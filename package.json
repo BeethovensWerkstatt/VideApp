@@ -1,0 +1,58 @@
+{
+  "name": "vide_app",
+  "version": "0.2.1",
+  "description": "This is the application that powers Beethovens Werkstatt's editions",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/BeethovensWerkstatt/VideApp.git"
+  },
+  "author": "Johannes Kepper",
+  "contributors": [{
+    "name": "Johannes Kepper",
+    "email": "kepper@edirom.de"
+  }],
+  "keywords": [
+    "edirom",
+    "mei",
+    "beethoven"
+  ],
+  "license": "AGPL-3.0",
+  "bugs": {
+    "url": "https://github.com/BeethovensWerkstatt/VideApp/issues"
+  },
+  "homepage": "https://github.com/BeethovensWerkstatt/VideApp#readme",
+  "devDependencies": {
+    "babel-preset-react": "^6.22.0",
+    "babelify": "^7.3.0",
+    "browserify": "^13.3.0",
+    "gulp": "^3.9.1",
+    "gulp-eslint": "^3.0.1",
+    "gulp-sass": "^3.1.0",
+    "jest-cli": "^18.1.0",
+    "react": "^15.4.2",
+    "react-addons-test-utils": "^15.4.2",
+    "react-dom": "^15.4.2",
+    "vinyl-source-stream": "^1.1.0"
+  },
+  "dependencies": {
+    "babel-eslint": "^7.1.1",
+    "babel-jest": "^18.0.0",
+    "babel-plugin-transform-object-rest-spread": "^6.22.0",
+    "babel-polyfill": "^6.22.0",
+    "babel-preset-es2015": "^6.22.0",
+    "eslint": "^3.13.1",
+    "isomorphic-fetch": "^2.2.1",
+    "openseadragon": "^2.2.1",
+    "react": "^15.4.2",
+    "react-dom": "^15.4.2",
+    "react-redux": "^5.0.2",
+    "react-slick": "^0.14.5",
+    "redux": "^3.6.0",
+    "redux-devtools": "^3.3.2",
+    "redux-thunk": "^2.2.0"
+  }
+}
