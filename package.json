@@ -1,6 +1,6 @@
 {
   "name": "vide_app",
-  "version": "0.2.1",
+  "version": "0.4.1",
   "description": "This is the application that powers Beethovens Werkstatt's editions",
   "main": "index.js",
   "scripts": {
