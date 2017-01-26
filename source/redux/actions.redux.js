@@ -201,9 +201,13 @@ export function closeContextMenu() {
 
 /** 
  * Function restoreState replaces the complete state object with a different state
- * @param {object} newState
- * @returns {object}
+ * @param {object} newState is the state that needs to be restored
+ * @returns {object} the actionType that's required for Redux
  */
- export function restoreState(newState = {}) {
-     return { type: ActionTypes.RESTORE_STATE, newState: newState };
+export function restoreState(newState = {}) {
+    //todo: move check if the state to be restored is valid over here
+    //right now, it's checked by the reducers, but this means that
+    //one reducer may decide that it's ok, while a second may reject
+    //it, resulting in an inconsistent state
+    return { type: ActionTypes.RESTORE_STATE, newState: newState };
  }
