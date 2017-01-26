@@ -9,7 +9,6 @@ let actionsFile = require('../actions.redux');
 describe('Redux Action tests', function() {
     //tests for setFirstView action creator
     it('emits an action to set the first view', function() {
-        
         //test default
         let defaultState = {
             type: actionsFile.ActionTypes.SET_FIRST_VIEW,
@@ -28,13 +27,11 @@ describe('Redux Action tests', function() {
             viewState: null
         };
         let actualState = actionsFile.setFirstView(testView);
-        expect(actualState).toEqual(state); 
-        
+        expect(actualState).toEqual(state);
     });
     
     //tests for setSecondView action creator
     it('emits an action to set the second view', function() {
-        
         //test default
         let defaultState = {
             type: actionsFile.ActionTypes.SET_SECOND_VIEW,
@@ -58,7 +55,6 @@ describe('Redux Action tests', function() {
     
     //tests for setViewLayouts action creator
     it('emits an action to set the layout of views', function() {
-        
         //test default
         let defaultState = {
             type: actionsFile.ActionTypes.SET_VIEW_LAYOUT,
@@ -80,7 +76,6 @@ describe('Redux Action tests', function() {
     
     //tests for setViewRatio action creator
     it('emits an action to set the ratio of views', function() {
-        
         //test default
         let defaultState = {
             type: actionsFile.ActionTypes.SET_VIEW_RATIO,
@@ -103,7 +98,6 @@ describe('Redux Action tests', function() {
     
     //tests for setEdition action creator
     it('emits an action to set the active edition', function() {
-        
         //test default
         let defaultState = {
             type: actionsFile.ActionTypes.ACTIVATE_EDITION,
@@ -126,7 +120,6 @@ describe('Redux Action tests', function() {
     
     //tests for switchLanguage action creator
     it('emits an action to switch between languages', function() {
-        
         //test default
         let defaultState = {
             type: actionsFile.ActionTypes.SWITCH_LANGUAGE,
@@ -148,7 +141,6 @@ describe('Redux Action tests', function() {
     
     //tests for showPreferences action creator
     it('emits an action to show the preferences window', function() {
-        
         //test default
         let defaultState = {
             type: actionsFile.ActionTypes.SHOW_PREFERENCES
@@ -160,7 +152,6 @@ describe('Redux Action tests', function() {
     
     //tests for hidePreferences action creator
     it('emits an action to hide the preferences window', function() {
-        
         //test default
         let defaultState = {
             type: actionsFile.ActionTypes.HIDE_PREFERENCES
@@ -169,5 +160,4 @@ describe('Redux Action tests', function() {
         let actualDefaultState = actionsFile.hidePreferences();
         expect(actualDefaultState).toEqual(defaultState);
     });
-    
 });
