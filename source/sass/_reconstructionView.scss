@@ -1,0 +1,184 @@
+@import 'mixins';
+@import 'variables';
+
+/*this is the sidebar*/
+$sidebarWidth: 300px;
+
+.reconstructionView {
+    
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;   
+    background-color: #ffffff;
+    
+    .reconstructionBox {
+        box-sizing: border-box;
+        position: absolute;
+        top: 0;
+        right: $sidebarWidth;
+        bottom: 0;
+        left: 0;
+        
+        @include linearGradient(#333333,#151515);
+        
+        .pageLabel {
+            border-radius: 5px;
+            padding: 1px 5px;
+            background-color: #f5f5f5;
+            margin-left: -10px;
+            font-weight: 300;
+        }
+        
+        .svgBox { 
+            
+            &.shapes  {
+                z-index: 2;
+                
+                &.patch {
+                    z-index: 4;
+                }
+                
+                path {
+                    opacity: .008;
+                    fill: #413e2d;
+                    
+                    &.visible {
+                        opacity: .7;
+                    }
+                    
+                    &.current {
+                        opactiy: .9;
+                        fill: #b42217;
+                    }
+                } 
+                
+                &.hiddenPatch {
+                    visibility: hidden;
+                }
+            }
+            
+            &.page {
+                z-index: 1;
+                
+                &.patch {
+                    z-index: 3;
+                }
+                
+                path {
+                    opacity: 1;
+                }
+                
+                &.hiddenPatch {
+                    visibility: hidden;
+                }
+            }
+            
+            svg {
+                width: 100%;
+                height: 100%;
+            }
+        }
+    }
+    
+    .viewNavigation {
+        position: absolute;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        width: $navigationWidth;
+        box-sizing: border-box;
+        
+        border-left: 0.5px solid #666666;
+        background-color: #e5e5e5;
+        
+        box-shadow: -2px 0 4px rgba(0,0,0,0.5);
+        
+        .reconstructionNavigator {
+            position:absolute;
+            width: 100%;
+            height: 120px;
+            @include linearGradient(#333333,#151515);
+        }
+    
+        .menubar {
+            position:absolute;
+            top: 120px;
+            left: 0;
+            right: 0;
+            height: 40px;
+            border-top: .5px solid #999999;
+            border-bottom: .5px solid #999999;
+            box-sizing: border-box;
+            background-color: #e5e5e5;
+            
+            .menuButton {
+                float: left;
+                height: 30px;
+                width: 30px;
+                margin: 4px;
+                box-sizing: border-box;
+                padding: 7px 8px;
+                border-radius: 5px;
+                font-size: 1.1em;
+                color: #333333;
+                text-shadow: 0 1px 3px #ffffff;
+                
+                &:hover {
+                    background-color: #cccccc;
+                }
+            }
+            
+            input {
+                width: 80px;
+                margin: 10px;
+            }
+        }
+        
+        .scarSelection {
+            display: none;
+        }
+        
+        .scarBox {
+        
+            overflow: auto;
+            
+            position: absolute;
+            top: 160px;
+            right: 10px;
+            bottom: 10px;
+            left: 10px;
+            
+            .rowBox {
+                
+                margin: 10px 0;
+            
+                .stateBox {
+                    display: inline-block;
+                    margin: 0 10px 0 0;
+                    padding: 2px 5px;
+                    border-radius: 5px;
+                    border: .5px solid #999999;
+                    background-color: #cccccc;
+                    font-weight: 100;
+                    
+                    &.active {
+                        background-color: #aaaaaa;
+                        font-weight: 300;
+                        text-shadow: 0 1px 2px rgba(255,255,255,.4);
+                    }
+                    
+                    &.current {
+                        background-color: #999999;
+                        font-weight: 400;
+                        text-shadow: 0 1px 2px rgba(255,255,255,.7);
+                    }
+                }
+            }
+        }
+        
+    }
+    
+}
+

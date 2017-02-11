@@ -1,0 +1,40 @@
+@import 'mixins';
+@import 'variables';
+
+.perspectivesBar {
+     position: absolute;
+     top: 0;
+     right: 60px;
+     height: $headerHeight;
+     
+    .perspectiveButton {
+        width: 40px;
+        height: 30px;
+        display: inline-block;
+        color: #999999;
+        
+        &.active {
+            color: #f5f5f5;
+            display: none;
+        }
+        
+        &.hidden {
+            display: none;
+        }
+        
+        .fa {
+            display: block;
+            margin: 3px auto;
+            padding: 2px 5px;
+            font-size: 18px;
+            width: 20px;
+            cursor: pointer;
+            
+            &.fa-rotate-90 {
+                position: relative;
+                top: 3px;
+            }
+        }
+        
+    }
+}

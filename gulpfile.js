@@ -45,6 +45,14 @@ gulp.task('lint', function() {
      */
 });
 
+/*gulp.task('logWorker', function() {
+    return browserify('./source/_modules/vide-history-db-connector.js')
+        .transform(babelify, {presets: ['es2015','react'], plugins: ['transform-object-rest-spread']})
+        .bundle()
+        .pipe(source('resources/js/logWorker.js'))
+        .pipe(gulp.dest('./build/'));
+});*/
+
 gulp.task('default', ['html', 'css', 'fonts'], function() {
     return browserify('./source/app.js')
         .transform(babelify, {presets: ['es2015', 'react'], plugins: ['transform-object-rest-spread']})

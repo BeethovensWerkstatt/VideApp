@@ -14,6 +14,8 @@ export const ActionTypes = {
     SET_FIRST_VIEW: 'SET_FIRST_VIEW',
     SET_SECOND_VIEW: 'SET_SECOND_VIEW',
     
+    LOG_VIEW_STATE: 'LOG_VIEW_STATE',
+    
     SET_VIEW_RATIO: 'SET_VIEW_RATIO',
     SET_VIEW_LAYOUT: 'SET_VIEW_LAYOUT',
     
@@ -28,7 +30,8 @@ export const ActionTypes = {
     REQUEST_EDITIONS: 'REQUEST_EDITIONS',
     RECEIVE_EDITIONS: 'RECEIVE_EDITIONS',
     RECEIVE_EDITIONS_FAILED: 'RECEIVE_EDITIONS_FAILED',
-    SET_EDITION: 'SET_EDITION',
+    
+    HIGHLIGHT_EDITION: 'HIGHLIGHT_EDITION',
     
     ACTIVATE_EDITION: 'ACTIVATE_EDITION',
     DEACTIVATE_EDITION: 'DEACTIVATE_EDITION',
@@ -57,6 +60,17 @@ export function setFirstView(perspective = Perspective.FACSIMILE, viewState = nu
  */ 
 export function setSecondView(perspective = Perspective.TRANSCRIPTION, viewState = null) {
     return { type: ActionTypes.SET_SECOND_VIEW, perspective, viewState };
+}
+
+/**
+ * Function logViewState is (indirectly) called by individual modules to 
+ * indicate that a requested state has been achieved. Mostly used to identify 
+ * what should be kept in the application history and what shouldn't.
+ * @param {number} view that gets confirmed. 
+ * @returns {object} the information required for redux
+ */
+export function logViewState(view = 1) {
+    return {type: ActionTypes.LOG_VIEW_STATE, view: view};
 }
 
 /** 
@@ -163,6 +177,16 @@ export function receiveEditionsFailed() {
     return { type: ActionTypes.RECEIVE_EDITIONS_FAILED };
 } 
 
+
+/** 
+ * Function highlightEdition marks an edition and shows further details
+ * @param {string} id of the edition to highlight
+ * @returns {object} the actionType that's required for Redux
+ */ 
+export function highlightEdition(id = '') {
+    return { type: ActionTypes.HIGHLIGHT_EDITION, id };
+}
+
 /** 
  * Function activateEdition sets an edition as the active one
  * @param {string} id of the edition to activate
@@ -210,4 +234,4 @@ export function restoreState(newState = {}) {
     //one reducer may decide that it's ok, while a second may reject
     //it, resulting in an inconsistent state
     return { type: ActionTypes.RESTORE_STATE, newState: newState };
- }
+}

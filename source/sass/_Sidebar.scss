@@ -1,0 +1,107 @@
+@import 'mixins';
+@import 'variables';
+
+div.sidebar {
+    
+    font-weight: 100;
+    font-size: 1em;
+    color: $mainFontColor;
+    
+    position: absolute;
+    top: $headerHeight;
+    bottom: $footerHeight;
+    left: 0;
+    
+    border-right: 0.5px solid #222222;
+    background-color: #484848;
+    
+    box-sizing: border-box;
+    
+    text-shadow: 1px 1px 3px #000000;
+    
+    .collapseButton {
+        display: inline-block;
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        width: 30px;
+        height: 30px;
+        border-radius: 6px;
+        @include linearGradient(#222222,#333333);
+    }
+    
+    &.expanded {
+        /*Value is provided by JS*/
+        /*width: 300px;*/
+    }
+    
+    &.collapsed {
+        width: 10px;
+        cursor: pointer;
+    }
+    
+    h1 {
+        font-size: 1em;
+        font-weight: 400;
+        margin: 0 0 10px;
+        padding: 10px;
+    }
+    
+    ul {
+        list-style-type: none;
+        margin: 0 0 10px;
+        padding: 0;
+        
+        li.supportedView {
+            margin: 0 0 5px 0;
+            padding: 5px 20px;
+            border-top: 0.5px solid transparent;
+            border-bottom: 0.5px solid transparent;
+            position: relative;
+            
+            div.positionLinks {
+                position: absolute;
+                right: 20px;
+                text-align: right;
+                width: 100px;
+                top: 5px;
+                
+                .separator, .viewLink {
+                    opacity: 0.2
+                }
+            }
+            
+            div.positionLinks span.viewLink.active, div.positionLinks span.viewLink:hover {
+                opacity: 1;
+            }
+            
+            div.singleLink span.viewLink {
+                position: absolute;
+                top: 0;
+                right: 0;
+                bottom: 0;
+                left: 0;
+                color: transparent;
+
+                * {
+                    text-shadow: none;
+                }
+                
+            }
+            
+            &.active {
+                @include linearGradient(#2b2b2b,#333333);
+                border-top: 0.5px solid #666666;
+                border-bottom: 0.5px solid #666666;
+                position: relative;
+                
+            }
+        }
+    }
+    
+    /*
+    a, a:hover, a:visited {
+        color: $mainFontColor;
+        text-decoration: none;        
+    }*/
+}

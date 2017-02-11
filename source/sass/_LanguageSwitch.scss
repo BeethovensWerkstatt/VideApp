@@ -1,0 +1,26 @@
+@import 'mixins';
+@import 'variables';
+
+div.languageSwitch {
+    float: right;
+    font-weight: 100;
+    font-size: 14px;
+    z-index: 2;
+    top: 6px;
+    position: relative;
+    
+    a, a:hover, a:visited {
+        color: $mainFontColor;
+        text-decoration: none;
+        
+        &.active {
+            font-weight: bold;
+            text-decoration: underline;
+        }
+    }
+    
+    strong {
+        font-weight: 700;
+        text-decoration: underline;
+    }
+}

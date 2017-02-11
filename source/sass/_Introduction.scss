@@ -1,0 +1,20 @@
+@import 'mixins';
+@import 'variables';
+
+div.introduction {
+    
+    margin: 0;
+    
+    h1 {
+        margin: 20px 20px 40px;    
+    }
+    
+    h2 {
+        margin: 20px;
+    }
+    
+    p {
+        margin: 10px 20px;
+    }
+    
+}

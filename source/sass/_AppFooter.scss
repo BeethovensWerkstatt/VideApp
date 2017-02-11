@@ -1,0 +1,32 @@
+@import 'mixins';
+@import 'variables';
+
+footer.appFooter {
+    @include linearGradient(#222222,#333333);
+    height: $footerHeight;
+    padding: 3px 10px;
+    color: $mainFontColor;
+    border-top: 0.5px solid #444444;
+    font-size: 12px;
+    line-height: 14px;
+    
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    
+    box-sizing: border-box;
+    
+    font-weight: 100;
+    
+    a, a:hover, a:visited {
+        color: $mainFontColor;
+        font-weight: 300;
+        text-decoration: none;
+    }
+    
+    #aboutLink {
+        display: inline-block;
+        float: right;
+    }
+}

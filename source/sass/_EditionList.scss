@@ -1,0 +1,124 @@
+@import 'mixins';
+@import 'variables';
+
+$rowBottomMargin: 40px;
+
+/*overview of available editions*/
+.editionList {
+    overflow: auto;
+    margin: 0 0 $rowBottomMargin;
+    
+    &.row {
+        height: 220px;
+        width: 100%;
+        @include linearGradient(#333333,#151515);
+        box-shadow: 0 3px 5px rgba(0,0,0,0.5) inset;
+        overflow: auto;
+        
+        .scrollContainer {
+            width: 100%;
+            height: 100%;
+            white-space: nowrap;
+            overflow-x: auto;
+        }
+        
+        .editionPreview {
+            display: inline-block;
+            width: 240px;
+            margin: 15px 40px;
+            height: 180px;
+            position: relative;
+            cursor: pointer;
+            
+            .previewImage {
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 240px;
+                height: 180px;
+                border-radius: 3px;
+                box-shadow: 0 3px 6px rgba(0,0,0,.3);
+            }
+            
+            h1.editionTitle {
+                position: absolute;
+                bottom: 30px;
+                left: 0;
+                right: 0;
+                margin: 0;
+                font-size: 18px;
+                font-weight: 700;
+                z-index: 2;
+                background-color: rgba(255,255,255,.8);
+                padding: 2px 10px;
+                white-space:normal;
+                cursor: pointer;
+            } 
+            
+            h2.editionOpus {
+                position: absolute;
+                bottom: 7px;
+                left: 0;
+                right: 0;
+                margin: 0;
+                font-size: 16px;
+                font-weight: 100;
+                z-index: 1;
+                background-color: rgba(255,255,255,.8);
+                padding: 2px 10px;
+                border-top: 1px solid $spotColor;
+                box-shadow: 0 1px 4px #000000;
+                white-space:normal;
+                cursor: pointer;
+            } 
+            
+        }
+    }
+    
+    /* todo: columns and grid display */
+    
+    
+    
+    .connectionStatus {
+        margin: 20px 40px;
+        text-align: center;
+        font-size: 0.8em;
+        color: #333333;
+        
+        .loadingBar {
+            display: inline-block;
+            width: 150px;
+            height: .5em;
+            background-color: #999999;
+            border: 0.5px solid #666666;
+            border-radius: .4em;
+            margin: 5em 3em 0 0;
+        }
+    }
+    
+}
+
+.editionDetails {
+    border-top: 1px solid $spotColor;
+    background-color: #303030;
+    margin: -$rowBottomMargin 0 20px;
+    padding: 10px 0;
+    color: #868686;
+    
+    h2 {
+        margin: 10px 20px !important;
+        font-size: 16px;
+        font-weight: 500;
+    }
+    
+    p {
+        font-weight: 300;
+    }
+    
+    .openButton {
+        cursor: pointer;
+        text-align: right;
+        margin: 20px;
+        padding: 3px;
+    }
+}

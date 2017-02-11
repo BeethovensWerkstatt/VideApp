@@ -1,0 +1,138 @@
+{
+    "tooltipFullscreen":{
+        "de":"Vollbildansicht umschalten",
+        "en":"toggle fullscreen"
+    },
+    "facsimile":{
+        "de":"Faksimile",
+        "en":"Facsimile"
+    },
+    "transcription":{
+        "de":"Transkription",
+        "en":"Transcription"
+    },
+    "invariance":{
+        "de":"Invarianz",
+        "en":"Invariance"
+    },
+    "reconstruction":{
+        "de":"Rekonstruktion",
+        "en":"Reconstruction"
+    },
+    "xml":{
+        "de":"XML",
+        "en":"XML"
+    },
+    "availableEditions":{
+        "de":"Verfügbare Fallstudien",
+        "en":"Available Case Studies"
+    },
+    "networkStatus":{
+        "de":"Status der Netzwerkverbindung",
+        "en":"Network Status"
+    },
+    "networkStatus_unConnected":{
+        "de":"nicht verbunden",
+        "en":"unconnected"
+    },
+    "networkStatus_100":{
+        "de":"Lade Daten",
+        "en":"Loading data"
+    },
+    "networkStatus_200":{
+        "de":"Daten erhalten",
+        "en":"Data received"
+    },
+    "networkStatus_204":{
+        "de":"Keine Daten vorhanden",
+        "en":"No data available"
+    },
+    "networkStatus_401":{
+        "de":"Keine ausreichenden Benutzerrechte",
+        "en":"Authorization failed"
+    },
+    "networkStatus_404":{
+        "de":"Anfrage fehlgeschlagen (404)",
+        "en":"Request failed (404)"
+    },
+    "editedBy":{
+        "de":"hrsg. von",
+        "en":"edited by"
+    },
+    "lastModified":{
+        "de":"letzte Änderung",
+        "en":"last modified"
+    },
+    "videFacsimileViewer_abbr":{
+        "de":"Faksimile",
+        "en":"Facsimile"
+    },
+    "Vide_xmlViewer_abbr":{
+        "de":"XML",
+        "en":"XML"
+    },
+    "Vide_transcriptionViewer_abbr":{
+        "de":"Transkription",
+        "en":"Transcription"
+    },
+    "Vide_invarianceViewer_abbr":{
+        "de":"Invarianz",
+        "en":"Invariance"
+    },
+    "Vide_reconstructionViewer_abbr":{
+        "de":"Rekonstruktion",
+        "en":"Reconstruction"
+    },
+    "Vide_meiTextViewer_abbr":{
+        "de":"Beschreibung",
+        "en":"Description"
+    },
+    "top":{
+        "de":"oben",
+        "en":"top"
+    },
+    "bottom":{
+        "de":"unten",
+        "en":"bottom"
+    },
+    "left":{
+        "de":"links",
+        "en":"left"
+    },
+    "right":{
+        "de":"rechts",
+        "en":"right"
+    },
+    "contextMenu_showIn_PERSPECTIVE_FACSIMILE":{
+        "de":"Im Faksimile anzeigen",
+        "en":"Show Facsimile"
+    },
+    "contextMenu_showIn_PERSPECTIVE_XML":{
+        "de":"XML anzeigen",
+        "en":"Show XML"
+    },
+    "contextMenu_showIn_PERSPECTIVE_TRANSCRIPTION":{
+        "de":"Transkription anzeigen",
+        "en":"Show Transcription"
+    },
+    "contextMenu_showIn_PERSPECTIVE_INVARIANCE":{
+        "de":"In Invarianz-Darstellung anzeigen",
+        "en":"Show in Invariance View"
+    },
+    "contextMenu_showIn_PERSPECTIVE_RECONSTRUCTION":{
+        "de":"In Rekonstruktions-Ansicht anzeigen",
+        "en":"Show in Reconstruction View"
+    },
+    "contextMenu_showIn_PERSPECTIVE_TEXT":{
+        "de":"Beschreibung anzeigen",
+        "en":"Show Description"
+    },
+    "no_preview_available":{
+        "de":"Keine Voransicht verfügbar",
+        "en":"no preview available"
+    },
+    "open_edition": {
+        "de":"Öffne Edition",
+        "en":"Open Edition"
+    }
+}

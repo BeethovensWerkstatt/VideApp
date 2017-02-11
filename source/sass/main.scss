@@ -1,0 +1,36 @@
+@import 'AppHeader';
+@import 'AppFooter';
+@import 'LanguageSwitch';
+@import 'Sidebar';
+@import 'BookmarksPane';
+@import 'PerspectiveButtons';
+@import 'Views';
+@import 'AppFooter';
+@import 'transcriptionView';
+@import 'xmlEditor';
+@import 'meiTextView';
+@import 'facsimileView';
+@import 'reconstructionView';
+@import 'ContextMenu';
+@import 'Introduction';
+@import 'EditionList';
+@import 'fonts';
+@import 'variables';
+
+
+
+body {
+    margin: 0;
+    padding: 0;
+    font-family: $mainFont;
+    
+    .i18n.error {
+        font-weight: 100;
+        background-color: #dd3333;
+        display: inline-block;
+        padding: 0 5px;
+        border-radius: 3px;
+        color: #000000;
+        text-shadow: 1px 1px 3px #000000;
+    }
+}

@@ -15,10 +15,10 @@ let Perspectives = VIDE_PROTOCOL.PERSPECTIVE;
  * @returns {object} the (potentially modified) state object
  */
 export function handlePreferences(state = {
-        showPreferences: false,
-        language: 'en',
-        showAbout: false
-    },
+    showPreferences: false,
+    language: 'en',
+    showAbout: false
+},
     action) {
     switch (action.type) {
 
@@ -43,22 +43,22 @@ export function handlePreferences(state = {
             let pref = action.newState.preferences;
             
             if(typeof pref !== 'object') {
-return state;
-}
-            
+                return state;
+            }
+            /*
             if(!(showPreferences in pref) || typeof pref.showPreferences !== 'boolean') {
-return state;
-}
+                return state;
+            }
             
             if(!(showAbout in pref) || typeof pref.showAbout !== 'boolean') {
-return state;
-}
+                return state;
+            }
                 
             //todo: check if language is supported
             if(!(language in pref) || typeof pref.language !== 'string') {
-return state;
-}
-             
+                return state;
+            }
+            */
             return pref;
             
         default: 
@@ -78,8 +78,9 @@ return state;
 export function handleEdition(state = {
     editions: {},
     active: '',
+    highlighted: '',
     revision: 'latest'
-    }, 
+}, 
     action) {
     switch (action.type) {
         
@@ -88,14 +89,18 @@ export function handleEdition(state = {
                 editions: action.editions
             });
             
-        case ActionTypes.SET_EDITION:
+        /*case ActionTypes.SET_EDITION:
             //todo: interface with AppManager
             //window.EoHub.setEdition(action.id);
-            return {...state, active: action.id};
+            return {...state, active: action.id};*/
+            
+        case ActionTypes.HIGHLIGHT_EDITION:
+            return {...state, highlighted: action.id};
+            
         case ActionTypes.ACTIVATE_EDITION:
             //todo: interface with AppManager
             //window.EoHub.setEdition(action.id);
-            return {...state, active: action.id};
+            return {...state, active: action.id, highlighted: ''};
         case ActionTypes.DEACTIVATE_EDITION:
             //todo: interface with AppManager
             //window.EoHub.unsetEdition();
@@ -106,21 +111,21 @@ export function handleEdition(state = {
             let edition = action.newState.edition;
             
             if(typeof edition !== 'object') {
-return state;
-}
-            
+                return state;
+            }
+            /*
             if(!(editions in edition) || typeof edition.editions !== 'object') {
-return state;
-}
+                return state;
+            }
                 
             if(!(active in edition) || typeof edition.active !== 'string') {
-return state;
-}
+                return state;
+            }
                 
             if(!(revision in edition) || typeof edition.revision !== 'string') {
-return state;
-}
-             
+                return state;
+            }
+            */
             return edition;
             
         default: 
@@ -137,53 +142,82 @@ return state;
  * @returns {object} the (potentially modified) state object
  */
 export function handleViews(state = {
-        layout: ViewLayouts.INTRODUCTION,
-        ratio: .5,
-        view1: {perspective: Perspectives.FACSIMILE, viewState: null},
-        view2: {perspective: Perspectives.TRANSCRIPTION, viewState: null}
-    }, action) {
+    layout: ViewLayouts.INTRODUCTION,
+    ratio: .5,
+    view1: {perspective: Perspectives.FACSIMILE, viewState: null, temp: false},
+    view2: {perspective: Perspectives.TRANSCRIPTION, viewState: null, temp: false}
+}, action) {
     switch (action.type) {
         
-        case ActionTypes.CHANGE_VIEWSRATIO:
-            if(!Number.isNaN(action.viewsRatio) && action.viewsRatio > .1 && action.viewsRatio < .9) {
-                return Object.assign({}, state, { ratio: action.viewsRatio });
+        
+        /* 
+         * INFO
+         * 
+         * cap of viewRatio to be .1 <= viewRatio <= .9 also enforced in Views.react.js
+         */
+        
+        case ActionTypes.SET_VIEW_RATIO:
+            if(!Number.isNaN(action.viewRatio)) {
+                let ratio = action.viewRatio;
+                if(ratio < .1) {
+                    ratio = .1;
+                }
+                if(ratio > .9) {
+                    ratio = .9;
+                }
+                return Object.assign({}, state, { ratio: ratio });
             }
             return state;
             
         case ActionTypes.SET_VIEW_LAYOUT:
-        
+            
             if(action.viewLayout in ViewLayouts) {
-                Object.assign({}, state, { layout: action.viewLayout });
+                return Object.assign({}, state, { layout: action.viewLayout });
             } 
             return state; 
-            
-        case ActionTypes.DEACTIVATE_EDITION:
-        
-            return Object.assign({}, state, { layout: ViewLayouts.EDITION_SELECTION });
         
         case ActionTypes.SET_FIRST_VIEW:
             if(action.perspective in Perspectives) {
                 return Object.assign({}, state, { view1: {
                     perspective: action.perspective,
-                    viewState: action.viewState
+                    viewState: action.viewState,
+                    temp: true
                 } }); 
             } 
             return state;
-            
             
         case ActionTypes.SET_SECOND_VIEW:
             if(action.perspective in Perspectives) {
                 return Object.assign({}, state, { view2: {
                     perspective: action.perspective,
-                    viewState: action.viewState
+                    viewState: action.viewState,
+                    temp: true
                 } }); 
             }
             return state;
+            
+        case ActionTypes.LOG_VIEW_STATE:
+            if(action.view === 1) {
+                return Object.assign({}, state, { view1: 
+                    Object.assign({}, state.view1, {temp: false})
+                });
+            } else if(action.view === 2) {
+                return Object.assign({}, state, { view2: 
+                    Object.assign({}, state.view2, {temp: false})
+                });
+            }
+            
+            return state;
+        
+        case ActionTypes.ACTIVATE_EDITION:
+        
+            return Object.assign({}, state, { layout: ViewLayouts.SINGLE_VIEW });
+        
         
         case ActionTypes.DEACTIVATE_EDITION:
             return Object.assign({}, state, {
-                view1: {perspective: Perspectives.FACSIMILE, viewState: null},
-                view2: {perspective: Perspectives.TRANSCRIPTION, viewState: null}
+                view1: {perspective: Perspectives.FACSIMILE, viewState: null, temp: false},
+                view2: {perspective: Perspectives.TRANSCRIPTION, viewState: null, temp: false}
             });
             
         case ActionTypes.RESTORE_STATE:
@@ -191,25 +225,25 @@ export function handleViews(state = {
             let views = action.newState.views;
             
             if(typeof views !== 'object') {
-return state;
-}
-            
+                return state;
+            }
+            /*
             if(!(layout in views) || !(views.layout in ViewLayouts)) {
-return state;
-}
+                return state;
+            }
                 
             if(!(ratio in views) || typeof views.ratio !== 'number' || views.ratio <= .1 || views.ratio >= .9) {
-return state;
-}
+                return state;
+            }
             
             if(!(view1 in views) || typeof views.view1 !== 'object' || !(views.view1.perspective in Perspectives) || typeof views.view1.viewState !== 'object') {
-return state;
-}
+                return state;
+            }
             
             if(!(view2 in views) || typeof views.view2 !== 'object' || !(views.view2.perspective in Perspectives) || typeof views.view2.viewState !== 'object') {
-return state;
-}
-            
+                return state;
+            }
+            */
             return views;
             
         default: 
@@ -220,7 +254,7 @@ return state;
 
 /** 
  * handleContextMenu is a Redux reducer composition which opens up the context menu when necessary
- * @param {object} state the default state, overridden with reak object if specified
+ * @param {object} state the default state, overridden with real object if specified
  * @param {object} action the action that modifies the current state
  * @returns {object} the (potentially modified) state object
  */
@@ -235,25 +269,25 @@ export function handleContextMenu(state = {visible: false, items:[], x: 0, y: 0}
             let contextMenu = action.newState.contextMenu;
             
             if(typeof contextMenu !== 'object') {
-return state;
-}
-            
+                return state;
+            }
+            /*
             if(!(visible in contextMenu) || typeof contextMenu.visible !== 'boolean') {
-return state;
-}
+                return state;
+            }
                 
             if(!(items in contextMenu) || !Array.isArray(contextMenu.items)) {
-return state;
-}
+                return state;
+            }
                 
             if(!(x in contextMenu) || typeof contextMenu.x !== 'number') {
-return state;
-}
+                return state;
+            }
                 
             if(!(y in contextMenu) || typeof contextMenu.y !== 'number') {
-return state;
-}
-             
+                return state;
+            }
+            */ 
             return contextMenu;
         
         //closing the context menu is no different from the default…
@@ -271,27 +305,30 @@ return state;
  * @returns {object} the (potentially modified) state object
  */
 export function handleNetwork(state = {
-    dataUrl: '',
     dataStatus: StatusCodes.NO_CONNECTION,
-    rethinkUrl: '',
-    rethinkStatus: StatusCodes.NO_CONNECTION,
-    userID: '',
-    sessionID: ''
+    nolog: false,
 }, action) {
     switch (action.type) {
         
         case ActionTypes.REQUEST_EDITIONS:
             return Object.assign({}, state, {
-                dataStatus: StatusCodes.CODE_100
+                dataStatus: StatusCodes.CODE_100,
+                nolog: true
             });
             
         case ActionTypes.RECEIVE_EDITIONS:
             return Object.assign({}, state, {
-                dataStatus: (Object.keys(action.editions).length > 0) ? StatusCodes.CODE_200 : StatusCodes.CODE_204
+                dataStatus: (Object.keys(action.editions).length > 0) ? StatusCodes.CODE_200 : StatusCodes.CODE_204,
+                nolog: false
             });
         case ActionTypes.RECEIVE_EDITIONS_FAILED:
             return Object.assign({}, state, {
                 dataStatus: StatusCodes.CODE_404
+            });
+            
+        case ActionTypes.HIGHLIGHT_EDITION: 
+            return Object.assign({}, state, {
+                nolog: true
             });
            
         case ActionTypes.RESTORE_STATE:
@@ -301,21 +338,23 @@ export function handleNetwork(state = {
             if(typeof network !== 'object') {
                 return state;
             }
-            
+            /*
             if(!(userID in network) || typeof network.userID !== 'string') {
                 return state;
             }
             
             if(!(sessionID in network) || typeof network.sessionID !== 'string') {
-return state;
-}
-            
+                return state;
+            }
+            */
             return network;
         
         default: 
-            return state;
+            return Object.assign({}, state, {
+                nolog: false
+            });
     
-}
+    }
 }
 
 /**

@@ -134,9 +134,9 @@ const EoModule = class EoModule {
      * @abstract
      * @param {string} containerID as ID of HTML element where content shall be placed
      */
-     getDefaultView(containerID) {
+    getDefaultView(containerID) {
          //filled by inheriting module class
-     }
+    }
     
     /**
      * This function handles a specific request for the current module.
