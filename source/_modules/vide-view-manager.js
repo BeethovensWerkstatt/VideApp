@@ -15,9 +15,9 @@ const VideViewManager = class VideViewManager {
     constructor(store, eohub) {
         this._store = store;
         this._eohub = eohub;
-        eohub.registerViewManager(this);
-        
         this._history = new VideHistoryManager(this._store);
+        
+        eohub.registerViewManager(this);        
     }
     
     //todo: remove this
@@ -134,6 +134,13 @@ const VideViewManager = class VideViewManager {
         return true;
     }
     
+    /** 
+     * Returns the ID of the current socket connection;
+     * @returns {string} the socket ID
+     */
+    getSocketID() {
+        return this._history.getSocketID();
+    }
 };
 
 export default VideViewManager;

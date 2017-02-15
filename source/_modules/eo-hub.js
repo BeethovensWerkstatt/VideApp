@@ -26,7 +26,9 @@ const EoHub = class EoHub {
         editionID: null}) {
         this.options = options;
         this._modules = new Map();
-        this._viewManager = null;
+        this._viewManager = null;        
+        this._socketID;
+        
         console.log('EoHub initialized');
     }
     
@@ -237,6 +239,18 @@ const EoHub = class EoHub {
      */
     registerViewManager(manager) {
         this._viewManager = manager;
+        this._socketID = manager.getSocketID();
+        this._setupSocket(this._socketID);
+    }
+    
+    /** 
+     * This function sets up the connection to server
+     */
+    _setupSocket(socketID) {
+         var socket = io('http://localhost:2999/' + socketID);
+         socket.on('connect', function(){
+             //console.log('eohub is entering connection')
+         });
     }
     
     /*

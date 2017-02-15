@@ -1,7 +1,7 @@
 import 'babel-polyfill';
 let shake128 = require('js-sha3').shake_128;
 import {version} from './../../package.json';
-import {restoreState} from './../redux/actions.redux';
+import {restoreState, resetState} from './../redux/actions.redux';
 const VideHistoryManager = class VideHistoryManager {
     
     /** 
@@ -12,8 +12,11 @@ const VideHistoryManager = class VideHistoryManager {
         this._store = store;
         this._userID = document.cookie.replace(/(?:(?:^|.*;\s*)userID\s*\=\s*([^;]*).*$)|^.*$/, '$1');
         this._sessionID;
+        this._socketID;
         
         let sessionCookie = document.cookie.replace(/(?:(?:^|.*;\s*)sessionID\s*\=\s*([^;]*).*$)|^.*$/, '$1');
+        
+        this._socketID = sessionCookie;
         
         if(!sessionStorage.getItem('sessionID')) {
             sessionStorage.setItem('sessionID', sessionCookie);
@@ -31,20 +34,31 @@ const VideHistoryManager = class VideHistoryManager {
             this._checkState();
         });
         
+        this._logSocket = io('http://localhost:2999/' + this._socketID);
+        this._logSocket.on('connect', () => {
+            this._logSocket.emit('logSession',{id:this._sessionID, user: this._userID, userAgent:userAgent, lang: language, states:[]});
+        });
+        
+        this._logSocket.on('sendState',(message) => {
+            console.log(' --> receiving state ' + message.hash);
+            console.log(message)
+            this._restoreState(message.state);
+        })
+        
         //triggered whenever user navigates through browser history
         window.onpopstate = (event) => {
             this._checkHistory(event);
         };
         
-        console.log('[INFO] This is session for tab ' + this._sessionID + ', sessionCookie was ' + sessionCookie);
-        console.log('Version: ' + version);
-        
         let initialLocation = this._getCurrentHash();
-        if(initialLocation !== '') {
-            console.log('[INFO] I need to restore state "' + initialLocation + '", directly at page load.');
-            console.log(history);
-            console.log(history.state);
-        }
+        
+        if(initialLocation !== '' && initialLocation !== sessionStorage.getItem('stateHash')) {
+            console.log('[INFO] I need to restore state "' + initialLocation + '"');
+            this._logSocket.emit('requestState',{hash:initialLocation,socket:this._socketID});
+        } /*else {
+            console.log(' --> a clean reload is requested')
+        }*/
+        
     }
     
     /** 
@@ -56,6 +70,8 @@ const VideHistoryManager = class VideHistoryManager {
         //logs each change of the state into the console
         console.log('[LOG] state has changed:');
         console.log(state);
+        sessionStorage.setItem('stateHash',this._getHash(state));
+        
         
         if(!state.views.view1.temp && !state.views.view2.temp && !state.network.nolog) {
             this._storeState(state);
@@ -68,14 +84,12 @@ const VideHistoryManager = class VideHistoryManager {
      * @param {object} state reflects the current Redux state of the application
      */
     _storeState(state) {
-        let hash = shake128.create(32);
-        hash.update(JSON.stringify(state));
-        let hex = hash.hex();
+        let hash = this._getHash(state);
         
-        if(hex !== this._getCurrentHash()) {
-            history.pushState(state, '', hex);
+        if(hash !== this._getCurrentHash()) {
+            history.pushState(state, '', hash);
             
-            //this._worker.postMessage({command: 'saveState', session: this._sessionID, hash: hex, state: state});
+            this._logSocket.emit('logState',{id:hash, state:state, session: this._sessionID, timestamp: Date.now()});
             
             /*r.table('sessions').get(this._sessionID)('states').
                 append({timestamp: Date.now(),hash: hex}).run(connection, function(err, result) {
@@ -91,6 +105,19 @@ const VideHistoryManager = class VideHistoryManager {
     }
     
     /** 
+     * function _getHash is used to calculate the hash for a given state
+     * @param {Object} state the state to be hashed
+     * @returns {string} the hash
+     */
+    _getHash(state) {
+        let hash = shake128.create(32);
+        hash.update(JSON.stringify(state));
+        let hex = hash.hex();
+        
+        return hex;
+    }
+    
+    /** 
      * This function is called when the user navigates through browser history.
      * It checks if there is a valid state that can be restored. If so, calls _restoreState
      * @param {Object} event that is stored in the browser history
@@ -99,7 +126,9 @@ const VideHistoryManager = class VideHistoryManager {
         console.log('[LOG] browser history went to:');
         
         let state = event.state;
-        this._restoreState(state);
+        if(state !== null) {
+            this._restoreState(state);
+        }    
     }
     
     /** 
@@ -107,7 +136,9 @@ const VideHistoryManager = class VideHistoryManager {
      * @param {Object} state of Redux to be restored by dispatching a corresponding action
      */
     _restoreState(state) {
+        console.log(' -> restoring state')
         this._store.dispatch(restoreState(state));
+        console.log(' -> restored state')
     }
     
     /** 
@@ -121,6 +152,14 @@ const VideHistoryManager = class VideHistoryManager {
         }
         
         return hash.substr(1);
+    }
+    
+    /** 
+     * Returns the ID of the current socket connection;
+     * @returns {string} the socket ID
+     */
+    getSocketID() {
+        return this._socketID;
     }
 
 };

@@ -39,7 +39,8 @@ export const ActionTypes = {
     OPEN_CONTEXTMENU: 'OPEN_CONTEXTMENU',
     CLOSE_CONTEXTMENU: 'CLOSE_CONTEXTMENU',
     
-    RESTORE_STATE: 'RESTORE_STATE'
+    RESTORE_STATE: 'RESTORE_STATE',
+    RESET_STATE: 'RESET_STATE'
 };
 
 /** 
@@ -235,3 +236,11 @@ export function restoreState(newState = {}) {
     //it, resulting in an inconsistent state
     return { type: ActionTypes.RESTORE_STATE, newState: newState };
 }
+
+/** 
+ * Function resetState brings the application back to the starting point
+ * @returns {object} the actionType that's required for Redux
+ */
+ export function resetState() {
+     return {type: ActionTypes.RESET_STATE}
+ }

@@ -60,7 +60,15 @@ export function handlePreferences(state = {
             }
             */
             return pref;
+        
+        case ActionTypes.RESET_STATE:
             
+            return {
+                showPreferences: false,
+                language: 'en',
+                showAbout: false
+            }
+        
         default: 
             return state;
     
@@ -127,6 +135,14 @@ export function handleEdition(state = {
             }
             */
             return edition;
+        case ActionTypes.RESET_STATE:
+            
+            return {editions: {},
+                active: '',
+                highlighted: '',
+                revision: 'latest'
+            }
+            
             
         default: 
             return state;
@@ -245,7 +261,16 @@ export function handleViews(state = {
             }
             */
             return views;
+        
+        case ActionTypes.RESET_STATE:
             
+            return {
+                layout: ViewLayouts.INTRODUCTION,
+                ratio: .5,
+                view1: {perspective: Perspectives.FACSIMILE, viewState: null, temp: false},
+                view2: {perspective: Perspectives.TRANSCRIPTION, viewState: null, temp: false}
+            }
+        
         default: 
             return state;
     
@@ -259,6 +284,7 @@ export function handleViews(state = {
  * @returns {object} the (potentially modified) state object
  */
 export function handleContextMenu(state = {visible: false, items:[], x: 0, y: 0}, action) {
+
     switch (action.type) {
         
         case ActionTypes.OPEN_CONTEXTMENU:        
@@ -289,6 +315,10 @@ export function handleContextMenu(state = {visible: false, items:[], x: 0, y: 0}
             }
             */ 
             return contextMenu;
+        
+        case ActionTypes.RESET_STATE:
+            
+            return {visible: false, items: [], x: 0, y: 0};
         
         //closing the context menu is no different from the default…
         default: 
@@ -348,6 +378,13 @@ export function handleNetwork(state = {
             }
             */
             return network;
+        
+        case ActionTypes.RESET_STATE:
+            
+            return {
+                dataStatus: StatusCodes.NO_CONNECTION,
+                nolog: false,
+            }
         
         default: 
             return Object.assign({}, state, {

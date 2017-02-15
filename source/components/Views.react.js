@@ -1,6 +1,5 @@
 import React, { PropTypes } from 'react';
 import View from './View.react';
-import ViewSplitter from './ViewSplitter.react';
 import Introduction from './Introduction.react';
 import { ViewLayouts } from './../redux/layout.constants';
 import SplitPane from 'react-split-pane';
@@ -12,6 +11,7 @@ import SplitPane from 'react-split-pane';
  */
 
 const Views = ({ firstView, secondView, layout, viewRatio, edition, language, setRatio }) => {
+    
     if(layout === ViewLayouts.SINGLE_VIEW) {
         return (
         <div className="views">
@@ -19,7 +19,6 @@ const Views = ({ firstView, secondView, layout, viewRatio, edition, language, se
         </div>
         );
     } else if(layout === ViewLayouts.HORIZONTAL_SPLIT) {
-        
         let size = Math.round(viewRatio * 100) + '%';
         let fullWidth = document.getElementsByClassName('views')[0].clientWidth;
         
@@ -35,7 +34,6 @@ const Views = ({ firstView, secondView, layout, viewRatio, edition, language, se
         </div>
         );
     } else if(layout === ViewLayouts.VERTICAL_SPLIT) {
-        
         let size = Math.round(viewRatio * 100) + '%';
         let fullHeight = document.getElementsByClassName('views')[0].clientHeight;
         
@@ -52,7 +50,9 @@ const Views = ({ firstView, secondView, layout, viewRatio, edition, language, se
         );
     } else if(layout === ViewLayouts.INTRODUCTION) {
         return (
-          <Introduction language={language}/>
+            <div className="views">
+                <Introduction language={language}/>
+            </div>
         );  
     } 
     

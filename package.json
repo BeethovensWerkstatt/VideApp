@@ -59,6 +59,7 @@
     "react-split-pane": "^0.1.57",
     "redux": "^3.6.0",
     "redux-devtools": "^3.3.2",
-    "redux-thunk": "^2.2.0"
+    "redux-thunk": "^2.2.0",
+    "socket.io-client": "^1.7.2"
   }
 }

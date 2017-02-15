@@ -49,28 +49,6 @@ div.views {
     }
 }
 
-div.viewSplitter {
-    background-color: #333333;
-    position: absolute;
-    z-index: 1;
-    
-    &.horizontal {
-        top: 0;
-        bottom: 0;
-        width: 3px;
-        margin-left: -1.5px;
-        cursor: ew-resize;
-    }
-    
-    &.vertical {
-        left: 0;
-        right: 0;
-        height: 3px;
-        margin-top: -1.5px;
-        cursor: ns-resize;
-    }
-}
-
 .Resizer {
         background: #000;
         opacity: .2;

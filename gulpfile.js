@@ -14,7 +14,7 @@ gulp.task('html', function() {
 gulp.task('fonts', function() {
     return gulp.src('./source/fonts/**/*.{ttf,woff,eof,svg}')
         // Perform minification tasks, etc here
-        .pipe(gulp.dest('./build/fonts/'));
+        .pipe(gulp.dest('./build/resources/fonts/'));
 });
 
 gulp.task('css', function() {
@@ -53,7 +53,12 @@ gulp.task('lint', function() {
         .pipe(gulp.dest('./build/'));
 });*/
 
-gulp.task('default', ['html', 'css', 'fonts'], function() {
+gulp.task('socketClient', function() {
+    return gulp.src('./node_modules/socket.io-client/dist/socket.io.min.js')
+        .pipe(gulp.dest('./build/resources/js/'));
+});
+
+gulp.task('default', ['html', 'css', 'fonts', 'socketClient'], function() {
     return browserify('./source/app.js')
         .transform(babelify, {presets: ['es2015', 'react'], plugins: ['transform-object-rest-spread']})
         .bundle()
