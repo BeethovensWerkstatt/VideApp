@@ -49,20 +49,28 @@
                 }
             }
             
-            &.active {
-                stroke: #ff3333;
-                fill: #ff3333;
+            &.current {
+                stroke: $spotColor;
+                fill: $spotColor;
                 opacity: .5 !important;
                 
                 &:hover {
-                    stroke: #cc3333;
-                    fill: #cc3333;
+                    stroke: $spotColor;
+                    fill: $spotColor;
                     opacity: .6 !important;
                 }
             }
             
-            &.inactive {
+            &.active {
+                stroke: darken($spotColor,25%);
+                fill: darken($spotColor,25%);
+                opacity: .35 !important;
                 
+                &:hover {
+                    stroke: darken($spotColor,15%);
+                    fill: darken($spotColor,15%);
+                    opacity: .6 !important;
+                }
             }
             
         }
@@ -191,8 +199,87 @@
             }
             
             
-            .rowBox {
+        }
+        
+        .statesBox {
+        
+            overflow: auto;
+            
+            position: absolute;
+            top: 30px;
+            right: 70px;
+            bottom: 30px;
+            left: 70px;
+            display: flex;
+            visibility: hidden;
+            
+            .columnsBox {
+                margin: 0 25px 0 0;
+                float: left;
+                width: 10px;
+                display: flex;
+                flex-direction: column-reverse;
+                height: 100%;
                 
+                .state {
+                    border: .5px solid #999999;
+                    width: 12px;
+                    height: 12px;
+                    margin: 10px 0 0 0;
+                    overflow: hidden;
+                    border-radius: 4px;
+                    background-color: #e5e5e5;
+                    position: relative;
+                    flex: none;
+                    cursor: pointer;
+                    
+                    label {
+                        display: none;
+                    }
+                    
+                    &.active:before {
+                        display: block;
+                        position: absolute;
+                        top: 2px;
+                        left: 2px;
+                        width: 8px;
+                        height: 8px;
+                        border-radius: 3px;
+                        content: '';
+                        z-index: 1;
+                        background-color: lighten($spotColor,30%);
+                    }
+                    
+                    &.current:before {
+                        display: block;
+                        position: absolute;
+                        top: 2px;
+                        left: 2px;
+                        width: 8px;
+                        height: 8px;
+                        border-radius: 3px;
+                        content: '';
+                        z-index: 1;
+                        background-color: $spotColor;
+                    }
+                    
+                    &.deletion {
+                        background-color: #bbbbbb;
+                        
+                        &:after {
+                            content:'/';
+                            color: #777777;
+                            font-size: 18px;
+                            position: absolute;
+                            top: -4px;
+                            left: 4px;
+                        }
+                    }
+                }
+            }
+            
+            /*  
+            .rowBox { 
                 margin: 10px 0;
             
                 .stateBox {
@@ -216,7 +303,8 @@
                         text-shadow: 0 1px 2px rgba(255,255,255,.7);
                     }
                 }
-            }
+            } 
+            */
         }
     }
 

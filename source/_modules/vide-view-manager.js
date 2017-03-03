@@ -53,6 +53,8 @@ const VideViewManager = class VideViewManager {
             this._store.dispatch(confirmState(state, 1));
         } else if(containerID === 'view2') {
             this._store.dispatch(confirmState(state, 2));
+        } else {
+            console.log('[ERROR] unable to determine target that wanted to confirm its view: ' + containerID)
         }
     }
     

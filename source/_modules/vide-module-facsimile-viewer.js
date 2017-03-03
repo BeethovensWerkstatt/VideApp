@@ -1,6 +1,6 @@
 import 'babel-polyfill';
 import VIDE_PROTOCOL from './vide-protocol';
-import {EoModule, Request} from './vide-module-blueprint';
+import {EoModule} from './vide-module-blueprint';
 
 
 
@@ -62,11 +62,13 @@ const VideFacsimileViewer = class VideFacsimileViewer extends EoModule {
      * returns {Object} a Promise with the json object containing info about all pages 
      */
     _getPageData(editionID) {
-    
+        let t0 = performance.now();
         let req = {id:editionID,type:'getPages'};
         return this.requestData(req,true).then((pageJson) => {
             
             let promises = [];
+            
+            
             for(let i=0; i<pageJson.sources.length; i++) {
                 let source = pageJson.sources[i];
                 
@@ -74,12 +76,15 @@ const VideFacsimileViewer = class VideFacsimileViewer extends EoModule {
                     let page = source.pages[j];
                         
                     if(page.shapes !== '') {
+                        let s0 = performance.now();
                         let svgPromise = new Promise((resolve, reject) => {
                             
                             let svgReq = {id: page.shapes,type:'getPageShapesSvg'};
                             resolve(
                                 this.requestData(svgReq, true).then(
                                     (svg) => {
+                                        let s1 = performance.now();
+                                        console.log('[DEBUG] loading svg for ' + page.label + ' took ' + (s1 - s0) + ' millisecs');
                                         return Promise.resolve(page.id);
                                     }
                                 )
@@ -90,7 +95,12 @@ const VideFacsimileViewer = class VideFacsimileViewer extends EoModule {
                     }
                 }
             }
-            return Promise.all(promises).then((results) => {return Promise.resolve(pageJson);});
+            
+            return Promise.all(promises).then((results) => {
+                let t1 = performance.now();
+                console.log('[DEBUG] getPageData took ' + (t1 - t0) + ' millisecs');
+                return Promise.resolve(pageJson);
+            });
         })
         
     }
@@ -162,7 +172,12 @@ const VideFacsimileViewer = class VideFacsimileViewer extends EoModule {
         scarBox.id = containerID + '_scarBox';
         scarBox.className = 'scarBox';
         
+        let statesBox = document.createElement('div');
+        statesBox.id = containerID + '_statesBox';
+        statesBox.className = 'statesBox';
+        
         statenav.appendChild(scarBox);
+        statenav.appendChild(statesBox);
         
         let scarLabel = document.createElement('div');
         scarLabel.id = containerID + '_scarLabel';
@@ -194,7 +209,7 @@ const VideFacsimileViewer = class VideFacsimileViewer extends EoModule {
      * @param {string} containerID describes the HTML element that contains the facsimile
      * @param {Object} json the pageJson object with info about the pages
      */
-    _setupViewer(containerID) {
+    _setupViewer(containerID, navMode = 'highlightMusic') {
         
         this._setupHtml(containerID);
         
@@ -203,11 +218,16 @@ const VideFacsimileViewer = class VideFacsimileViewer extends EoModule {
         let stateData = this._getStateData(editionID);
         let measureData = this._getMeasureData(editionID);
         
+        let t0 = performance.now();
+        
         return Promise.all([pageData, stateData,measureData]).then((results) => {
             let pageJson = results[0];
             let stateJson = results[1];
             let measureJson = results[2];
-           
+            
+            let t1 = performance.now();
+                console.log('[DEBUG] setupViewer took ' + (t1 - t0) + ' millisecs');
+            
             if(this._cache.has(containerID + '_viewer')) {
                 return Promise.resolve(this._cache.get(containerID + '_viewer'))
             } else {
@@ -324,164 +344,165 @@ const VideFacsimileViewer = class VideFacsimileViewer extends EoModule {
                             }
                         }
                         
-                        //load scar overview
+                         
                         
-                        let staffCount = measureJson.staves.length;
+                        resolve(viewer);
+                    });
+                    
+                    //load scar overview
+                    let staffCount = measureJson.staves.length;
+                    
+                    let m=0;
+                    let n=measureJson.measures.length;
+                    let scarBox = document.getElementById(containerID + '_scarBox');
+                    
+                    //insert measures in scarBox
+                    for(m; m<n; m++) {
+                        let measure = measureJson.measures[m]
+                        let elem = document.createElement('div');
+                        elem.classList.add('measure');
+                        elem.setAttribute('title',(measure.label !== '') ? measure.label : measure.n);
+                        elem.setAttribute('data-id',measure.id);
+                        scarBox.append(elem);
                         
-                        let m=0;
-                        let n=measureJson.measures.length;
-                        let scarBox = document.getElementById(containerID + '_scarBox');
-                        
-                        //insert measures in scarBox
-                        for(m; m<n; m++) {
-                            let measure = measureJson.measures[m]
-                            let elem = document.createElement('div');
-                            elem.classList.add('measure');
-                            elem.setAttribute('title',(measure.label !== '') ? measure.label : measure.n);
-                            elem.setAttribute('data-id',measure.id);
-                            scarBox.append(elem);
-                            
-                            //handler to jump to individual measures
-                            elem.addEventListener('click',(e) => {
-                                console.log('please goto measure ' + measure.id);
-                                let req = {
-                                    id: measure.id,
-                                    object: VIDE_PROTOCOL.OBJECT.NOTATION,
-                                    contexts: [],
-                                    perspective: VIDE_PROTOCOL.PERSPECTIVE.FACSIMILE,
-                                    operation: VIDE_PROTOCOL.OPERATION.VIEW,
-                                    state: {}
-                                };
-                                this.handleRequest(req,containerID);
-                            })
-                            
-                            //insert overlays for scars 
-                            let k=0;
-                            let l=measure.scars.length;
-                            for(k;k<l;k++) {
-                                
-                                let scar = measure.scars[k];
-                                elem.classList.add('unflex')
-                                
-                                if(scar.complete) {
-                                    let scarElem = document.createElement('div');
-                                    scarElem.classList.add('scar');
-                                    scarElem.classList.add('complete');
-                                    scarElem.setAttribute('data-scar',scar.scar);
-                                    elem.append(scarElem);
-                                    
-                                    //handler to jump to a specific scar
-                                    scarElem.addEventListener('click',(e) => {
-                                        let elem = e.currentTarget;
-                                        let scarId = elem.getAttribute('data-scar');
-                                        highlightScar(scarId);
-                                        e.stopPropagation();
-                                    })
-                                } else {
-                                    let p = 0;
-                                    let q = scar.staves.length;
-                                    for(p; p<q; p++) {
-                                        let n = scar.staves[p] ;
-                                        let jsn = n - 1;
-                                        
-                                        let label = measureJson.staves[jsn].label;
-                                        if(label === '' || typeof label === 'undefined') {
-                                            label = n;
-                                        }
-                                        
-                                        let unit = (90 / staffCount);
-                                        let top = jsn * unit + 5;
-                                        
-                                        let scarElem = document.createElement('div');
-                                        scarElem.classList.add('scar');
-                                        scarElem.classList.add('staff');
-                                        scarElem.setAttribute('data-scar',scar.scar);
-                                        scarElem.setAttribute('data-staff-n',n);
-                                        scarElem.setAttribute('title',label);
-                                        scarElem.style.top = top + '%';
-                                        scarElem.style.height = unit + '%';
-                                        
-                                        elem.append(scarElem);
-                                        
-                                        scarElem.addEventListener('click',(e) => {
-                                            let elem = e.currentTarget;
-                                            let scarId = elem.getAttribute('data-scar');
-                                            highlightScar(scarId);
-                                            e.stopPropagation();
-                                        })
-                                    }
-                                   
-                                }
-                                
-                            }
-                        }
-                        
-                        //listener for next scar button
-                        document.querySelector('#' + containerID + ' .prevScarBtn').addEventListener('click',(e) => {
-                            let currentScar = document.getElementById(containerID + '_scarLabel').getAttribute('data-scarId');
-                            let index = stateJson.findIndex((elem) => {
-                                return elem.id === currentScar;
-                            });
-                            let nextIndex;
-                            if(index === 0) {
-                                nextIndex = stateJson.length -1;
-                            } else {
-                                nextIndex = index - 1;
-                            }
-                            
-                            let nextScar = stateJson[nextIndex].id;
-                            this._highlightScarForNav(containerID,nextScar);
-                            
-                        });
-                        
-                        //listener for previous scar button
-                        document.querySelector('#' + containerID + ' .nextScarBtn').addEventListener('click',(e) => {
-                            let currentScar = document.getElementById(containerID + '_scarLabel').getAttribute('data-scarId');
-                            let index = stateJson.findIndex((elem) => {
-                                return elem.id === currentScar;
-                            });
-                            let nextIndex;
-                            if(index === stateJson.length-1) {
-                                nextIndex = 0;
-                            } else {
-                                nextIndex = index + 1;
-                            }
-                            
-                            let nextScar = stateJson[nextIndex].id;
-                            this._highlightScarForNav(containerID,nextScar);
-                        });
-                        
-                        //listener for activating a scar
-                        document.getElementById(containerID + '_scarLabel').addEventListener('click',(e) => {
-                            let scarId = e.currentTarget.getAttribute('data-scarId');
-                            if(scarId === null) {
-                                return false;
-                            }
-                            
-                            let scar = stateJson.find((elem) => {
-                                return elem.id === scarId;  
-                            });
-                            
-                            let firstState = scar.states[0];
+                        //handler to jump to individual measures
+                        elem.addEventListener('click',(e) => {
                             let req = {
-                                id: firstState.id,
-                                object: VIDE_PROTOCOL.OBJECT.STATE,
+                                id: measure.id,
+                                object: VIDE_PROTOCOL.OBJECT.NOTATION,
                                 contexts: [],
                                 perspective: VIDE_PROTOCOL.PERSPECTIVE.FACSIMILE,
                                 operation: VIDE_PROTOCOL.OPERATION.VIEW,
                                 state: {}
                             };
-                            //this request needs to go through vide-view-manager???           
-                            this.handleRequest(req,containerID);      
-                                       
+                            this.handleRequest(req,containerID);
+                        })
+                        
+                        //insert overlays for scars 
+                        let k=0;
+                        let l=measure.scars.length;
+                        for(k;k<l;k++) {
+                            
+                            let scar = measure.scars[k];
+                            elem.classList.add('unflex')
+                            
+                            if(scar.complete) {
+                                let scarElem = document.createElement('div');
+                                scarElem.classList.add('scar');
+                                scarElem.classList.add('complete');
+                                scarElem.setAttribute('data-scar',scar.scar);
+                                elem.append(scarElem);
+                                
+                                //handler to jump to a specific scar
+                                scarElem.addEventListener('click',(e) => {
+                                    let elem = e.currentTarget;
+                                    let scarId = elem.getAttribute('data-scar');
+                                    this._highlightScarForNav(containerID,scarId);
+                                    e.stopPropagation();
+                                })
+                            } else {
+                                let p = 0;
+                                let q = scar.staves.length;
+                                for(p; p<q; p++) {
+                                    let n = scar.staves[p] ;
+                                    let jsn = n - 1;
+                                    
+                                    let label = measureJson.staves[jsn].label;
+                                    if(label === '' || typeof label === 'undefined') {
+                                        label = n;
+                                    }
+                                    
+                                    let unit = (90 / staffCount);
+                                    let top = jsn * unit + 5;
+                                    
+                                    let scarElem = document.createElement('div');
+                                    scarElem.classList.add('scar');
+                                    scarElem.classList.add('staff');
+                                    scarElem.setAttribute('data-scar',scar.scar);
+                                    scarElem.setAttribute('data-staff-n',n);
+                                    scarElem.setAttribute('title',label);
+                                    scarElem.style.top = top + '%';
+                                    scarElem.style.height = unit + '%';
+                                    
+                                    elem.append(scarElem);
+                                    
+                                    scarElem.addEventListener('click',(e) => {
+                                        let elem = e.currentTarget;
+                                        let scarId = elem.getAttribute('data-scar');
+                                        this._highlightScarForNav(containerID,scarId);
+                                        e.stopPropagation();
+                                    })
+                                }
+                               
+                            }
+                            
+                        }
+                    }
+                    
+                    //listener for next scar button
+                    document.querySelector('#' + containerID + ' .prevScarBtn').addEventListener('click',(e) => {
+                        let currentScar = document.getElementById(containerID + '_scarLabel').getAttribute('data-scarId');
+                        let index = stateJson.findIndex((elem) => {
+                            return elem.id === currentScar;
+                        });
+                        let nextIndex;
+                        if(index === 0) {
+                            nextIndex = stateJson.length -1;
+                        } else {
+                            nextIndex = index - 1;
+                        }
+                        
+                        let nextScar = stateJson[nextIndex].id;
+                        this._highlightScarForNav(containerID,nextScar);
+                        
+                    });
+                    
+                    //listener for previous scar button
+                    document.querySelector('#' + containerID + ' .nextScarBtn').addEventListener('click',(e) => {
+                        let currentScar = document.getElementById(containerID + '_scarLabel').getAttribute('data-scarId');
+                        let index = stateJson.findIndex((elem) => {
+                            return elem.id === currentScar;
+                        });
+                        let nextIndex;
+                        if(index === stateJson.length-1) {
+                            nextIndex = 0;
+                        } else {
+                            nextIndex = index + 1;
+                        }
+                        
+                        let nextScar = stateJson[nextIndex].id;
+                        this._highlightScarForNav(containerID,nextScar);
+                    });
+                    
+                    //listener for activating a scar
+                    document.getElementById(containerID + '_scarLabel').addEventListener('click',(e) => {
+                        let scarId = e.currentTarget.getAttribute('data-scarId');
+                        if(scarId === null) {
+                            return false;
+                        }
+                        
+                        let scar = stateJson.find((elem) => {
+                            return elem.id === scarId;  
                         });
                         
-                        this._highlightScarForNav(containerID,stateJson[0].id);    
-                        
-                        resolve(viewer);
+                        let firstState = scar.states[0];
+                        let req = {
+                            id: firstState.id,
+                            object: VIDE_PROTOCOL.OBJECT.STATE,
+                            contexts: [],
+                            perspective: VIDE_PROTOCOL.PERSPECTIVE.FACSIMILE,
+                            operation: VIDE_PROTOCOL.OPERATION.VIEW,
+                            state: {}
+                        };
+                        //this request needs to go through vide-view-manager???           
+                        this.handleRequest(req,containerID);      
+                                   
                     });
-                
-                //return viewer;
+                    
+                    this._highlightScarForNav(containerID,stateJson[0].id);   
+                    
+                    //todo: deal with navMode, and what is actually highlighted in here…
+                    
                 });
             
             }
@@ -552,84 +573,134 @@ const VideFacsimileViewer = class VideFacsimileViewer extends EoModule {
             );
     }
     
-    _setupStatesNav(containerID, json) {
-        let selectBox = document.getElementById(containerID + '_scarSelect');
+    _setupStatesNav(containerID, scar, currentState = '', activeStates = []) {
         
-        //let json = (typeof jsonRaw === 'object') ? jsonRaw : JSON.parse(jsonRaw);
+        let columns = 0;
+        let stateArray = [];
         
-        for(let i in json) {
-            let scar = json[i];
-            let option = document.createElement('option');
-            option.innerHTML = scar.label + ' [' + scar.states.length + ' states]';
-            selectBox.appendChild(option);
-        }
+        let statesBox = document.getElementById(containerID + '_statesBox');
+        let previousScarId = statesBox.getAttribute('data-scarId');
         
-        let _this = this;
+        //generate new HTML for this scar
+        if(previousScarId !== scar.id) {
         
-        let func = function(event) {
-            let i = selectBox.selectedIndex;
-            let scar = json[i];
+            statesBox.setAttribute('data-scarId',scar.id);
             
-            let rows = 0;
-            let stateArray = [];
-            
-            for(let j in scar.states) {
-                let state = scar.states[j];
+            for(let i in scar.states) {
+                let state = scar.states[i];
                 
-                rows = (state.position > rows) ? state.position : rows;
+                columns = (state.position > columns) ? state.position : columns;
                 
-                if(rows > stateArray.length) {
+                if(columns > stateArray.length) {
                     let newArray = [];
                     stateArray.push(newArray);
                 }
-                stateArray[rows - 1].push(state);    
+                stateArray[columns - 1].push(state);    
             }
-            
-            //empty states from former scar
-            let scarBox = document.getElementById(containerID + '_scarBox');
-            scarBox.innerHTML = '';
-            
-            //add a single row for each simultaneous "step" 
-            for(let n=0; n<rows; n++) {
-                let rowBox = document.createElement('div');
-                rowBox.classList.add('rowBox');
                 
-                //within each row, add corresponding states
-                for(let m=0; m<stateArray[n].length; m++) {
-                    let stateBox = document.createElement('div');
-                    stateBox.classList.add('stateBox');
-                    stateBox.setAttribute('data-stateid', stateArray[n][m].id);
-                    stateBox.id = containerID + '_' + stateArray[n][m].id;
-                    //todo: make this compatible with I18n
-                    stateBox.innerHTML = 'Schreibschicht ' + stateArray[n][m].label;
-                    rowBox.appendChild(stateBox);
+            //empty states from former scar
+            //todo: remove listeners
+            statesBox.innerHTML = '';
+                
+            //add a single column for each simultaneous "step" 
+            for(let n=0; n<columns; n++) {
+                let columnsBox = document.createElement('div');
+                columnsBox.classList.add('columnsBox');
                     
-                    let stateSelect = function(event) {
-                        let currentState = stateArray[n][m];
+                //within each column, add corresponding states
+                for(let m=0; m<stateArray[n].length; m++) {
+                    let stateObj = stateArray[n][m];
+                
+                    let stateBox = document.createElement('div');
+                    stateBox.classList.add('state');
+                    stateBox.setAttribute('data-stateid', stateObj.id);
+                    stateBox.setAttribute('data-statePos', stateObj.position);
+                    
+                    stateBox.id = containerID + '_' + stateObj.id;
+                    
+                    if(stateObj.id === currentState) {
+                        stateBox.classList.add('current');
+                    }
+                    
+                    if(activeStates.indexOf(stateObj.id) !== -1) {
+                        stateBox.classList.add('active');
+                    }
+                    
+                    if(stateObj.deletion) {
+                        stateBox.classList.add('deletion');
+                    }
+                    
+                    //todo: make this compatible with I18n
+                    stateBox.innerHTML = '<label>' + stateObj.label + '</label>';
+                    columnsBox.appendChild(stateBox);
+                    
+                    let stateSelect = (event) => {
                         
-                        //_this.highlightState(currentState,containerID,_this);
+                        let requiredStates = [];
+                        //todo: add possibility to deactivate state
+                        /* 
+                            keep var toBeDeactivated when iterating over states, 
+                            when stateObj.id === current state, set to true
+                            problem: request object needs an active object! 
+                        */
+                        let p = 0;
+                        let q = scar.states.length;
                         
-                        let query = {
-                            objectType: EO_Protocol.Object.OBJECT_STATE,
-                            objectID: currentState.id,
-                            contexts: [],
-                            perspective: _this._supportedPerspective,
-                            operation: EO_Protocol.Operation.OPERATION_VIEW
-                        };
                         
-                        let request = new Request(containerID, _this._eohub.getEdition(), query);
-                        _this._eohub.sendSelfRequest(request, _this);
+                        for(p; p<q; p++) {
+                            let queriedState = scar.states[p];
+                            let queriedStateElem = document.getElementById(containerID + '_' + queriedState.id);
+                            
+                            let lesserPos = (queriedState.position < stateObj.position && !queriedState.deletion);
+                            let isActive = (queriedState.position <= stateObj.position && queriedStateElem.classList.contains('active'))
+                            let isDeletion = stateObj.deletion && queriedStateElem.classList.contains('active') && (queriedState.position <= stateObj.position);
+                            //todo: check those… 
+                            
+                            if(lesserPos || isActive || isDeletion) {
+                                requiredStates.push({id: queriedState.id, context: VIDE_PROTOCOL.CONTEXT.STATE});
+                            }
+                        }
+                        
+                        let req = {
+                            id: stateObj.id,
+                            object: VIDE_PROTOCOL.OBJECT.STATE,
+                            contexts: requiredStates,
+                            perspective: VIDE_PROTOCOL.PERSPECTIVE.FACSIMILE,
+                            operation: VIDE_PROTOCOL.OPERATION.VIEW,
+                            state: {}
+                        }
+                        
+                        this.handleRequest(req,containerID);
                     };
                     stateBox.addEventListener('click', stateSelect);
                 }
                 
-                scarBox.appendChild(rowBox);
-            }
-        };
+                statesBox.appendChild(columnsBox);
+            };
+        } else {
         
-        selectBox.addEventListener('change', func);
-        selectBox.selectedIndex = 0;
-        func(null);
+            let p = 0;
+            let q = scar.states.length;
+            for(p; p<q; p++) {
+                let queriedState = scar.states[p];
+                let queriedStateElem = document.getElementById(containerID + '_' + queriedState.id);
+                
+                if(queriedState.id === currentState) {
+                    queriedStateElem.classList.add('current');
+                } else {
+                    queriedStateElem.classList.remove('current');
+                }
+                
+                if(activeStates.indexOf(queriedState.id) !== -1) {
+                    queriedStateElem.classList.add('active');
+                } else {
+                    queriedStateElem.classList.remove('active');
+                }
+                
+            }
+        }
+        
+        
     }
     
     getDefaultView(containerID) {
@@ -638,8 +709,9 @@ const VideFacsimileViewer = class VideFacsimileViewer extends EoModule {
         
     }
     
-    _hightlightScarForNav(containerID, scarId) {
+    _highlightScarForNav(containerID, scarId) {
         this._removeScarHighlightForNav(containerID);
+        this._closeSingleScar(containerID);
         
         let editionID = this._eohub.getEdition();
         this._getStateData(editionID).then((stateJson) => {
@@ -674,39 +746,40 @@ const VideFacsimileViewer = class VideFacsimileViewer extends EoModule {
         }
     }
     
+    _openSingleScar(containerID, scarId, currentState = '', activeStates = []) {
+        let editionID = this._eohub.getEdition();
+        this._getStateData(editionID).then((stateJson) => {
+            let scarObj = stateJson.find((elem) => {
+                return elem.id === scarId;
+            });
+            
+            this._setupStatesNav(containerID, scarObj, currentState, activeStates);
+            
+            document.getElementById(containerID + '_scarBox').style.visibility = 'hidden';
+            document.getElementById(containerID + '_statesBox').style.visibility = 'visible';
+        });
+    }
     
-    highlightState(state, containerID, facsViewer) {
-        let currentState = document.querySelectorAll('#' + containerID + ' .stateBox.current');
+    _closeSingleScar(containerID) {
+        document.getElementById(containerID + '_scarBox').style.visibility = 'visible';
+        document.getElementById(containerID + '_statesBox').style.visibility = 'hidden';
         
-        if(currentState.length > 0) {
-            [...currentState][0].classList.remove('current');
-            
-            let oldShapes = document.querySelectorAll('#' + containerID + ' path.highlighted, #' + containerID + ' path.active');
-            for (let shape of oldShapes) {
-                shape.classList.remove('highlighted', 'active');
-            }
-            
-            if([...currentState][0].getAttribute('data-stateid') === state.id) {
-                return false;
-            }
-        }
-        
-        document.getElementById(containerID + '_' + state.id).classList.add('current');
-        
-        let viewer = facsViewer._viewerStore.get(containerID);
+    }
+    
+    _highlightState(state, containerID, viewer,className = 'active') {
         
         if(state.shapes.length === 0) {
             return false;
         }
         
         try {
-            let baseRect = facsViewer._getShapeRect(containerID, viewer, document.querySelector('#' + containerID + ' #' + state.shapes[0]));
+            let baseRect = this._getShapeRect(containerID, viewer, document.querySelector('#' + containerID + ' #' + state.shapes[0]));
             
             for(let i=0; i<state.shapes.length; i++) {
                 let shape = document.querySelector('#' + containerID + ' #' + state.shapes[i]);
                 try {
-                    shape.classList.toggle('highlighted');
-                    let rect = facsViewer._getShapeRect(containerID, viewer, shape);
+                    shape.classList.add(className);
+                    let rect = this._getShapeRect(containerID, viewer, shape);
                     baseRect = baseRect.union(rect);  
                 } catch(error) {
                     console.log('[ERROR] invalid shape ' + state.shapes[i] + ' in state ' + state.label + ': ' + error);
@@ -718,24 +791,31 @@ const VideFacsimileViewer = class VideFacsimileViewer extends EoModule {
         }
     }
     
-    highlightItem(containerID, shapesArray) {
-        let oldHighlights = document.querySelectorAll('#' + containerID + ' path.active, #' + +containerID + ' path.highlighted');
+    _removeSvgHighlights(containerID) {
+        let elems = document.querySelectorAll('#' + containerID + ' svg path.active, #' + containerID + ' svg path.current');
+        
+        for (let elem of elems) {
+           elem.classList.remove('active');
+           elem.classList.remove('current');
+        }
+    }
+    
+    highlightItem(viewer,containerID, shapesArray) {
+        let oldHighlights = document.querySelectorAll('#' + containerID + ' path.active, #' + +containerID + ' path.current');
         for (let shape of oldHighlights) {
-            shape.classList.remove('active', 'highlighted');
+            shape.classList.remove('current');
         }
         
         if(shapesArray.length === 0) {
             return false;
         }
         
-        let viewer = this._viewerStore.get(containerID);
-        
         let baseRect = this._getShapeRect(containerID, viewer, document.querySelector('#' + containerID + ' #' + shapesArray[0]));
         
         for(let i=0; i<shapesArray.length; i++) {
             let shape = document.querySelector('#' + containerID + ' #' + shapesArray[i]);
             try {
-                shape.classList.add('active');
+                shape.classList.add('current');
                 let rect = this._getShapeRect(containerID, viewer, shape);
                 baseRect = baseRect.union(rect);  
             } catch(error) {
@@ -772,75 +852,122 @@ const VideFacsimileViewer = class VideFacsimileViewer extends EoModule {
     }
     
     handleRequest(request,containerID) {
-        let reqContainer = request.getContainer();
-        
-        let containerID = (reqContainer.endsWith('_VIEWTYPE_FACSIMILEVIEW')) ? reqContainer : reqContainer + '_VIEWTYPE_FACSIMILEVIEW';
-        let container = document.getElementById(containerID);
-        
-        let _this = this;
-        
-        let func = function() {
-            console.log('[DEBUG] handling facsimile request');    
-        
-            let type = JSON.stringify(request.getQueryPrototype());
-        
-            let stateProto = JSON.stringify({objectType: EO_Protocol.Object.OBJECT_STATE, contexts: [], perspective: _this._supportedPerspective, operation: EO_Protocol.Operation.OPERATION_VIEW});
-            let notationProto = JSON.stringify({objectType: EO_Protocol.Object.OBJECT_NOTATION, contexts: [], perspective: _this._supportedPerspective, operation: EO_Protocol.Operation.OPERATION_VIEW});
-            let lyricProto = JSON.stringify({objectType: EO_Protocol.Object.OBJECT_LYRICS, contexts: [], perspective: _this._supportedPerspective, operation: EO_Protocol.Operation.OPERATION_VIEW});
-            let dirProto = JSON.stringify({objectType: EO_Protocol.Object.OBJECT_DIR, contexts: [], perspective: _this._supportedPerspective, operation: EO_Protocol.Operation.OPERATION_VIEW});
-            let delProto = JSON.stringify({objectType: EO_Protocol.Object.OBJECT_DEL, contexts: [], perspective: _this._supportedPerspective, operation: EO_Protocol.Operation.OPERATION_VIEW});
-            let metaProto = JSON.stringify({objectType: EO_Protocol.Object.OBJECT_METAMARK, contexts: [], perspective: _this._supportedPerspective, operation: EO_Protocol.Operation.OPERATION_VIEW});
+       
+        //determine type of request
+        let type;
             
-            //highlight a single state
-            if(type === stateProto) {
-                let stateObj = null;
-                let target = request.getObjectID();
-                
-                for (let scar of _this._stateStore.get(request.getEditionID())) {
-                    for (let state of scar.states) {
-                        if(state.id === target) {
-                            stateObj = state;
-                        }
-                    } 
-                }
-                
-                _this.highlightState(stateObj, request.getContainer(), _this);
-            } else if(type === notationProto || type === lyricProto || type === dirProto || type === delProto || type === metaProto) {
-                let responseType = 'json';
-                let url = _this._getBaseURI() + 'edition/' + _this._eohub.getEdition() + '/object/' + request.getObjectID() + '/shapes.json';
-                
-                let shapeRequest = new DataRequest(responseType, url);
-                _this._eohub.requestData(shapeRequest).then(
-                    (json) => {
-                        _this.highlightItem(containerID, json);
-                    });
-            } else {
-                console.log('[WARNING] Dunno how to handle the following request:');
-                console.log(request);
-            }
-        };
-        
-        
-        if(container.innerHTML === '' || !this._viewerStore.has(containerID)) {
-            this.getDefaultView(containerID).then(func());
-        } else {
-            func();
+        if(request.perspective !== this._supportedPerspective) {
+            console.log('[ERROR] unable to handle the following request in VideFacsimileViewer: perspective not supported')
+            console.log(request)
+            return false;
         }
         
+        if(request.operation !== VIDE_PROTOCOL.OPERATION.VIEW) {
+            console.log('[ERROR] unable to handle the following request in VideFacsimileViewer: only allowed operation is "VIEW"')
+            console.log(request)
+            return false;
+        }
         
-        /*if(this._stateStore.has(_this._eohub.getEdition())) {
-            this._setupStatesNav(containerID, this._stateStore.get(_this._eohub.getEdition()));    
+        if(request.object === VIDE_PROTOCOL.OBJECT.NOTATION && request.contexts.length === 0) {
+            type = 'highlightMusic';
+        } else if(request.object === VIDE_PROTOCOL.OBJECT.LYRICS && request.contexts.length === 0) {
+            type = 'highlightMusic';
+        } else if(request.object === VIDE_PROTOCOL.OBJECT.METAMARK && request.contexts.length === 0) {
+            type = 'highlightMusic';
+        } else if(request.object === VIDE_PROTOCOL.OBJECT.DIR && request.contexts.length === 0) {
+            type = 'highlightMusic';    
+        } else if(request.object === VIDE_PROTOCOL.OBJECT.DEL && request.contexts.length === 0) {
+            type = 'highlightMusic';    
+        } else if(request.object === VIDE_PROTOCOL.OBJECT.STATE) {
+            type = 'highlightState';
         } else {
-            let statesResponseType = 'json';
-            let statesUrl = this._getBaseURI() + 'edition/' + this._eohub.getEdition() + '/states/overview.json';
-            let statesCallback = function(originalRequest,json) {
-                _this._stateStore.set(_this._eohub.getEdition(),json)
-                _this._setupStatesNav(containerID, json);
-            }
-            let stateRequest = new DataRequest(statesResponseType,statesUrl,statesCallback);
-            this._eohub.requestData(stateRequest);
+            console.log('[ERROR] unable to determine the type of the following request in VideFacsimileViewer:')
+            console.log(request)
+            return false;
+        }
         
-        }*/
+        this._setupViewer(containerID, type).then((viewer) => {
+            
+            let editionID = this._eohub.getEdition();
+            
+            if(type === 'highlightMusic') {
+                let req = {
+                    id: request.id,
+                    edition: editionID,
+                    type: 'getShapesForObject'
+                };
+                
+                this.requestData(req,false).then((json) => {
+                    if(typeof json.dimensions !== 'undefined') {
+                        console.log('I need to highlight rect: ')
+                        console.log(json.dimensions);
+                    } else {
+                        this.highlightItem(viewer,containerID,json.shapes);    
+                    }
+                });    
+            } else if(type === 'highlightState') {
+                
+                let editionID = this._eohub.getEdition();
+                this._getStateData(editionID).then((stateJson) => {
+                    
+                    let scar;
+                    let i = 0;
+                    
+                    loops:{
+                        for(i; i<stateJson.length;i++) {
+                            let current = stateJson[i];
+                            
+                            let j = 0;
+                            for(j; j<current.states.length;j++) {
+                                let state = current.states[j];
+                                if(state.id === request.id) {
+                                    scar = current;
+                                    break loops;
+                                }
+                            }
+                        }
+                    }
+                    
+                    let activeStates = [];
+                    i = 0;
+                    for(i;i<request.contexts.length;i++) {
+                        activeStates.push(request.contexts[i].id)
+                    }
+                    
+                    this._openSingleScar(containerID,scar.id,request.id,activeStates);
+                    
+                    //highlight states in facsimile
+                    
+                    this._removeSvgHighlights(containerID);
+                    i=0; 
+                    let currentHandled = false;
+                    
+                    for(i;i<activeStates.length;i++) {
+                        
+                        let stateObj = scar.states.find((obj) => {
+                            return obj.id === activeStates[i]; 
+                        });
+                        
+                        if(stateObj.id !== request.id) {
+                            this._highlightState(stateObj, containerID, viewer,'active')
+                        } else {
+                            currentHandled = true;
+                            this._highlightState(stateObj, containerID, viewer,'current')
+                        }
+                    }
+                    
+                    if(!currentHandled) {
+                        let stateObj = scar.states.find((obj) => {
+                            return obj.id === request.id; 
+                        });
+                        this._highlightState(stateObj, containerID, viewer,'current')
+                    }
+                    
+                });
+            }
+        });
+        
+        
     }
     
 };
