@@ -40,7 +40,8 @@ export const ActionTypes = {
     CLOSE_CONTEXTMENU: 'CLOSE_CONTEXTMENU',
     
     RESTORE_STATE: 'RESTORE_STATE',
-    RESET_STATE: 'RESET_STATE'
+    RESET_STATE: 'RESET_STATE',
+    CONFIRM_STATE: 'CONFIRM_STATE'
 };
 
 /** 
@@ -49,8 +50,8 @@ export const ActionTypes = {
  * @param {Object|null} viewState object when initializing the view
  * @returns {object} the information how view1.state needs to be modified
  */ 
-export function setFirstView(perspective = Perspective.FACSIMILE, viewState = null) {
-    return { type: ActionTypes.SET_FIRST_VIEW, perspective, viewState };
+export function setFirstView(perspective = Perspective.FACSIMILE, target = null) {
+    return { type: ActionTypes.SET_FIRST_VIEW, perspective, target };
 }
 
 /** 
@@ -59,8 +60,8 @@ export function setFirstView(perspective = Perspective.FACSIMILE, viewState = nu
  * @param {Object|null} viewState object when initializing the view
  * @returns {object} the information how view2.state needs to be modified
  */ 
-export function setSecondView(perspective = Perspective.TRANSCRIPTION, viewState = null) {
-    return { type: ActionTypes.SET_SECOND_VIEW, perspective, viewState };
+export function setSecondView(perspective = Perspective.TRANSCRIPTION, target = null) {
+    return { type: ActionTypes.SET_SECOND_VIEW, perspective, target };
 }
 
 /**
@@ -193,8 +194,8 @@ export function highlightEdition(id = '') {
  * @param {string} id of the edition to activate
  * @returns {object} the actionType that's required for Redux
  */ 
-export function activateEdition(id = '') {
-    return { type: ActionTypes.ACTIVATE_EDITION, id };
+export function activateEdition(id = '', revision = '') {
+    return { type: ActionTypes.ACTIVATE_EDITION, id, revision };
 }
 
 /** 
@@ -241,6 +242,14 @@ export function restoreState(newState = {}) {
  * Function resetState brings the application back to the starting point
  * @returns {object} the actionType that's required for Redux
  */
- export function resetState() {
-     return {type: ActionTypes.RESET_STATE}
- }
+export function resetState() {
+    return {type: ActionTypes.RESET_STATE};
+}
+
+/** 
+ * Function confirmState confirms that a certain state has been reached by a view
+ * @returns {object} the actionType that's required for Redux
+ */
+export function confirmState(state = {},view = -1) {
+    return {type: ActionTypes.CONFIRM_STATE, state, view};
+}

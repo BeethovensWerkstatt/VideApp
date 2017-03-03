@@ -2,6 +2,7 @@ import 'babel-polyfill';
 let shake128 = require('js-sha3').shake_128;
 import {version} from './../../package.json';
 import {restoreState, resetState} from './../redux/actions.redux';
+
 const VideHistoryManager = class VideHistoryManager {
     
     /** 
@@ -36,14 +37,14 @@ const VideHistoryManager = class VideHistoryManager {
         
         this._logSocket = io('http://localhost:2999/' + this._socketID);
         this._logSocket.on('connect', () => {
-            this._logSocket.emit('logSession',{id:this._sessionID, user: this._userID, userAgent:userAgent, lang: language, states:[]});
+            this._logSocket.emit('logSession', {id:this._sessionID, user: this._userID, userAgent:userAgent, lang: language, states:[]});
         });
         
-        this._logSocket.on('sendState',(message) => {
+        this._logSocket.on('sendState', (message) => {
             console.log(' --> receiving state ' + message.hash);
-            console.log(message)
+            console.log(message);
             this._restoreState(message.state);
-        })
+        });
         
         //triggered whenever user navigates through browser history
         window.onpopstate = (event) => {
@@ -54,11 +55,10 @@ const VideHistoryManager = class VideHistoryManager {
         
         if(initialLocation !== '' && initialLocation !== sessionStorage.getItem('stateHash')) {
             console.log('[INFO] I need to restore state "' + initialLocation + '"');
-            this._logSocket.emit('requestState',{hash:initialLocation,socket:this._socketID});
+            this._logSocket.emit('requestState', {hash:initialLocation, socket:this._socketID});
         } /*else {
             console.log(' --> a clean reload is requested')
         }*/
-        
     }
     
     /** 
@@ -70,7 +70,7 @@ const VideHistoryManager = class VideHistoryManager {
         //logs each change of the state into the console
         console.log('[LOG] state has changed:');
         console.log(state);
-        sessionStorage.setItem('stateHash',this._getHash(state));
+        sessionStorage.setItem('stateHash', this._getHash(state));
         
         
         if(!state.views.view1.temp && !state.views.view2.temp && !state.network.nolog) {
@@ -89,7 +89,7 @@ const VideHistoryManager = class VideHistoryManager {
         if(hash !== this._getCurrentHash()) {
             history.pushState(state, '', hash);
             
-            this._logSocket.emit('logState',{id:hash, state:state, session: this._sessionID, timestamp: Date.now()});
+            this._logSocket.emit('logState', {id:hash, state:state, session: this._sessionID, timestamp: Date.now()});
             
             /*r.table('sessions').get(this._sessionID)('states').
                 append({timestamp: Date.now(),hash: hex}).run(connection, function(err, result) {
@@ -136,9 +136,7 @@ const VideHistoryManager = class VideHistoryManager {
      * @param {Object} state of Redux to be restored by dispatching a corresponding action
      */
     _restoreState(state) {
-        console.log(' -> restoring state')
         this._store.dispatch(restoreState(state));
-        console.log(' -> restored state')
     }
     
     /** 

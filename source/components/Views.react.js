@@ -10,12 +10,11 @@ import SplitPane from 'react-split-pane';
  * cap of viewRatio to be .1 <= viewRatio <= .9 also enforced in reducers.redux.js
  */
 
-const Views = ({ firstView, secondView, layout, viewRatio, edition, language, setRatio }) => {
-    
+const Views = ({ view1, view2, layout, viewRatio, edition, revision, language, setRatio }) => {
     if(layout === ViewLayouts.SINGLE_VIEW) {
         return (
         <div className="views">
-            Und hier geht es dann weiter… TODO in Views.react.js
+            <View view={view1} pos="view1" edition={edition} revision={revision} language={language} layout={layout}/>
         </div>
         );
     } else if(layout === ViewLayouts.HORIZONTAL_SPLIT) {
@@ -28,8 +27,8 @@ const Views = ({ firstView, secondView, layout, viewRatio, edition, language, se
                 let newRatio = newSize / fullWidth;
                 setRatio(newRatio);
             }}>
-                <div>Horizontal Pane 1</div>
-                <div>Horizontal Pane 2</div>
+                <View view={view1} pos="view1" edition={edition} revision={revision} language={language} layout={layout}/>
+                <View view={view2} pos="view2" edition={edition} revision={revision} language={language} layout={layout}/>
             </SplitPane>
         </div>
         );
@@ -43,8 +42,8 @@ const Views = ({ firstView, secondView, layout, viewRatio, edition, language, se
                 let newRatio = newSize / fullHeight;
                 setRatio(newRatio);
             }}>
-                <div>Vertical Pane 1</div>
-                <div>Vertical Pane 2</div>
+                <View view={view1} pos="view1" edition={edition} revision={revision} language={language} layout={layout}/>
+                <View view={view2} pos="view2" edition={edition} revision={revision} language={language} layout={layout}/>
             </SplitPane>  
         </div>
         );
@@ -60,11 +59,12 @@ const Views = ({ firstView, secondView, layout, viewRatio, edition, language, se
 };
 
 Views.propTypes = {
-    firstView: PropTypes.object.isRequired,
-    secondView: PropTypes.object.isRequired,
+    view1: PropTypes.object.isRequired,
+    view2: PropTypes.object.isRequired,
     layout: PropTypes.string.isRequired,
     viewRatio: PropTypes.number.isRequired,
     edition: PropTypes.string.isRequired,
+    revision: PropTypes.string.isRequired,
     language: PropTypes.string.isRequired,
     setRatio: PropTypes.func.isRequired
 };

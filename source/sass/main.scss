@@ -7,17 +7,15 @@
 @import 'Views';
 @import 'AppFooter';
 @import 'transcriptionView';
-@import 'xmlEditor';
 @import 'meiTextView';
 @import 'facsimileView';
 @import 'reconstructionView';
 @import 'ContextMenu';
 @import 'Introduction';
 @import 'EditionList';
+@import 'select';
 @import 'fonts';
 @import 'variables';
-
-
 
 body {
     margin: 0;

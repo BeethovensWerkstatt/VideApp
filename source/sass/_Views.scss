@@ -14,36 +14,32 @@ div.views {
         position: relative;
         overflow: hidden;
         
-        &.single {
-            width: 100%;
-            height: 100%;            
-        }
+        width: 100%;
+        height: 100%;
         
-        &.vertical {
-            width: 100%;
+        &.VIDE_PROTOCOL_PERSPECTIVE_FACSIMILE {
             
-            /*background-color: green;*/
+            .xmlMenu {
+                position: absolute;
+                top: 0;
+                right: 0;
+                height: $viewMenuBarHeight;
+                left: 0;
+                @include linearGradient($viewMenuBarTopColor, $viewMenuBarBottomColor);
+            }
             
-            &.bottom {
-                padding-top: 5px;
-                border-top: 2px solid #666666;
-                
-                /*background-color: red;*/
+            .editor {
+                position: absolute;
+                top: $viewMenuBarHeight;
+                right: 0;
+                bottom: 0;
+                left: 0;
             }
         }
         
-        &.horizontal {
-            height: 100%;
-            display: inline-block;
+        &.VIDE_PROTOCOL_PERSPECTIVE_XML {
+        
             
-            /*background-color: blue;*/
-            
-            &.right {
-                padding-left: 5px;
-                border-left: 2px solid #666666;
-                
-                /*background-color: yellow;*/
-            }
         }
         
     }

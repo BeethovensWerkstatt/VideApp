@@ -1,4 +1,13 @@
 import VIDE_PROTOCOL from './vide-protocol';
+let Select = require('tether-select');
+
+Math.uuidCompact = function() {
+    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+        let r = Math.random()*16|0;
+        let v = c === 'x' ? r : (r&0x3|0x8);
+        return v.toString(16);
+    });
+};
 
 /** Generic class for EoModules. */
 const EoModule = class EoModule {
@@ -12,6 +21,10 @@ const EoModule = class EoModule {
         this._key = '';
         this._active = true;
         this._eohub = null;
+        this._socketID;
+        this._server;
+        this._socket;
+        this._cache = new Map();
     }
     
     /**
@@ -29,6 +42,10 @@ const EoModule = class EoModule {
      */
     registerHub(eohub) {
         this._eohub = eohub;
+        this._server = eohub._server;
+        this._socketID = eohub._socketID;
+        
+        this._socket = io(this._server + this._socketID);
     }
     
     /**
@@ -55,6 +72,42 @@ const EoModule = class EoModule {
      */
     isActive() {
         return this._active;
+    }
+    
+    /** 
+     * This vanilla function is used to request data from the server. It adds a unique key to 
+     * the request object, which is then used to receive the corresponding server answer and
+     * return it as a Promise. 
+     * @param {Object} requestObject specified by individual module
+     * @returns {Object} a Promise with the server answer
+     */
+    requestData(requestObject, cache = false) {
+        
+        return new Promise((resolve) => {
+            
+            let key = JSON.stringify(requestObject)
+            let cached = this._cache.get(key);
+            
+            if(typeof cached === 'undefined') {
+                let enhancedRequest = Object.assign({},requestObject);
+                enhancedRequest.key = Math.uuidCompact();
+                enhancedRequest.state = {};
+                
+                this._socket.once(enhancedRequest.key,(data) => {
+                    this._cache.set(key,data);
+                    resolve(data);
+                });
+                
+                this._socket.emit('requestData', enhancedRequest);
+                
+            } else {
+                resolve(cached);
+            }
+        
+            
+            
+        });
+        
     }
     
     /**
@@ -118,6 +171,44 @@ const EoModule = class EoModule {
         return this._supportedRequests;
     }
     
+    /** 
+     * This function is used to 
+     * @param {string} parentID of parent element where <select> will be inserted
+     * @param {string} containerID ID of the whole view
+     */
+    _setupViewSelect(parentID, containerID) {
+        let sel = document.createElement('select');
+        sel.classList.add('viewSelect');
+        
+        let modules = this._eohub.getActiveModules();
+        
+        let i=0;
+        
+        for(i;i<modules.length;i++) {
+            let opt = document.createElement('option');
+            let key = modules[i];
+            opt.value = key;
+            opt.setAttribute('data-i18n-text',key)
+            opt.innerHTML = this._eohub.getI18nString(key);
+            sel.appendChild(opt);
+        }
+        
+        document.getElementById(parentID).appendChild(sel);
+        
+        let selectInstance = new Select({
+            el: sel,
+            className: 'select-theme-chosen'
+        });
+        
+        selectInstance.change(this._key);
+        selectInstance.on('change',(e) => {
+            console.log('----------------X11')
+            console.log('vide-module-blueprint.js: _setupViewSelect')
+            console.log(e);
+        });
+    }
+    
+    
     /**
      * This function is used to remove all listeners and content when closing a view.
      * It is expected to be overridden by each module.
@@ -126,6 +217,7 @@ const EoModule = class EoModule {
      */
     unmount(containerID) {
         //filled by inheriting module class
+        
     }
     
     /**
@@ -144,8 +236,13 @@ const EoModule = class EoModule {
      * @abstract
      * @param {Object} request that shall be handled.
      */
-    handleRequest(request) {
-         //filled by inheriting module class
+    handleRequest(vontainerID,request) {
+        //filled by inheriting module class
+        
+    }
+    
+    _confirmView(state, containerID) {
+        this._eohub.confirmView(state, containerID, this._key);
     }
     
 };

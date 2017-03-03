@@ -9,48 +9,42 @@ const VideFacsimileViewer = class VideFacsimileViewer extends EoModule {
     /*Constructor method*/
     constructor() {
         super();
-        this._supportedPerspective = EO_Protocol.Perspective.PERSPECTIVE_FACSIMILE;
+        this._supportedPerspective = VIDE_PROTOCOL.PERSPECTIVE.FACSIMILE;
         this._supportedRequests = [];
-        let _this = this;
         this._viewerStore = new Map();
-        this._stateStore = new Map();
-        this._pageJsonStore = new Map();
-        this._svgStore = new Map();
         
-        let stateReq = {objectType: EO_Protocol.Object.OBJECT_STATE, 
+        let stateReq = {objectType: VIDE_PROTOCOL.OBJECT.STATE, 
             contexts:[], 
-            perspective: _this._supportedPerspective, 
-            operation: EO_Protocol.Operation.OPERATION_VIEW};
-        let notationReq = {objectType: EO_Protocol.Object.OBJECT_NOTATION, 
+            perspective: this._supportedPerspective, 
+            operation: VIDE_PROTOCOL.OPERATION.VIEW};
+        let notationReq = {objectType: VIDE_PROTOCOL.OBJECT.NOTATION, 
             contexts:[], 
-            perspective: _this._supportedPerspective, 
-            operation: EO_Protocol.Operation.OPERATION_VIEW};
-        let lyricReq = {objectType: EO_Protocol.Object.OBJECT_LYRICS, 
+            perspective: this._supportedPerspective, 
+            operation: VIDE_PROTOCOL.OPERATION.VIEW};
+        let lyricReq = {objectType: VIDE_PROTOCOL.OBJECT.LYRICS, 
             contexts:[], 
-            perspective: _this._supportedPerspective, 
-            operation: EO_Protocol.Operation.OPERATION_VIEW};
-        let metaReq = {objectType: EO_Protocol.Object.OBJECT_METAMARK, 
+            perspective: this._supportedPerspective, 
+            operation: VIDE_PROTOCOL.OPERATION.VIEW};
+        let metaReq = {objectType: VIDE_PROTOCOL.OBJECT.METAMARK, 
             contexts:[], 
-            perspective: _this._supportedPerspective, 
-            operation: EO_Protocol.Operation.OPERATION_VIEW};
-        let dirReq = {objectType: EO_Protocol.Object.OBJECT_DIR, 
+            perspective: this._supportedPerspective, 
+            operation: VIDE_PROTOCOL.OPERATION.VIEW};
+        let dirReq = {objectType: VIDE_PROTOCOL.OBJECT.DIR, 
             contexts:[], 
-            perspective: _this._supportedPerspective, 
-            operation: EO_Protocol.Operation.OPERATION_VIEW};
-        let delReq = {objectType: EO_Protocol.Object.OBJECT_DEL, 
+            perspective: this._supportedPerspective, 
+            operation: VIDE_PROTOCOL.OPERATION.VIEW};
+        let delReq = {objectType: VIDE_PROTOCOL.OBJECT.DEL, 
             contexts:[], 
-            perspective: _this._supportedPerspective, 
-            operation: EO_Protocol.Operation.OPERATION_VIEW};
-        _this._supportedRequests.push(stateReq);
-        _this._supportedRequests.push(notationReq);
-        _this._supportedRequests.push(lyricReq);
-        _this._supportedRequests.push(metaReq);
-        _this._supportedRequests.push(dirReq);
-        _this._supportedRequests.push(delReq);
+            perspective: this._supportedPerspective, 
+            operation: VIDE_PROTOCOL.OPERATION.VIEW};
+        this._supportedRequests.push(stateReq);
+        this._supportedRequests.push(notationReq);
+        this._supportedRequests.push(lyricReq);
+        this._supportedRequests.push(metaReq);
+        this._supportedRequests.push(dirReq);
+        this._supportedRequests.push(delReq);
         
-        this._key = 'videFacsimileViewer';
-        this._serverConfig = {host: 'http://localhost', port: ':34466', basepath:'/'};
-        
+        this._key = 'VideFacsimileViewer';
         return this;
     }
     
@@ -61,57 +55,79 @@ const VideFacsimileViewer = class VideFacsimileViewer extends EoModule {
         document.getElementById(containerID).innerHTML = '';
     }
     
+    /** 
+     * This function loads a JSON object with info about the pages available in all sources, 
+     * and also loads corresponding SVG shapes, putting them in the local this._cache.
+     * @param {string} editionID is the edition for which page data shall be loaded
+     * returns {Object} a Promise with the json object containing info about all pages 
+     */
     _getPageData(editionID) {
-        if(this._pageJsonStore.has(editionID)) {
-            return Promise.resolve(this._pageJsonStore.get(editionID));
-        } else {
-            let responseType = 'json';
-            let url = this._getBaseURI() + 'edition/' + editionID + '/pages.json';
+    
+        let req = {id:editionID,type:'getPages'};
+        return this.requestData(req,true).then((pageJson) => {
             
-            let dataRequest = new DataRequest(responseType, url);
-            return this._eohub.requestData(dataRequest).then(
-                (json) => {
-                    let pageJson = (typeof json === 'object') ? json : JSON.parse(json);
-                    this._pageJsonStore.set(editionID, pageJson);
-                    
-                    let promises = [];
-                    
-                    for(let i=0; i<pageJson.sources.length; i++) {
-                        let source = pageJson.sources[i];
+            let promises = [];
+            for(let i=0; i<pageJson.sources.length; i++) {
+                let source = pageJson.sources[i];
+                
+                for(let j=0; j<source.pages.length; j++) {
+                    let page = source.pages[j];
                         
-                        for(let j=0; j<source.pages.length; j++) {
-                            let page = source.pages[j];
-                                
-                            if(page.shapes !== '') {
-                                let self = this;
-                                
-                                let svgPromise = new Promise(function(resolve, reject) {
-                                    let svgResponseType = 'text';
-                                    let svgUrl = self._getBaseURI() + 'file/' + page.shapes + '.svg';
-                                    
-                                    let svgRequest = new DataRequest(svgResponseType, svgUrl);
-                                    resolve(
-                                        self._eohub.requestData(svgRequest).then(
-                                            (svg) => {
-                                                self._svgStore.set(page.id, svg);
-                                                return Promise.resolve(page.id);
-                                            }
-                                        )
-                                    );
-                                });
+                    if(page.shapes !== '') {
+                        let svgPromise = new Promise((resolve, reject) => {
                             
-                                promises.push(svgPromise);
-                            }
-                        }
-                    }
+                            let svgReq = {id: page.shapes,type:'getPageShapesSvg'};
+                            resolve(
+                                this.requestData(svgReq, true).then(
+                                    (svg) => {
+                                        return Promise.resolve(page.id);
+                                    }
+                                )
+                            );
+                        });
                     
-                    return Promise.all(promises).then((results) => {return Promise.resolve(pageJson);});
+                        promises.push(svgPromise);
+                    }
                 }
-            );
-        }
+            }
+            return Promise.all(promises).then((results) => {return Promise.resolve(pageJson);});
+        })
+        
     }
     
+    /** 
+     * retrieves basic information about the states and scars available in the edition
+     * @param {string} editionID describes the edition in question
+     */
+    _getStateData(editionID) {
+        
+        let req = {id: editionID,type:'getStates'};
+        return this.requestData(req,true);
+        
+    }
+    
+    /** 
+     * retrieves basic information about the measures available in the edition,
+     * including info about the scars that affect a specific measure
+     * @param {string} editionID describes the edition in question
+     */
+    _getMeasureData(editionID) {
+        
+        let req = {id: editionID,type:'getMeasures'};
+        return this.requestData(req,true);
+        
+    }
+    
+    /** 
+     * This function builds the required HTML, with no data being involved
+     * @param {string} containerID denotes the HTML element in which everything will be placed.
+     */
     _setupHtml(containerID) {
+    
+        if(document.getElementById(containerID + '_scarBox') !== null) {
+            return true;
+        }
+    
         let container = document.getElementById(containerID);
         
         container.innerHTML = '';
@@ -120,196 +136,357 @@ const VideFacsimileViewer = class VideFacsimileViewer extends EoModule {
         facs.id = containerID + '_facsimile';
         facs.className = 'facsimile';
         
-        let sidebar = document.createElement('div');
-        sidebar.id = containerID + '_facsimile';
-        sidebar.className = 'facsimileSidebar';
+        let facsNav = document.createElement('div');
+        facsNav.id = containerID + '_facsimileNavigator';
+        facsNav.className = 'facsNav';
         
-        let navigator = document.createElement('div');
-        navigator.id = containerID + '_facsimileNavigator';
-        navigator.className = 'navigatorBox';
+        let facsNavMenu = document.createElement('div');
+        facsNavMenu.id = containerID + '_facsNavMenu';
+        facsNavMenu.className = 'facsNavMenu';
         
-        let menubar = document.createElement('div');
-        menubar.id = containerID + '_menubar';
-        menubar.className = 'menubar';
-        
-        menubar.innerHTML = '<div id="' + containerID + '_zoomIn" class="menuButton"><i class="fa fa-plus"></i></div>' +
+        facsNavMenu.innerHTML = '<div id="' + containerID + '_zoomIn" class="menuButton"><i class="fa fa-plus"></i></div>' +
             '<div id="' + containerID + '_zoomOut" class="menuButton"><i class="fa fa-minus"></i></div>' + 
             '<div id="' + containerID + '_zoomHome" class="menuButton"><i class="fa fa-arrows-alt"></i></div>' + 
             '<div id="' + containerID + '_rotateLeft" class="menuButton"><i class="fa fa-rotate-left"></i></div>' + 
             '<div id="' + containerID + '_rotateRight" class="menuButton"><i class="fa fa-rotate-right"></i></div>';
         
+        let navOverlay = document.createElement('div');
+        navOverlay.id = containerID + '_navOverlay';
+        navOverlay.className = 'navOverlay';
         
         let statenav = document.createElement('div');
         statenav.id = containerID + '_stateNavigation';
         statenav.className = 'stateNavigation';
         
-        let scarSelect = document.createElement('select');
-        scarSelect.id = containerID + '_scarSelect';
-        scarSelect.className = 'scarSelect';
-        
         let scarBox = document.createElement('div');
         scarBox.id = containerID + '_scarBox';
         scarBox.className = 'scarBox';
         
-        statenav.appendChild(scarSelect);
         statenav.appendChild(scarBox);
         
-        sidebar.appendChild(navigator);
-        sidebar.appendChild(menubar);
-        sidebar.appendChild(statenav);
+        let scarLabel = document.createElement('div');
+        scarLabel.id = containerID + '_scarLabel';
+        scarLabel.className = 'scarLabel';
+        
+        let prevScar = document.createElement('div');
+        prevScar.className = 'prevScarBtn';
+        prevScar.innerHTML = '<i class="fa fa-chevron-left" aria-hidden="true"></i>';
+        
+        let nextScar = document.createElement('div');
+        nextScar.className = 'nextScarBtn';
+        nextScar.innerHTML = '<i class="fa fa-chevron-right" aria-hidden="true"></i>';
+        
+        navOverlay.appendChild(prevScar);
+        navOverlay.appendChild(nextScar);
+        navOverlay.appendChild(scarLabel);
+        navOverlay.appendChild(statenav);
         
         container.appendChild(facs);
-        container.appendChild(sidebar);
+        container.appendChild(facsNav);
+        container.appendChild(facsNavMenu);
+        container.appendChild(navOverlay);
+        
+        this._setupViewSelect(containerID + '_navOverlay', containerID);
     }
     
-    _setupViewer(containerID, json) {
-        let self = this;
+    /** 
+     * This function sets up the Openseadragon viewer
+     * @param {string} containerID describes the HTML element that contains the facsimile
+     * @param {Object} json the pageJson object with info about the pages
+     */
+    _setupViewer(containerID) {
         
-        return new Promise(function(resolve, reject) {
-            let pageURIs = [];
-            for(let i=0; i<json.sources.length; i++) {
-                let source = json.sources[i];
-                for(let j=0; j<source.pages.length; j++) {
-                    let page = source.pages[j];
-                    let uri = page.uri + '/info.json';
-                    pageURIs.push(uri);
-                }
-            }
-            
-            let viewer = OpenSeadragon({
-                id: containerID + '_facsimile',
-                tileSources: pageURIs,
-                sequenceMode: false,
-                showReferenceStrip: true,
-                showRotationControl: true,
-                showNavigator: true,
-                navigatorRotate: false,
-                navigatorId: containerID + '_facsimileNavigator',
-                showFullPageControl: false,
-                zoomInButton: containerID + '_zoomIn',
-                zoomOutButton: containerID + '_zoomOut',
-                homeButton: containerID + '_zoomHome',
-                rotateLeftButton: containerID + '_rotateLeft',
-                rotateRightButton: containerID + '_rotateRight',
-                //toolbar: containerID + '_menubar',
-                pixelsPerWheelLine: 60,
-                // Enable touch rotation on tactile devices
-                gestureSettingsTouch: {
-                    pinchRotate: true
-                },
-                gestureSettingsMouse: {
-                    clickToZoom: false,
-                    dblClickToZoom: true
-                },
-                collectionMode: true,
-                collectionRows: 1, 
-                collectionTileSize: 1200,
-                collectionTileMargin: 0
-            });
-            
-            self._viewerStore.set(containerID, viewer);
-            
-            //do internal setup after images are loaded
-            viewer.addHandler('open', (event) => {
-                for(let i=0; i<json.sources.length; i++) {
-                    let source = json.sources[i];
-                    for(let j=0; j<source.pages.length; j++) {
-                        let page = source.pages[j];
-                        let pageLabel = document.createElement('div');
-                        pageLabel.id = containerID + '_pageLabel_' + page.id;
-                        pageLabel.className = 'pageLabel';
-                        pageLabel.innerHTML = page.label;
-                        
-                        let bounds = viewer.world.getItemAt(j).getBounds();
-                        
-                        //create page label
-                        viewer.addOverlay({
-                            element: pageLabel,
-                            //location: new OpenSeadragon.Rect(0.33, 0.75, 1.2, 1.25)
-                            y: bounds.y + bounds.height,
-                            x: bounds.x + (bounds.width / 2),
-                            placement: 'TOP'
-                        });
-                        
-                        //if possible, load svg overlays
-                        if(page.shapes !== '') {
-                            if(self._svgStore.has(page.id)) {
-                                let svgBox = document.createElement('div');
-                                svgBox.className = 'svgBox';
-                                svgBox.innerHTML = self._svgStore.get(page.id);
-                                viewer.addOverlay({
-                                    element: svgBox,
-                                    y: bounds.y,
-                                    x: bounds.x,
-                                    width: bounds.width,
-                                    height: bounds.height,
-                                    placement: 'TOP_LEFT'
-                                });
-                                
-                                
-                                let onClick = (e) => {
-                                    let shape = e.target;
-                                    
-                                    self._clickShape(containerID, viewer, shape, e);
-                                    
-                                    e.preventDefault(); 
-                                };
-                                let paths = svgBox.querySelectorAll('path');
-                                
-                                for(let x=0; x < paths.length; x++) {
-                                    let path = paths[x];
-                                    path.addEventListener('click', onClick, false);
-                                }
-                            } else {
-                                console.log('[ERROR] failed to load things in correct order – svg shapes not available for ' + page.id + ' (yet)');
-                                /*let svgResponseType = 'text';
-                                let svgUrl = facsViewer._getBaseURI() + 'file/' + page.shapes + '.svg';
-                                let svgCallback = function(origSvgRequest,svg) {
-                                    
-                                    facsViewer._svgStore.set(page.id,svg)
-                                    
-                                    let svgBox = document.createElement('div');
-                                    svgBox.className = 'svgBox'
-                                    svgBox.innerHTML = svg;
-                                    viewer.addOverlay({
-                                        element: svgBox,
-                                        y: bounds.y,
-                                        x: bounds.x,
-                                        width: bounds.width,
-                                        height: bounds.height,
-                                        placement: 'TOP_LEFT'
-                                    });
-                                    
-                                    
-                                    let onClick = function(event) {
-                                        let shape = event.target;
-                                        
-                                        facsViewer._clickShape(containerID, viewer, shape, event);
-                                        
-                                        event.preventDefault(); 
-                                    }
-                                    let paths = svgBox.querySelectorAll('path');
-                                    
-                                    for(let x=0;x < paths.length;x++) {
-                                        let path = paths[x];
-                                        path.addEventListener('click',onClick,false);
-                                    }
-                                };
-                                
-                                let svgRequest = new DataRequest(svgResponseType,svgUrl,svgCallback);
-                                facsViewer._eohub.requestData(svgRequest);*/
-                            }
-                        } else {
-                            console.log('no shapes to retrieve for page ' + page.label);
+        this._setupHtml(containerID);
+        
+        let editionID = this._eohub.getEdition();
+        let pageData = this._getPageData(editionID);
+        let stateData = this._getStateData(editionID);
+        let measureData = this._getMeasureData(editionID);
+        
+        return Promise.all([pageData, stateData,measureData]).then((results) => {
+            let pageJson = results[0];
+            let stateJson = results[1];
+            let measureJson = results[2];
+           
+            if(this._cache.has(containerID + '_viewer')) {
+                return Promise.resolve(this._cache.get(containerID + '_viewer'))
+            } else {
+                return new Promise((resolve, reject) => {
+                    let pageURIs = [];
+                    let i=0;
+                    for(i; i<pageJson.sources.length; i++) {
+                        let source = pageJson.sources[i];
+                        let j=0;
+                        for(j; j<source.pages.length; j++) {
+                            let page = source.pages[j];
+                            let uri = page.uri + '/info.json';
+                            pageURIs.push(uri);
                         }
                     }
-                }
+                    
+                    //OSD viewer with all properties
+                    let viewer = OpenSeadragon({
+                        id: containerID + '_facsimile',
+                        tileSources: pageURIs,
+                        sequenceMode: false,
+                        showReferenceStrip: true,
+                        showRotationControl: true,
+                        showNavigator: true,
+                        navigatorRotate: false,
+                        navigatorId: containerID + '_facsimileNavigator',
+                        showFullPageControl: false,
+                        zoomInButton: containerID + '_zoomIn',
+                        zoomOutButton: containerID + '_zoomOut',
+                        homeButton: containerID + '_zoomHome',
+                        rotateLeftButton: containerID + '_rotateLeft',
+                        rotateRightButton: containerID + '_rotateRight',
+                        //toolbar: containerID + '_menubar',
+                        pixelsPerWheelLine: 60,
+                        // Enable touch rotation on tactile devices
+                        gestureSettingsTouch: {
+                            pinchRotate: true
+                        },
+                        gestureSettingsMouse: {
+                            clickToZoom: false,
+                            dblClickToZoom: true
+                        },
+                        collectionMode: true,
+                        collectionRows: 1, 
+                        collectionTileSize: 1200,
+                        collectionTileMargin: 0
+                    });
+                    
+                    //store viewer for later use
+                    this._cache.set(containerID + '_viewer', viewer)
+                    
+                    //do internal setup after images are loaded
+                    viewer.addHandler('open', (event) => {
+                        let i=0;
+                        
+                        for(i; i<pageJson.sources.length; i++) {
+                            let source = pageJson.sources[i];
+                            for(let j=0; j<source.pages.length; j++) {
+                                let page = source.pages[j];
+                                let pageLabel = document.createElement('div');
+                                pageLabel.id = containerID + '_pageLabel_' + page.id;
+                                pageLabel.className = 'pageLabel';
+                                pageLabel.innerHTML = page.label;
+                                
+                                let bounds = viewer.world.getItemAt(j).getBounds();
+                                
+                                //create page label
+                                viewer.addOverlay({
+                                    element: pageLabel,
+                                    //location: new OpenSeadragon.Rect(0.33, 0.75, 1.2, 1.25)
+                                    y: bounds.y + bounds.height,
+                                    x: bounds.x + (bounds.width / 2),
+                                    placement: 'TOP'
+                                });
+                                
+                                let cacheKey = JSON.stringify({id: page.shapes,type:'getPageShapesSvg'});
+                                
+                                //if possible, load svg overlays
+                                if(page.shapes !== '') {
+                                    if(this._cache.has(cacheKey)) {
+                                        let svgBox = document.createElement('div');
+                                        svgBox.className = 'svgBox';
+                                        svgBox.innerHTML = this._cache.get(cacheKey);
+                                        viewer.addOverlay({
+                                            element: svgBox,
+                                            y: bounds.y,
+                                            x: bounds.x,
+                                            width: bounds.width,
+                                            height: bounds.height,
+                                            placement: 'TOP_LEFT'
+                                        });
+                                        
+                                        //handler for svg shapes being clicked
+                                        let onClick = (e) => {
+                                            let shape = e.target;
+                                            this._clickShape(containerID, viewer, shape, e);
+                                            e.preventDefault(); 
+                                        };
+                                        let paths = svgBox.querySelectorAll('path');
+                                        
+                                        //adding the handler to each svg shape
+                                        for(let x=0; x < paths.length; x++) {
+                                            let path = paths[x];
+                                            path.addEventListener('click', onClick, false);
+                                        }
+                                    } else {
+                                        console.log('[ERROR] failed to load things in correct order – svg shapes not available for ' + page.id + ' (yet)');
+                                    }
+                                } else {
+                                    console.log('no shapes to retrieve for page ' + page.label);
+                                }
+                                
+                                
+                            }
+                        }
+                        
+                        //load scar overview
+                        
+                        let staffCount = measureJson.staves.length;
+                        
+                        let m=0;
+                        let n=measureJson.measures.length;
+                        let scarBox = document.getElementById(containerID + '_scarBox');
+                        
+                        //insert measures in scarBox
+                        for(m; m<n; m++) {
+                            let measure = measureJson.measures[m]
+                            let elem = document.createElement('div');
+                            elem.classList.add('measure');
+                            elem.setAttribute('title',(measure.label !== '') ? measure.label : measure.n);
+                            elem.setAttribute('data-id',measure.id);
+                            scarBox.append(elem);
+                            
+                            //handler to jump to individual measures
+                            elem.addEventListener('click',(e) => {
+                                console.log('please goto measure ' + measure.id);
+                                let req = {
+                                    id: measure.id,
+                                    object: VIDE_PROTOCOL.OBJECT.NOTATION,
+                                    contexts: [],
+                                    perspective: VIDE_PROTOCOL.PERSPECTIVE.FACSIMILE,
+                                    operation: VIDE_PROTOCOL.OPERATION.VIEW,
+                                    state: {}
+                                };
+                                this.handleRequest(req,containerID);
+                            })
+                            
+                            //insert overlays for scars 
+                            let k=0;
+                            let l=measure.scars.length;
+                            for(k;k<l;k++) {
+                                
+                                let scar = measure.scars[k];
+                                elem.classList.add('unflex')
+                                
+                                if(scar.complete) {
+                                    let scarElem = document.createElement('div');
+                                    scarElem.classList.add('scar');
+                                    scarElem.classList.add('complete');
+                                    scarElem.setAttribute('data-scar',scar.scar);
+                                    elem.append(scarElem);
+                                    
+                                    //handler to jump to a specific scar
+                                    scarElem.addEventListener('click',(e) => {
+                                        let elem = e.currentTarget;
+                                        let scarId = elem.getAttribute('data-scar');
+                                        highlightScar(scarId);
+                                        e.stopPropagation();
+                                    })
+                                } else {
+                                    let p = 0;
+                                    let q = scar.staves.length;
+                                    for(p; p<q; p++) {
+                                        let n = scar.staves[p] ;
+                                        let jsn = n - 1;
+                                        
+                                        let label = measureJson.staves[jsn].label;
+                                        if(label === '' || typeof label === 'undefined') {
+                                            label = n;
+                                        }
+                                        
+                                        let unit = (90 / staffCount);
+                                        let top = jsn * unit + 5;
+                                        
+                                        let scarElem = document.createElement('div');
+                                        scarElem.classList.add('scar');
+                                        scarElem.classList.add('staff');
+                                        scarElem.setAttribute('data-scar',scar.scar);
+                                        scarElem.setAttribute('data-staff-n',n);
+                                        scarElem.setAttribute('title',label);
+                                        scarElem.style.top = top + '%';
+                                        scarElem.style.height = unit + '%';
+                                        
+                                        elem.append(scarElem);
+                                        
+                                        scarElem.addEventListener('click',(e) => {
+                                            let elem = e.currentTarget;
+                                            let scarId = elem.getAttribute('data-scar');
+                                            highlightScar(scarId);
+                                            e.stopPropagation();
+                                        })
+                                    }
+                                   
+                                }
+                                
+                            }
+                        }
+                        
+                        //listener for next scar button
+                        document.querySelector('#' + containerID + ' .prevScarBtn').addEventListener('click',(e) => {
+                            let currentScar = document.getElementById(containerID + '_scarLabel').getAttribute('data-scarId');
+                            let index = stateJson.findIndex((elem) => {
+                                return elem.id === currentScar;
+                            });
+                            let nextIndex;
+                            if(index === 0) {
+                                nextIndex = stateJson.length -1;
+                            } else {
+                                nextIndex = index - 1;
+                            }
+                            
+                            let nextScar = stateJson[nextIndex].id;
+                            this._highlightScarForNav(containerID,nextScar);
+                            
+                        });
+                        
+                        //listener for previous scar button
+                        document.querySelector('#' + containerID + ' .nextScarBtn').addEventListener('click',(e) => {
+                            let currentScar = document.getElementById(containerID + '_scarLabel').getAttribute('data-scarId');
+                            let index = stateJson.findIndex((elem) => {
+                                return elem.id === currentScar;
+                            });
+                            let nextIndex;
+                            if(index === stateJson.length-1) {
+                                nextIndex = 0;
+                            } else {
+                                nextIndex = index + 1;
+                            }
+                            
+                            let nextScar = stateJson[nextIndex].id;
+                            this._highlightScarForNav(containerID,nextScar);
+                        });
+                        
+                        //listener for activating a scar
+                        document.getElementById(containerID + '_scarLabel').addEventListener('click',(e) => {
+                            let scarId = e.currentTarget.getAttribute('data-scarId');
+                            if(scarId === null) {
+                                return false;
+                            }
+                            
+                            let scar = stateJson.find((elem) => {
+                                return elem.id === scarId;  
+                            });
+                            
+                            let firstState = scar.states[0];
+                            let req = {
+                                id: firstState.id,
+                                object: VIDE_PROTOCOL.OBJECT.STATE,
+                                contexts: [],
+                                perspective: VIDE_PROTOCOL.PERSPECTIVE.FACSIMILE,
+                                operation: VIDE_PROTOCOL.OPERATION.VIEW,
+                                state: {}
+                            };
+                            //this request needs to go through vide-view-manager???           
+                            this.handleRequest(req,containerID);      
+                                       
+                        });
+                        
+                        this._highlightScarForNav(containerID,stateJson[0].id);    
+                        
+                        resolve(viewer);
+                    });
                 
-                resolve(viewer);
-            });
-        
-        //return viewer;
+                //return viewer;
+                });
+            
+            }
         });
+        
     }
     
     _focusShape(containerID, viewer, shape) {
@@ -322,41 +499,38 @@ const VideFacsimileViewer = class VideFacsimileViewer extends EoModule {
     }
     
     _clickShape(containerID, viewer, shape, event) {
-        let supportedRequests = window.EoHub.getSupportedRequests();
+        let supportedRequests = this._eohub.getSupportedRequests();
         
-        let responseType = 'json';
-        let url = this._getBaseURI() + 'edition/' + this._eohub.getEdition() + '/shape/' + shape.id + '/info.json';
-        let _this = this;
+        let shapeReq = {id: shape.id, edition: this._eohub.getEdition(), type: 'getShapeInfo'}
         
-        let dataRequest = new DataRequest(responseType, url);
-        this._eohub.requestData(dataRequest)
+        this.requestData(shapeReq,false)
             .then(
                 (json) => {
                     //console.log('[DEBUG]: There are ' + json.length + ' elems associated with this shape.')
-            
+                    
                     let elem = json[0];
                     
                     let requests = [];
-                    let filteredRequests = supportedRequests.filter(function(request){
-                        return (request.objectType === elem.type && request.perspective !== _this._supportedPerspective);
+                    let filteredRequests = supportedRequests.filter((request) => {
+                        return (request.objectType === elem.type && request.perspective !== this._supportedPerspective);
                     }); 
                     
-                    filteredRequests.forEach(function(request, j) {
+                    filteredRequests.forEach((request, j) => {
                         let req = Object.assign({}, request);
-                        req.objectID = elem.id;
+                        req.id = elem.id;
                         
-                        if(request.perspective === EO_Protocol.Perspective.PERSPECTIVE_TRANSCRIPTION) {
+                        if(request.perspective === VIDE_PROTOCOL.PERSPECTIVE.TRANSCRIPTION) {
                             let states = elem.states.filter(function(state){
                                 return state.type !== 'del';
                             });
                             
                             for(let k=0; k<states.length; k++) {
                                 let reqCopy = {
-                                    objectType: req.objectType, 
-                                    objectID: req.objectID,
+                                    object: req.object, 
+                                    id: req.id,
                                     operation: req.operation,
                                     perspective: req.perspective,
-                                    contexts: [{id: states[k].id, type:EO_Protocol.Context.CONTEXT_STATE}]
+                                    contexts: [{id: states[k].id, context:VIDE_PROTOCOL.CONTEXT.STATE}]
                                 };
                                 
                                 requests.push(reqCopy);
@@ -367,10 +541,10 @@ const VideFacsimileViewer = class VideFacsimileViewer extends EoModule {
                     });
                     
                     let closeFunc = function() {
-                        _this._focusShape(containerID, viewer, shape);
+                        this._focusShape(containerID, viewer, shape);
                     };
                     try {
-                        _this._eohub._viewManager.setContextMenu(requests, event, containerID, closeFunc);    
+                        this._eohub._viewManager.setContextMenu(requests, event, containerID, closeFunc);    
                     } catch(err) {
                         console.log('[ERROR] Unable to open context menu: ' + err);
                     }
@@ -459,35 +633,47 @@ const VideFacsimileViewer = class VideFacsimileViewer extends EoModule {
     }
     
     getDefaultView(containerID) {
+        
+        this._setupViewer(containerID);
+        
+    }
+    
+    _hightlightScarForNav(containerID, scarId) {
+        this._removeScarHighlightForNav(containerID);
+        
         let editionID = this._eohub.getEdition();
-        
-        let responseType = 'json';
-        let url = this._getBaseURI() + 'edition/' + editionID + '/pages.json';
-        
-        containerID = containerID.replace(/videFacsimileViewer/, 'VIEWTYPE_FACSIMILEVIEW');
-        this._setupHtml(containerID);
-        
-        this._getPageData(editionID)
-            .then(
-                (pageJson) => {
-                    this._setupViewer(containerID, pageJson);
-                });
-        
-        if(this._stateStore.has(editionID)) {
-            return Promise.resolve(this._setupStatesNav(containerID, this._stateStore.get(editionID)));    
-        } else {
-            let statesResponseType = 'json';
-            let statesUrl = this._getBaseURI() + 'edition/' + editionID + '/states/overview.json';
+        this._getStateData(editionID).then((stateJson) => {
+            let scarObj = stateJson.find((elem) => {
+                return elem.id === scarId;
+            });
             
-            let stateRequest = new DataRequest(statesResponseType, statesUrl);
-            this._eohub.requestData(stateRequest)
-                .then(
-                (json) => {
-                    this._stateStore.set(editionID, json);
-                    return Promise.resolve(this._setupStatesNav(containerID, json));
-                });
+            try {
+                let label = document.getElementById(containerID + '_scarLabel');
+                label.innerHTML = scarObj.label;
+                label.setAttribute('data-scarId',scarId);
+            } catch(err) {
+                console.log('[ERROR] unable to highlight scar ' + scarId + ': ' + err)
+            }
+            
+            let matchedElems = document.querySelectorAll('#' + containerID + ' .scarBox .scar[data-scar="' + scarId + '"]');
+            for (let match of matchedElems) {
+                match.classList.add('highlight');
+            }
+        });
+        
+    }
+    
+    _removeScarHighlightForNav(containerID) {
+        let label = document.getElementById(containerID + '_scarLabel');
+        label.innerHTML = '';
+        label.removeAttribute('data-scarId');
+        
+        let matchedElems = document.querySelectorAll('#' + containerID + ' .scarBox .scar.highlight');
+        for (let match of matchedElems) {
+            match.classList.remove('highlight');
         }
     }
+    
     
     highlightState(state, containerID, facsViewer) {
         let currentState = document.querySelectorAll('#' + containerID + ' .stateBox.current');
@@ -585,7 +771,7 @@ const VideFacsimileViewer = class VideFacsimileViewer extends EoModule {
         return rect;
     }
     
-    handleRequest(request) {
+    handleRequest(request,containerID) {
         let reqContainer = request.getContainer();
         
         let containerID = (reqContainer.endsWith('_VIEWTYPE_FACSIMILEVIEW')) ? reqContainer : reqContainer + '_VIEWTYPE_FACSIMILEVIEW';

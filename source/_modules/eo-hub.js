@@ -3,7 +3,10 @@ import { connect } from 'react-redux';
 import fetch from 'isomorphic-fetch';
 import {Request, DataRequest} from './vide-module-blueprint';
 
+//imported in HTML -> globally available
 /*import io from 'socket.io';*/
+
+let server = 'http://localhost:2999/';
 
 Math.uuidCompact = function() {
     return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
@@ -12,7 +15,6 @@ Math.uuidCompact = function() {
         return v.toString(16);
     });
 };
-
 
 const EoHub = class EoHub {
 
@@ -23,13 +25,28 @@ const EoHub = class EoHub {
     constructor(options = {database: 
             {url:'', user: null, password: null}, 
         modules: [], 
-        editionID: null}) {
+        editionID: null, 
+        revision:''}) {
         this.options = options;
         this._modules = new Map();
         this._viewManager = null;        
         this._socketID;
+        this._server = server;
+        this.cache = new Map();
         
         console.log('EoHub initialized');
+    }
+    
+    setLanguage(lang) {
+        this._viewManager.setLanguage(lang);
+    }
+    
+    getI18nString(key) {
+        return this._viewManager.getI18nString(key);
+    }
+    
+    confirmView(state, containerID, moduleKey) {
+        this._viewManager.confirmView(state, containerID, moduleKey);
     }
     
     /**
@@ -38,15 +55,16 @@ const EoHub = class EoHub {
      * @returns {Object} returns the EoHub instance
      * 
      */
-    setEdition(id) {
+    setEdition(id, revision) {
         this.options.editionID = id;
+        this.options.revision = revision;
         
-        let object = this._viewManager._store.getState().editions.items[id];
+        let supportedViews = this._viewManager.getSupportedViews(id);
         
         let _this = this;
-        for(let i=0; i<object.supportedViews.length; i++) {
-            let viewKey = object.supportedViews[i].id;
-            
+        for(let i=0; i<supportedViews.length; i++) {
+            let viewKey = supportedViews[i].id;
+            //console.log('[eohub] activating module ' + viewKey + ' for edition ' + id)
             _this.activateModule(viewKey);
         }
         
@@ -62,11 +80,20 @@ const EoHub = class EoHub {
     }
     
     /**
+     * gets the current revision of the current edition
+     * @returns {string} the revision of the current edition
+     */
+    getRevision() {
+        return this.options.revision;
+    }
+    
+    /**
      * unsets the current edition
      * @returns {Object} the EoHub instance
      */
     unsetEdition() {
         this.options.editionID = null;
+        this.options.revision = '';
         return this;
     }
     
@@ -125,6 +152,25 @@ const EoHub = class EoHub {
     }
     
     /**
+     * Function that returns a list of active modules
+     * @returns {Object[]} the active modules
+     */
+    getActiveModules() {
+        
+        let moduleArray = [...this._modules.keys()].sort();
+        let array = [];
+        let i=0;
+        for(i;i<moduleArray.length;i++) {
+            let module = this.getModule(moduleArray[i]);
+            if(module.isActive()) {
+                array.push(module.getKey());
+            }
+        }
+    
+        return array;
+    }
+    
+    /**
      * Function unmountModule
      * This function is called to clean up all listeners etc. before closing a view. 
      * Every module decides if and how to use it. 
@@ -143,7 +189,7 @@ const EoHub = class EoHub {
     requestDefault(moduleKey, containerID) {
         //console.log('[DEBUG] requesting default view for ' + moduleKey + ' in container ' + containerID);
         
-        this._modules.get(moduleKey).getDefaultView(containerID);
+        this.getModule(moduleKey).getDefaultView(containerID);
         
         /*try {
             this._modules.get(moduleKey).getDefaultView(containerID);
@@ -247,10 +293,10 @@ const EoHub = class EoHub {
      * This function sets up the connection to server
      */
     _setupSocket(socketID) {
-         var socket = io('http://localhost:2999/' + socketID);
-         socket.on('connect', function(){
+        var socket = io('http://localhost:2999/' + socketID);
+        socket.on('connect', function(){
              //console.log('eohub is entering connection')
-         });
+        });
     }
     
     /*
@@ -316,4 +362,4 @@ const EoHub = class EoHub {
     
 };
 
-export default EoHub;
+export let eohub = new EoHub();

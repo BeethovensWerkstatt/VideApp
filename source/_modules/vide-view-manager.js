@@ -1,8 +1,9 @@
 import 'babel-polyfill';
-import {ViewTypes, ViewLayouts, openContextMenu, setFirstView, setSecondView} from './../redux/actions.redux';
+import {ViewTypes, ViewLayouts, openContextMenu, setFirstView, setSecondView, confirmState} from './../redux/actions.redux';
 import {Request} from './vide-module-blueprint';
 import VideHistoryManager from './vide-history-manager';
-
+import {eohub} from './eo-hub';
+import * as langfile from '../i18n/i18n.json';
 
 const VideViewManager = class VideViewManager {
 
@@ -12,12 +13,47 @@ const VideViewManager = class VideViewManager {
      * @param {Object} store the Redux store of the application
      * @param {Object} eohub the interface to all vide modules
      */
-    constructor(store, eohub) {
+    constructor(store) {
         this._store = store;
-        this._eohub = eohub;
         this._history = new VideHistoryManager(this._store);
-        
+        this._langfile = langfile;
+        this._currentLang = this._store.getState().preferences.language;
         eohub.registerViewManager(this);        
+    }
+    
+    setLanguage(lang) {
+        this._currentLang = lang;
+        let elems = document.querySelectorAll('*[data-i18n-text], *[data-i18n-title]');
+        
+        for (let elem of elems) {
+            if(elem.hasAttribute('data-i18n-text')) {
+                let key = elem.getAttribute('data-i18n-text');
+                let obj = this._langfile[key]
+                elem.innerHTML = obj[lang];    
+            }
+            
+            if(elem.hasAttribute('data-i18n-title')) {
+                let key = elem.getAttribute('data-i18n-title');
+                let obj = this._langfile[key];
+                elem.setAttribute('title',obj[lang]);    
+            }
+        }
+    }
+    
+    getI18nString(key) {
+        let object = this._langfile[key];
+        if(typeof object !== 'undefined') {
+            return object[this._currentLang];    
+        }
+        return 'I18N ERROR: ' + key;
+    }
+    
+    confirmView(state, containerID, moduleKey) {
+        if(containerID === 'view1') {
+            this._store.dispatch(confirmState(state, 1));
+        } else if(containerID === 'view2') {
+            this._store.dispatch(confirmState(state, 2));
+        }
     }
     
     //todo: remove this
@@ -45,6 +81,9 @@ const VideViewManager = class VideViewManager {
          *      generate a func that gets called when menu opens
          * 
          */
+        
+        console.log('----requesting context menu')
+        console.log(items)
         
         if(items.length === 0) {
             return false;
@@ -141,6 +180,19 @@ const VideViewManager = class VideViewManager {
     getSocketID() {
         return this._history.getSocketID();
     }
+    
+    /** 
+     * Returns all views supported by a specified edition
+     * @param {string} id of the edition
+     * @returns {[Object]} the array of supported views 
+     */
+    getSupportedViews(id) {
+        //todo: include revision of the edition
+        
+        console.log('requesting views for id ' + id)
+        return this._store.getState().edition.editions[id].supportedViews;
+    }
+
 };
 
 export default VideViewManager;

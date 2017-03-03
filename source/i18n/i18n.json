@@ -63,45 +63,13 @@
         "de":"letzte Änderung",
         "en":"last modified"
     },
-    "videFacsimileViewer_abbr":{
-        "de":"Faksimile",
-        "en":"Facsimile"
-    },
-    "Vide_xmlViewer_abbr":{
+    "VideXmlViewer":{
         "de":"XML",
         "en":"XML"
     },
-    "Vide_transcriptionViewer_abbr":{
-        "de":"Transkription",
-        "en":"Transcription"
-    },
-    "Vide_invarianceViewer_abbr":{
-        "de":"Invarianz",
-        "en":"Invariance"
-    },
-    "Vide_reconstructionViewer_abbr":{
-        "de":"Rekonstruktion",
-        "en":"Reconstruction"
-    },
-    "Vide_meiTextViewer_abbr":{
-        "de":"Beschreibung",
-        "en":"Description"
-    },
-    "top":{
-        "de":"oben",
-        "en":"top"
-    },
-    "bottom":{
-        "de":"unten",
-        "en":"bottom"
-    },
-    "left":{
-        "de":"links",
-        "en":"left"
-    },
-    "right":{
-        "de":"rechts",
-        "en":"right"
+    "VideFacsimileViewer":{
+        "de":"Faksimile",
+        "en":"Facsimile"
     },
     "contextMenu_showIn_PERSPECTIVE_FACSIMILE":{
         "de":"Im Faksimile anzeigen",

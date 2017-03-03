@@ -4,6 +4,11 @@ import VIDE_PROTOCOL from '../_modules/vide-protocol';
 import { StatusCodes } from './networking.constants';
 import { combineReducers } from 'redux';
 
+import { eohub } from '../_modules/eo-hub'; 
+
+var semver = require('semver');
+
+
 let Perspectives = VIDE_PROTOCOL.PERSPECTIVE;
 
 /** 
@@ -35,6 +40,7 @@ export function handlePreferences(state = {
         case ActionTypes.SWITCH_LANGUAGE:
             //todo: check if language is supported  
             if(action.language) {
+                eohub.setLanguage(action.language);
                 return {...state, language: action.language};
             }
             return state;
@@ -67,7 +73,7 @@ export function handlePreferences(state = {
                 showPreferences: false,
                 language: 'en',
                 showAbout: false
-            }
+            };
         
         default: 
             return state;
@@ -87,7 +93,7 @@ export function handleEdition(state = {
     editions: {},
     active: '',
     highlighted: '',
-    revision: 'latest'
+    revision: ''
 }, 
     action) {
     switch (action.type) {
@@ -106,13 +112,15 @@ export function handleEdition(state = {
             return {...state, highlighted: action.id};
             
         case ActionTypes.ACTIVATE_EDITION:
-            //todo: interface with AppManager
-            //window.EoHub.setEdition(action.id);
-            return {...state, active: action.id, highlighted: ''};
+            
+            let version = action.revision !== '' ? action.revision : semver.maxSatisfying(state.editions[action.id].revisions, '*');
+            eohub.setEdition(action.id, version);
+            
+            return {...state, active: action.id, highlighted: '', revision: version};
         case ActionTypes.DEACTIVATE_EDITION:
-            //todo: interface with AppManager
-            //window.EoHub.unsetEdition();
-            return {...state, active: null};
+            
+            eohub.unsetEdition();
+            return {...state, active: null, revision: ''};
             
         case ActionTypes.RESTORE_STATE:
             
@@ -140,8 +148,8 @@ export function handleEdition(state = {
             return {editions: {},
                 active: '',
                 highlighted: '',
-                revision: 'latest'
-            }
+                revision: ''
+            };
             
             
         default: 
@@ -160,8 +168,8 @@ export function handleEdition(state = {
 export function handleViews(state = {
     layout: ViewLayouts.INTRODUCTION,
     ratio: .5,
-    view1: {perspective: Perspectives.FACSIMILE, viewState: null, temp: false},
-    view2: {perspective: Perspectives.TRANSCRIPTION, viewState: null, temp: false}
+    view1: {perspective: Perspectives.FACSIMILE, target: null, temp: false},
+    view2: {perspective: Perspectives.TRANSCRIPTION, target: null, temp: false}
 }, action) {
     switch (action.type) {
         
@@ -196,7 +204,7 @@ export function handleViews(state = {
             if(action.perspective in Perspectives) {
                 return Object.assign({}, state, { view1: {
                     perspective: action.perspective,
-                    viewState: action.viewState,
+                    target: action.target,
                     temp: true
                 } }); 
             } 
@@ -206,7 +214,7 @@ export function handleViews(state = {
             if(action.perspective in Perspectives) {
                 return Object.assign({}, state, { view2: {
                     perspective: action.perspective,
-                    viewState: action.viewState,
+                    target: action.target,
                     temp: true
                 } }); 
             }
@@ -232,8 +240,8 @@ export function handleViews(state = {
         
         case ActionTypes.DEACTIVATE_EDITION:
             return Object.assign({}, state, {
-                view1: {perspective: Perspectives.FACSIMILE, viewState: null, temp: false},
-                view2: {perspective: Perspectives.TRANSCRIPTION, viewState: null, temp: false}
+                view1: {perspective: Perspectives.FACSIMILE, target: null, temp: false},
+                view2: {perspective: Perspectives.TRANSCRIPTION, target: null, temp: false}
             });
             
         case ActionTypes.RESTORE_STATE:
@@ -267,9 +275,26 @@ export function handleViews(state = {
             return {
                 layout: ViewLayouts.INTRODUCTION,
                 ratio: .5,
-                view1: {perspective: Perspectives.FACSIMILE, viewState: null, temp: false},
-                view2: {perspective: Perspectives.TRANSCRIPTION, viewState: null, temp: false}
+                view1: {perspective: Perspectives.FACSIMILE, target: null, temp: false},
+                view2: {perspective: Perspectives.TRANSCRIPTION, target: null, temp: false}
+            };
+            
+        case ActionTypes.CONFIRM_STATE:
+            
+            if(action.view === 1) {
+                console.log('confirming view 1')
+                console.log(action.state)
+                return Object.assign({}, state, { view1: 
+                    Object.assign({}, state.view1, {temp: false, target: action.state})
+                });
+            } else if(action.view === 2) {
+                console.log('confirming view 1')
+                return Object.assign({}, state, { view2: 
+                    Object.assign({}, state.view2, {temp: false, target: action.state})
+                });
             }
+            
+            return state;
         
         default: 
             return state;
@@ -284,7 +309,6 @@ export function handleViews(state = {
  * @returns {object} the (potentially modified) state object
  */
 export function handleContextMenu(state = {visible: false, items:[], x: 0, y: 0}, action) {
-
     switch (action.type) {
         
         case ActionTypes.OPEN_CONTEXTMENU:        
@@ -384,7 +408,7 @@ export function handleNetwork(state = {
             return {
                 dataStatus: StatusCodes.NO_CONNECTION,
                 nolog: false,
-            }
+            };
         
         default: 
             return Object.assign({}, state, {

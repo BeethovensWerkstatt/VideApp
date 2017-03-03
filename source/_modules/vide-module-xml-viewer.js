@@ -7,80 +7,106 @@ const VideXmlViewer = class VideXMLviewer extends EoModule {
     /*Constructor method*/
     constructor() {
         super();
-        this._supportedPerspective = EO_Protocol.Perspective.PERSPECTIVE_XML;
-        this._supportedRequests = [];
+        this._supportedPerspective = VIDE_PROTOCOL.PERSPECTIVE.XML;
         let _this = this;
         this._aceStore = new Map();
         
-        Object.keys(EO_Protocol.Object).forEach(function(object, i) {
-            _this._supportedRequests.push({objectType: object, contexts:[], perspective: _this._supportedPerspective, operation: EO_Protocol.Operation.OPERATION_VIEW});
+        Object.keys(VIDE_PROTOCOL.OBJECT).forEach((object, i) => {
+            this._supportedRequests.push({objectType: object, contexts:[], perspective: this._supportedPerspective, operation: VIDE_PROTOCOL.OPERATION.VIEW});
         });
         
-        this._key = 'videXMLviewer';
-        this._serverConfig = {host: 'http://localhost', port: ':32756', basepath:'/'};
+        this._key = 'VideXmlViewer';
         return this;
     }
     
     unmount(containerID) {
         //console.log('[DEBUG] Unmounting ' + this._key + ' at ' + containerID)
+        let key = containerID + '_' + this._eohub.getEdition();
         
-        let editor = window.aceStore[_this._eohub.getEdition()].editor;
+        let editor = this._aceStore.get(key);
         if(typeof editor !== 'undefined') {
             editor.destroy();
             editor = null;
         }
-            
-    
+        
+        this._aceStore.delete(key)
+        
         document.getElementById(containerID).innerHTML = '';
     }
     
+    _getEditor(containerID) {
+        
+        let key = containerID + '_' + this._eohub.getEdition();
+        
+        let editor = this._aceStore.get(key);
+        if(typeof editor === 'undefined') {
+            editor = this._setupHtml(containerID); 
+            this._aceStore.set(key, editor);
+        }
+        return Promise.resolve(editor);        
+        
+    }
+    
     _setupHtml(containerID) {
-        //console.log('_setupHtml with ' + containerID)
+        
+        
+        //create html for menu
+        let menuID = containerID + '_menu';
+        let menuElem = document.createElement('div');
+        menuElem.id = menuID;
+        menuElem.classList.add('xmlMenu');
+        document.getElementById(containerID).appendChild(menuElem);
+        
+        this._setupViewSelect(containerID + '_menu', containerID);
+        
+        //create html for editor
         let key = containerID + '_editor';
-        document.getElementById(containerID).innerHTML = '<div id="' + key + '" class="editor"></div>';
+        let editorElem = document.createElement('div');
+        editorElem.id = key;
+        editorElem.classList.add('editor');
+        document.getElementById(containerID).appendChild(editorElem);
+        
+        //ace setup
         let editor = ace.edit(key);
-        editor.setTheme('ace/theme/ambiance');
+        editor.setTheme('ace/theme/chrome');
         editor.getSession().setMode('ace/mode/xml');
         editor.clearSelection();
+        editor.setReadOnly(true);
         
-        let aceStore = this._aceStore.get(this._eohub.getEdition());
-        if(typeof aceStore === 'undefined') {
-            this._aceStore.set(this._eohub.getEdition(), {editor: editor, containerID: containerID});
-        } else {
-            aceStore.editor = editor;
-            aceStore.containerID = containerID;
-        }
+        editor.getSession().on('changeScrollTop',() => {
+            let state = this._getCurrentState(editor);
+            this._confirmView(state,containerID)
+        })
         
         return editor;
     }
     
     getDefaultView(containerID) {
-        let responseType = 'text';
-        let url = this._getBaseURI() + 'file/' + this._eohub.getEdition() + '.xml';
         
-        //
-        //if(typeof window.aceStore === 'undefined' || typeof window.aceStore[this._eohub.getEdition()] === 'undefined')
+        let editionID = this._eohub.getEdition();
         
-        let dataRequest = new DataRequest(responseType, url);
+        let request = {
+            id: editionID,
+            object: VIDE_PROTOCOL.OBJECT.EDITION,
+            contexts: [],
+            perspective: this._supportedPerspective,
+            operation: VIDE_PROTOCOL.OPERATION.VIEW,
+            state: {},
+            edition: editionID,
+            revision: this._eohub.getRevision()
+        };
         
-        this._eohub.requestData(dataRequest).then(
-            (xml) => {
-                containerID = containerID.replace(/videXMLviewer/, 'VIEWTYPE_XMLVIEW');
-            
-                let editor = this._setupHtml(containerID);
-                
-                //let key = containerID + '_editor';
-                //let editor = ace.edit(key);
-                
-                //if(typeof window.aceStore === 'undefined')
-                //    window.aceStore = {};
-                
-                this._aceStore.get(this._eohub.getEdition()).xml = xml; 
-                
-                editor.setValue(xml);
-                editor.clearSelection();
-                return Promise.resolve(this._setClickHandler(editor, containerID));
-            });
+        this.handleRequest(request, containerID);        
+    }
+    
+    _getCurrentState(editor) {
+        let line = editor.renderer.getFirstFullyVisibleRow();
+        let selection = editor.getSelection();
+        let search = editor.getLastSearchOptions();
+        
+        let state = {line:line}
+        
+        return state;
     }
     
     _setClickHandler(editor, containerID) {
@@ -130,7 +156,7 @@ const VideXmlViewer = class VideXMLviewer extends EoModule {
                             let req = Object.assign({}, request);
                             req.objectID = elem.id;
                             
-                            if(request.perspective === EO_Protocol.Perspective.PERSPECTIVE_TRANSCRIPTION) {
+                            if(request.perspective === VIDE_PROTOCOL.PERSPECTIVE.TRANSCRIPTION) {
                                 let states = elem.states.filter(function(state){
                                     return state.type !== 'del';
                                 });
@@ -138,7 +164,7 @@ const VideXmlViewer = class VideXMLviewer extends EoModule {
                                 states.forEach(function(state, k) {
                                     let reqCopy = Object.assign({}, req);
                                     reqCopy.contexts.length = 0;
-                                    reqCopy.contexts.push({type: EO_Protocol.Context.CONTEXT_STATE, id: state.id});
+                                    reqCopy.contexts.push({type: VIDE_PROTOCOL.CONTEXT.STATE, id: state.id});
                                     requests.push(reqCopy);
                                 });
                             } else {
@@ -160,15 +186,27 @@ const VideXmlViewer = class VideXMLviewer extends EoModule {
             //return Promise.resolve(editor);
     }
     
-    handleRequest(request) {
-        let fullContainer = (request.getContainer() + '_' + this._key).replace(/videXMLviewer/, 'VIEWTYPE_XMLVIEW');
+    handleRequest(request,containerID) {
         
-        let edition = this._eohub.getEdition();
-        let targetObject = request.getObjectID();
+        if(request.object === VIDE_PROTOCOL.OBJECT.EDITION) {
+            request.type = 'getXmlFile';    
+        }
         
-        let htmlElem = document.getElementById(fullContainer + '_editor');
-        
-        if(!this._aceStore.has(edition)) {
+        this._getEditor(containerID).then((editor) => {
+            this.requestData(request, true).then((xml) => {
+                editor.setValue(xml);
+                editor.clearSelection();
+                
+                let state = this._getCurrentState(editor);
+                this._confirmView(state,containerID);
+            })
+        })
+           
+                
+        //return Promise.resolve(this._setClickHandler(editor, containerID));
+         
+        //todo: prüfen
+        /*if(!this._aceStore.has(edition)) {
             this.getDefaultView(fullContainer).then(
                 (editor) => {
                     return Promise.resolve(this._findString(editor, 'id="' + targetObject + '"'));
@@ -183,7 +221,7 @@ const VideXmlViewer = class VideXMLviewer extends EoModule {
             return Promise.resolve(this._findString(editor, 'id="' + targetObject + '"').then(this._setClickHandler(editor, fullContainer)));
         } else {
             return Promise.resolve(this._findString(this._aceStore.get(edition).editor, 'id="' + targetObject + '"'));
-        }
+        }*/
     }
     
     _findString(editor, string) {

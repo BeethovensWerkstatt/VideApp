@@ -17,7 +17,7 @@ import VideAppState from './redux/reducers.redux';
 import { fetchEditions } from './redux/actions.redux';
 
 //load core components
-import EoHub from './_modules/eo-hub';
+import {eohub} from './_modules/eo-hub';
 import VideViewManager from './_modules/vide-view-manager';
 
 //load individual modules
@@ -34,32 +34,27 @@ let store = createStore(VideAppState, applyMiddleware(
     )
 );
 
+let videViewManager = new VideViewManager(store);
 
-//set up data hub
-let eoHub = window.EoHub = new EoHub();
+let xmlViewer = new VideXmlViewer();
+eohub.registerModule(xmlViewer);
 
+let videFacsimileViewer = new VideFacsimileViewer();
+eohub.registerModule(videFacsimileViewer);
 
-let videViewManager = new VideViewManager(store, eoHub);
-
-/*let xmlViewer = new VideXmlViewer();
-eoHub.registerModule(xmlViewer);
-
-let transcriptionViewer = new VideTranscriptionViewer();
-eoHub.registerModule(transcriptionViewer);
+/*let transcriptionViewer = new VideTranscriptionViewer();
+eohub.registerModule(transcriptionViewer);
 let vrvToolkit = new verovio.toolkit();
 window.vrvStore = {vrvToolkit: vrvToolkit};
 
 let videTextViewer = new VideTextViewer();
-eoHub.registerModule(videTextViewer);
-
-let videFacsimileViewer = new VideFacsimileViewer();
-eoHub.registerModule(videFacsimileViewer);
+eohub.registerModule(videTextViewer);
 
 let videReconstructionViewer = new VideReconstructionViewer();
-eoHub.registerModule(videReconstructionViewer);
+eohub.registerModule(videReconstructionViewer);
 
 let videInvarianceViewer = new VideInvarianceViewer();
-eoHub.registerModule(videInvarianceViewer);*/
+eohub.registerModule(videInvarianceViewer);*/
 
 
 /*store.dispatch(switchLanguage('de'));
