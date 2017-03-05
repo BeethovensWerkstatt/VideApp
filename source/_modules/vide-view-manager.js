@@ -1,6 +1,6 @@
 import 'babel-polyfill';
-import {ViewTypes, ViewLayouts, openContextMenu, setFirstView, setSecondView, confirmState} from './../redux/actions.redux';
-import {Request} from './vide-module-blueprint';
+import {ViewLayouts, openContextMenu, setFirstView, setSecondView, confirmState} from './../redux/actions.redux';
+import VIDE_PROTOCOL from './vide-protocol';
 import VideHistoryManager from './vide-history-manager';
 import {eohub} from './eo-hub';
 import * as langfile from '../i18n/i18n.json';
@@ -133,34 +133,40 @@ const VideViewManager = class VideViewManager {
      * @returns {boolean} false if there are errors
      */
     prepareView(target, moduleKey, request) {
-        let viewType;
-        if(moduleKey === 'videXMLviewer') {viewType = ViewTypes.VIEWTYPE_XMLVIEW;} else if(moduleKey === 'videTranscriptionViewer') {viewType = ViewTypes.VIEWTYPE_TRANSCRIPTIONVIEW;} else if(moduleKey === 'videFacsimileViewer') {viewType = ViewTypes.VIEWTYPE_FACSIMILEVIEW;} else if(moduleKey === 'videReconstructionViewer') {viewType = ViewTypes.VIEWTYPE_RECONSTRUCTIONVIEW;} else if(moduleKey === 'videInvarianceViewer') {viewType = ViewTypes.VIEWTYPE_INVARIANCEVIEW;} else {
+        let perspective;
+        if(moduleKey === 'VideXmlViewer') {
+            perspective = VIDE_PROTOCOL.PERSPECTIVE.XML;
+        } else if(moduleKey === 'VideTranscriptionViewer') {
+            perspective = VIDE_PROTOCOL.PERSPECTIVE.TRANSCRIPTION;
+        } else if(moduleKey === 'VideFacsimileViewer') {
+            perspective = VIDE_PROTOCOL.PERSPECTIVE.FACSIMILE;
+        } else if(moduleKey === 'VideReconstructionViewer') {
+            perspective = VIDE_PROTOCOL.PERSPECTIVE.RECONSTRUCTION;
+        } else if(moduleKey === 'VideInvarianceViewer') {
+            perspective = VIDE_PROTOCOL.PERSPECTIVE.INVARIANCE;
+        } else {
             console.log('[ERROR] Dunno how to handle moduleKey ' + moduleKey + ' in videViewManager');
             return false;
         }
         
         let state = this._store.getState();
         
-        /*console.log('-----------------------')
-        console.log(request);
-        console.log('-----------------------')*/
-        
         try {
-            if(target === 'firstView' && state.firstView.viewType !== viewType) {
+            if(target === 'view1' && state.views.view1.perspective !== perspective) {
                 console.log('videViewManager.prepareView(): first view needs to be set');
-                this._store.dispatch(setFirstView(viewType, request));
-            } else if(target === 'secondView' && state.secondView.viewType !== viewType) {
+                this._store.dispatch(setFirstView(perspective, request));
+            } else if(target === 'view2' && state.views.view2.perspective !== perspective) {
                 console.log('videViewManager.prepareView(): second view needs to be set');
-                this._store.dispatch(setSecondView(viewType, request));                
+                this._store.dispatch(setSecondView(perspective, request));                
             } else {
                 console.log('videViewManager.prepareView(): view is available already');
                 
                 //view doesn't need to be changed (View.react will stop a re-rendering), but this will set the state of the view
                 
-                if(target === 'firstView') {
-                    this._store.dispatch(setFirstView(viewType, request));
-                } else if(target === 'secondView') {
-                    this._store.dispatch(setSecondView(viewType, request));
+                if(target === 'view1') {
+                    this._store.dispatch(setFirstView(perspective, request));
+                } else if(target === 'view2') {
+                    this._store.dispatch(setSecondView(perspective, request));
                 }
                 
                 //this is done through View.react

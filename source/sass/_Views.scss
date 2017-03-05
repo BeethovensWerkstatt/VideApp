@@ -38,10 +38,18 @@ div.views {
         }
         
         &.VIDE_PROTOCOL_PERSPECTIVE_XML {
-        
-            
-        }
-        
+            .menu {
+                border-bottom: 1px solid #999999;
+                @include linearGradient(#f5f5f5,#e5e5e5);
+            }
+            .editor {
+                position: absolute;
+                top: 26px;
+                right: 0;
+                bottom: 0;
+                left: 0;
+            }
+        }        
     }
 }
 

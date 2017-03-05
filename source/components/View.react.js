@@ -11,11 +11,25 @@ const View = React.createClass({
         
         let viewType = '';
         
+        if(this.props.view.perspective === VIDE_PROTOCOL.PERSPECTIVE.XML) {
+            viewType = 'VideXmlViewer';
+        } else if(this.props.view.perspective === VIDE_PROTOCOL.PERSPECTIVE.TRANSCRIPTION) {
+            viewType = 'VideTranscriptionViewer';
+        } else if(this.props.view.perspective === VIDE_PROTOCOL.PERSPECTIVE.TEXT) {
+            viewType = 'VideTextViewer';
+        } else if(this.props.view.perspective === VIDE_PROTOCOL.PERSPECTIVE.FACSIMILE) {
+            viewType = 'VideFacsimileViewer';
+        } else if(this.props.view.perspective === VIDE_PROTOCOL.PERSPECTIVE.RECONSTRUCTION) {
+            viewType = 'VideReconstructionViewer';
+        } else if(this.props.view.perspective === VIDE_PROTOCOL.PERSPECTIVE.INVARIANCE) {
+            viewType = 'VideInvarianceViewer';
+        }
+        
         try {
-            window.EoHub.unmountModule(viewType, this.props.is + '_' + this.props.viewType);
+            eohub.unmountModule(viewType, this.props.pos);
             //console.log('[DEBUG]: unmounting ' + viewType + ' at "' + this.props.is + '_' + this.props.viewType + '"');
         } catch(err) {
-            console.log('[DEBUG] no module for ' + this.props.viewType + ' available. Cannot unmount() -> ' + err);
+            console.log('[DEBUG] no module for ' + this.props.view.perspective + ' available. Cannot unmount() -> ' + err);
         }
     },
     

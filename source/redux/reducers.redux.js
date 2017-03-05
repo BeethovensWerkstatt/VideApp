@@ -201,7 +201,8 @@ export function handleViews(state = {
             return state; 
         
         case ActionTypes.SET_FIRST_VIEW:
-            if(action.perspective in Perspectives) {
+        
+            if(Object.values(Perspectives).indexOf(action.perspective) !== -1) {
                 return Object.assign({}, state, { view1: {
                     perspective: action.perspective,
                     target: action.target,
@@ -283,7 +284,6 @@ export function handleViews(state = {
             
             if(action.view === 1) {
                 console.log('confirming view 1')
-                console.log(action.state)
                 return Object.assign({}, state, { view1: 
                     Object.assign({}, state.view1, {temp: false, target: action.state})
                 });

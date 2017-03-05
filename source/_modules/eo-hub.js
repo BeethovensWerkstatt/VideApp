@@ -247,6 +247,11 @@ const EoHub = class EoHub {
         this._viewManager.prepareView(request.getContainer(), module.getKey(), request);
     }
     
+    
+    changeView(containerID,targetView) {
+        this._viewManager.prepareView(containerID, targetView);
+    }
+    
     /*
      * this function is used when a module "speaks to itself"
      */

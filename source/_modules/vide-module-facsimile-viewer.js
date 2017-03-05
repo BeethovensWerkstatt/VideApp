@@ -49,9 +49,10 @@ const VideFacsimileViewer = class VideFacsimileViewer extends EoModule {
     }
     
     unmount(containerID) {
-        let viewer = this._viewerStore.get(containerID);
+        
+        let viewer = this._cache.get(containerID + '_viewer', viewer)
         viewer.destroy();
-        this._viewerStore.delete(containerID);
+        this._cache.delete(containerID + '_viewer');
         document.getElementById(containerID).innerHTML = '';
     }
     

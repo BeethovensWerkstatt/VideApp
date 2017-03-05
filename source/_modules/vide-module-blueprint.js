@@ -202,9 +202,9 @@ const EoModule = class EoModule {
         
         selectInstance.change(this._key);
         selectInstance.on('change',(e) => {
-            console.log('----------------X11')
             console.log('vide-module-blueprint.js: _setupViewSelect')
             console.log(e);
+            this._eohub.changeView(containerID,e.value);
         });
     }
     
