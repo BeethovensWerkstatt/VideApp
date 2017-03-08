@@ -311,7 +311,7 @@ export function handleViews(state = {
 export function handleContextMenu(state = {visible: false, items:[], x: 0, y: 0}, action) {
     switch (action.type) {
         
-        case ActionTypes.OPEN_CONTEXTMENU:        
+        case ActionTypes.OPEN_CONTEXTMENU:   
             return {visible: true, items: action.items, x: action.x, y: action.y};
         
         case ActionTypes.RESTORE_STATE:

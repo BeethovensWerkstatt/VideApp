@@ -43,7 +43,7 @@ const View = React.createClass({
     },
     
     componentWillReceiveProps: function(nextProps) {
-        console.log('INFO: componentWillReceiveProps on ' + nextProps.is);
+        console.log('INFO: componentWillReceiveProps on ' + nextProps.pos);
     },
     
     shouldComponentUpdate: function(nextProps, nextState) {
@@ -79,7 +79,8 @@ const View = React.createClass({
             //todo: if necessary, send commands to view from here…
         }
         
-        if(!needsUpdate && nextProps.view.viewState !== null && nextProps.view.viewState !== this.props.view.viewState) {
+        //if view can stay the same, send request to the view for local adjustments
+        if(!needsUpdate && nextProps.view.target !== null && nextProps.view.target !== this.props.view.target) {
             this.sendRequest(nextProps, nextState);
         }
             
@@ -134,24 +135,25 @@ const View = React.createClass({
     },
     
     sendRequest: function(props, state) {
-    
+        
+        let moduleKey;
+            
+        if(props.view.perspective === VIDE_PROTOCOL.PERSPECTIVE.TRANSCRIPTION) {
+            moduleKey = 'videTranscriptionViewer';
+        } else if(props.view.perspective === VIDE_PROTOCOL.PERSPECTIVE.TEXT) {
+            moduleKey = 'videMEITextViewer';
+        } else if(props.view.perspective === VIDE_PROTOCOL.PERSPECTIVE.XML) {
+            moduleKey = 'VideXmlViewer';
+        } else if(props.view.perspective === VIDE_PROTOCOL.PERSPECTIVE.FACSIMILE) {
+            moduleKey = 'VideFacsimileViewer';
+        } else if(props.view.perspective === VIDE_PROTOCOL.PERSPECTIVE.RECONSTRUCTION) {
+            moduleKey = 'videReconstructionViewer';
+        } else if(props.view.perspective === VIDE_PROTOCOL.PERSPECTIVE.INVARIANCE) {
+            moduleKey = 'videInvarianceViewer';
+        }
+        
         //request default view    
         if(props.view.target === null) {
-            let moduleKey;
-            
-            if(props.view.perspective === VIDE_PROTOCOL.PERSPECTIVE.TRANSCRIPTION) {
-                moduleKey = 'videTranscriptionViewer';
-            } else if(props.view.perspective === VIDE_PROTOCOL.PERSPECTIVE.TEXT) {
-                moduleKey = 'videMEITextViewer';
-            } else if(props.view.perspective === VIDE_PROTOCOL.PERSPECTIVE.XML) {
-                moduleKey = 'VideXmlViewer';
-            } else if(props.view.perspective === VIDE_PROTOCOL.PERSPECTIVE.FACSIMILE) {
-                moduleKey = 'VideFacsimileViewer';
-            } else if(props.view.perspective === VIDE_PROTOCOL.PERSPECTIVE.RECONSTRUCTION) {
-                moduleKey = 'videReconstructionViewer';
-            } else if(props.view.perspective === VIDE_PROTOCOL.PERSPECTIVE.INVARIANCE) {
-                moduleKey = 'videInvarianceViewer';
-            }
             
             console.log('[DEBUG] request default view for ' + moduleKey);
             
@@ -161,20 +163,18 @@ const View = React.createClass({
             //    console.log('[ERROR] unable to request default for ' + props.view.perspective + ': ' + err);
             //}
         } else {
-        
-            //todo
-        
-            /*let req = props.view.viewState;
-            let module = eohub.getModule(req.getModuleKey());
+            
+            let req = props.view.target;
+            let module = eohub.getModule(moduleKey);
             
             //console.log('[DEBUG] handle request for ' + req.getModuleKey());
             
             try {
-                module.handleRequest(req);    
+                module.handleRequest(req,props.pos);    
             } catch(err) {
-                console.log('[ERROR] unable to handle request for ' + props.viewType + ': ' + err);
+                console.log('[ERROR] unable to handle request for ' + moduleKey + ': ' + err);
                 console.log(req);
-            }*/
+            }
         }
     }
 });

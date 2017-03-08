@@ -1,5 +1,6 @@
 import { connect } from 'react-redux';
 import { openContextMenu, closeContextMenu } from '../redux/actions.redux';
+import {eohub} from './../_modules/eo-hub';
 import ContextMenu from '../components/ContextMenu.react';
 
 const mapStateToProps = (state, ownProps) => {
@@ -18,7 +19,9 @@ const mapDispatchToProps = (dispatch, ownProps) => {
         },
         submitRequest: (item) => {
             try {
-                window.EoHub.broadcastRequest(item);    
+                console.log('--------now what to do with this item:')
+                console.log(item)
+                eohub.broadcastRequest(item);    
             } catch(err) {
                 console.log('[ERROR] Unable to submit request: ' + err);
             }

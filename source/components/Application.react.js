@@ -2,11 +2,11 @@ var React = require('react');
 var AppHeader = require('./AppHeader.react');
 
 import ViewsController from '../containers/ViewsController.react';
+import ContextMenuController from '../containers/ContextMenuController.react';
 
 
 /*var AppFooter = require('./AppFooter.react');
 
-import ContextMenuController from '../containers/ContextMenuController.react';
 
 import PerspectivesBar from './PerspectivesBar.react';
 import BookmarksPane from '../containers/BookmarksPane.react';
@@ -23,6 +23,7 @@ var Application = React.createClass({
             <div className='appContainer'>
                 <AppHeader text="Beethovens Werkstatt"/>
                 <ViewsController/>
+                <ContextMenuController/>
             </div>
             
         );
@@ -37,5 +38,5 @@ module.exports = Application;
                 <ViewsController/>
                 
                 <AppFooter/>
-                <ContextMenuController/>
+                
  */

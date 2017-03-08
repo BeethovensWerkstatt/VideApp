@@ -71,27 +71,27 @@
         "de":"Faksimile",
         "en":"Facsimile"
     },
-    "contextMenu_showIn_PERSPECTIVE_FACSIMILE":{
+    "contextMenu_showIn_VIDE_PROTOCOL_PERSPECTIVE_FACSIMILE":{
         "de":"Im Faksimile anzeigen",
         "en":"Show Facsimile"
     },
-    "contextMenu_showIn_PERSPECTIVE_XML":{
+    "contextMenu_showIn_VIDE_PROTOCOL_PERSPECTIVE_XML":{
         "de":"XML anzeigen",
         "en":"Show XML"
     },
-    "contextMenu_showIn_PERSPECTIVE_TRANSCRIPTION":{
+    "contextMenu_showIn_VIDE_PROTOCOL_PERSPECTIVE_TRANSCRIPTION":{
         "de":"Transkription anzeigen",
         "en":"Show Transcription"
     },
-    "contextMenu_showIn_PERSPECTIVE_INVARIANCE":{
+    "contextMenu_showIn_VIDE_PROTOCOL_PERSPECTIVE_INVARIANCE":{
         "de":"In Invarianz-Darstellung anzeigen",
         "en":"Show in Invariance View"
     },
-    "contextMenu_showIn_PERSPECTIVE_RECONSTRUCTION":{
+    "contextMenu_showIn_VIDE_PROTOCOL_PERSPECTIVE_RECONSTRUCTION":{
         "de":"In Rekonstruktions-Ansicht anzeigen",
         "en":"Show in Reconstruction View"
     },
-    "contextMenu_showIn_PERSPECTIVE_TEXT":{
+    "contextMenu_showIn_VIDE_PROTOCOL_PERSPECTIVE_TEXT":{
         "de":"Beschreibung anzeigen",
         "en":"Show Description"
     },

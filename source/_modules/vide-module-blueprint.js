@@ -120,22 +120,23 @@ const EoModule = class EoModule {
             return false;
         }
         
-        if(request.getPerspective() !== this._supportedPerspective) {
+        if(request.perspective !== this._supportedPerspective) {
             return false;
         }
+        let contextsPlain = [];
+        for(let i = 0; i < request.contexts.length; i++) {
+            contextsPlain.push(request.contexts[i].context);
+        }
         
-        let query = request.getQueryPrototype();
+        let query = {object: request.object,contexts: contextsPlain,perspective: this._supportedPerspective,operation:VIDE_PROTOCOL.OPERATION.VIEW}
         let isSupported = false;
         
         for (let req of this._supportedRequests) {
             let reqTest;
             
-            if(req.contexts.length > 0 && typeof req.contexts[0] === 'object') {
-                let contextsPlain = [];
-                for(let i = 0; i < req.contexts.length; i++) {
-                    contextsPlain.push(req.contexts[i].type);
-                }
-                reqTest = Object.assign(req, {contexts:contextsPlain});
+            if(req.contexts.length > 0 && typeof req.contexts[0] === 'string') {
+                console.log('---------not sure I have ever been here…')
+                reqTest = Object.assign(req, {contexts:req.contexts});
             } else {
                 reqTest = req;
             }

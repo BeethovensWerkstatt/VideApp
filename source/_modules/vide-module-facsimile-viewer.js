@@ -13,27 +13,27 @@ const VideFacsimileViewer = class VideFacsimileViewer extends EoModule {
         this._supportedRequests = [];
         this._viewerStore = new Map();
         
-        let stateReq = {objectType: VIDE_PROTOCOL.OBJECT.STATE, 
+        let stateReq = {object: VIDE_PROTOCOL.OBJECT.STATE, 
             contexts:[], 
             perspective: this._supportedPerspective, 
             operation: VIDE_PROTOCOL.OPERATION.VIEW};
-        let notationReq = {objectType: VIDE_PROTOCOL.OBJECT.NOTATION, 
+        let notationReq = {object: VIDE_PROTOCOL.OBJECT.NOTATION, 
             contexts:[], 
             perspective: this._supportedPerspective, 
             operation: VIDE_PROTOCOL.OPERATION.VIEW};
-        let lyricReq = {objectType: VIDE_PROTOCOL.OBJECT.LYRICS, 
+        let lyricReq = {object: VIDE_PROTOCOL.OBJECT.LYRICS, 
             contexts:[], 
             perspective: this._supportedPerspective, 
             operation: VIDE_PROTOCOL.OPERATION.VIEW};
-        let metaReq = {objectType: VIDE_PROTOCOL.OBJECT.METAMARK, 
+        let metaReq = {object: VIDE_PROTOCOL.OBJECT.METAMARK, 
             contexts:[], 
             perspective: this._supportedPerspective, 
             operation: VIDE_PROTOCOL.OPERATION.VIEW};
-        let dirReq = {objectType: VIDE_PROTOCOL.OBJECT.DIR, 
+        let dirReq = {object: VIDE_PROTOCOL.OBJECT.DIR, 
             contexts:[], 
             perspective: this._supportedPerspective, 
             operation: VIDE_PROTOCOL.OPERATION.VIEW};
-        let delReq = {objectType: VIDE_PROTOCOL.OBJECT.DEL, 
+        let delReq = {object: VIDE_PROTOCOL.OBJECT.DEL, 
             contexts:[], 
             perspective: this._supportedPerspective, 
             operation: VIDE_PROTOCOL.OPERATION.VIEW};
@@ -344,9 +344,6 @@ const VideFacsimileViewer = class VideFacsimileViewer extends EoModule {
                                 
                             }
                         }
-                        
-                         
-                        
                         resolve(viewer);
                     });
                     
@@ -376,7 +373,8 @@ const VideFacsimileViewer = class VideFacsimileViewer extends EoModule {
                                 operation: VIDE_PROTOCOL.OPERATION.VIEW,
                                 state: {}
                             };
-                            this.handleRequest(req,containerID);
+                            
+                            this._eohub.sendSelfRequest(req,this,containerID);
                         })
                         
                         //insert overlays for scars 
@@ -496,7 +494,7 @@ const VideFacsimileViewer = class VideFacsimileViewer extends EoModule {
                             state: {}
                         };
                         //this request needs to go through vide-view-manager???           
-                        this.handleRequest(req,containerID);      
+                        this._eohub.sendSelfRequest(req,this,containerID);
                                    
                     });
                     
@@ -528,19 +526,17 @@ const VideFacsimileViewer = class VideFacsimileViewer extends EoModule {
         this.requestData(shapeReq,false)
             .then(
                 (json) => {
-                    //console.log('[DEBUG]: There are ' + json.length + ' elems associated with this shape.')
                     
                     let elem = json[0];
                     
                     let requests = [];
                     let filteredRequests = supportedRequests.filter((request) => {
-                        return (request.objectType === elem.type && request.perspective !== this._supportedPerspective);
+                        return (request.object === elem.type && request.perspective !== this._supportedPerspective);
                     }); 
                     
                     filteredRequests.forEach((request, j) => {
                         let req = Object.assign({}, request);
                         req.id = elem.id;
-                        
                         if(request.perspective === VIDE_PROTOCOL.PERSPECTIVE.TRANSCRIPTION) {
                             let states = elem.states.filter(function(state){
                                 return state.type !== 'del';
@@ -562,7 +558,7 @@ const VideFacsimileViewer = class VideFacsimileViewer extends EoModule {
                         }
                     });
                     
-                    let closeFunc = function() {
+                    let closeFunc = () => {
                         this._focusShape(containerID, viewer, shape);
                     };
                     try {
@@ -671,7 +667,7 @@ const VideFacsimileViewer = class VideFacsimileViewer extends EoModule {
                             state: {}
                         }
                         
-                        this.handleRequest(req,containerID);
+                        this._eohub.sendSelfRequest(req,this,containerID);
                     };
                     stateBox.addEventListener('click', stateSelect);
                 }
@@ -802,6 +798,11 @@ const VideFacsimileViewer = class VideFacsimileViewer extends EoModule {
     }
     
     highlightItem(viewer,containerID, shapesArray) {
+    
+        if(shapesArray.length === 0) {
+            console.log('[WARNING] no shapes provided that could be focussed on')
+        }
+    
         let oldHighlights = document.querySelectorAll('#' + containerID + ' path.active, #' + +containerID + ' path.current');
         for (let shape of oldHighlights) {
             shape.classList.remove('current');
@@ -823,7 +824,6 @@ const VideFacsimileViewer = class VideFacsimileViewer extends EoModule {
                 console.log('[ERROR] invalid shape ' + shapesArray[i] + ': ' + error);
             } 
         }
-        
         viewer.viewport.fitBoundsWithConstraints(baseRect);
     }
     
@@ -853,7 +853,10 @@ const VideFacsimileViewer = class VideFacsimileViewer extends EoModule {
     }
     
     handleRequest(request,containerID) {
-       
+        
+        console.log('[INFO] received the following request for VideFacsimileViewer at ' + containerID + ':')
+        console.log(request)
+        
         //determine type of request
         let type;
             
@@ -888,6 +891,8 @@ const VideFacsimileViewer = class VideFacsimileViewer extends EoModule {
         }
         
         this._setupViewer(containerID, type).then((viewer) => {
+            
+            console.log('got the viewer')
             
             let editionID = this._eohub.getEdition();
             

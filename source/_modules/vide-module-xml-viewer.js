@@ -11,8 +11,8 @@ const VideXmlViewer = class VideXMLviewer extends EoModule {
         let _this = this;
         this._aceStore = new Map();
         
-        Object.keys(VIDE_PROTOCOL.OBJECT).forEach((object, i) => {
-            this._supportedRequests.push({objectType: object, contexts:[], perspective: this._supportedPerspective, operation: VIDE_PROTOCOL.OPERATION.VIEW});
+        Object.values(VIDE_PROTOCOL.OBJECT).forEach((object, i) => {
+            this._supportedRequests.push({object: object, contexts:[], perspective: this._supportedPerspective, operation: VIDE_PROTOCOL.OPERATION.VIEW});
         });
         
         this._key = 'VideXmlViewer';
@@ -87,13 +87,7 @@ const VideXmlViewer = class VideXMLviewer extends EoModule {
         
         let request = {
             id: editionID,
-            object: VIDE_PROTOCOL.OBJECT.EDITION,
-            contexts: [],
-            perspective: this._supportedPerspective,
-            operation: VIDE_PROTOCOL.OPERATION.VIEW,
-            state: {},
-            edition: editionID,
-            revision: this._eohub.getRevision()
+            type: 'getXmlFile'
         };
         
         this.handleRequest(request, containerID);        
@@ -109,7 +103,7 @@ const VideXmlViewer = class VideXMLviewer extends EoModule {
         return state;
     }
     
-    _setClickHandler(editor, containerID) {
+    /*_setClickHandler(editor, containerID) {
         editor.on('click', (event) => {
             var position = event.getDocumentPosition();
             var token = editor.session.getTokenAt(position.row, position.column);
@@ -184,18 +178,36 @@ const VideXmlViewer = class VideXMLviewer extends EoModule {
             
             
             //return Promise.resolve(editor);
-    }
+    }*/
     
     handleRequest(request,containerID) {
         
-        if(request.object === VIDE_PROTOCOL.OBJECT.EDITION) {
+        console.log('[VideXmlViewer] received request')
+        console.log(request)
+        console.log(containerID)
+        
+        //todo: fix the following
+        /*if(request.object === VIDE_PROTOCOL.OBJECT.EDITION) {
             request.type = 'getXmlFile';    
+        }
+        request.type = 'getXmlFile'; 
+        */
+        let req = {
+            id: this._eohub.getEdition(),
+            type: 'getXmlFile'
         }
         
         this._getEditor(containerID).then((editor) => {
-            this.requestData(request, true).then((xml) => {
+        
+            console.log('got an editor')
+            console.log(editor)
+            this.requestData(req, true).then((xml) => {
                 editor.setValue(xml);
                 editor.clearSelection();
+                
+                if(request.object !== VIDE_PROTOCOL.OBJECT.EDITION) {
+                    this._findString(editor, 'id="' + request.id + '"')
+                }
                 
                 let state = this._getCurrentState(editor);
                 this._confirmView(state,containerID);

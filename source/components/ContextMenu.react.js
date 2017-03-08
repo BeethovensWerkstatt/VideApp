@@ -1,11 +1,12 @@
 import React, { PropTypes } from 'react';
 import I18n from './../containers/I18n.react';
 import PreviewItem from './PreviewItem.react';
-import {EoModule, DataRequest} from './../temp/eomodule';
+import {eohub} from './../_modules/eo-hub';
 const Slider = require('react-slick');
 
 
 const ContextMenu = ({ items, visible, closeContextMenu, submitRequest, x, y }) => {
+
     if(visible) {
         let menuStyle = {top: (y + 10) + 'px', left: (x + 10) + 'px'};
         
@@ -19,20 +20,25 @@ const ContextMenu = ({ items, visible, closeContextMenu, submitRequest, x, y }) 
             centerPadding: 0
         };
         
-        let id = 'e' + Math.uuidCompact();
-        let url = 'http://localhost:8080/exist/apps/exist-module/edition/' + items[0].editionID + '/element/' + items[0].query.objectID + '/en/description.json';
-        let request = new DataRequest('json', url);
-        window.EoHub.requestData(request).then(
-            (json) => {
-                console.log('-----------------url ' + url);
-                console.log(json);
-                document.getElementById(id + '_bravura').innerHTML = json[0].bravura;
-                document.getElementById(id + '_desc').innerHTML = json[0].desc;
-                document.getElementById(id + '_measure').innerHTML = json[0].measure;
-                document.getElementById(id + '_position').innerHTML = json[0].position;
-            }
-        );
+        let key = Math.uuidCompact()
+        let req = {
+            id: items[0].req.id,
+            edition: eohub.getEdition(),
+            type: 'getElementDesc',
+            key: key
+        }
         
+        let socket = io(eohub._server + eohub._socketID);
+        
+        socket.once(key,(json) => {
+            
+            document.getElementById(key + '_bravura').innerHTML = json[0].bravura;
+            document.getElementById(key + '_desc').innerHTML = json[0].desc;
+            document.getElementById(key + '_measure').innerHTML = json[0].measure;
+            document.getElementById(key + '_position').innerHTML = json[0].position;
+        });
+        
+        socket.emit('requestData', req);
         
         return (
         
@@ -55,14 +61,14 @@ const ContextMenu = ({ items, visible, closeContextMenu, submitRequest, x, y }) 
                             }    
                         </Slider>
                     </div>
-                    <div className="descBox" id={id}>
+                    <div className="descBox" id={key}>
                         <div>
-                            <div className="bravura" id={id + '_bravura'}></div>
-                            <div className="desc" id={id + '_desc'}></div>
+                            <div className="bravura" id={key + '_bravura'}></div>
+                            <div className="desc" id={key + '_desc'}></div>
                         </div>
                         <div>
-                            <div className="measure" id={id + '_measure'}></div>
-                            <div className="position" id={id + '_position'}></div>
+                            <div className="measure" id={key + '_measure'}></div>
+                            <div className="position" id={key + '_position'}></div>
                         </div>
                     </div>
                 </div>

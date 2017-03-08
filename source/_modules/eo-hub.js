@@ -1,7 +1,6 @@
 import 'babel-polyfill';
 import { connect } from 'react-redux';
 import fetch from 'isomorphic-fetch';
-import {Request, DataRequest} from './vide-module-blueprint';
 
 //imported in HTML -> globally available
 /*import io from 'socket.io';*/
@@ -189,17 +188,17 @@ const EoHub = class EoHub {
     requestDefault(moduleKey, containerID) {
         //console.log('[DEBUG] requesting default view for ' + moduleKey + ' in container ' + containerID);
         
-        this.getModule(moduleKey).getDefaultView(containerID);
         
-        /*try {
-            this._modules.get(moduleKey).getDefaultView(containerID);
+        
+        try {
+            this.getModule(moduleKey).getDefaultView(containerID);
         }
         catch (e) {
             if(typeof this._modules.get(moduleKey) === 'undefined')
                 console.log('[ERROR]: No module with key "' + moduleKey + '" registered in app.js');
             else
                 console.log('[ERROR]: ' + e);
-        }*/
+        }
     }
     
     /**
@@ -209,22 +208,23 @@ const EoHub = class EoHub {
      * @param {Object} req is sent to all modules
      * @returns {boolean} if there is no adequate module
      */
-    broadcastRequest(req) {
-        let request;
+    broadcastRequest(object) {
+        let req = object.req;
+        let containerID = object.target;
         
-        if(req instanceof Request) {
+        /*if(req instanceof Request) {
             request = req;
         } else {
             request = new Request(req.containerID, req.editionID, req.query);
-        }
+        }*/
         
         let fittingModules = [];
         
         for (var eoModule of this._modules.values()) {
             try {
-                let fits = eoModule.checkRequest(request);
+                let fits = eoModule.checkRequest(req);
                 if(fits !== false) {
-                    fittingModules.push(fits);
+                    fittingModules.push(eoModule);
                 }
             } catch(err) {
                 console.log('[ERROR] Problems when checking for modules matching the following request (' + err + '):');
@@ -234,17 +234,14 @@ const EoHub = class EoHub {
         
         if(fittingModules.length === 0) {
             console.log('[WARNING] No module available to resolve the following request:');
-            console.log(request);
+            console.log(req);
             console.log(this.getSupportedRequests());
-            console.log(request.getQueryPrototype());
-            console.log('index: ' + this.getSupportedRequests().indexOf(request.getQueryPrototype()));
             return false;
         }
         
         let module = fittingModules[0];
-        request.addModuleKey(module.getKey());
         
-        this._viewManager.prepareView(request.getContainer(), module.getKey(), request);
+        this._viewManager.prepareView(containerID, module.getKey(), req);
     }
     
     
@@ -255,11 +252,8 @@ const EoHub = class EoHub {
     /*
      * this function is used when a module "speaks to itself"
      */
-    sendSelfRequest(req, module) {
-        req.addModuleKey(module.getKey());
-        let underscorePos = req.getContainer().indexOf('_');
-        let target = underscorePos !== -1 ? req.getContainer().slice(0, underscorePos) : req.getContainer();
-        return Promise.resolve(this._viewManager.prepareView(target, module.getKey(), req));
+    sendSelfRequest(req, module,containerID) {
+        return Promise.resolve(this._viewManager.prepareView(containerID, module.getKey(), req));
     }
     
     /*

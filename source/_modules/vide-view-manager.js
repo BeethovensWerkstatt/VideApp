@@ -1,5 +1,6 @@
 import 'babel-polyfill';
-import {ViewLayouts, openContextMenu, setFirstView, setSecondView, confirmState} from './../redux/actions.redux';
+import {openContextMenu, setFirstView, setSecondView, confirmState} from './../redux/actions.redux';
+import {ViewLayouts} from './../redux/layout.constants';
 import VIDE_PROTOCOL from './vide-protocol';
 import VideHistoryManager from './vide-history-manager';
 import {eohub} from './eo-hub';
@@ -83,14 +84,9 @@ const VideViewManager = class VideViewManager {
          *      generate a func that gets called when menu opens
          * 
          */
-        
-        console.log('----requesting context menu')
-        console.log(items)
-        
         if(items.length === 0) {
             return false;
         }
-        
         let unsubscribe;
         
         if(typeof closeFunc === 'function') {
@@ -103,23 +99,38 @@ const VideViewManager = class VideViewManager {
             });
         }
         
-        let activeEdition = this._store.getState().activeEdition;
-        let layout = this._store.getState().layout;
+        let activeEdition = this._store.getState().edition.active;
+        let layout = this._store.getState().views.layout;
         let target;
         
-        if(layout === ViewLayouts.SINGLE_VIEW) {target = 'firstView';} else if(originView.substr(0, 9) === 'firstView') {target = 'secondView';} else {target = 'firstView';}
+        if(layout === ViewLayouts.SINGLE_VIEW) {
+            target = 'view1';
+        } else if(originView.substr(0, 9) === 'firstView') {
+            target = 'view2';
+        } else {
+            target = 'view1';
+        }
         
         let requests = [];
-        items.forEach(function(item, i) {
+        items.forEach((item, i) => {
             let containerID= target;// + '_' + item.perspective;
             let editionID = activeEdition;
-            let query = {objectType: item.objectType, objectID: item.objectID, contexts: item.contexts, perspective: item.perspective, operation: item.operation};
-            let req = {containerID: containerID, editionID: editionID, query: query};
-            requests.push(req);
+            let query = {
+                target: target,
+                req: {
+                    id: item.id,
+                    object: item.object,
+                    contexts: item.contexts,
+                    perspective: item.perspective,
+                    operation: item.operation,
+                    state: {}
+                }
+            }    
+            requests.push(query);
         });
         
         try{
-            this._store.dispatch(openContextMenu(requests, event.clientX, event.clientY));    
+            this._store.dispatch(openContextMenu(requests, event.clientX, event.clientY)); 
         } catch(err) {
             console.log('[ERROR] Unable to open context menu: ' + err);
         }
