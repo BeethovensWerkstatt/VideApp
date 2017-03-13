@@ -209,6 +209,7 @@ const VideViewManager = class VideViewManager {
         //todo: include revision of the edition
         
         console.log('requesting views for id ' + id)
+        console.log(this._store.getState())
         return this._store.getState().edition.editions[id].supportedViews;
     }
 

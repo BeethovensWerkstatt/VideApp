@@ -1,7 +1,8 @@
 import 'babel-polyfill';
 let shake128 = require('js-sha3').shake_128;
 import {version} from './../../package.json';
-import {restoreState, resetState} from './../redux/actions.redux';
+import {restoreState, resetState, receiveEditions, activateEdition} from './../redux/actions.redux';
+import {eohub} from './eo-hub';
 
 const VideHistoryManager = class VideHistoryManager {
     
@@ -127,7 +128,14 @@ const VideHistoryManager = class VideHistoryManager {
         
         let state = event.state;
         if(state !== null) {
-            this._restoreState(state);
+            try {
+                this._restoreState(state);    
+            } catch(err) {
+                console.log('[ERROR] Unable to restore state: ' + err);
+                console.log(state)
+            }
+            
+            
         }    
     }
     
@@ -136,7 +144,15 @@ const VideHistoryManager = class VideHistoryManager {
      * @param {Object} state of Redux to be restored by dispatching a corresponding action
      */
     _restoreState(state) {
+        this._store.dispatch(receiveEditions(state.edition.editions));
+        this._store.dispatch(activateEdition(state.edition.active));
         this._store.dispatch(restoreState(state));
+        /*try {
+            eohub.setEdition(state.edition.active, state.edition.revision);
+        } catch(err) {
+            console.log('[ERROR] Unable to restore state: ' + err);
+            console.log(state)
+        }*/
     }
     
     /** 

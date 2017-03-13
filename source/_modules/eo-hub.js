@@ -58,6 +58,8 @@ const EoHub = class EoHub {
         this.options.editionID = id;
         this.options.revision = revision;
         
+        console.log('me here with ' + id + ' -- ' + revision)
+        
         let supportedViews = this._viewManager.getSupportedViews(id);
         
         let _this = this;

@@ -77,15 +77,15 @@ const VideFacsimileViewer = class VideFacsimileViewer extends EoModule {
                     let page = source.pages[j];
                         
                     if(page.shapes !== '') {
-                        let s0 = performance.now();
+                        //let s0 = performance.now();
                         let svgPromise = new Promise((resolve, reject) => {
                             
                             let svgReq = {id: page.shapes,type:'getPageShapesSvg'};
                             resolve(
                                 this.requestData(svgReq, true).then(
                                     (svg) => {
-                                        let s1 = performance.now();
-                                        console.log('[DEBUG] loading svg for ' + page.label + ' took ' + (s1 - s0) + ' millisecs');
+                                        //let s1 = performance.now();
+                                        //console.log('[DEBUG] loading svg for ' + page.label + ' took ' + (s1 - s0) + ' millisecs');
                                         return Promise.resolve(page.id);
                                     }
                                 )
@@ -220,7 +220,6 @@ const VideFacsimileViewer = class VideFacsimileViewer extends EoModule {
         let measureData = this._getMeasureData(editionID);
         
         let t0 = performance.now();
-        
         return Promise.all([pageData, stateData,measureData]).then((results) => {
             let pageJson = results[0];
             let stateJson = results[1];
@@ -279,6 +278,11 @@ const VideFacsimileViewer = class VideFacsimileViewer extends EoModule {
                     
                     //store viewer for later use
                     this._cache.set(containerID + '_viewer', viewer)
+                    
+                    //log position of view when view changes
+                    viewer.addHandler('animation-finish',(event) => {
+                        this._confirmView({bounds:viewer.viewport.getBounds()},containerID);
+                    });
                     
                     //do internal setup after images are loaded
                     viewer.addHandler('open', (event) => {

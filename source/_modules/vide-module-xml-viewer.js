@@ -73,10 +73,10 @@ const VideXmlViewer = class VideXMLviewer extends EoModule {
         editor.clearSelection();
         editor.setReadOnly(true);
         
-        editor.getSession().on('changeScrollTop',() => {
+        /*editor.getSession().on('changeScrollTop',() => {
             let state = this._getCurrentState(editor);
             this._confirmView(state,containerID)
-        })
+        })*/
         
         return editor;
     }
@@ -199,10 +199,10 @@ const VideXmlViewer = class VideXMLviewer extends EoModule {
         
         this._getEditor(containerID).then((editor) => {
         
-            console.log('got an editor')
-            console.log(editor)
             this.requestData(req, true).then((xml) => {
-                editor.setValue(xml);
+                
+                editor.session.setValue(xml)
+                //editor.setValue(xml);
                 editor.clearSelection();
                 
                 if(request.object !== VIDE_PROTOCOL.OBJECT.EDITION) {
@@ -210,7 +210,7 @@ const VideXmlViewer = class VideXMLviewer extends EoModule {
                 }
                 
                 let state = this._getCurrentState(editor);
-                this._confirmView(state,containerID);
+                //this._confirmView(state,containerID);
             })
         })
            
