@@ -3,3 +3,10 @@
     background: -webkit-linear-gradient(top,  $top 0%,$bottom 100%); /* Chrome10+,Safari5.1+ */
     background: linear-gradient(to bottom,  $top 0%,$bottom 100%); /* W3C */
 }
+
+@mixin noSelect() {
+    -moz-user-select: none;
+    -webkit-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}

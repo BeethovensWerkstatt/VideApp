@@ -38,8 +38,9 @@
     "react": "^15.4.2",
     "react-addons-test-utils": "^15.4.2",
     "react-dom": "^15.4.2",
-    "vinyl-source-stream": "^1.1.0",
-    "rethinkdb": "^2.3.3"
+    "rethinkdb": "^2.3.3",
+    "tether-drop": "^1.4.2",
+    "vinyl-source-stream": "^1.1.0"
   },
   "dependencies": {
     "@kadira/react-split-pane": "^1.4.7",

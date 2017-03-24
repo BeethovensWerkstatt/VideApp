@@ -1,10 +1,10 @@
 import 'babel-polyfill';
 import VIDE_PROTOCOL from './vide-protocol';
-import {EoModule} from './vide-module-blueprint';
+import {EoNavModule} from './vide-nav-module-blueprint';
 
 
 
-const VideFacsimileViewer = class VideFacsimileViewer extends EoModule {
+const VideFacsimileViewer = class VideFacsimileViewer extends EoNavModule {
 
     /*Constructor method*/
     constructor() {
@@ -45,6 +45,11 @@ const VideFacsimileViewer = class VideFacsimileViewer extends EoModule {
         this._supportedRequests.push(delReq);
         
         this._key = 'VideFacsimileViewer';
+        
+        //used for I18n to identify how individual states are labeled
+        this._stateLabelKeySingular = 'writingLayer';
+        this._stateLabelKeyPlural = 'writingLayers';
+        
         return this;
     }
     
@@ -107,29 +112,6 @@ const VideFacsimileViewer = class VideFacsimileViewer extends EoModule {
     }
     
     /** 
-     * retrieves basic information about the states and scars available in the edition
-     * @param {string} editionID describes the edition in question
-     */
-    _getStateData(editionID) {
-        
-        let req = {id: editionID,type:'getStates'};
-        return this.requestData(req,true);
-        
-    }
-    
-    /** 
-     * retrieves basic information about the measures available in the edition,
-     * including info about the scars that affect a specific measure
-     * @param {string} editionID describes the edition in question
-     */
-    _getMeasureData(editionID) {
-        
-        let req = {id: editionID,type:'getMeasures'};
-        return this.requestData(req,true);
-        
-    }
-    
-    /** 
      * This function builds the required HTML, with no data being involved
      * @param {string} containerID denotes the HTML element in which everything will be placed.
      */
@@ -161,48 +143,13 @@ const VideFacsimileViewer = class VideFacsimileViewer extends EoModule {
             '<div id="' + containerID + '_rotateLeft" class="menuButton"><i class="fa fa-rotate-left"></i></div>' + 
             '<div id="' + containerID + '_rotateRight" class="menuButton"><i class="fa fa-rotate-right"></i></div>';
         
-        let navOverlay = document.createElement('div');
-        navOverlay.id = containerID + '_navOverlay';
-        navOverlay.className = 'navOverlay';
         
-        let statenav = document.createElement('div');
-        statenav.id = containerID + '_stateNavigation';
-        statenav.className = 'stateNavigation';
-        
-        let scarBox = document.createElement('div');
-        scarBox.id = containerID + '_scarBox';
-        scarBox.className = 'scarBox';
-        
-        let statesBox = document.createElement('div');
-        statesBox.id = containerID + '_statesBox';
-        statesBox.className = 'statesBox';
-        
-        statenav.appendChild(scarBox);
-        statenav.appendChild(statesBox);
-        
-        let scarLabel = document.createElement('div');
-        scarLabel.id = containerID + '_scarLabel';
-        scarLabel.className = 'scarLabel';
-        
-        let prevScar = document.createElement('div');
-        prevScar.className = 'prevScarBtn';
-        prevScar.innerHTML = '<i class="fa fa-chevron-left" aria-hidden="true"></i>';
-        
-        let nextScar = document.createElement('div');
-        nextScar.className = 'nextScarBtn';
-        nextScar.innerHTML = '<i class="fa fa-chevron-right" aria-hidden="true"></i>';
-        
-        navOverlay.appendChild(prevScar);
-        navOverlay.appendChild(nextScar);
-        navOverlay.appendChild(scarLabel);
-        navOverlay.appendChild(statenav);
         
         container.appendChild(facs);
         container.appendChild(facsNav);
         container.appendChild(facsNavMenu);
-        container.appendChild(navOverlay);
         
-        this._setupViewSelect(containerID + '_navOverlay', containerID);
+        this._setupNavHtml(containerID);        
     }
     
     /** 
@@ -351,160 +298,6 @@ const VideFacsimileViewer = class VideFacsimileViewer extends EoModule {
                         resolve(viewer);
                     });
                     
-                    //load scar overview
-                    let staffCount = measureJson.staves.length;
-                    
-                    let m=0;
-                    let n=measureJson.measures.length;
-                    let scarBox = document.getElementById(containerID + '_scarBox');
-                    
-                    //insert measures in scarBox
-                    for(m; m<n; m++) {
-                        let measure = measureJson.measures[m]
-                        let elem = document.createElement('div');
-                        elem.classList.add('measure');
-                        elem.setAttribute('title',(measure.label !== '') ? measure.label : measure.n);
-                        elem.setAttribute('data-id',measure.id);
-                        scarBox.append(elem);
-                        
-                        //handler to jump to individual measures
-                        elem.addEventListener('click',(e) => {
-                            let req = {
-                                id: measure.id,
-                                object: VIDE_PROTOCOL.OBJECT.NOTATION,
-                                contexts: [],
-                                perspective: VIDE_PROTOCOL.PERSPECTIVE.FACSIMILE,
-                                operation: VIDE_PROTOCOL.OPERATION.VIEW,
-                                state: {}
-                            };
-                            
-                            this._eohub.sendSelfRequest(req,this,containerID);
-                        })
-                        
-                        //insert overlays for scars 
-                        let k=0;
-                        let l=measure.scars.length;
-                        for(k;k<l;k++) {
-                            
-                            let scar = measure.scars[k];
-                            elem.classList.add('unflex')
-                            
-                            if(scar.complete) {
-                                let scarElem = document.createElement('div');
-                                scarElem.classList.add('scar');
-                                scarElem.classList.add('complete');
-                                scarElem.setAttribute('data-scar',scar.scar);
-                                elem.append(scarElem);
-                                
-                                //handler to jump to a specific scar
-                                scarElem.addEventListener('click',(e) => {
-                                    let elem = e.currentTarget;
-                                    let scarId = elem.getAttribute('data-scar');
-                                    this._highlightScarForNav(containerID,scarId);
-                                    e.stopPropagation();
-                                })
-                            } else {
-                                let p = 0;
-                                let q = scar.staves.length;
-                                for(p; p<q; p++) {
-                                    let n = scar.staves[p] ;
-                                    let jsn = n - 1;
-                                    
-                                    let label = measureJson.staves[jsn].label;
-                                    if(label === '' || typeof label === 'undefined') {
-                                        label = n;
-                                    }
-                                    
-                                    let unit = (90 / staffCount);
-                                    let top = jsn * unit + 5;
-                                    
-                                    let scarElem = document.createElement('div');
-                                    scarElem.classList.add('scar');
-                                    scarElem.classList.add('staff');
-                                    scarElem.setAttribute('data-scar',scar.scar);
-                                    scarElem.setAttribute('data-staff-n',n);
-                                    scarElem.setAttribute('title',label);
-                                    scarElem.style.top = top + '%';
-                                    scarElem.style.height = unit + '%';
-                                    
-                                    elem.append(scarElem);
-                                    
-                                    scarElem.addEventListener('click',(e) => {
-                                        let elem = e.currentTarget;
-                                        let scarId = elem.getAttribute('data-scar');
-                                        this._highlightScarForNav(containerID,scarId);
-                                        e.stopPropagation();
-                                    })
-                                }
-                               
-                            }
-                            
-                        }
-                    }
-                    
-                    //listener for next scar button
-                    document.querySelector('#' + containerID + ' .prevScarBtn').addEventListener('click',(e) => {
-                        let currentScar = document.getElementById(containerID + '_scarLabel').getAttribute('data-scarId');
-                        let index = stateJson.findIndex((elem) => {
-                            return elem.id === currentScar;
-                        });
-                        let nextIndex;
-                        if(index === 0) {
-                            nextIndex = stateJson.length -1;
-                        } else {
-                            nextIndex = index - 1;
-                        }
-                        
-                        let nextScar = stateJson[nextIndex].id;
-                        this._highlightScarForNav(containerID,nextScar);
-                        
-                    });
-                    
-                    //listener for previous scar button
-                    document.querySelector('#' + containerID + ' .nextScarBtn').addEventListener('click',(e) => {
-                        let currentScar = document.getElementById(containerID + '_scarLabel').getAttribute('data-scarId');
-                        let index = stateJson.findIndex((elem) => {
-                            return elem.id === currentScar;
-                        });
-                        let nextIndex;
-                        if(index === stateJson.length-1) {
-                            nextIndex = 0;
-                        } else {
-                            nextIndex = index + 1;
-                        }
-                        
-                        let nextScar = stateJson[nextIndex].id;
-                        this._highlightScarForNav(containerID,nextScar);
-                    });
-                    
-                    //listener for activating a scar
-                    document.getElementById(containerID + '_scarLabel').addEventListener('click',(e) => {
-                        let scarId = e.currentTarget.getAttribute('data-scarId');
-                        if(scarId === null) {
-                            return false;
-                        }
-                        
-                        let scar = stateJson.find((elem) => {
-                            return elem.id === scarId;  
-                        });
-                        
-                        let firstState = scar.states[0];
-                        let req = {
-                            id: firstState.id,
-                            object: VIDE_PROTOCOL.OBJECT.STATE,
-                            contexts: [],
-                            perspective: VIDE_PROTOCOL.PERSPECTIVE.FACSIMILE,
-                            operation: VIDE_PROTOCOL.OPERATION.VIEW,
-                            state: {}
-                        };
-                        //this request needs to go through vide-view-manager???           
-                        this._eohub.sendSelfRequest(req,this,containerID);
-                                   
-                    });
-                    
-                    this._highlightScarForNav(containerID,stateJson[0].id);   
-                    
-                    //todo: deal with navMode, and what is actually highlighted in here…
                     
                 });
             
@@ -574,196 +367,9 @@ const VideFacsimileViewer = class VideFacsimileViewer extends EoModule {
             );
     }
     
-    _setupStatesNav(containerID, scar, currentState = '', activeStates = []) {
-        
-        let columns = 0;
-        let stateArray = [];
-        
-        let statesBox = document.getElementById(containerID + '_statesBox');
-        let previousScarId = statesBox.getAttribute('data-scarId');
-        
-        //generate new HTML for this scar
-        if(previousScarId !== scar.id) {
-        
-            statesBox.setAttribute('data-scarId',scar.id);
-            
-            for(let i in scar.states) {
-                let state = scar.states[i];
-                
-                columns = (state.position > columns) ? state.position : columns;
-                
-                if(columns > stateArray.length) {
-                    let newArray = [];
-                    stateArray.push(newArray);
-                }
-                stateArray[columns - 1].push(state);    
-            }
-                
-            //empty states from former scar
-            //todo: remove listeners
-            statesBox.innerHTML = '';
-                
-            //add a single column for each simultaneous "step" 
-            for(let n=0; n<columns; n++) {
-                let columnsBox = document.createElement('div');
-                columnsBox.classList.add('columnsBox');
-                    
-                //within each column, add corresponding states
-                for(let m=0; m<stateArray[n].length; m++) {
-                    let stateObj = stateArray[n][m];
-                
-                    let stateBox = document.createElement('div');
-                    stateBox.classList.add('state');
-                    stateBox.setAttribute('data-stateid', stateObj.id);
-                    stateBox.setAttribute('data-statePos', stateObj.position);
-                    
-                    stateBox.id = containerID + '_' + stateObj.id;
-                    
-                    if(stateObj.id === currentState) {
-                        stateBox.classList.add('current');
-                    }
-                    
-                    if(activeStates.indexOf(stateObj.id) !== -1) {
-                        stateBox.classList.add('active');
-                    }
-                    
-                    if(stateObj.deletion) {
-                        stateBox.classList.add('deletion');
-                    }
-                    
-                    //todo: make this compatible with I18n
-                    stateBox.innerHTML = '<label>' + stateObj.label + '</label>';
-                    columnsBox.appendChild(stateBox);
-                    
-                    let stateSelect = (event) => {
-                        
-                        let requiredStates = [];
-                        //todo: add possibility to deactivate state
-                        /* 
-                            keep var toBeDeactivated when iterating over states, 
-                            when stateObj.id === current state, set to true
-                            problem: request object needs an active object! 
-                        */
-                        let p = 0;
-                        let q = scar.states.length;
-                        
-                        
-                        for(p; p<q; p++) {
-                            let queriedState = scar.states[p];
-                            let queriedStateElem = document.getElementById(containerID + '_' + queriedState.id);
-                            
-                            let lesserPos = (queriedState.position < stateObj.position && !queriedState.deletion);
-                            let isActive = (queriedState.position <= stateObj.position && queriedStateElem.classList.contains('active'))
-                            let isDeletion = stateObj.deletion && queriedStateElem.classList.contains('active') && (queriedState.position <= stateObj.position);
-                            //todo: check those… 
-                            
-                            if(lesserPos || isActive || isDeletion) {
-                                requiredStates.push({id: queriedState.id, context: VIDE_PROTOCOL.CONTEXT.STATE});
-                            }
-                        }
-                        
-                        let req = {
-                            id: stateObj.id,
-                            object: VIDE_PROTOCOL.OBJECT.STATE,
-                            contexts: requiredStates,
-                            perspective: VIDE_PROTOCOL.PERSPECTIVE.FACSIMILE,
-                            operation: VIDE_PROTOCOL.OPERATION.VIEW,
-                            state: {}
-                        }
-                        
-                        this._eohub.sendSelfRequest(req,this,containerID);
-                    };
-                    stateBox.addEventListener('click', stateSelect);
-                }
-                
-                statesBox.appendChild(columnsBox);
-            };
-        } else {
-        
-            let p = 0;
-            let q = scar.states.length;
-            for(p; p<q; p++) {
-                let queriedState = scar.states[p];
-                let queriedStateElem = document.getElementById(containerID + '_' + queriedState.id);
-                
-                if(queriedState.id === currentState) {
-                    queriedStateElem.classList.add('current');
-                } else {
-                    queriedStateElem.classList.remove('current');
-                }
-                
-                if(activeStates.indexOf(queriedState.id) !== -1) {
-                    queriedStateElem.classList.add('active');
-                } else {
-                    queriedStateElem.classList.remove('active');
-                }
-                
-            }
-        }
-        
-        
-    }
-    
     getDefaultView(containerID) {
         
         this._setupViewer(containerID);
-        
-    }
-    
-    _highlightScarForNav(containerID, scarId) {
-        this._removeScarHighlightForNav(containerID);
-        this._closeSingleScar(containerID);
-        
-        let editionID = this._eohub.getEdition();
-        this._getStateData(editionID).then((stateJson) => {
-            let scarObj = stateJson.find((elem) => {
-                return elem.id === scarId;
-            });
-            
-            try {
-                let label = document.getElementById(containerID + '_scarLabel');
-                label.innerHTML = scarObj.label;
-                label.setAttribute('data-scarId',scarId);
-            } catch(err) {
-                console.log('[ERROR] unable to highlight scar ' + scarId + ': ' + err)
-            }
-            
-            let matchedElems = document.querySelectorAll('#' + containerID + ' .scarBox .scar[data-scar="' + scarId + '"]');
-            for (let match of matchedElems) {
-                match.classList.add('highlight');
-            }
-        });
-        
-    }
-    
-    _removeScarHighlightForNav(containerID) {
-        let label = document.getElementById(containerID + '_scarLabel');
-        label.innerHTML = '';
-        label.removeAttribute('data-scarId');
-        
-        let matchedElems = document.querySelectorAll('#' + containerID + ' .scarBox .scar.highlight');
-        for (let match of matchedElems) {
-            match.classList.remove('highlight');
-        }
-    }
-    
-    _openSingleScar(containerID, scarId, currentState = '', activeStates = []) {
-        let editionID = this._eohub.getEdition();
-        this._getStateData(editionID).then((stateJson) => {
-            let scarObj = stateJson.find((elem) => {
-                return elem.id === scarId;
-            });
-            
-            this._setupStatesNav(containerID, scarObj, currentState, activeStates);
-            
-            document.getElementById(containerID + '_scarBox').style.visibility = 'hidden';
-            document.getElementById(containerID + '_statesBox').style.visibility = 'visible';
-        });
-    }
-    
-    _closeSingleScar(containerID) {
-        document.getElementById(containerID + '_scarBox').style.visibility = 'visible';
-        document.getElementById(containerID + '_statesBox').style.visibility = 'hidden';
         
     }
     
@@ -895,8 +501,6 @@ const VideFacsimileViewer = class VideFacsimileViewer extends EoModule {
         }
         
         this._setupViewer(containerID, type).then((viewer) => {
-            
-            console.log('got the viewer')
             
             let editionID = this._eohub.getEdition();
             

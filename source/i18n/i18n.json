@@ -99,8 +99,108 @@
         "de":"Keine Voransicht verfügbar",
         "en":"no preview available"
     },
+    "open": {
+        "de":"Öffne",
+        "en":"Open"
+    },
+    "writingLayer": {
+        "de":"Schreibschicht",
+        "en":"writing layer"
+    },
+    "writingLayers": {
+        "de":"Schreibschichten",
+        "en":"writing layers"
+    },
+    "variant": {
+        "de":"Variante",
+        "en":"variant"
+    },
+    "variants": {
+        "de":"Varianten",
+        "en":"variants"
+    },
     "open_edition": {
         "de":"Öffne Edition",
         "en":"Open Edition"
+    },
+    "categories": {
+        "de":"Kategorien",
+        "en":"Categories"
+    },
+    "Rhythmische_Veränderung": {
+        "de":"Rhythmische Veränderung",
+        "en":"Modification of Rhythm"
+    }, 
+    "Revisionsvariante": {
+        "de":"Revisionsvariante",
+        "en":"Revision"
+    }, 
+    "Veränderung_der_Notenhöhe": {
+        "de":"Veränderung der Notenhöhe",
+        "en":"Modification of Pitch"
+    }, 
+    "bwTerm_variant": {
+        "de":"Variante",
+        "en":"Variant"
+    }, 
+    "bw_Term_variant": {
+        "de":"Variante",
+        "en":"Variant"
+    }, 
+    "Korrektur": {
+        "de":"Korrektur",
+        "en":"Correction"
+    }, 
+    "bwTerm_microVariant": {
+        "de":"Mikrovariante",
+        "en":"Micro-Variant"
+    }, 
+    "melodische_und_rhythmische_Veränderung": {
+        "de":"Melodische und rhythmische Veränderung",
+        "en":"Melodic and rhythmic modification"
+    }, 
+    "Erweiterung": {
+        "de":"Erweiterung",
+        "en":"Extension"
+    }, 
+    "Binnenvariante": {
+        "de":"Binnenvariante",
+        "en":"Included Variant"
+    }, 
+    "rhythmische_und_melodische_Veränderung": {
+        "de":"Rhythmische und melodische Veränderung",
+        "en":"Rhythmic and melodic modification"
+    }, 
+    "rhythmische_Veränderung": {
+        "de":"Rhythmische Veränderung",
+        "en":"Rhythmic modification"
+    }, 
+    "Strukturelle_Variante": {
+        "de":"Strukturelle Variante",
+        "en":"Structural variant"
+    },
+    "Ad_hoc_Variante": {
+        "de":"Ad hoc Variante",
+        "en":"Ad hoc variant"
+    }, 
+    "Ad-hoc-Variante": {
+        "de":"Ad-hoc Variante",
+        "en":"Ad-hoc variant"
+    }, 
+    "Veränderung_der_Oktavlage": {
+        "de":"Veränderung der Oktavlage",
+        "en":"Modification of octave"
+    }, 
+    "Veränderung_der_Notenwerte": {
+        "de":"Veränderung der Notenwerte",
+        "en":"Change of durations"
+    }, 
+    "Veränderung_der_Notenlage": {
+        "de":"Veränderung der Notenlage",
+        "en":"Change of Notenlage"
+    }, 
+    "bwTerm_micro_Variant" : {
+        "de":"Mikro-Variante",
+        "en":"Micro variant"
     }
 }

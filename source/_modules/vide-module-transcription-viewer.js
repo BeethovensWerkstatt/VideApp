@@ -1,14 +1,14 @@
 import 'babel-polyfill';
 import VIDE_PROTOCOL from './vide-protocol';
-import {EoModule, Request} from './vide-module-blueprint';
+import {EoNavModule} from './vide-nav-module-blueprint';
 
 
-const VideTranscriptionViewer = class VideTranscriptionViewer extends EoModule {
+const VideTranscriptionViewer = class VideTranscriptionViewer extends EoNavModule {
 
     /*Constructor method*/
     constructor() {
         super();
-        this._supportedPerspective = EO_Protocol.Perspective.PERSPECTIVE_TRANSCRIPTION;
+        this._supportedPerspective = VIDE_PROTOCOL.PERSPECTIVE.TRANSCRIPTION;
         this._supportedRequests = [];
         let _this = this;
         
@@ -20,15 +20,18 @@ const VideTranscriptionViewer = class VideTranscriptionViewer extends EoModule {
         _this._supportedRequests.push({objectType: EO_Protocol.Object.OBJECT_DIR, contexts:[EO_Protocol.Context.CONTEXT_STATE], perspective: this._supportedPerspective, operation: EO_Protocol.Operation.OPERATION_VIEW});
         
         this._key = 'videTranscriptionViewer';
-        this._serverConfig = {host: 'http://localhost', port: ':32105', basepath:'/'};
         
         this._stateStore = new Map();
         this._currentRendering = new Map();
         
+        //used for I18n to identify how individual states are labeled
+        this._stateLabelKeySingular = 'variant';
+        this._stateLabelKeyPlural = 'variants';
+        
         return this;
     }
     
-    _prepareHTML(containerID) {
+    _setupHtml(containerID) {
         let vb = document.createElement('div');
         vb.className = 'verovioBox';
         vb.id = containerID + '_verovioBox'; 
@@ -110,7 +113,7 @@ const VideTranscriptionViewer = class VideTranscriptionViewer extends EoModule {
     }
     
     _setupMenu(containerID, activeStateIDs = [], mainStateID) {
-        return Promise.resolve(this._prepareHTML(containerID)
+        return Promise.resolve(this._setupHtml(containerID)
             .then(() => {
                 return Promise.resolve(this._getStateData(this._eohub.getEdition())
                     .then(mapObject => {
