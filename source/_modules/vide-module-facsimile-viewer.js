@@ -155,9 +155,8 @@ const VideFacsimileViewer = class VideFacsimileViewer extends EoNavModule {
     /** 
      * This function sets up the Openseadragon viewer
      * @param {string} containerID describes the HTML element that contains the facsimile
-     * @param {Object} json the pageJson object with info about the pages
      */
-    _setupViewer(containerID, navMode = 'highlightMusic') {
+    _setupViewer(containerID) {
         
         this._setupHtml(containerID);
         
@@ -228,7 +227,12 @@ const VideFacsimileViewer = class VideFacsimileViewer extends EoNavModule {
                     
                     //log position of view when view changes
                     viewer.addHandler('animation-finish',(event) => {
-                        this._confirmView({bounds:viewer.viewport.getBounds()},containerID);
+                        
+                        let oldState = this._getLastRequest(containerID);
+                        let newState = Object.assign({}, oldState, {state: {bounds: viewer.viewport.getBounds()}})
+                        
+                        this._confirmView(newState,containerID);
+                        
                     });
                     
                     //do internal setup after images are loaded
@@ -312,6 +316,10 @@ const VideFacsimileViewer = class VideFacsimileViewer extends EoNavModule {
         
         if(rect !== null) {
             viewer.viewport.fitBoundsWithConstraints(rect);
+            let oldState = this._getLastRequest(containerID);
+            let newState = Object.assign({}, oldState, {state: {bounds: rect}})
+            
+            this._confirmView(newState,containerID);
         }
     }
     
@@ -369,7 +377,18 @@ const VideFacsimileViewer = class VideFacsimileViewer extends EoNavModule {
     
     getDefaultView(containerID) {
         
-        this._setupViewer(containerID);
+        let editionID = this._eohub.getEdition();
+        
+        let req = {
+            id: editionID,
+            object: VIDE_PROTOCOL.OBJECT.EDITION, 
+            contexts:[], 
+            perspective: this._supportedPerspective,
+            operation: VIDE_PROTOCOL.OPERATION.VIEW
+        };
+        
+        this.handleRequest(req, containerID);     
+        //this._setupViewer(containerID);
         
     }
     
@@ -393,6 +412,7 @@ const VideFacsimileViewer = class VideFacsimileViewer extends EoNavModule {
                 }
             }
             viewer.viewport.fitBoundsWithConstraints(baseRect);
+            
         } catch(err) {
             console.log('[ERROR] Unable to highlight state ' + state.id + ' in facsimile: ' + err);
         }
@@ -467,6 +487,8 @@ const VideFacsimileViewer = class VideFacsimileViewer extends EoNavModule {
         console.log('[INFO] received the following request for VideFacsimileViewer at ' + containerID + ':')
         console.log(request)
         
+        this._saveRequest(containerID,request);
+        
         //determine type of request
         let type;
             
@@ -482,7 +504,9 @@ const VideFacsimileViewer = class VideFacsimileViewer extends EoNavModule {
             return false;
         }
         
-        if(request.object === VIDE_PROTOCOL.OBJECT.NOTATION && request.contexts.length === 0) {
+        if(typeof request.state !== 'undefined' && typeof request.state.bounds !== 'undefined') {
+            type = 'getRect';
+        } else if(request.object === VIDE_PROTOCOL.OBJECT.NOTATION && request.contexts.length === 0) {
             type = 'highlightMusic';
         } else if(request.object === VIDE_PROTOCOL.OBJECT.LYRICS && request.contexts.length === 0) {
             type = 'highlightMusic';
@@ -494,17 +518,33 @@ const VideFacsimileViewer = class VideFacsimileViewer extends EoNavModule {
             type = 'highlightMusic';    
         } else if(request.object === VIDE_PROTOCOL.OBJECT.STATE) {
             type = 'highlightState';
-        } else {
+        } else if(request.object === VIDE_PROTOCOL.OBJECT.EDITION) {
+            type = 'showAll';
+        }else {
             console.log('[ERROR] unable to determine the type of the following request in VideFacsimileViewer:')
             console.log(request)
             return false;
         }
         
-        this._setupViewer(containerID, type).then((viewer) => {
+        this._setupViewer(containerID).then((viewer) => {
+            
+            this._confirmView(request,containerID);
             
             let editionID = this._eohub.getEdition();
             
-            if(type === 'highlightMusic') {
+            if(type === 'getRect') {
+                
+                try {
+                    let input = request.state.bounds;
+                    let rect = new OpenSeadragon.Rect(input.x, input.y, input.width, input.height,input.degrees);
+                
+                    viewer.viewport.fitBoundsWithConstraints(rect);    
+                } catch(err) {
+                    console.log('[ERROR]: Unable to center the following rectangle (' + err + '):');
+                    console.log(request.state.bounds);
+                }
+                
+            } else if(type === 'highlightMusic') {
                 let req = {
                     id: request.id,
                     edition: editionID,
@@ -516,7 +556,7 @@ const VideFacsimileViewer = class VideFacsimileViewer extends EoNavModule {
                         console.log('I need to highlight rect: ')
                         console.log(json.dimensions);
                     } else {
-                        this.highlightItem(viewer,containerID,json.shapes);    
+                        this.highlightItem(viewer,containerID,json.shapes);  
                     }
                 });    
             } else if(type === 'highlightState') {

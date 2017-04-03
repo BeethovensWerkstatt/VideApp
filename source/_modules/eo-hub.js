@@ -33,7 +33,20 @@ const EoHub = class EoHub {
         this._server = server;
         this.cache = new Map();
         
+        this._vrvToolkit = new verovio.toolkit();
+        this._vrvToolkit.setOptions(JSON.stringify({
+                        inputFormat: 'mei',
+                        border: 0,
+                        scale: 35,           //scale is in percent (1 - 100)
+                        ignoreLayout: 0,
+                        noLayout: 1          //results in a continuous system without page breaks
+                    }));
+        
         console.log('EoHub initialized');
+    }
+    
+    getVerovio() {
+        return this._vrvToolkit;
     }
     
     setLanguage(lang) {

@@ -191,7 +191,7 @@ const EoNavModule = class EoNavModule extends EoModule {
                         id: measure.id,
                         object: VIDE_PROTOCOL.OBJECT.NOTATION,
                         contexts: [],
-                        perspective: VIDE_PROTOCOL.PERSPECTIVE.FACSIMILE,
+                        perspective: this._supportedPerspective,
                         operation: VIDE_PROTOCOL.OPERATION.VIEW,
                         state: {}
                     };

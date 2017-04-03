@@ -201,27 +201,33 @@ export function handleViews(state = {
             return state; 
         
         case ActionTypes.SET_FIRST_VIEW:
-        
+            
             if(Object.values(Perspectives).indexOf(action.perspective) !== -1) {
-                return Object.assign({}, state, { view1: {
-                    perspective: action.perspective,
-                    target: action.target,
-                    temp: true
-                } }); 
+                if(action.target === null) {
+                    return Object.assign({}, state, { 
+                        view1: Object.assign({}, action.target, {perspective: action.perspective, operation: VIDE_PROTOCOL.OPERATION.VIEW}) 
+                    }); 
+                }
+                return Object.assign({}, state, { 
+                    view1: Object.assign({}, action.target, {temp: false}) 
+                }); 
             } 
             return state;
             
         case ActionTypes.SET_SECOND_VIEW:
-            if(action.perspective in Perspectives) {
-                return Object.assign({}, state, { view2: {
-                    perspective: action.perspective,
-                    target: action.target,
-                    temp: true
-                } }); 
-            }
+            if(Object.values(Perspectives).indexOf(action.perspective) !== -1) {
+                if(action.target === null) {
+                    return Object.assign({}, state, { 
+                        view2: Object.assign({}, action.target, {perspective: action.perspective, operation: VIDE_PROTOCOL.OPERATION.VIEW}) 
+                    }); 
+                }
+                return Object.assign({}, state, { 
+                    view2: Object.assign({}, action.target, {temp: false}) 
+                }); 
+            } 
             return state;
             
-        case ActionTypes.LOG_VIEW_STATE:
+        /*case ActionTypes.LOG_VIEW_STATE:
             if(action.view === 1) {
                 return Object.assign({}, state, { view1: 
                     Object.assign({}, state.view1, {temp: false})
@@ -232,7 +238,7 @@ export function handleViews(state = {
                 });
             }
             
-            return state;
+            return state;*/
         
         case ActionTypes.ACTIVATE_EDITION:
         
@@ -269,7 +275,12 @@ export function handleViews(state = {
                 return state;
             }
             */
-            return views;
+            let fixedViews = Object.assign({}, views, {
+                view1: Object.assign({}, views.view1, {temp: false}),
+                view2: Object.assign({}, views.view2, {temp: false})
+            })
+            
+            return fixedViews;
         
         case ActionTypes.RESET_STATE:
             
@@ -284,14 +295,21 @@ export function handleViews(state = {
             
             if(action.view === 1) {
                 console.log('confirming view 1')
-                return Object.assign({}, state, { view1: 
-                    Object.assign({}, state.view1, {temp: false, target: action.state})
-                });
+                let newState = Object.assign({}, state, { view1:
+                    Object.assign({}, action.state, {temp: null})
+                });    
+                console.log(newState)
+                
+                return newState; 
+                
             } else if(action.view === 2) {
-                console.log('confirming view 1')
-                return Object.assign({}, state, { view2: 
-                    Object.assign({}, state.view2, {temp: false, target: action.state})
-                });
+                console.log('confirming view 2')
+                let newState = Object.assign({}, state, { view2:
+                    Object.assign({}, action.state, {temp: null})
+                });    
+                console.log(newState)
+                
+                return newState; 
             }
             
             return state;

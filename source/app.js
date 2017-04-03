@@ -42,10 +42,10 @@ eohub.registerModule(xmlViewer);
 let videFacsimileViewer = new VideFacsimileViewer();
 eohub.registerModule(videFacsimileViewer);
 
-/*let transcriptionViewer = new VideTranscriptionViewer();
+let transcriptionViewer = new VideTranscriptionViewer();
 eohub.registerModule(transcriptionViewer);
-let vrvToolkit = new verovio.toolkit();
-window.vrvStore = {vrvToolkit: vrvToolkit};
+
+/* 
 
 let videTextViewer = new VideTextViewer();
 eohub.registerModule(videTextViewer);

@@ -157,6 +157,7 @@ const VideViewManager = class VideViewManager {
             perspective = VIDE_PROTOCOL.PERSPECTIVE.INVARIANCE;
         } else {
             console.log('[ERROR] Dunno how to handle moduleKey ' + moduleKey + ' in videViewManager');
+            console.log(request)
             return false;
         }
         

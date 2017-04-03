@@ -71,6 +71,10 @@
         "de":"Faksimile",
         "en":"Facsimile"
     },
+    "VideTranscriptionViewer":{
+        "de":"Transkription",
+        "en":"Transcription"
+    },
     "contextMenu_showIn_VIDE_PROTOCOL_PERSPECTIVE_FACSIMILE":{
         "de":"Im Faksimile anzeigen",
         "en":"Show Facsimile"

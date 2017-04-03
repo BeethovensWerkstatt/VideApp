@@ -14,7 +14,7 @@ export const ActionTypes = {
     SET_FIRST_VIEW: 'SET_FIRST_VIEW',
     SET_SECOND_VIEW: 'SET_SECOND_VIEW',
     
-    LOG_VIEW_STATE: 'LOG_VIEW_STATE',
+    //LOG_VIEW_STATE: 'LOG_VIEW_STATE',
     
     SET_VIEW_RATIO: 'SET_VIEW_RATIO',
     SET_VIEW_LAYOUT: 'SET_VIEW_LAYOUT',
@@ -71,9 +71,9 @@ export function setSecondView(perspective = Perspective.TRANSCRIPTION, target = 
  * @param {number} view that gets confirmed. 
  * @returns {object} the information required for redux
  */
-export function logViewState(view = 1) {
+/*export function logViewState(view = 1) {
     return {type: ActionTypes.LOG_VIEW_STATE, view: view};
-}
+}*/
 
 /** 
  * Function setViewLayout specifies the general layout of the app
@@ -251,5 +251,7 @@ export function resetState() {
  * @returns {object} the actionType that's required for Redux
  */
 export function confirmState(state = {},view = -1) {
+    console.log('actions.redux.js: confirmState')
+    console.log(state)
     return {type: ActionTypes.CONFIRM_STATE, state, view};
 }

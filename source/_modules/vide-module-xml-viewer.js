@@ -85,20 +85,26 @@ const VideXmlViewer = class VideXMLviewer extends EoModule {
         
         let editionID = this._eohub.getEdition();
         
-        let request = {
+        let req = {
             id: editionID,
-            type: 'getXmlFile'
+            object: VIDE_PROTOCOL.OBJECT.EDITION, 
+            contexts:[], 
+            perspective: this._supportedPerspective,
+            operation: VIDE_PROTOCOL.OPERATION.VIEW
         };
         
-        this.handleRequest(request, containerID);        
+        this.handleRequest(req, containerID);        
     }
     
-    _getCurrentState(editor) {
+    _getCurrentState(containerID,editor) {
+    
+        let lastReq = this._getLastRequest(containerID);
+    
         let line = editor.renderer.getFirstFullyVisibleRow();
         let selection = editor.getSelection();
         let search = editor.getLastSearchOptions();
         
-        let state = {line:line}
+        let state = Object.assign({}, lastReq,{state: {line:line}});
         
         return state;
     }
@@ -186,12 +192,8 @@ const VideXmlViewer = class VideXMLviewer extends EoModule {
         console.log(request)
         console.log(containerID)
         
-        //todo: fix the following
-        /*if(request.object === VIDE_PROTOCOL.OBJECT.EDITION) {
-            request.type = 'getXmlFile';    
-        }
-        request.type = 'getXmlFile'; 
-        */
+        this._saveRequest(containerID,request);
+        
         let req = {
             id: this._eohub.getEdition(),
             type: 'getXmlFile'
@@ -206,11 +208,11 @@ const VideXmlViewer = class VideXMLviewer extends EoModule {
                 editor.clearSelection();
                 
                 if(request.object !== VIDE_PROTOCOL.OBJECT.EDITION) {
-                    this._findString(editor, 'id="' + request.id + '"')
+                    this._findString(editor, 'id="' + request.id + '"');
                 }
                 
-                let state = this._getCurrentState(editor);
-                //this._confirmView(state,containerID);
+                let state = this._getCurrentState(containerID,editor);
+                this._confirmView(state,containerID);
             })
         })
            

@@ -45,9 +45,11 @@
             position: absolute;
             top: 30px;
             right: 70px;
-            bottom: 15px;
+            bottom: 30px;
             left: 70px;
             display: flex;
+            
+            z-index: 1;
             
             .measure {
                 width: 6px;
@@ -102,6 +104,8 @@
             left: 70px;
             display: flex;
             visibility: hidden;
+            
+            z-index: 1;
             
             .columnsBox {
                 margin: 0 25px 0 0;

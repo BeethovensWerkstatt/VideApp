@@ -34,26 +34,26 @@ const View = React.createClass({
     },
     
     componentWillMount: function() {
-        console.log('INFO: componentWillMount');
+        //console.log('INFO: componentWillMount');
     },
     
     componentDidMount: function() {
-        console.log('INFO: componentDidMount');
+        //console.log('INFO: componentDidMount');
         this.sendRequest(this.props, this.state);
     },
     
     componentWillReceiveProps: function(nextProps) {
-        console.log('INFO: componentWillReceiveProps on ' + nextProps.pos);
+        //console.log('INFO: componentWillReceiveProps on ' + nextProps.pos);
     },
     
     shouldComponentUpdate: function(nextProps, nextState) {
-        console.log('INFO: shouldComponentUpdate');
+        //console.log('INFO: shouldComponentUpdate');
         let needsUpdate = true;
         if(this.props.pos === nextProps.pos 
             && this.props.view.perspective === nextProps.view.perspective
-            && (this.props.layout === nextProps.layout
-            || (this.props.layout !== ViewLayouts.SINGLE_VIEW
-            && nextProps.layout !== ViewLayouts.SINGLE_VIEW))) {
+            /*&& (this.props.layout === nextProps.layout
+                || (this.props.layout !== ViewLayouts.SINGLE_VIEW
+                    && nextProps.layout !== ViewLayouts.SINGLE_VIEW))*/) {
             needsUpdate = false;
             
             //this is a switch from vertical to horizontal layout
@@ -79,8 +79,10 @@ const View = React.createClass({
             //todo: if necessary, send commands to view from here…
         }
         
+        console.log('INFO: shouldComponentUpdate: ' + needsUpdate);
+        
         //if view can stay the same, send request to the view for local adjustments
-        if(!needsUpdate && nextProps.view.target !== null && nextProps.view.target !== this.props.view.target) {
+        if(!needsUpdate && nextProps.view.temp === false) {
             this.sendRequest(nextProps, nextState);
         }
             
@@ -96,6 +98,9 @@ const View = React.createClass({
     
     componentDidUpdate: function (prevProps, prevState) {
         console.log('[DEBUG] componentDidUpdate')
+        console.log(this.props);
+        console.log(this.state);
+        console.log('-------------done…')
         
         /*if(this.props.viewType === ViewTypes.VIEWTYPE_XMLVIEW) {
             
@@ -139,7 +144,7 @@ const View = React.createClass({
         let moduleKey;
             
         if(props.view.perspective === VIDE_PROTOCOL.PERSPECTIVE.TRANSCRIPTION) {
-            moduleKey = 'videTranscriptionViewer';
+            moduleKey = 'VideTranscriptionViewer';
         } else if(props.view.perspective === VIDE_PROTOCOL.PERSPECTIVE.TEXT) {
             moduleKey = 'videMEITextViewer';
         } else if(props.view.perspective === VIDE_PROTOCOL.PERSPECTIVE.XML) {
@@ -152,8 +157,14 @@ const View = React.createClass({
             moduleKey = 'videInvarianceViewer';
         }
         
+        console.log('[[sendRequest]]: moduleKey is ' + moduleKey + ' typeof target: ' + typeof props.view.target)
+        console.log(props.view)
+        
+        
         //request default view    
-        if(props.view.target === null) {
+        if(props.view.target === null || (typeof props.view.target === 'undefined')) {
+            
+            console.log('me here')
             
             console.log('[DEBUG] request default view for ' + moduleKey);
             
@@ -164,7 +175,7 @@ const View = React.createClass({
             //}
         } else {
             
-            let req = props.view.target;
+            let req = props.view;
             let module = eohub.getModule(moduleKey);
             
             //console.log('[DEBUG] handle request for ' + req.getModuleKey());

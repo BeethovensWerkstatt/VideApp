@@ -13,13 +13,13 @@ const VideTranscriptionViewer = class VideTranscriptionViewer extends EoNavModul
         let _this = this;
         
         //shows a complete state, without highlighting
-        _this._supportedRequests.push({objectType: EO_Protocol.Object.OBJECT_STATE, contexts:[EO_Protocol.Context.CONTEXT_STATE], perspective: this._supportedPerspective, operation: EO_Protocol.Operation.OPERATION_VIEW});
+        _this._supportedRequests.push({objectType: VIDE_PROTOCOL.OBJECT.STATE, contexts:[VIDE_PROTOCOL.CONTEXT.STATE], perspective: this._supportedPerspective, operation: VIDE_PROTOCOL.OPERATION.VIEW});
         //highlights a note (or similar) within a state
-        _this._supportedRequests.push({objectType: EO_Protocol.Object.OBJECT_NOTATION, contexts:[EO_Protocol.Context.CONTEXT_STATE], perspective: this._supportedPerspective, operation: EO_Protocol.Operation.OPERATION_VIEW});
-        _this._supportedRequests.push({objectType: EO_Protocol.Object.OBJECT_LYRICS, contexts:[EO_Protocol.Context.CONTEXT_STATE], perspective: this._supportedPerspective, operation: EO_Protocol.Operation.OPERATION_VIEW});
-        _this._supportedRequests.push({objectType: EO_Protocol.Object.OBJECT_DIR, contexts:[EO_Protocol.Context.CONTEXT_STATE], perspective: this._supportedPerspective, operation: EO_Protocol.Operation.OPERATION_VIEW});
+        _this._supportedRequests.push({objectType: VIDE_PROTOCOL.OBJECT.NOTATION, contexts:[VIDE_PROTOCOL.CONTEXT.STATE], perspective: this._supportedPerspective, operation: VIDE_PROTOCOL.OPERATION.VIEW});
+        _this._supportedRequests.push({objectType: VIDE_PROTOCOL.OBJECT.LYRICS, contexts:[VIDE_PROTOCOL.CONTEXT.STATE], perspective: this._supportedPerspective, operation: VIDE_PROTOCOL.OPERATION.VIEW});
+        _this._supportedRequests.push({objectType: VIDE_PROTOCOL.OBJECT.DIR, contexts:[VIDE_PROTOCOL.CONTEXT.STATE], perspective: this._supportedPerspective, operation: VIDE_PROTOCOL.OPERATION.VIEW});
         
-        this._key = 'videTranscriptionViewer';
+        this._key = 'VideTranscriptionViewer';
         
         this._stateStore = new Map();
         this._currentRendering = new Map();
@@ -31,40 +31,53 @@ const VideTranscriptionViewer = class VideTranscriptionViewer extends EoNavModul
         return this;
     }
     
+    _getFinalState(editionID) {
+        
+        let req = {id: editionID,type:'getFinalState'};
+        return this.requestData(req,true);
+        
+    }
+    
     _setupHtml(containerID) {
-        let vb = document.createElement('div');
-        vb.className = 'verovioBox';
-        vb.id = containerID + '_verovioBox'; 
+    
+        if(document.getElementById(containerID + '_scarBox') !== null) {
+            return true;
+        }
         
-        let vn = document.createElement('div');
-        vn.className = 'viewNavigation';
-        vn.id = containerID + '_viewNavigation'; 
+        let container = document.getElementById(containerID);
         
-        let vnScarSel = document.createElement('div');
-        vnScarSel.className = 'scarSelection';
+        container.innerHTML = '';
         
-        let vnDropdown = document.createElement('select');
-        vnDropdown.id = containerID + '_dropdown';
+        let transcription = document.createElement('div');
+        transcription.className = 'verovioBox';
+        transcription.id = containerID + '_verovioBox'; 
         
-        vnScarSel.appendChild(vnDropdown);
-        vn.appendChild(vnScarSel);
+        let transcriptionNavMenu = document.createElement('div');
+        transcriptionNavMenu.id = containerID + '_transcriptionNavMenu';
+        transcriptionNavMenu.className = 'transcriptionNavMenu';
         
-        let scarBox = document.createElement('div');
-        scarBox.className = 'scarBox';
-        scarBox.id = containerID + '_scarBox';
+        transcriptionNavMenu.innerHTML = '<div id="' + containerID + '_zoomIn" class="menuButton"><i class="fa fa-plus"></i></div>' +
+            '<div id="' + containerID + '_zoomOut" class="menuButton"><i class="fa fa-minus"></i></div>' + 
+            '<div id="' + containerID + '_zoomHome" class="menuButton"><i class="fa fa-arrows-alt"></i></div>' + 
+            '<div id="' + containerID + '_rotateLeft" class="menuButton"><i class="fa fa-rotate-left"></i></div>' + 
+            '<div id="' + containerID + '_rotateRight" class="menuButton"><i class="fa fa-rotate-right"></i></div>';
         
-        vn.appendChild(scarBox);
+        container.appendChild(transcription);
+        container.appendChild(transcriptionNavMenu);
         
-        let tv = document.createElement('div');
-        tv.className = 'transcriptionView';
+        this._setupNavHtml(containerID);
         
-        tv.appendChild(vb);
-        tv.appendChild(vn);
+        let scarBox = document.getElementById(containerID + '_stateNavigation');
         
-        document.getElementById(containerID).innerHTML = '';
-        document.getElementById(containerID).appendChild(tv);
+        let transcriptionNavContainer = document.createElement('div');
+        transcriptionNavContainer.className = 'transcriptionNavContainer';
+        let transcriptionNav = document.createElement('div');
+        transcriptionNav.className = 'transcriptionNav';
+        transcriptionNav.id = containerID + '_transcriptionNavigator';
+        transcriptionNavContainer.appendChild(transcriptionNav);
         
-        return Promise.resolve(tv);
+        scarBox.appendChild(transcriptionNavContainer);
+        
     }
     
     unmount(containerID) {
@@ -72,7 +85,7 @@ const VideTranscriptionViewer = class VideTranscriptionViewer extends EoNavModul
         this._currentRendering.delete(containerID);
     }
     
-    _getStateData(editionID) {
+    /*_getStateData(editionID) {
         if(this._stateStore.has(editionID)) {
             return Promise.resolve(this._stateStore.get(editionID));
         } else {
@@ -110,7 +123,7 @@ const VideTranscriptionViewer = class VideTranscriptionViewer extends EoNavModul
                     return Promise.resolve(mapObject);
                 });
         }
-    }
+    }*/
     
     _setupMenu(containerID, activeStateIDs = [], mainStateID) {
         return Promise.resolve(this._setupHtml(containerID)
@@ -217,30 +230,238 @@ const VideTranscriptionViewer = class VideTranscriptionViewer extends EoNavModul
     }
     
     getDefaultView(containerID) {
-        /*
-        let responseType = 'text';
-        let url = this._getBaseURI() + 'edition/' + this._eohub.getEdition() + '/' + 'firstState/' + 'meiSnippet.xml';
-        */
+        
+        this._setupViewer(containerID);
+        
+    }
+    
+    _setupViewer(containerID) {
+        this._setupHtml(containerID);
         
         let editionID = this._eohub.getEdition();
         
-        this._getStateData(editionID)
-            .then(mapObject => {
-                return this.prepareStateRequest(mapObject.firstStateID, containerID);
-            })
-            .then((request) => {
-                return Promise.resolve(this._eohub.sendSelfRequest(request, this));
-            });
+        let stateDataPromise = this._getStateData(editionID);
+        let measureDataPromise = this._getMeasureData(editionID);
+        
+        let t0 = performance.now();
+        return Promise.all([stateDataPromise,measureDataPromise]).then((results) => {
+            //let finalState = results[0];
+            let stateJson = results[0];
+            let measureJson = results[1];
+            
+            let t1 = performance.now();
+                console.log('[DEBUG] setupViewer took ' + (t1 - t0) + ' millisecs');
+                
+            if(this._cache.has(containerID + '_viewer')) {
+                return Promise.resolve(this._cache.get(containerID + '_viewer'))
+            } else {
+                return new Promise((resolve, reject) => {
+                    
+                    let verovio = this._eohub.getVerovio();
+                    
+                    let options = JSON.stringify({
+                        inputFormat: 'mei',
+                        border: 0,
+                        scale: 35,           //scale is in percent (1 - 100)
+                        ignoreLayout: 0,
+                        noLayout: 1          //results in a continuous system without page breaks
+                    });
+                    
+                    this._getFinalState(editionID).then((finalState) => {
+                        
+                        let svgString = verovio.renderData(finalState + '\n', options);
+                        this._cache.set('finalState',svgString)
+                        
+                        let svg = new DOMParser().parseFromString(svgString, "image/svg+xml");
+                        
+                        let widthAttr = svg.childNodes[0].getAttribute('width');
+                        let width = widthAttr.substring(0,widthAttr.indexOf("px"))
+                        
+                        let heightAttr = svg.childNodes[0].getAttribute('height');
+                        let height = heightAttr.substring(0,heightAttr.indexOf("px"))
+                        
+                        console.log('dimensions: ' + width + ' / ' + height);
+                        console.log(document.getElementById(containerID + '_verovioBox'))
+                        
+                        
+                        //OSD viewer with all properties
+                        let viewer = OpenSeadragon({
+                            id: containerID + '_verovioBox',
+                            tileSources: {
+                                height: parseInt(height,10),
+                                width:  parseInt(width,10),
+                                tileSize: 16,
+                                //type: 'image',
+                                //url:  'data:image/png;base64,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',//'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQAQMAAAAlPW0iAAAAA1BMVEX///+nxBvIAAAAAXRSTlMAQObYZgAAAAxJREFUCB1jYCANAAAAMAABhKzxegAAAABJRU5ErkJggg==',
+                                //buildPyramid: false
+                                
+                                getTileUrl: function( level, x, y ){
+                                    //transparent png
+                                    return 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQAQMAAAAlPW0iAAAAA1BMVEX///+nxBvIAAAAAXRSTlMAQObYZgAAAAxJREFUCB1jYCANAAAAMAABhKzxegAAAABJRU5ErkJggg==';
+                                    //red: 
+                                    //return 'data:image/png;base64,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'
+                                }
+                            },
+                            sequenceMode: false,
+                            showReferenceStrip: true,
+                            showRotationControl: false,
+                            showNavigator: true,
+                            navigatorRotate: false,
+                            navigatorId: containerID + '_transcriptionNavigator',
+                            showFullPageControl: false,
+                            zoomInButton: containerID + '_zoomIn',
+                            zoomOutButton: containerID + '_zoomOut',
+                            homeButton: containerID + '_zoomHome',
+                            //rotateLeftButton: containerID + '_rotateLeft',
+                            //rotateRightButton: containerID + '_rotateRight',
+                            //toolbar: containerID + '_menubar',
+                            pixelsPerWheelLine: 60,
+                            // Enable touch rotation on tactile devices
+                            gestureSettingsTouch: {
+                                pinchRotate: true
+                            },
+                            gestureSettingsMouse: {
+                                clickToZoom: false,
+                                dblClickToZoom: true
+                            },
+                            collectionMode: true,
+                            collectionRows: 1, 
+                            collectionTileSize: 1200,
+                            collectionTileMargin: 0,
+                            
+                            visibilityRatio: 0.7,
+                            constrainDuringPan: true
+                            
+                        });
+                        
+                        console.log('------viewer is really there')
+                        
+                        //store viewer for later use
+                        this._cache.set(containerID + '_viewer', viewer)
+                        
+                        //log position of view when view changes
+                        /*viewer.addHandler('animation-finish',(event) => {
+                            this._confirmView({bounds:viewer.viewport.getBounds()},containerID);
+                        });*/
+                        
+                        //do internal setup after images are loaded
+                        viewer.addHandler('open', (event) => {
+                            
+                            let svgBox = document.createElement('div');
+                            svgBox.className = 'svgBox';
+                            svgBox.innerHTML= svgString;
+                            
+                            let bounds = viewer.world.getItemAt(0).getBounds();
+                            
+                            console.log('-------------DINGELINGELING')
+                            console.log(viewer.world.getItemAt(0));
+                            console.log(bounds)
+                            viewer.addOverlay({
+                                element: svgBox,
+                                y: bounds.y,
+                                x: bounds.x,
+                                width: bounds.width,
+                                height: bounds.height,
+                                checkResize: true,
+                                placement: 'TOP_LEFT'
+                            });
+                            
+                            //todo: extract into separate function
+                            let i = 0;
+                            let j = measureJson.measures.length;
+                            for(i; i<j; i++) {
+                                let measure = measureJson.measures[i]; 
+                                if(measure.scars.length > 0) {
+                                    try {
+                                        let rect = this._getShapeRect(containerID, viewer, measure.id);
+                                        viewer.addOverlay({
+                                            className: 'scarOverlay ' + measure.n + ' ' + measure.id,
+                                            location: rect,
+                                            checkResize: true,
+                                            placement: 'TOP_LEFT'
+                                        });
+                                    } catch(err) {
+                                        console.log('[ERROR] unable to get scar highlight in measure ' + measure.n + ': ' + err)
+                                    }
+                                }
+                            }
+                            
+                            
+                            
+                            /*let max = viewer.viewport.getMaxZoom();
+                            viewer.viewport.zoomTo(max,new OpenSeadragon.Point(bounds.x,bounds.y),true);*/
+                            
+                            //jump to first measure
+                            this._focusShape(containerID,viewer,measureJson.measures[0].id);
+                            
+                            resolve(viewer);
+                        });
+                        
+                    });
+                    
+                    
+                    
+                    
+                    
+                    
+                });
+            
+            }    
+                
+        });
     }
     
-    handleRequest(request) {
-        let reqContainer = request.getContainer();
+    handleRequest(request, containerID) {
         
-        let containerID = (reqContainer.endsWith('_VIEWTYPE_TRANSCRIPTIONVIEW')) ? reqContainer : reqContainer + '_VIEWTYPE_TRANSCRIPTIONVIEW';
-        let activeStateIDs = request.getContextsByType(EO_Protocol.Context.CONTEXT_STATE);
-        let mainStateID = (request.getObjectType() === EO_Protocol.Object.OBJECT_STATE) ? request.getObjectID() : null;
+        console.log('[INFO] received the following request for VideFacsimileViewer at ' + containerID + ':')
+        console.log(request)
         
-        return Promise.resolve(
+        if(request.perspective !== this._supportedPerspective) {
+            console.log('[ERROR] unable to handle the following request in VideFacsimileViewer: perspective not supported')
+            console.log(request)
+            return false;
+        }
+        
+        if(request.operation !== VIDE_PROTOCOL.OPERATION.VIEW) {
+            console.log('[ERROR] unable to handle the following request in VideFacsimileViewer: only allowed operation is "VIEW"')
+            console.log(request)
+            return false;
+        }
+        
+        let type;
+        
+        if(request.object === VIDE_PROTOCOL.OBJECT.NOTATION && request.contexts.length === 0) {
+            type = 'highlightMeasure';
+        } else if(request.object === VIDE_PROTOCOL.OBJECT.LYRICS && request.contexts.length === 0) {
+            type = 'highlightMusic';
+        } else if(request.object === VIDE_PROTOCOL.OBJECT.DIR && request.contexts.length === 0) {
+            type = 'highlightMusic';    
+        } else if(request.object === VIDE_PROTOCOL.OBJECT.STATE) {
+            type = 'highlightState';
+        } else {
+            console.log('[ERROR] unable to determine the type of the following request in VideFacsimileViewer:')
+            console.log(request)
+            return false;
+        }
+        
+        this._setupViewer(containerID).then((viewer) => {
+            
+            let editionID = this._eohub.getEdition();
+            
+            if(type === 'highlightMeasure') {
+                try {
+                    this._focusShape(containerID,viewer,request.id);    
+                } catch(err) {
+                    console.log('[ERROR] Unable to highlight measure ' + request.id + ': ' + err);
+                }
+                
+            } else {
+                console.log('Dunno how to handle request (yet)')
+            }
+            
+        });
+        
+        /*return Promise.resolve(
             this._setupMenu(containerID, activeStateIDs, mainStateID)
                 .then((mapObject) => {
                 //prepare url
@@ -290,19 +511,83 @@ const VideTranscriptionViewer = class VideTranscriptionViewer extends EoNavModul
                 })
                 .then((svg) => {
                 //check if something needs to be highlighted 
-                    if(request.getObjectType() !== EO_Protocol.Object.OBJECT_STATE) {
+                    if(request.getObjectType() !== VIDE_PROTOCOL.OBJECT.STATE) {
                         let targets = document.querySelectorAll('#' + containerID + ' svg #' + request.getObjectID());
                         for (let target of targets) {
                             target.classList.add('highlight');
                         }
                     }
                 
-                    if(request.getObjectType() !== EO_Protocol.Object.OBJECT_STATE && request.getObjectType() !== EO_Protocol.Object.OBJECT_NOTATION) {
+                    if(request.getObjectType() !== VIDE_PROTOCOL.OBJECT.STATE && request.getObjectType() !== VIDE_PROTOCOL.OBJECT.NOTATION) {
                         console.log('[WARNING] No support for handling ' + request.getObjectType() + ' in videTranscriptionViewer.js yet.');
                     }
                 
                     return Promise.resolve(true);
-                }));
+                }));*/
+    }
+    
+    highlightItem(viewer,containerID, shapesArray) {
+    
+        if(shapesArray.length === 0) {
+            console.log('[WARNING] no shapes provided that could be focussed on')
+        }
+    
+        let oldHighlights = document.querySelectorAll('#' + containerID + ' .active, #' + +containerID + ' .current');
+        for (let shape of oldHighlights) {
+            shape.classList.remove('current');
+        }
+        
+        if(shapesArray.length === 0) {
+            return false;
+        }
+        
+        let baseRect = this._getShapeRect(containerID, viewer, document.querySelector('#' + containerID + ' #' + shapesArray[0]));
+        
+        for(let i=0; i<shapesArray.length; i++) {
+            let shape = document.querySelector('#' + containerID + ' #' + shapesArray[i]);
+            try {
+                shape.classList.add('current');
+                let rect = this._getShapeRect(containerID, viewer, shape);
+                baseRect = baseRect.union(rect);  
+            } catch(error) {
+                console.log('[ERROR] invalid shape ' + shapesArray[i] + ': ' + error);
+            } 
+        }
+        viewer.viewport.fitBoundsWithConstraints(baseRect);
+    }
+    
+    _focusShape(containerID, viewer, shape) {
+        let rect = this._getShapeRect(containerID, viewer, shape);
+        console.log('[DEBUG] clicked on shape ' + shape.id);
+        
+        if(rect !== null) {
+            viewer.viewport.fitBoundsWithConstraints(rect);
+        }
+    }
+    
+    _getShapeRect(containerID, viewer, input) {
+        //decide if I have an ID or the element itself already
+        
+        let elem;
+        if(typeof input === 'string') {
+            input = input.replace(/#/, '');
+            elem = document.querySelector('#' + containerID + ' #' + input);
+        } else if(typeof input === 'object') {
+            elem = input;
+        } else {
+            console.log('[ERROR] problem with input of type ' + (typeof input));
+            console.log(input);
+            return null;
+        }
+        
+        let windowRect = elem.getBoundingClientRect();
+                                    
+        let ul = viewer.viewport.windowToViewportCoordinates(new OpenSeadragon.Point(windowRect.left, windowRect.top));
+        let lr = viewer.viewport.windowToViewportCoordinates(new OpenSeadragon.Point(windowRect.right, windowRect.bottom));
+        
+        let rect = new OpenSeadragon.Rect(ul.x, ul.y, lr.x - ul.x, lr.y - ul.y);
+        
+        return rect;
     }
     
     prepareStateRequest(stateID, containerID) {
@@ -334,15 +619,15 @@ const VideTranscriptionViewer = class VideTranscriptionViewer extends EoNavModul
                 //create contexts for each state
                 let contexts = [];
                 for(let i=0; i<requestedStates.length; i++) {
-                    contexts.push({type:EO_Protocol.Context.CONTEXT_STATE, id:requestedStates[i]});                       
+                    contexts.push({type:VIDE_PROTOCOL.CONTEXT.STATE, id:requestedStates[i]});                       
                 }
                 
                 let query = {
-                    objectType: EO_Protocol.Object.OBJECT_STATE,
+                    objectType: VIDE_PROTOCOL.OBJECT.STATE,
                     objectID: stateID,
                     contexts: contexts,
                     perspective: this._supportedPerspective,
-                    operation: EO_Protocol.Operation.OPERATION_VIEW
+                    operation: VIDE_PROTOCOL.OPERATION.VIEW
                 };
                 
                 let request = new Request(containerID, this._eohub.getEdition(), query);
@@ -398,7 +683,9 @@ const VideTranscriptionViewer = class VideTranscriptionViewer extends EoNavModul
     
     _prepareRendering(mei, containerID) {
         let _this = this;
-            
+        
+        console.log('____x_____x_____x____x____ prepareRendering')
+        
         let vrvToolkit = window.vrvStore.vrvToolkit;
             
         var options = JSON.stringify({
@@ -420,7 +707,7 @@ const VideTranscriptionViewer = class VideTranscriptionViewer extends EoNavModul
             
             //filter for notation
         let filteredRequests = supportedRequests.filter(function(request){
-            return (request.objectType === EO_Protocol.Object.OBJECT_NOTATION && request.perspective !== _this._supportedPerspective);
+            return (request.objectType === VIDE_PROTOCOL.OBJECT.NOTATION && request.perspective !== _this._supportedPerspective);
         });
             
         let notes = document.querySelectorAll('#' + containerID + ' g.note, #' + containerID + ' g.rest');

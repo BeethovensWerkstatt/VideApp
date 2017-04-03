@@ -24,7 +24,17 @@ const EoModule = class EoModule {
         this._socketID;
         this._server;
         this._socket;
-        this._cache = new Map();
+        this._cache;// = new Map();
+         
+        this._requestMap = new Map(); 
+    }
+    
+    _saveRequest(containerID, req) {
+        this._requestMap.set(containerID,req);
+    }
+    
+    _getLastRequest(containerID) {
+        return this._requestMap.get(containerID);
     }
     
     /**
@@ -44,6 +54,7 @@ const EoModule = class EoModule {
         this._eohub = eohub;
         this._server = eohub._server;
         this._socketID = eohub._socketID;
+        this._cache = eohub.cache;
         
         this._socket = io(this._server + this._socketID);
     }
