@@ -41,7 +41,7 @@ export const ActionTypes = {
     
     RESTORE_STATE: 'RESTORE_STATE',
     RESET_STATE: 'RESET_STATE',
-    CONFIRM_STATE: 'CONFIRM_STATE'
+    CONFIRM_VIEW: 'CONFIRM_VIEW'
 };
 
 /** 
@@ -50,8 +50,8 @@ export const ActionTypes = {
  * @param {Object|null} viewState object when initializing the view
  * @returns {object} the information how view1.state needs to be modified
  */ 
-export function setFirstView(perspective = Perspective.FACSIMILE, target = null) {
-    return { type: ActionTypes.SET_FIRST_VIEW, perspective, target };
+export function setFirstView(moduleKey = 'VideFacsimileViewer', request = null) {
+    return { type: ActionTypes.SET_FIRST_VIEW, moduleKey, request };
 }
 
 /** 
@@ -60,8 +60,16 @@ export function setFirstView(perspective = Perspective.FACSIMILE, target = null)
  * @param {Object|null} viewState object when initializing the view
  * @returns {object} the information how view2.state needs to be modified
  */ 
-export function setSecondView(perspective = Perspective.TRANSCRIPTION, target = null) {
-    return { type: ActionTypes.SET_SECOND_VIEW, perspective, target };
+export function setSecondView(moduleKey = 'VideTranscriptionViewer', request = null) {
+    return { type: ActionTypes.SET_SECOND_VIEW, moduleKey, request };
+}
+
+/** 
+ * Function confirmView confirms that a certain state has been reached by a view
+ * @returns {object} the actionType that's required for Redux
+ */
+export function confirmView(state = null,view = -1) {
+    return {type: ActionTypes.CONFIRM_VIEW, state, view};
 }
 
 /**
@@ -244,14 +252,4 @@ export function restoreState(newState = {}) {
  */
 export function resetState() {
     return {type: ActionTypes.RESET_STATE};
-}
-
-/** 
- * Function confirmState confirms that a certain state has been reached by a view
- * @returns {object} the actionType that's required for Redux
- */
-export function confirmState(state = {},view = -1) {
-    console.log('actions.redux.js: confirmState')
-    console.log(state)
-    return {type: ActionTypes.CONFIRM_STATE, state, view};
 }

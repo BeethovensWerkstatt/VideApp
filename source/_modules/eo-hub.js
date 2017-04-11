@@ -57,8 +57,8 @@ const EoHub = class EoHub {
         return this._viewManager.getI18nString(key);
     }
     
-    confirmView(state, containerID, moduleKey) {
-        this._viewManager.confirmView(state, containerID, moduleKey);
+    confirmView(moduleKey, containerID, state) {
+        this._viewManager.confirmView(moduleKey, containerID, state);
     }
     
     /**
@@ -272,29 +272,6 @@ const EoHub = class EoHub {
     }
     
     /*
-     * public function requestData
-     * this function is called from individual modules and takes care
-     * of the network communication. 
-     * If required, add socket.io support in here
-     */
-    requestData(dataRequest, containerID) {
-        //console.log('[INFO] requesting data')
-        if(dataRequest.responseType === 'json') {
-            return fetch(dataRequest.url)
-                .then(response => response.json())
-                .catch(error => console.log('[ERROR] Network error: ' + error))
-                .then(text => {
-                    return Promise.resolve((typeof text === 'string') ? JSON.parse(text) : text);  
-                });
-        } else if(dataRequest.responseType === 'text') {
-            return fetch(dataRequest.url)
-                .then(response => response.text())
-                .catch(error => console.log('[ERROR] Network error: ' + error));
-                //.then(text => dataRequest.callback(dataRequest,text,containerID))
-        }
-    }
-    
-    /*
      * This function registers the viewManager
      */
     registerViewManager(manager) {
@@ -308,9 +285,9 @@ const EoHub = class EoHub {
      */
     _setupSocket(socketID) {
         var socket = io('http://localhost:2999/' + socketID);
-        socket.on('connect', function(){
+        /*socket.on('connect', function(){
              //console.log('eohub is entering connection')
-        });
+        });*/
     }
     
     /*

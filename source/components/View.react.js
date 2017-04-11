@@ -9,21 +9,7 @@ const View = React.createClass({
     
     unmount: function() {
         
-        let viewType = '';
-        
-        if(this.props.view.perspective === VIDE_PROTOCOL.PERSPECTIVE.XML) {
-            viewType = 'VideXmlViewer';
-        } else if(this.props.view.perspective === VIDE_PROTOCOL.PERSPECTIVE.TRANSCRIPTION) {
-            viewType = 'VideTranscriptionViewer';
-        } else if(this.props.view.perspective === VIDE_PROTOCOL.PERSPECTIVE.TEXT) {
-            viewType = 'VideTextViewer';
-        } else if(this.props.view.perspective === VIDE_PROTOCOL.PERSPECTIVE.FACSIMILE) {
-            viewType = 'VideFacsimileViewer';
-        } else if(this.props.view.perspective === VIDE_PROTOCOL.PERSPECTIVE.RECONSTRUCTION) {
-            viewType = 'VideReconstructionViewer';
-        } else if(this.props.view.perspective === VIDE_PROTOCOL.PERSPECTIVE.INVARIANCE) {
-            viewType = 'VideInvarianceViewer';
-        }
+        let viewType = this.props.view.moduleKey;
         
         try {
             eohub.unmountModule(viewType, this.props.pos);
@@ -50,7 +36,7 @@ const View = React.createClass({
         //console.log('INFO: shouldComponentUpdate');
         let needsUpdate = true;
         if(this.props.pos === nextProps.pos 
-            && this.props.view.perspective === nextProps.view.perspective
+            && this.props.view.moduleKey === nextProps.view.moduleKey
             /*&& (this.props.layout === nextProps.layout
                 || (this.props.layout !== ViewLayouts.SINGLE_VIEW
                     && nextProps.layout !== ViewLayouts.SINGLE_VIEW))*/) {
@@ -79,10 +65,11 @@ const View = React.createClass({
             //todo: if necessary, send commands to view from here…
         }
         
-        console.log('INFO: shouldComponentUpdate: ' + needsUpdate);
+        //console.log('INFO: shouldComponentUpdate: ' + needsUpdate);
         
         //if view can stay the same, send request to the view for local adjustments
-        if(!needsUpdate && nextProps.view.temp === false) {
+        if(!needsUpdate && nextProps.view.request !== this.props.view.request) {
+            //console.log('sending request from inside shouldComponentUpdate')
             this.sendRequest(nextProps, nextState);
         }
             
@@ -90,39 +77,16 @@ const View = React.createClass({
     },
     
     componentWillUpdate: function(nextProps, nextState) {
-        if(this.props.view.perspective !== nextProps.view.perspective) {
+        if(this.props.view.moduleKey !== nextProps.view.moduleKey) {
             //console.log('[DEBUG]: will call unmount()');
             this.unmount();
         }
     },
     
     componentDidUpdate: function (prevProps, prevState) {
-        console.log('[DEBUG] componentDidUpdate')
-        console.log(this.props);
-        console.log(this.state);
-        console.log('-------------done…')
+        //console.log('[DEBUG] componentDidUpdate')
         
-        /*if(this.props.viewType === ViewTypes.VIEWTYPE_XMLVIEW) {
-            
-            if(this.props.view.viewState === null)
-                window.EoHub.requestDefault('videXMLviewer', this.props.is + '_' + this.props.viewType);
-            else {
-                let req = this.props.view.viewState;
-                let module = window.EoHub.getModule(req.getModuleKey());
-                module.handleRequest(req);
-            }                
-            
-        } else if(this.props.viewType === ViewTypes.VIEWTYPE_FACSIMILEVIEW) {
-            
-            document.getElementById(this.props.is + '_' + this.props.viewType).innerHTML = '<div>FACSIMILE</div>'
-            
-        } else if(this.props.viewType === ViewTypes.VIEWTYPE_TRANSCRIPTIONVIEW) {
-            window.EoHub.requestDefault('videTranscriptionViewer', this.props.is + '_' + this.props.viewType);            
-        
-        } else if(this.props.viewType === ViewTypes.VIEWTYPE_TEXTVIEW_MEI) {
-            window.EoHub.requestDefault('videMEITextViewer', this.props.is + '_' + this.props.viewType);            
-        }*/
-        
+        //console.log('sending request from inside componentDidUpdate')
         this.sendRequest(this.props, this.state);
     },
     
@@ -131,9 +95,9 @@ const View = React.createClass({
     },
     
     render: function() { 
-        console.log('[DEBUG] rendering view ' + this.props.view.perspective + ' at ' + this.props.pos)
+        //console.log('[DEBUG] rendering view ' + this.props.view.perspective + ' at ' + this.props.pos)
         return (
-            <div id={this.props.pos} className={'view ' + this.props.pos + ' ' + this.props.view.perspective}>
+            <div id={this.props.pos} className={'view ' + this.props.pos + ' ' + this.props.view.moduleKey}>
                 
             </div>
         );
@@ -141,47 +105,24 @@ const View = React.createClass({
     
     sendRequest: function(props, state) {
         
-        let moduleKey;
-            
-        if(props.view.perspective === VIDE_PROTOCOL.PERSPECTIVE.TRANSCRIPTION) {
-            moduleKey = 'VideTranscriptionViewer';
-        } else if(props.view.perspective === VIDE_PROTOCOL.PERSPECTIVE.TEXT) {
-            moduleKey = 'videMEITextViewer';
-        } else if(props.view.perspective === VIDE_PROTOCOL.PERSPECTIVE.XML) {
-            moduleKey = 'VideXmlViewer';
-        } else if(props.view.perspective === VIDE_PROTOCOL.PERSPECTIVE.FACSIMILE) {
-            moduleKey = 'VideFacsimileViewer';
-        } else if(props.view.perspective === VIDE_PROTOCOL.PERSPECTIVE.RECONSTRUCTION) {
-            moduleKey = 'videReconstructionViewer';
-        } else if(props.view.perspective === VIDE_PROTOCOL.PERSPECTIVE.INVARIANCE) {
-            moduleKey = 'videInvarianceViewer';
-        }
-        
-        console.log('[[sendRequest]]: moduleKey is ' + moduleKey + ' typeof target: ' + typeof props.view.target)
-        console.log(props.view)
-        
+        let moduleKey = props.view.moduleKey;
+        let module = eohub.getModule(moduleKey);
         
         //request default view    
-        if(props.view.target === null || (typeof props.view.target === 'undefined')) {
+        if(props.view.request === null || (typeof props.view.request === 'undefined')) {
             
-            console.log('me here')
-            
-            console.log('[DEBUG] request default view for ' + moduleKey);
-            
-            //try {
-                eohub.requestDefault(moduleKey, props.pos);    
-            //} catch(err) {
-            //    console.log('[ERROR] unable to request default for ' + props.view.perspective + ': ' + err);
-            //}
+            try {
+                module.getDefaultView(props.pos);
+            } catch(err) {
+                console.log('[ERROR] unable to request default for ' + props.view.perspective + ': ' + err);
+            }
         } else {
             
-            let req = props.view;
-            let module = eohub.getModule(moduleKey);
-            
+            let req = props.view.request;
             //console.log('[DEBUG] handle request for ' + req.getModuleKey());
             
             try {
-                module.handleRequest(req,props.pos);    
+                module.handleRequest(props.pos,req);    
             } catch(err) {
                 console.log('[ERROR] unable to handle request for ' + moduleKey + ': ' + err);
                 console.log(req);

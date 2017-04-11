@@ -331,11 +331,10 @@ const EoNavModule = class EoNavModule extends EoModule {
                     id: firstState.id,
                     object: VIDE_PROTOCOL.OBJECT.STATE,
                     contexts: [],
-                    perspective: VIDE_PROTOCOL.PERSPECTIVE.FACSIMILE,
+                    perspective: this._supportedPerspective,
                     operation: VIDE_PROTOCOL.OPERATION.VIEW,
                     state: {}
                 };
-                //this request needs to go through vide-view-manager???           
                 this._eohub.sendSelfRequest(req,this,containerID);
                            
             });

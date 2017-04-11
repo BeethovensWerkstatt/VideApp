@@ -1,5 +1,5 @@
 import 'babel-polyfill';
-import {openContextMenu, setFirstView, setSecondView, confirmState} from './../redux/actions.redux';
+import {openContextMenu, setFirstView, setSecondView, confirmView} from './../redux/actions.redux';
 import {ViewLayouts} from './../redux/layout.constants';
 import VIDE_PROTOCOL from './vide-protocol';
 import VideHistoryManager from './vide-history-manager';
@@ -49,11 +49,11 @@ const VideViewManager = class VideViewManager {
         return 'I18N ERROR: ' + key;
     }
     
-    confirmView(state, containerID, moduleKey) {
+    confirmView(moduleKey, containerID, state) {
         if(containerID === 'view1') {
-            this._store.dispatch(confirmState(state, 1));
+            this._store.dispatch(confirmView(state, 1));
         } else if(containerID === 'view2') {
-            this._store.dispatch(confirmState(state, 2));
+            this._store.dispatch(confirmView(state, 2));
         } else {
             console.log('[ERROR] unable to determine target that wanted to confirm its view: ' + containerID)
         }
@@ -143,42 +143,33 @@ const VideViewManager = class VideViewManager {
      * @param {Object} request to be handled
      * @returns {boolean} false if there are errors
      */
-    prepareView(target, moduleKey, request) {
-        let perspective;
-        if(moduleKey === 'VideXmlViewer') {
-            perspective = VIDE_PROTOCOL.PERSPECTIVE.XML;
-        } else if(moduleKey === 'VideTranscriptionViewer') {
-            perspective = VIDE_PROTOCOL.PERSPECTIVE.TRANSCRIPTION;
-        } else if(moduleKey === 'VideFacsimileViewer') {
-            perspective = VIDE_PROTOCOL.PERSPECTIVE.FACSIMILE;
-        } else if(moduleKey === 'VideReconstructionViewer') {
-            perspective = VIDE_PROTOCOL.PERSPECTIVE.RECONSTRUCTION;
-        } else if(moduleKey === 'VideInvarianceViewer') {
-            perspective = VIDE_PROTOCOL.PERSPECTIVE.INVARIANCE;
-        } else {
-            console.log('[ERROR] Dunno how to handle moduleKey ' + moduleKey + ' in videViewManager');
-            console.log(request)
-            return false;
-        }
+    prepareView(containerID, moduleKey, request = null) {
         
-        let state = this._store.getState();
+        let perspective = (request !== null) ? request.perspective : null;
+        let appState = this._store.getState();
         
         try {
-            if(target === 'view1' && state.views.view1.perspective !== perspective) {
+            if(containerID === 'view1' && request === null) {
+                console.log('videViewManager.prepareView(): requesting new perspective for view 1');
+                this._store.dispatch(setFirstView(moduleKey));
+            } else if(containerID === 'view2' && request === null) {
+                console.log('videViewManager.prepareView(): requesting new perspective for view 2');
+                this._store.dispatch(setSecondView(moduleKey));
+            } else if(containerID === 'view1' && perspective !== appState.views.view1.perspective) {
                 console.log('videViewManager.prepareView(): first view needs to be set');
-                this._store.dispatch(setFirstView(perspective, request));
-            } else if(target === 'view2' && state.views.view2.perspective !== perspective) {
+                this._store.dispatch(setFirstView(moduleKey, request));
+            } else if(containerID === 'view2' && perspective !== appState.views.view2.perspective) {
                 console.log('videViewManager.prepareView(): second view needs to be set');
-                this._store.dispatch(setSecondView(perspective, request));                
+                this._store.dispatch(setSecondView(moduleKey, request));                
             } else {
                 console.log('videViewManager.prepareView(): view is available already');
                 
                 //view doesn't need to be changed (View.react will stop a re-rendering), but this will set the state of the view
                 
-                if(target === 'view1') {
-                    this._store.dispatch(setFirstView(perspective, request));
-                } else if(target === 'view2') {
-                    this._store.dispatch(setSecondView(perspective, request));
+                if(containerID === 'view1') {
+                    this._store.dispatch(setFirstView(moduleKey, request));
+                } else if(containerID === 'view2') {
+                    this._store.dispatch(setSecondView(moduleKey, request));
                 }
                 
                 //this is done through View.react

@@ -93,18 +93,16 @@ const VideXmlViewer = class VideXMLviewer extends EoModule {
             operation: VIDE_PROTOCOL.OPERATION.VIEW
         };
         
-        this.handleRequest(req, containerID);        
+        this.handleRequest(containerID,req,{});        
     }
     
     _getCurrentState(containerID,editor) {
-    
-        let lastReq = this._getLastRequest(containerID);
     
         let line = editor.renderer.getFirstFullyVisibleRow();
         let selection = editor.getSelection();
         let search = editor.getLastSearchOptions();
         
-        let state = Object.assign({}, lastReq,{state: {line:line}});
+        let state = {line:line};
         
         return state;
     }
@@ -186,7 +184,7 @@ const VideXmlViewer = class VideXMLviewer extends EoModule {
             //return Promise.resolve(editor);
     }*/
     
-    handleRequest(request,containerID) {
+    handleRequest(containerID,request,state = {}) {
         
         console.log('[VideXmlViewer] received request')
         console.log(request)
@@ -211,8 +209,12 @@ const VideXmlViewer = class VideXMLviewer extends EoModule {
                     this._findString(editor, 'id="' + request.id + '"');
                 }
                 
+                if(typeof state.line === 'number') {
+                    editor.gotoLine(state.line,0,true);
+                }
+                
                 let state = this._getCurrentState(containerID,editor);
-                this._confirmView(state,containerID);
+                this._confirmView(containerID,state);
             })
         })
            

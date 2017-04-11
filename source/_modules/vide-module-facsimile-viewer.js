@@ -228,10 +228,9 @@ const VideFacsimileViewer = class VideFacsimileViewer extends EoNavModule {
                     //log position of view when view changes
                     viewer.addHandler('animation-finish',(event) => {
                         
-                        let oldState = this._getLastRequest(containerID);
-                        let newState = Object.assign({}, oldState, {state: {bounds: viewer.viewport.getBounds()}})
+                        let newState = {bounds: viewer.viewport.getBounds()};
                         
-                        this._confirmView(newState,containerID);
+                        this._confirmView(containerID,newState);
                         
                     });
                     
@@ -387,7 +386,7 @@ const VideFacsimileViewer = class VideFacsimileViewer extends EoNavModule {
             operation: VIDE_PROTOCOL.OPERATION.VIEW
         };
         
-        this.handleRequest(req, containerID);     
+        this.handleRequest(containerID,req,{});     
         //this._setupViewer(containerID);
         
     }
@@ -482,12 +481,11 @@ const VideFacsimileViewer = class VideFacsimileViewer extends EoNavModule {
         return rect;
     }
     
-    handleRequest(request,containerID) {
+    handleRequest(containerID,request,state = {}) {
         
         console.log('[INFO] received the following request for VideFacsimileViewer at ' + containerID + ':')
+        console.log(containerID)
         console.log(request)
-        
-        this._saveRequest(containerID,request);
         
         //determine type of request
         let type;
@@ -504,7 +502,7 @@ const VideFacsimileViewer = class VideFacsimileViewer extends EoNavModule {
             return false;
         }
         
-        if(typeof request.state !== 'undefined' && typeof request.state.bounds !== 'undefined') {
+        if(state !== null && typeof state.bounds !== 'undefined') {
             type = 'getRect';
         } else if(request.object === VIDE_PROTOCOL.OBJECT.NOTATION && request.contexts.length === 0) {
             type = 'highlightMusic';
@@ -528,20 +526,21 @@ const VideFacsimileViewer = class VideFacsimileViewer extends EoNavModule {
         
         this._setupViewer(containerID).then((viewer) => {
             
-            this._confirmView(request,containerID);
+            //todo: add more complex object when confirming state?
+            this._confirmView(containerID,{});
             
             let editionID = this._eohub.getEdition();
             
             if(type === 'getRect') {
                 
                 try {
-                    let input = request.state.bounds;
+                    let input = state.bounds;
                     let rect = new OpenSeadragon.Rect(input.x, input.y, input.width, input.height,input.degrees);
                 
                     viewer.viewport.fitBoundsWithConstraints(rect);    
                 } catch(err) {
                     console.log('[ERROR]: Unable to center the following rectangle (' + err + '):');
-                    console.log(request.state.bounds);
+                    console.log(state.bounds);
                 }
                 
             } else if(type === 'highlightMusic') {

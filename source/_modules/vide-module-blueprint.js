@@ -29,14 +29,6 @@ const EoModule = class EoModule {
         this._requestMap = new Map(); 
     }
     
-    _saveRequest(containerID, req) {
-        this._requestMap.set(containerID,req);
-    }
-    
-    _getLastRequest(containerID) {
-        return this._requestMap.get(containerID);
-    }
-    
     /**
      * This function returns the key of the current module
      * @abstract
@@ -248,13 +240,13 @@ const EoModule = class EoModule {
      * @abstract
      * @param {Object} request that shall be handled.
      */
-    handleRequest(vontainerID,request) {
+    handleRequest(containerID,request) {
         //filled by inheriting module class
         
     }
     
-    _confirmView(state, containerID) {
-        this._eohub.confirmView(state, containerID, this._key);
+    _confirmView(containerID,state) {
+        this._eohub.confirmView(this._key,containerID,state);
     }
     
 };

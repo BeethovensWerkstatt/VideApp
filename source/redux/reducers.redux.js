@@ -168,8 +168,8 @@ export function handleEdition(state = {
 export function handleViews(state = {
     layout: ViewLayouts.INTRODUCTION,
     ratio: .5,
-    view1: {perspective: Perspectives.FACSIMILE, target: null, temp: false},
-    view2: {perspective: Perspectives.TRANSCRIPTION, target: null, temp: false}
+    view1: {moduleKey: 'VideFacsimileViewer', request: null, state: null, log: false},
+    view2: {moduleKey: 'VideTranscriptionViewer', request: null, state: null, log: false}
 }, action) {
     switch (action.type) {
         
@@ -201,44 +201,47 @@ export function handleViews(state = {
             return state; 
         
         case ActionTypes.SET_FIRST_VIEW:
-            
-            if(Object.values(Perspectives).indexOf(action.perspective) !== -1) {
-                if(action.target === null) {
-                    return Object.assign({}, state, { 
-                        view1: Object.assign({}, action.target, {perspective: action.perspective, operation: VIDE_PROTOCOL.OPERATION.VIEW}) 
-                    }); 
-                }
+            if(action.request === null && typeof action.moduleKey === 'string') {
                 return Object.assign({}, state, { 
-                    view1: Object.assign({}, action.target, {temp: false}) 
+                    view1: Object.assign({}, state.view1, {moduleKey: action.moduleKey, request: action.request, state: null, log: false}) 
+                }); 
+            } else if(Object.values(Perspectives).indexOf(action.request.perspective) !== -1){
+                return Object.assign({}, state, { 
+                    view1: Object.assign({}, state.view1, {moduleKey: action.moduleKey, request: action.request, state: null, log: false}) 
                 }); 
             } 
             return state;
             
         case ActionTypes.SET_SECOND_VIEW:
-            if(Object.values(Perspectives).indexOf(action.perspective) !== -1) {
-                if(action.target === null) {
-                    return Object.assign({}, state, { 
-                        view2: Object.assign({}, action.target, {perspective: action.perspective, operation: VIDE_PROTOCOL.OPERATION.VIEW}) 
-                    }); 
-                }
+            if(action.request === null && typeof action.moduleKey === 'string') {
                 return Object.assign({}, state, { 
-                    view2: Object.assign({}, action.target, {temp: false}) 
+                    view2: Object.assign({}, state.view2, {moduleKey: action.moduleKey, request: action.request, state: null, log: false}) 
+                }); 
+            } else if(Object.values(Perspectives).indexOf(action.request.perspective) !== -1){
+                return Object.assign({}, state, { 
+                    view2: Object.assign({}, state.view2, {moduleKey: action.moduleKey, request: action.request, state: null, log: false}) 
                 }); 
             } 
             return state;
+         
+        case ActionTypes.CONFIRM_VIEW:
             
-        /*case ActionTypes.LOG_VIEW_STATE:
             if(action.view === 1) {
-                return Object.assign({}, state, { view1: 
-                    Object.assign({}, state.view1, {temp: false})
-                });
+                let newState = Object.assign({}, state, { view1:
+                    Object.assign({}, state.view1, {state: action.state, log: true})
+                });    
+                
+                return newState; 
+                
             } else if(action.view === 2) {
-                return Object.assign({}, state, { view2: 
-                    Object.assign({}, state.view2, {temp: false})
-                });
+                let newState = Object.assign({}, state, { view2:
+                    Object.assign({}, state.view2, {state:action.state, log: true})
+                });    
+                
+                return newState; 
             }
             
-            return state;*/
+            return state; 
         
         case ActionTypes.ACTIVATE_EDITION:
         
@@ -291,29 +294,6 @@ export function handleViews(state = {
                 view2: {perspective: Perspectives.TRANSCRIPTION, target: null, temp: false}
             };
             
-        case ActionTypes.CONFIRM_STATE:
-            
-            if(action.view === 1) {
-                console.log('confirming view 1')
-                let newState = Object.assign({}, state, { view1:
-                    Object.assign({}, action.state, {temp: null})
-                });    
-                console.log(newState)
-                
-                return newState; 
-                
-            } else if(action.view === 2) {
-                console.log('confirming view 2')
-                let newState = Object.assign({}, state, { view2:
-                    Object.assign({}, action.state, {temp: null})
-                });    
-                console.log(newState)
-                
-                return newState; 
-            }
-            
-            return state;
-        
         default: 
             return state;
     
