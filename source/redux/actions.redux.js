@@ -14,7 +14,7 @@ export const ActionTypes = {
     SET_FIRST_VIEW: 'SET_FIRST_VIEW',
     SET_SECOND_VIEW: 'SET_SECOND_VIEW',
     
-    //LOG_VIEW_STATE: 'LOG_VIEW_STATE',
+    SET_SYNC_VIEWS: 'SET_SYNC_VIEWS',
     
     SET_VIEW_RATIO: 'SET_VIEW_RATIO',
     SET_VIEW_LAYOUT: 'SET_VIEW_LAYOUT',
@@ -62,6 +62,15 @@ export function setFirstView(moduleKey = 'VideFacsimileViewer', request = null) 
  */ 
 export function setSecondView(moduleKey = 'VideTranscriptionViewer', request = null) {
     return { type: ActionTypes.SET_SECOND_VIEW, moduleKey, request };
+}
+
+/** 
+ * Function setSyncViews determines whether views should be synced or not 
+ * @param {boolean} sync if views shall be synced or not
+ * @returns {object} the information needed for reducers
+ */ 
+export function setSyncViews(synced = false) {
+    return { type: ActionTypes.SET_SYNC_VIEWS, synced };
 }
 
 /** 

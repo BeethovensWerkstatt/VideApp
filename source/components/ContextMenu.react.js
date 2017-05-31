@@ -32,14 +32,17 @@ const ContextMenu = ({ items, visible, closeContextMenu, submitRequest, x, y }) 
         
         socket.once(key,(json) => {
             
-            document.getElementById(key + '_bravura').innerHTML = json[0].bravura;
-            document.getElementById(key + '_desc').innerHTML = json[0].desc;
-            document.getElementById(key + '_measure').innerHTML = json[0].measure;
-            document.getElementById(key + '_position').innerHTML = json[0].position;
+            try {
+                document.getElementById(key + '_bravura').innerHTML = json[0].bravura;
+                document.getElementById(key + '_desc').innerHTML = json[0].desc;
+                document.getElementById(key + '_measure').innerHTML = json[0].measure;
+                document.getElementById(key + '_position').innerHTML = json[0].position;
+            } catch(err) {
+                console.log('Unable to render results')
+            }
         });
         
         socket.emit('requestData', req);
-        
         return (
         
             <div className="contextMenuBack" onClick={e => {
@@ -73,7 +76,11 @@ const ContextMenu = ({ items, visible, closeContextMenu, submitRequest, x, y }) 
                     </div>
                 </div>
             </div>
-        );    
+        );   
+        
+        /*return (
+            <h1>HURZ!!!</h1>
+        );*/
     }
     
     return null;

@@ -190,8 +190,6 @@ const VideXmlViewer = class VideXMLviewer extends EoModule {
         console.log(request)
         console.log(containerID)
         
-        this._saveRequest(containerID,request);
-        
         let req = {
             id: this._eohub.getEdition(),
             type: 'getXmlFile'

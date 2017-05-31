@@ -1,5 +1,6 @@
 import React, { PropTypes } from 'react';
 import PerspectiveController from '../containers/PerspectiveController.react';
+import SyncViewsController from '../containers/SyncViewsController.react';
 
 import {ViewLayouts} from '../redux/layout.constants';
 
@@ -8,7 +9,8 @@ const PerspectivesBar = ({ }) => {
     <div className="perspectivesBar">
         <PerspectiveController type={ViewLayouts.SINGLE_VIEW} noIntro={true}/>
         <PerspectiveController type={ViewLayouts.VERTICAL_SPLIT} noIntro={true}/>
-        <PerspectiveController type={ViewLayouts.HORIZONTAL_SPLIT} noIntro={true}/>        
+        <PerspectiveController type={ViewLayouts.HORIZONTAL_SPLIT} noIntro={true}/>
+        <SyncViewsController/>
     </div>
     
     );

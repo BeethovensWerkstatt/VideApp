@@ -71,6 +71,10 @@
         "de":"Faksimile",
         "en":"Facsimile"
     },
+    "VidePageOverlayViewer":{
+        "de":"Überlagerung",
+        "en":"Overlay"
+    },
     "VideTranscriptionViewer":{
         "de":"Transkription",
         "en":"Transcription"

@@ -1,9 +1,14 @@
 @import 'mixins';
 @import 'variables';
 
-.view.VideFacsimileViewer {
+.view.VideFacsimileViewer, .view.VidePageOverlayViewer {
     display: flex;
-    flex-direction: column-reverse;    
+    flex-direction: column-reverse;  
+    
+    .visSlider {
+        width: 90px;
+        margin: 8px 0;
+    }
 }
 
 .facsimile {
@@ -23,6 +28,16 @@
         border-radius: 4px;
         box-shadow: 0 1px 3px rgba(0,0,0,0.3);
     }
+    
+    .verovioOverlay {
+        
+        background-color: rgba(255,255,255,.4);
+        
+        svg {
+            width: 100% !important;
+            height: 100% !important;
+        }  
+    } 
     
     .svgBox svg {
         width: 100% !important;

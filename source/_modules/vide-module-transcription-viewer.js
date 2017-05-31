@@ -35,6 +35,9 @@ const VideTranscriptionViewer = class VideTranscriptionViewer extends EoNavModul
         this._stateLabelKeySingular = 'variant';
         this._stateLabelKeyPlural = 'variants';
         
+        //whether genetic states which are pure deletions shall be rendered in navigation or not
+        this._showDeletions = false;
+        
         return this;
     }
     
@@ -279,14 +282,14 @@ const VideTranscriptionViewer = class VideTranscriptionViewer extends EoNavModul
             let measureJson = results[1];
             
             let t1 = performance.now();
-                console.log('[DEBUG] setupViewer took ' + (t1 - t0) + ' millisecs');
+            console.log('[DEBUG] setupViewer took ' + (t1 - t0) + ' millisecs');
                 
             if(this._cache.has(containerID + '_viewer')) {
-                console.log('getting viewer from cache')
+                //console.log('getting viewer from cache')
                 return Promise.resolve(this._cache.get(containerID + '_viewer'))
             } else {
                 return new Promise((resolve, reject) => {
-                    console.log('building new viewer')
+                    //console.log('building new viewer')
                     let verovio = this._eohub.getVerovio();
                     
                     this._getFinalState(editionID).then((finalState) => {
@@ -379,19 +382,20 @@ const VideTranscriptionViewer = class VideTranscriptionViewer extends EoNavModul
                             //insert scars
                             for(i; i<j; i++) {
                             
-                                console.log('--23---- adding listeners')
-                            
+                                
                                 let scar = stateJson[i]; 
                                 let firstMeasure = scar.firstMeasure;
                                 let firstState = scar.states[0];
                                 
-                                let scarRect = this._createRect(viewer,containerID, scar.affectedNotes);
+                                //rectangle used as background for textual scars
+                                //attention: positioning is broken 
+                                /*let scarRect = this._createRect(viewer,containerID, scar.affectedNotes);
                                 viewer.addOverlay({
                                     id: containerID + '_' + scar.id,
                                     className: 'scarHighlight',
                                     location: scarRect,
                                     checkResize: true
-                                });
+                                });*/
                                 
                                 let p = 0;
                                 let q = scar.affectedNotes.length;
@@ -703,11 +707,7 @@ const VideTranscriptionViewer = class VideTranscriptionViewer extends EoNavModul
                 //determine dimensions
                 let dimensions = this._getVerovioDimensions(stateSvg);
                 let baseDimensions = this._baseDimensions.get(editionID);
-                /*
-                console.log('----------------- scar ' + scar.label + ' staffHeight: ' + dimensions.staffHeight + ' (' + baseDimensions.staffHeight + '), relation: ' + dimensions.relation + ' (' + baseDimensions.relation + ')')
-                console.log(dimensions)
-                console.log(baseDimensions)
-                */                                     
+                                                    
                 let attachmentMeasureRect = document.querySelector('#' + containerID + ' svg #' +scar.firstMeasure).getBoundingClientRect();
                 
                 let ul = viewer.viewport.windowToViewportCoordinates(new OpenSeadragon.Point(attachmentMeasureRect.left, attachmentMeasureRect.top));
@@ -716,22 +716,12 @@ const VideTranscriptionViewer = class VideTranscriptionViewer extends EoNavModul
                 let rect = new OpenSeadragon.Rect(ul.x, ul.y, lr.x - ul.x, lr.y - ul.y);
                 
                 let dist = allBounds.height / (baseDimensions.viewBoxHeight / baseDimensions.staffHeight);
-                /*
-                console.log('allBounds.height: ' + allBounds.height + ' | ratio: ' + (baseDimensions.viewBoxHeight / baseDimensions.staffHeight) + ' | dist: ' + dist)
-                */
+                
                 let ulx = ul.x;
                 let uly = allBounds.y - (2 * dist);
-                /*
-                console.log('-------11')
-                */
+                
                 try {
-                    /*
-                    console.log('----------12')
-                    console.log(ulx)
-                    console.log(uly)
-                    console.log(rect)
-                    console.log(viewer)
-                    */
+                    
                     
                     //place Label
                     /*viewer.addOverlay({
@@ -744,9 +734,7 @@ const VideTranscriptionViewer = class VideTranscriptionViewer extends EoNavModul
                         checkResize: true
                     });*/
                     
-                    /*
-                    console.log('-----------13')
-                    */
+                    
                     //generate HTML container for Verovio
                     console.log('--------22') 
                     
@@ -770,12 +758,6 @@ const VideTranscriptionViewer = class VideTranscriptionViewer extends EoNavModul
                     
                     //determine dimensions of Verovio container
                     let thisWidthFactor = 1 / baseDimensions.width * dimensions.width;
-                    /*
-                    console.log(baseDimensions)
-                    console.log(allBounds)
-                    console.log('---------------14 ' + thisWidthFactor)
-                    */
-                    //let stateRect = tiledImage.imageToViewportRectangle(rect.x,rect.y,svgWidth * .035,svgHeight * .035);
                     
                     let rectWidth = allBounds.width * thisWidthFactor;
                     let rectHeight = rectWidth / dimensions.width * dimensions.height;
@@ -793,7 +775,6 @@ const VideTranscriptionViewer = class VideTranscriptionViewer extends EoNavModul
                         checkResize: true,
                         placement: 'BOTTOM_LEFT'
                     });
-                    console.log('--------24')
                     viewer.viewport.fitBoundsWithConstraints(rectBounds);
                     console.log('--------25')
                 } catch(err) {

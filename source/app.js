@@ -28,6 +28,9 @@ import VideFacsimileViewer from './_modules/vide-module-facsimile-viewer';
 import VideReconstructionViewer from './_modules/vide-module-reconstruction-viewer';
 import VideInvarianceViewer from './_modules/vide-module-invariance-viewer';
 
+
+import VidePageOverlayViewer from './_modules/vide-module-pageOverlay-viewer';
+
 //enhance react app to allow dispatching functions, not just plain states
 let store = createStore(VideAppState, applyMiddleware(
         thunkMiddleware
@@ -41,6 +44,9 @@ eohub.registerModule(xmlViewer);
 
 let videFacsimileViewer = new VideFacsimileViewer();
 eohub.registerModule(videFacsimileViewer);
+
+let videPageOverlayViewer = new VidePageOverlayViewer();
+eohub.registerModule(videPageOverlayViewer);
 
 let transcriptionViewer = new VideTranscriptionViewer();
 eohub.registerModule(transcriptionViewer);

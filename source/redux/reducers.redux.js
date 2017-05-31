@@ -145,12 +145,7 @@ export function handleEdition(state = {
             return edition;
         case ActionTypes.RESET_STATE:
             
-            return {editions: {},
-                active: '',
-                highlighted: '',
-                revision: ''
-            };
-            
+            return Object.assign({}, state, { active: '', highlighted: '', revision: '' });
             
         default: 
             return state;
@@ -168,6 +163,7 @@ export function handleEdition(state = {
 export function handleViews(state = {
     layout: ViewLayouts.INTRODUCTION,
     ratio: .5,
+    synced: false,
     view1: {moduleKey: 'VideFacsimileViewer', request: null, state: null, log: false},
     view2: {moduleKey: 'VideTranscriptionViewer', request: null, state: null, log: false}
 }, action) {
@@ -223,7 +219,15 @@ export function handleViews(state = {
                 }); 
             } 
             return state;
-         
+        
+        case ActionTypes.SET_SYNC_VIEWS: 
+            
+            if(typeof action.synced !== 'boolean') {
+                return state;
+            }
+            
+            return Object.assign({}, state, { synced: action.synced });
+        
         case ActionTypes.CONFIRM_VIEW:
             
             if(action.view === 1) {
@@ -290,6 +294,7 @@ export function handleViews(state = {
             return {
                 layout: ViewLayouts.INTRODUCTION,
                 ratio: .5,
+                synced: false,
                 view1: {perspective: Perspectives.FACSIMILE, target: null, temp: false},
                 view2: {perspective: Perspectives.TRANSCRIPTION, target: null, temp: false}
             };

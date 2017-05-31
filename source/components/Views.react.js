@@ -10,7 +10,7 @@ import SplitPane from 'react-split-pane';
  * cap of viewRatio to be .1 <= viewRatio <= .9 also enforced in reducers.redux.js
  */
 
-const Views = ({ view1, view2, layout, viewRatio, edition, revision, language, setRatio }) => {
+const Views = ({ view1, view2, layout, synced, viewRatio, edition, revision, language, setRatio }) => {
     if(layout === ViewLayouts.SINGLE_VIEW) {
         return (
         <div className="views">
@@ -27,8 +27,8 @@ const Views = ({ view1, view2, layout, viewRatio, edition, revision, language, s
                 let newRatio = newSize / fullWidth;
                 setRatio(newRatio);
             }}>
-                <View view={view1} pos="view1" edition={edition} revision={revision} language={language} layout={layout}/>
-                <View view={view2} pos="view2" edition={edition} revision={revision} language={language} layout={layout}/>
+                <View view={view1} otherView={view2} synced={synced} pos="view1" edition={edition} revision={revision} language={language} layout={layout}/>
+                <View view={view2} otherView={view1} synced={synced} pos="view2" edition={edition} revision={revision} language={language} layout={layout}/>
             </SplitPane>
         </div>
         );
@@ -42,8 +42,8 @@ const Views = ({ view1, view2, layout, viewRatio, edition, revision, language, s
                 let newRatio = newSize / fullHeight;
                 setRatio(newRatio);
             }}>
-                <View view={view1} pos="view1" edition={edition} revision={revision} language={language} layout={layout}/>
-                <View view={view2} pos="view2" edition={edition} revision={revision} language={language} layout={layout}/>
+                <View view={view1} otherView={view2} synced={synced} pos="view1" edition={edition} revision={revision} language={language} layout={layout}/>
+                <View view={view2} otherView={view2} synced={synced} pos="view2" edition={edition} revision={revision} language={language} layout={layout}/>
             </SplitPane>  
         </div>
         );
@@ -62,6 +62,7 @@ Views.propTypes = {
     view1: PropTypes.object.isRequired,
     view2: PropTypes.object.isRequired,
     layout: PropTypes.string.isRequired,
+    synced: PropTypes.bool.isRequired,
     viewRatio: PropTypes.number.isRequired,
     edition: PropTypes.string.isRequired,
     revision: PropTypes.string.isRequired,

@@ -7,6 +7,7 @@ const mapStateToProps = (state, ownProps) => {
         view1 : state.views.view1,
         view2 : state.views.view2,
         layout: state.views.layout,
+        synced: state.views.synced,
         viewRatio: state.views.ratio,
         edition : state.edition.active,
         revision: state.edition.revision,

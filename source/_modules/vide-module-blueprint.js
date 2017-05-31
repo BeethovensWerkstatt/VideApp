@@ -29,6 +29,10 @@ const EoModule = class EoModule {
         this._requestMap = new Map(); 
     }
     
+    getSupportedPerspective() {
+        return this._supportedPerspective;
+    }
+    
     /**
      * This function returns the key of the current module
      * @abstract

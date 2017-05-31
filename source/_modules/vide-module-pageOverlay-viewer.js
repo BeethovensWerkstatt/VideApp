@@ -4,12 +4,12 @@ import {EoNavModule} from './vide-nav-module-blueprint';
 
 
 
-const VideFacsimileViewer = class VideFacsimileViewer extends EoNavModule {
+const VidePageOverlayViewer = class VidePageOverlayViewer extends EoNavModule {
 
     /*Constructor method*/
     constructor() {
         super();
-        this._supportedPerspective = VIDE_PROTOCOL.PERSPECTIVE.FACSIMILE;
+        this._supportedPerspective = VIDE_PROTOCOL.PERSPECTIVE.RECONSTRUCTION;
         this._supportedRequests = [];
         this._viewerStore = new Map();
         
@@ -44,7 +44,7 @@ const VideFacsimileViewer = class VideFacsimileViewer extends EoNavModule {
         this._supportedRequests.push(dirReq);
         this._supportedRequests.push(delReq);
         
-        this._key = 'VideFacsimileViewer';
+        this._key = 'VidePageOverlayViewer';
         
         //used for I18n to identify how individual states are labeled
         this._stateLabelKeySingular = 'writingLayer';
@@ -141,13 +141,48 @@ const VideFacsimileViewer = class VideFacsimileViewer extends EoNavModule {
             '<div id="' + containerID + '_zoomOut" class="menuButton"><i class="fa fa-minus"></i></div>' + 
             '<div id="' + containerID + '_zoomHome" class="menuButton"><i class="fa fa-arrows-alt"></i></div>' + 
             '<div id="' + containerID + '_rotateLeft" class="menuButton"><i class="fa fa-rotate-left"></i></div>' + 
-            '<div id="' + containerID + '_rotateRight" class="menuButton"><i class="fa fa-rotate-right"></i></div>';
-        
-        
+            '<div id="' + containerID + '_rotateRight" class="menuButton"><i class="fa fa-rotate-right"></i></div>' + 
+            '<input id="' + containerID + '_visSlider" class="visSlider" type="range" name="vis" min="0" max="1" step="0.01" value="0.4">';;
         
         container.appendChild(facs);
         container.appendChild(facsNav);
         container.appendChild(facsNavMenu);
+        
+        document.getElementById(containerID + '_visSlider').addEventListener('change', (e) => {
+            let val = document.getElementById(containerID + '_visSlider').value;
+            let boxes = document.querySelectorAll('#' + containerID + ' .verovioOverlay');
+            
+            for(let i = 0; i<boxes.length; i++) {
+                
+                let bgCol = Math.max(1 - val * 1.666,0);
+                //let bgOp = 1 - (val * 1.25 + 0.2); 
+                
+                let bgOp = (1.0 - val) * 0.8;
+                
+                boxes[i].style.backgroundColor = 'rgba(255,255,255,' + bgCol + ')';
+                boxes[i].style.opacity = bgOp;
+                /*
+                let contents = boxes.querySelectorAll('#' + containerID + ' .verovioOverlay');*/
+            }
+        });
+        
+        document.getElementById(containerID + '_visSlider').addEventListener('input', (e) => {
+                let val = document.getElementById(containerID + '_visSlider').value;
+            let boxes = document.querySelectorAll('#' + containerID + ' .verovioOverlay');
+            
+            for(let i = 0; i<boxes.length; i++) {
+                
+                let bgCol = Math.max(1 - val * 1.666,0);
+                //let bgOp = 1 - (val * 1.25 + 0.2); 
+                
+                let bgOp = (1.0 - val) * 0.8;
+                
+                boxes[i].style.backgroundColor = 'rgba(255,255,255,' + bgCol + ')';
+                boxes[i].style.opacity = bgOp;
+                /*
+                let contents = boxes.querySelectorAll('#' + containerID + ' .verovioOverlay');*/
+            }
+        });
         
         this._setupNavHtml(containerID);        
     }
@@ -295,6 +330,27 @@ const VideFacsimileViewer = class VideFacsimileViewer extends EoNavModule {
                                     console.log('no shapes to retrieve for page ' + page.label);
                                 }
                                 
+                                if(page.id === 'edirom_surface_15e544a7-a074-4792-9e5a-31e103356935') {
+                                    
+                                    let req = {id:'Op.75.2_A_fol6r_verovioOverlay',type:'getRenderedPageOverlay'};
+                                    
+                                    this.requestData(req,true).then((svg) => {
+                                        let overlayBox = document.createElement('div');
+                                        overlayBox.className = 'verovioOverlay';
+                                        overlayBox.innerHTML = svg;
+                                        viewer.addOverlay({
+                                            element: overlayBox,
+                                            y: bounds.y,
+                                            x: bounds.x,
+                                            width: bounds.width,
+                                            height: bounds.height,
+                                            placement: 'TOP_LEFT'
+                                        });
+                                    });
+                                } else {
+                                    console.log('[INFO] Nothing to load for page ' + page.id + ' (yet)')
+                                }
+                                
                                 
                             }
                         }
@@ -313,15 +369,6 @@ const VideFacsimileViewer = class VideFacsimileViewer extends EoNavModule {
         let rect = this._getShapeRect(containerID, viewer, shape);
         console.log('[DEBUG] clicked on shape ' + shape.id);
         
-        if(rect !== null) {
-            /*viewer.viewport.fitBoundsWithConstraints(rect);
-            let oldState = this._getLastRequest(containerID);
-            let newState = Object.assign({}, oldState, {state: {bounds: rect}})
-            
-            this._confirmView(newState,containerID);*/
-            
-            console.log('---------------- missing a rect')
-        }
     }
     
     _clickShape(containerID, viewer, shape, event) {
@@ -627,4 +674,4 @@ const VideFacsimileViewer = class VideFacsimileViewer extends EoNavModule {
     
 };
 
-export default VideFacsimileViewer;
+export default VidePageOverlayViewer;

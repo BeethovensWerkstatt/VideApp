@@ -13,6 +13,9 @@ const EoNavModule = class EoNavModule extends EoModule {
         this._stateLabelKeySingular = '';
         this._stateLabelKeyPlural = '';
         
+        //whether genetic states which are pure deletions shall be rendered in navigation or not
+        this._showDeletions = true;
+        
         return this;
     }
     
@@ -45,8 +48,6 @@ const EoNavModule = class EoNavModule extends EoModule {
     }
     
     _setupNavHtml(containerID) {
-    
-        //console.log('-------------------/11 Calling setupNavHtml')
     
         let navOverlay = document.createElement('div');
         navOverlay.id = containerID + '_navOverlay';
@@ -382,7 +383,15 @@ const EoNavModule = class EoNavModule extends EoModule {
                 //within each column, add corresponding states
                 for(let m=0; m<stateArray[n].length; m++) {
                     let stateObj = stateArray[n][m];
-                
+                    
+                    //skip the box when necessary
+                    if(!this._showDeletions && stateObj.deletion) {
+                        //console.log('no show for ' + n + ' / ' + m)
+                        continue;
+                    }
+                    
+                    //console.log('---- show ' + n + ' / ' + m)
+                    
                     let stateBox = document.createElement('div');
                     stateBox.classList.add('state');
                     stateBox.setAttribute('data-stateid', stateObj.id);
@@ -423,6 +432,11 @@ const EoNavModule = class EoNavModule extends EoModule {
                             let queriedState = scar.states[p];
                             let queriedStateElem = document.getElementById(containerID + '_' + queriedState.id);
                             
+                            //skip, because deletions aren't shown
+                            if(queriedStateElem === null && !this._showDeletions) {
+                                continue;
+                            }
+                            
                             let lesserPos = (queriedState.position < stateObj.position && !queriedState.deletion);
                             let isActive = (queriedState.position <= stateObj.position && (queriedStateElem.classList.contains('active') || queriedStateElem.classList.contains('current')));
                             let isDeletion = stateObj.deletion && (queriedStateElem.classList.contains('active') || queriedStateElem.classList.contains('current')) && (queriedState.position <= stateObj.position);
@@ -461,6 +475,11 @@ const EoNavModule = class EoNavModule extends EoModule {
             for(p; p<q; p++) {
                 let queriedState = scar.states[p];
                 let queriedStateElem = document.getElementById(containerID + '_' + queriedState.id);
+                
+                //skip, because deletions aren't shown
+                if(queriedStateElem === null && !this._showDeletions) {
+                    continue;
+                }
                 
                 if(queriedState.id === currentState) {
                     queriedStateElem.classList.add('current');

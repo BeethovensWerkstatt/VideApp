@@ -10,9 +10,16 @@ header.appHeader {
     line-height: 14px;
     
     box-sizing: border-box;
+    position: relative;
+    
+    .videAppLogo {
+        height: 25px;
+        cursor: pointer;
+    }
     
     .title {
         font-size: 14px;
         font-weight: 100;
+        display: none;
     }
 }

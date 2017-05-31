@@ -1,5 +1,6 @@
 import React, { PropTypes } from 'react';
 import LanguageSwitch from '../containers/LanguageSwitch.react';
+import HomeButtonController from '../containers/HomeButtonController.react';
 import PerspectivesBar from './PerspectivesBar.react';
 
 var AppHeader = React.createClass({
@@ -13,6 +14,7 @@ var AppHeader = React.createClass({
     render: function() {
         return (
             <header className='appHeader'>
+                <HomeButtonController/>
                 <span className='title'>{this.props.text}</span>
                 <PerspectivesBar/>
                 <div className='languageSwitch'>
