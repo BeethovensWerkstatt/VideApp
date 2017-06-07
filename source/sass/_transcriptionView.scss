@@ -72,12 +72,11 @@
         
     }
     
-    /* currently unused */
     .transcriptionNavContainer {
         position: absolute;
-        top: 30px;
+        height: 3px;
         right: 70px;
-        bottom: 30px;
+        bottom: 36px;
         left: 70px;
         display: flex;
         
@@ -97,7 +96,10 @@
             }
         }
         
-        
+    }
+    
+    .navOverlay.scarOpen .transcriptionNavContainer {
+        display: none;
     }
     
     .transcriptionNavMenu {

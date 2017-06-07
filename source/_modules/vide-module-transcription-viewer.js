@@ -41,6 +41,9 @@ const VideTranscriptionViewer = class VideTranscriptionViewer extends EoNavModul
         return this;
     }
     
+    /* 
+     * pulls the final state of the edition
+     */
     _getFinalState(editionID) {
         
         let req = {id: editionID,type:'getFinalState'};
@@ -48,6 +51,9 @@ const VideTranscriptionViewer = class VideTranscriptionViewer extends EoNavModul
         
     }
     
+    /* 
+     * gets a given state, along some other states, as MEI for rendering with verovio
+     */
     _getStateAsMEI(editionID,stateID,otherStates = []) {
         
         let req = {id: stateID, edition: editionID, otherStates: otherStates,type:'getState'};
@@ -55,6 +61,9 @@ const VideTranscriptionViewer = class VideTranscriptionViewer extends EoNavModul
         
     }
     
+    /* 
+     * this sets up the basic HTML 
+     */
     _setupHtml(containerID) {
     
         if(document.getElementById(containerID + '_scarBox') !== null) {
@@ -100,155 +109,17 @@ const VideTranscriptionViewer = class VideTranscriptionViewer extends EoNavModul
         
     }
     
+    /* 
+     * this is supposed to kill the current instance
+     */
     unmount(containerID) {
         document.getElementById(containerID).innerHTML = '';
         //this._currentRenderingDimensions.delete(containerID);
     }
     
-    /*_getStateData(editionID) {
-        if(this._stateStore.has(editionID)) {
-            return Promise.resolve(this._stateStore.get(editionID));
-        } else {
-            let responseType = 'json';
-            let url = this._getBaseURI() + 'edition/' + editionID + '/' + 'states/' + 'overview.json';
-            
-            let request = new DataRequest(responseType, url);
-            return this._eohub.requestData(request)
-                .then(json => {
-                    let stateMap = new Map();
-                    let scarMap = new Map();
-                    let firstScarID;
-                    let firstStateID;
-                    
-                    json.forEach((scar, i) => {
-                        scarMap.set(scar.id, scar);
-                        let _i = i;
-                        
-                        scar.states.forEach((state, j) => {
-                            state.scarID = scar.id;
-                            stateMap.set(state.id, state);
-                            let _j = j;
-                            
-                            if(i === 0 && j === 0) {
-                                firstScarID = scar.id;
-                                firstStateID = state.id;
-                            }
-                        });
-                    });
-                    
-                    
-                    let mapObject = {stateMap: stateMap, scarMap: scarMap, firstScarID: firstScarID, firstStateID: firstStateID};
-                    this._stateStore.set(editionID, mapObject); 
-                    
-                    return Promise.resolve(mapObject);
-                });
-        }
-    }*/
-    
-    _setupMenu(containerID, activeStateIDs = [], mainStateID) {
-        return Promise.resolve(this._setupHtml(containerID)
-            .then(() => {
-                return Promise.resolve(this._getStateData(this._eohub.getEdition())
-                    .then(mapObject => {
-                        let scars = [...mapObject.scarMap.values()];
-                        let selectBox = document.getElementById(containerID + '_dropdown');
-                        selectBox.innerHTML = '';
-                        
-                        let scarToActivateIndex = -1;
-                        let scarToActivateID = (typeof mainStateID === 'string') ? mapObject.stateMap.get(mainStateID).scarID : mapObject.stateMap.get(activeStateIDs[0]).scarID;
-                        
-                        for(let i in scars) {
-                            let scar = scars[i];
-                            let option = document.createElement('option');
-                            option.innerHTML = scar.label + ' [' + scar.states.length + ' states]';
-                            selectBox.appendChild(option);
-                            if(scar.id === scarToActivateID) {
-                                scarToActivateIndex = i;
-                            }
-                        }
-                        
-                        if(scarToActivateIndex === -1) {
-                            console.log('[ERROR] Unable to find ' + scarToActivateID);
-                            return false;
-                        }
-                        
-                        let func = (e) => {
-                            let i = selectBox.selectedIndex;
-                            let scar = scars[i];
-                            
-                            let rows = 0;
-                            let stateArray = [];
-                            
-                            for(let j in scar.states) {
-                                let state = scar.states[j];
-                                
-                                //ignore states which are pure deletions
-                                if(!state.deletion) {
-                                    rows = (state.position > rows) ? state.position : rows;
-                                
-                                    if(rows > stateArray.length) {
-                                        let newArray = [];
-                                        stateArray.push(newArray);
-                                    }
-                                    stateArray[rows - 1].push(state); 
-                                }
-                            }
-                            
-                            //empty states from former scar
-                            let scarBox = document.getElementById(containerID + '_scarBox');
-                            scarBox.innerHTML = '';
-                            
-                            //add a single row for each simultaneous "step" 
-                            for(let n=0; n<rows; n++) {
-                                let rowBox = document.createElement('div');
-                                rowBox.classList.add('rowBox');
-                                
-                                //within each row, add corresponding states
-                                for(let m=0; m<stateArray[n].length; m++) {
-                                    let state = stateArray[n][m];
-                                    
-                                    let stateBox = document.createElement('div');
-                                    stateBox.classList.add('stateBox');
-                                    stateBox.setAttribute('data-stateid', state.id);
-                                    stateBox.id = containerID + '_' + state.id;
-                                    if(activeStateIDs.indexOf(state.id) !== -1) {
-                                        stateBox.classList.add('active');
-                                    }
-                                    if(mainStateID === state.id) {
-                                        stateBox.classList.add('current');
-                                    }
-                                    //todo: make this compatible with I18n
-                                    stateBox.innerHTML = 'Variante ' + state.label;
-                                    rowBox.appendChild(stateBox);
-                                    
-                                    let stateSelect = (event) => {
-                                        this.prepareStateRequest(state.id, containerID)
-                                            .then((request) => {
-                                                return Promise.resolve(this._eohub.sendSelfRequest(request, this));
-                                            });
-                                    };
-                                    stateBox.addEventListener('click', stateSelect);
-                                }
-                                
-                                scarBox.appendChild(rowBox);
-                            }
-                            
-                            //html zur navigation aufbauen
-                        };
-                        
-                        selectBox.addEventListener('change', func);
-                        selectBox.selectedIndex = scarToActivateIndex;
-                        func(null);
-                        
-                        return mapObject;
-                    }
-            
-                    )
-        
-                );
-            }));
-    }
-    
+    /* 
+     * gets default view
+     */
     getDefaultView(containerID) {
         
         //this._setupViewer(containerID);
@@ -267,6 +138,9 @@ const VideTranscriptionViewer = class VideTranscriptionViewer extends EoNavModul
         
     }
     
+    /* 
+     * sets up the viewer, or retrieves it from cache when available
+     */
     _setupViewer(containerID) {
         this._setupHtml(containerID);
         
@@ -292,167 +166,24 @@ const VideTranscriptionViewer = class VideTranscriptionViewer extends EoNavModul
                     //console.log('building new viewer')
                     let verovio = this._eohub.getVerovio();
                     
-                    this._getFinalState(editionID).then((finalState) => {
+                    console.log('------------------------------71')
+                    console.log(stateJson)
+                    console.log('Is there more than one scar? ' + stateJson.length === 1)
+                    
+                    if(stateJson.length > 1) {
+                        // do the old stuff
                         
-                        let svgString = verovio.renderData(finalState + '\n', this._verovioOptions);
-                        this._cache.set('finalState',svgString)
+                        this._setupMultiScarViewer(stateJson,measureJson,verovio,editionID,containerID,resolve)
+                         
+                    } else if(stateJson.length === 1) {
+                        // do the new stuff
+                        console.log('---------888')
+                        console.log(resolve)
+                        this._setupSingleScarViewer(stateJson,measureJson,verovio,editionID,containerID,resolve)
                         
-                        let svg = new DOMParser().parseFromString(svgString, "image/svg+xml");
-                        let baseDimensions = this._getVerovioDimensions(svg);
-                        
-                        this._baseDimensions.set(editionID,baseDimensions);
-                        
-                        /*console.log('dimensions: ' + width + ' / ' + height);
-                        console.log(document.getElementById(containerID + '_verovioBox'))*/
-                        
-                        //OSD viewer with all properties
-                        let viewer = OpenSeadragon({
-                            id: containerID + '_verovioBox',
-                            tileSources: {
-                                height: parseInt(baseDimensions.height,10),
-                                width:  parseInt(baseDimensions.width,10),
-                                tileSize: 1024,
-                                x: 0,
-                                y: 0,
-                                getTileUrl: function( level, x, y ){
-                                    //transparent png
-                                    return 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQAQMAAAAlPW0iAAAAA1BMVEX///+nxBvIAAAAAXRSTlMAQObYZgAAAAxJREFUCB1jYCANAAAAMAABhKzxegAAAABJRU5ErkJggg==';
-                                    //red: 
-                                    //return 'data:image/png;base64,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'
-                                }
-                            },
-                            sequenceMode: false,
-                            showReferenceStrip: true,
-                            showRotationControl: false,
-                            showNavigator: true,
-                            navigatorRotate: false,
-                            navigatorId: containerID + '_transcriptionNavigator',
-                            showFullPageControl: false,
-                            zoomInButton: containerID + '_zoomIn',
-                            zoomOutButton: containerID + '_zoomOut',
-                            homeButton: containerID + '_zoomHome',
-                            //rotateLeftButton: containerID + '_rotateLeft',
-                            //rotateRightButton: containerID + '_rotateRight',
-                            //toolbar: containerID + '_menubar',
-                            pixelsPerWheelLine: 60,
-                            // Enable touch rotation on tactile devices
-                            gestureSettingsTouch: {
-                                pinchRotate: true
-                            },
-                            gestureSettingsMouse: {
-                                clickToZoom: false,
-                                dblClickToZoom: true
-                            },
-                            collectionMode: true,
-                            collectionRows: 1, 
-                            collectionTileSize: 1200,
-                            collectionTileMargin: 0,
-                            
-                            visibilityRatio: 0.2,
-                            constrainDuringPan: true
-                            
-                        });
-                        
-                        //store viewer for later use
-                        this._cache.set(containerID + '_viewer', viewer)
-                        
-                        //log position of view when view changes
-                        viewer.addHandler('animation-finish',(event) => {
-                            let newState = {bounds: viewer.viewport.getBounds()};
-                            this._confirmView(containerID,newState);
-                        });
-                        
-                        viewer.addHandler('zoom',(event) => {
-                            let scaleRatioFix = 1 / viewer.viewport.getMaxZoom();
-                            /*console.log(event.zoom + ' – ' + viewer.viewport.getMaxZoom() + ' – ' + viewer.viewport.getMinZoom())
-                            console.log('zoomin to ' + (event.zoom * scaleRatioFix))*/
-                            let infos = document.querySelectorAll('#' + containerID + ' .scarInfoContent *');
-                            for (let info of infos) {
-                                info.style.transform = 'scale(' + (event.zoom * scaleRatioFix) + ')';
-                            }
-                        });
-                        
-                        // as soon as the Verovio output is rendered, add scars
-                        viewer.addOnceHandler('add-overlay',(event) => {
-                            
-                            let tiledImage = viewer.world.getItemAt(0);
-                            let i = 0;
-                            let j = stateJson.length;
-                            
-                            //insert scars
-                            for(i; i<j; i++) {
-                            
-                                
-                                let scar = stateJson[i]; 
-                                let firstMeasure = scar.firstMeasure;
-                                let firstState = scar.states[0];
-                                
-                                //rectangle used as background for textual scars
-                                //attention: positioning is broken 
-                                /*let scarRect = this._createRect(viewer,containerID, scar.affectedNotes);
-                                viewer.addOverlay({
-                                    id: containerID + '_' + scar.id,
-                                    className: 'scarHighlight',
-                                    location: scarRect,
-                                    checkResize: true
-                                });*/
-                                
-                                let p = 0;
-                                let q = scar.affectedNotes.length;
-                                
-                                for(p; p<q; p++) {
-                                    try {
-                                        let elem = document.querySelector('#' + containerID + ' #' + scar.affectedNotes[p]);
-                                        elem.classList.add('affectedByScar');
-                                        elem.addEventListener('click',(e) => {
-                                            
-                                            let req = {
-                                                id: firstState.id,
-                                                object: VIDE_PROTOCOL.OBJECT.STATE,
-                                                contexts: [],
-                                                perspective: this._supportedPerspective,
-                                                operation: VIDE_PROTOCOL.OPERATION.VIEW,
-                                                state: {}
-                                            };
-                                            this._eohub.sendSelfRequest(req,this,containerID);
-                                            
-                                        })
-                                    } catch(err) {
-                                        
-                                    }
-                                }
-                                
-                            }
-                            
-                            // jump to first measure
-                            this._focusShape(containerID,viewer,measureJson.measures[0].id);
-                            
-                        });
-                        
-                        //do internal setup after images are loaded
-                        viewer.addHandler('open', (event) => {
-                            
-                            let svgBox = document.createElement('div');
-                            svgBox.className = 'svgBox';
-                            svgBox.innerHTML= svgString;
-                            
-                            let bounds = viewer.world.getItemAt(0).getBounds();
-                            
-                            //place Verovio
-                            viewer.addOverlay({
-                                element: svgBox,
-                                y: bounds.y,
-                                x: bounds.x,
-                                width: bounds.width,
-                                height: bounds.height,
-                                checkResize: true,
-                                placement: 'TOP_LEFT'
-                            });
-                            
-                            resolve(viewer);
-                        });
-                        
-                    });
+                    } else {
+                        console.log('[ERROR] The edition ' + editionID + ' apparently has no textual scar, and thus cannot be displayed with the current version of vide-module-transcription-viewer.js.')
+                    }
                     
                 });
             
@@ -461,6 +192,219 @@ const VideTranscriptionViewer = class VideTranscriptionViewer extends EoNavModul
         });
     }
     
+    /* 
+     * render transcription with the last state of the work rendered as base text, and
+     * individual states above (mode is used when there is more than one scar available)
+     */
+    _setupMultiScarViewer(stateJson,measureJson,verovio,editionID, containerID,resolve) {
+        this._getFinalState(editionID).then((finalState) => {
+                        
+            let svgString = verovio.renderData(finalState + '\n', this._verovioOptions);
+            this._cache.set('finalState',svgString)
+            
+            let svg = new DOMParser().parseFromString(svgString, "image/svg+xml");
+            let baseDimensions = this._getVerovioDimensions(svg);
+            
+            this._baseDimensions.set(editionID,baseDimensions);
+            
+            /*console.log('dimensions: ' + width + ' / ' + height);
+            console.log(document.getElementById(containerID + '_verovioBox'))*/
+            
+            //OSD viewer with all properties
+            let viewer = OpenSeadragon(this._setOsdOptions(containerID, baseDimensions));
+            
+            //store viewer for later use
+            this._cache.set(containerID + '_viewer', viewer)
+            
+            //log position of view when view changes
+            viewer.addHandler('animation-finish',(event) => {
+                let newState = {bounds: viewer.viewport.getBounds()};
+                this._confirmView(containerID,newState);
+            });
+            
+            viewer.addHandler('zoom',(event) => {
+                let scaleRatioFix = 1 / viewer.viewport.getMaxZoom();
+                /*console.log(event.zoom + ' – ' + viewer.viewport.getMaxZoom() + ' – ' + viewer.viewport.getMinZoom())
+                console.log('zoomin to ' + (event.zoom * scaleRatioFix))*/
+                let infos = document.querySelectorAll('#' + containerID + ' .scarInfoContent *');
+                for (let info of infos) {
+                    info.style.transform = 'scale(' + (event.zoom * scaleRatioFix) + ')';
+                }
+            });
+            
+            // as soon as the Verovio output is rendered, add scars
+            viewer.addOnceHandler('add-overlay',(event) => {
+                
+                let tiledImage = viewer.world.getItemAt(0);
+                let i = 0;
+                let j = stateJson.length;
+                
+                //insert scars
+                for(i; i<j; i++) {
+                
+                    
+                    let scar = stateJson[i]; 
+                    let firstMeasure = scar.firstMeasure;
+                    let firstState = scar.states[0];
+                    
+                    //rectangle used as background for textual scars
+                    //attention: positioning is broken 
+                    /*let scarRect = this._createRect(viewer,containerID, scar.affectedNotes);
+                    viewer.addOverlay({
+                        id: containerID + '_' + scar.id,
+                        className: 'scarHighlight',
+                        location: scarRect,
+                        checkResize: true
+                    });*/
+                    
+                    let p = 0;
+                    let q = scar.affectedNotes.length;
+                    
+                    for(p; p<q; p++) {
+                        try {
+                            let elem = document.querySelector('#' + containerID + ' #' + scar.affectedNotes[p]);
+                            elem.classList.add('affectedByScar');
+                            elem.addEventListener('click',(e) => {
+                                
+                                let req = {
+                                    id: firstState.id,
+                                    object: VIDE_PROTOCOL.OBJECT.STATE,
+                                    contexts: [],
+                                    perspective: this._supportedPerspective,
+                                    operation: VIDE_PROTOCOL.OPERATION.VIEW,
+                                    state: {}
+                                };
+                                this._eohub.sendSelfRequest(req,this,containerID);
+                                
+                            })
+                        } catch(err) {
+                            
+                        }
+                    }
+                    
+                }
+                
+                // jump to first measure
+                this._focusShape(containerID,viewer,measureJson.measures[0].id);
+                
+            });
+            
+            //do internal setup after images are loaded
+            viewer.addHandler('open', (event) => {
+                
+                let svgBox = document.createElement('div');
+                svgBox.className = 'svgBox';
+                svgBox.innerHTML= svgString;
+                
+                let bounds = viewer.world.getItemAt(0).getBounds();
+                
+                //place Verovio
+                viewer.addOverlay({
+                    element: svgBox,
+                    y: bounds.y,
+                    x: bounds.x,
+                    width: bounds.width,
+                    height: bounds.height,
+                    checkResize: true,
+                    placement: 'TOP_LEFT'
+                });
+                
+                resolve(viewer);
+            });
+            
+        });
+        
+    }
+    
+    /* 
+     * render only one state of the text, with no base text below. Mode is used when there is only
+     * one textual scar. This means that there is no context shown. 
+     */
+    _setupSingleScarViewer(stateJson,measureJson,verovio,editionID,containerID,resolve) {
+        
+        let firstState = stateJson[0].states[0];
+        this._getStateAsMEI(editionID,firstState.id,[]).then((stateMEI) => {
+            
+            let svgString = verovio.renderData(stateMEI + '\n', this._verovioOptions);
+            this._cache.set('firstState',svgString)
+            
+            let svg = new DOMParser().parseFromString(svgString, "image/svg+xml");
+            let baseDimensions = this._getVerovioDimensions(svg);
+            this._baseDimensions.set(editionID,baseDimensions);
+            
+            /*console.log('dimensions: ' + width + ' / ' + height);
+            console.log(document.getElementById(containerID + '_verovioBox'))*/
+            
+            //OSD viewer with all properties
+            let viewer = OpenSeadragon(this._setOsdOptions(containerID, baseDimensions));
+            
+            //store viewer for later use
+            this._cache.set(containerID + '_viewer', viewer)
+            
+            this._setOsdHandlers(containerID, viewer, stateJson, svgString, resolve, 'singleScar');
+        });       
+    }
+    
+    //sets all handlers required in OpenSeadragon. Called from _setupSingleScarViewer (and _setupMultiScarViewer)
+    _setOsdHandlers(containerID, viewer, stateJson, svg, resolveFunc, mode = 'multiScar') {
+        
+        if(mode !== 'multiScar' && mode !== 'singleScar') {
+            resolveFunc(viewer);
+            return false;
+        }
+        
+        //log position of view when view changes
+        viewer.addHandler('animation-finish',(event) => {
+            let newState = {bounds: viewer.viewport.getBounds()};
+            this._confirmView(containerID,newState);
+        });
+        
+        viewer.addHandler('zoom',(event) => {
+            let scaleRatioFix = 1 / viewer.viewport.getMaxZoom();
+            /*console.log(event.zoom + ' – ' + viewer.viewport.getMaxZoom() + ' – ' + viewer.viewport.getMinZoom())
+            console.log('zoomin to ' + (event.zoom * scaleRatioFix))*/
+            let infos = document.querySelectorAll('#' + containerID + ' .scarInfoContent *');
+            for (let info of infos) {
+                info.style.transform = 'scale(' + (event.zoom * scaleRatioFix) + ')';
+            }
+        });
+        
+        // as soon as the Verovio output is rendered, add scars
+        viewer.addOnceHandler('add-overlay',(event) => {
+            
+            // jump to first measure
+            this._focusShape(containerID,viewer,stateJson[0].firstMeasure);
+            
+        });
+        
+        //do internal setup after images are loaded
+        viewer.addHandler('open', (event) => {
+            
+            let svgBox = document.createElement('div');
+            svgBox.className = 'svgBox';
+            svgBox.innerHTML= svg;
+            
+            let bounds = viewer.world.getItemAt(0).getBounds();
+            
+            //place Verovio
+            viewer.addOverlay({
+                element: svgBox,
+                y: bounds.y,
+                x: bounds.x,
+                width: bounds.width,
+                height: bounds.height,
+                checkResize: true,
+                placement: 'TOP_LEFT'
+            });
+            
+            resolveFunc(viewer);
+        });
+        
+    }
+    
+    /* 
+     * main function
+     */
     handleRequest(containerID,request,state = {}) {
         
         if(request.perspective !== this._supportedPerspective) {
@@ -508,7 +452,7 @@ const VideTranscriptionViewer = class VideTranscriptionViewer extends EoNavModul
                 
             } else if(type === 'default') {
                 
-                //console.log('[DEBUG] default transcription loaded at ' + containerID);
+                console.log('[DEBUG] default transcription loaded at ' + containerID);
                 //todo: have more complex object
                 //this._confirmView(containerID,{});
                 
@@ -551,35 +495,14 @@ const VideTranscriptionViewer = class VideTranscriptionViewer extends EoNavModul
                     }
                     
                     this._openSingleScar(containerID,scar.id,request.id,activeStates);
-                    console.log('---------------------------------------------------')
-                    console.log('---------------------------------------------------')
-                    console.log('---------------------------------------------------')
-                    this._renderState(containerID,scar,viewer,request.id,activeStates);
                     
-                    /*i=0; 
-                    let currentHandled = false;
                     
-                    for(i;i<activeStates.length;i++) {
+                    
+                    //state needs to be rendered only if there is more than one scar
+                    if(stateJson.length > 1) {
                         
-                        let stateObj = scar.states.find((obj) => {
-                            return obj.id === activeStates[i]; 
-                        });
-                        
-                        if(stateObj.id !== request.id) {
-                            this._highlightState(stateObj, containerID, viewer,'active')
-                        } else {
-                            currentHandled = true;
-                            this._highlightState(stateObj, containerID, viewer,'current')
-                        }
+                        this._renderState(containerID,scar,viewer,request.id,activeStates);    
                     }
-                    
-                    if(!currentHandled) {
-                        let stateObj = scar.states.find((obj) => {
-                            return obj.id === request.id; 
-                        });
-                        this._highlightState(stateObj, containerID, viewer,'current')
-                    }*/
-                    
                     
                 });
                 
@@ -588,104 +511,10 @@ const VideTranscriptionViewer = class VideTranscriptionViewer extends EoNavModul
             }
             
         });
-        
-        /*return Promise.resolve(
-            this._setupMenu(containerID, activeStateIDs, mainStateID)
-                .then((mapObject) => {
-                //prepare url
-                    let mainState = (mainStateID !== null) ? mainStateID : activeStateIDs[activeStateIDs.length -1];
-                
-                    let requiredStateIDs = this._getRequiredStates(mapObject.stateMap.get(mainState), mapObject.stateMap, []);
-                    let futureStateIDs = this._getFutureStates(mapObject.stateMap.get(mainState), mapObject.stateMap, []);
-                                
-                    let requestableStateIDs = requiredStateIDs.slice(0);
-                
-                    for(let i=0; i<activeStateIDs.length; i++) {
-                    //it's neither included already, nor folowing the current state
-                        if(requestableStateIDs.indexOf(activeStateIDs[i]) === -1 && futureStateIDs.indexOf(activeStateIDs[i] === -1)) {
-                            requestableStateIDs.push(activeStateIDs[i]);
-                        }   
-                    }
-                
-                    for(let i=0; i>requestableStateIDs; i++) {
-                        try {
-                            document.querySelector('#' + containerID + ' div.stateBox[data-stateid~="' + requestableStateIDs[i] + '"]').classList.add('active');   
-                        } catch(err) {
-                            console.log('[WARNING] Unable to highlight button for state ' + requestableStateIDs[i]);
-                        }
-                    }
-                
-                    let otherStates = (requestableStateIDs.length > 0) ? requestableStateIDs.join('___') : '_'; 
-                
-                    let responseType = 'text';
-                    let url = this._getBaseURI() + 'edition/' + this._eohub.getEdition() + '/state/' + mainState + '/otherStates/' + otherStates + '/meiSnippet.xml';
-                
-                //if requested states are already displayed, skip loading fresh MEI and rendering by Verovio
-                    if(this._currentRendering.has(containerID) && this._currentRendering.get(containerID) === url) {
-                        let svg = document.querySelector('#' + containerID + ' svg');
-                        let existingHighlights = svg.querySelectorAll('.highlight');
-                        for (let existingHighlight of existingHighlights) {
-                            existingHighlight.classList.remove('highlight');
-                        }
-                        return Promise.resolve(svg);
-                    } else {
-                        let dataRequest = new DataRequest(responseType, url);
-                        return this._eohub.requestData(dataRequest, containerID).then(
-                        (mei) => {
-                            return this._prepareRendering(mei, containerID);
-                        }
-                    );
-                    }
-                })
-                .then((svg) => {
-                //check if something needs to be highlighted 
-                    if(request.getObjectType() !== VIDE_PROTOCOL.OBJECT.STATE) {
-                        let targets = document.querySelectorAll('#' + containerID + ' svg #' + request.getObjectID());
-                        for (let target of targets) {
-                            target.classList.add('highlight');
-                        }
-                    }
-                
-                    if(request.getObjectType() !== VIDE_PROTOCOL.OBJECT.STATE && request.getObjectType() !== VIDE_PROTOCOL.OBJECT.NOTATION) {
-                        console.log('[WARNING] No support for handling ' + request.getObjectType() + ' in videTranscriptionViewer.js yet.');
-                    }
-                
-                    return Promise.resolve(true);
-                }));*/
+    
     }
-    
-    //is this still used? 
-    /*highlightItem(viewer,containerID, shapesArray) {
-    
-        if(shapesArray.length === 0) {
-            console.log('[WARNING] no shapes provided that could be focussed on')
-        }
-    
-        let oldHighlights = document.querySelectorAll('#' + containerID + ' .active, #' + +containerID + ' .current');
-        for (let shape of oldHighlights) {
-            shape.classList.remove('current');
-        }
         
-        if(shapesArray.length === 0) {
-            return false;
-        }
-        
-        let baseRect = this._getShapeRect(containerID, viewer, document.querySelector('#' + containerID + ' #' + shapesArray[0]));
-        
-        for(let i=0; i<shapesArray.length; i++) {
-            let shape = document.querySelector('#' + containerID + ' #' + shapesArray[i]);
-            try {
-                shape.classList.add('current');
-                let rect = this._getShapeRect(containerID, viewer, shape);
-                baseRect = baseRect.union(rect);  
-            } catch(error) {
-                console.log('[ERROR] invalid shape ' + shapesArray[i] + ': ' + error);
-            } 
-        }
-        viewer.viewport.fitBoundsWithConstraints(baseRect);
-    }*/
-    
-    _renderState(containerID,scar,viewer,stateID,activeStates = []) {
+    _renderState(containerID, scar, viewer, stateID, activeStates = []) {
         
         console.log('RENDERING STATE ' + stateID)
         
@@ -722,7 +551,6 @@ const VideTranscriptionViewer = class VideTranscriptionViewer extends EoNavModul
                 
                 try {
                     
-                    
                     //place Label
                     /*viewer.addOverlay({
                         id: containerID + '_' + scar.id,
@@ -733,7 +561,6 @@ const VideTranscriptionViewer = class VideTranscriptionViewer extends EoNavModul
                         placement: 'BOTTOM_RIGHT',
                         checkResize: true
                     });*/
-                    
                     
                     //generate HTML container for Verovio
                     console.log('--------22') 
@@ -800,31 +627,6 @@ const VideTranscriptionViewer = class VideTranscriptionViewer extends EoNavModul
         }
     }
     
-    _getShapeRect(containerID, viewer, input) {
-        //decide if I have an ID or the element itself already
-        
-        let elem;
-        if(typeof input === 'string') {
-            input = input.replace(/#/, '');
-            elem = document.querySelector('#' + containerID + ' #' + input);
-        } else if(typeof input === 'object') {
-            elem = input;
-        } else {
-            console.log('[ERROR] problem with input of type ' + (typeof input));
-            console.log(input);
-            return null;
-        }
-        
-        let windowRect = elem.getBoundingClientRect();
-                                    
-        let ul = viewer.viewport.windowToViewportCoordinates(new OpenSeadragon.Point(windowRect.left, windowRect.top));
-        let lr = viewer.viewport.windowToViewportCoordinates(new OpenSeadragon.Point(windowRect.right, windowRect.bottom));
-        
-        let rect = new OpenSeadragon.Rect(ul.x, ul.y, lr.x - ul.x, lr.y - ul.y);
-        
-        return rect;
-    }
-    
     prepareStateRequest(stateID, containerID) {
         console.log('prepareStateRequest(' + stateID + ',' + containerID+')');
         
@@ -835,11 +637,6 @@ const VideTranscriptionViewer = class VideTranscriptionViewer extends EoNavModul
                 let state = mapObject.stateMap.get(stateID);
                 let requiredStates = this._getRequiredStates(state, mapObject.stateMap, []);
                 let futureStates = this._getFutureStates(state, mapObject.stateMap, []);
-                
-                console.log('-------------------------56');
-                console.log(state);
-                console.log(requiredStates);
-                console.log(futureStates);
                 
                 let requestedStates = requiredStates.slice(0);
                 
@@ -1058,6 +855,13 @@ const VideTranscriptionViewer = class VideTranscriptionViewer extends EoNavModul
             return false;
         }
         
+        //no element could be found
+        if(elem === null) {
+            console.log('[ERROR] problem with input of type ' + (typeof input));
+            console.log(input);
+            return false;
+        }
+        
         try {
             
             /* 
@@ -1088,6 +892,56 @@ const VideTranscriptionViewer = class VideTranscriptionViewer extends EoNavModul
         }
         
     }
+    
+    _setOsdOptions(containerID, baseDimensions) {
+        
+        return {
+            id: containerID + '_verovioBox',
+            tileSources: {
+                height: parseInt(baseDimensions.height,10),
+                width:  parseInt(baseDimensions.width,10),
+                tileSize: 1024,
+                x: 0,
+                y: 0,
+                getTileUrl: function( level, x, y ){
+                    //transparent png
+                    return 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQAQMAAAAlPW0iAAAAA1BMVEX///+nxBvIAAAAAXRSTlMAQObYZgAAAAxJREFUCB1jYCANAAAAMAABhKzxegAAAABJRU5ErkJggg==';
+                    //red: 
+                    //return 'data:image/png;base64,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'
+                }
+            },
+            sequenceMode: false,
+            showReferenceStrip: true,
+            showRotationControl: false,
+            showNavigator: true,
+            navigatorRotate: false,
+            navigatorId: containerID + '_transcriptionNavigator',
+            showFullPageControl: false,
+            zoomInButton: containerID + '_zoomIn',
+            zoomOutButton: containerID + '_zoomOut',
+            homeButton: containerID + '_zoomHome',
+            //rotateLeftButton: containerID + '_rotateLeft',
+            //rotateRightButton: containerID + '_rotateRight',
+            //toolbar: containerID + '_menubar',
+            pixelsPerWheelLine: 60,
+            // Enable touch rotation on tactile devices
+            gestureSettingsTouch: {
+                pinchRotate: true
+            },
+            gestureSettingsMouse: {
+                clickToZoom: false,
+                dblClickToZoom: true
+            },
+            collectionMode: true,
+            collectionRows: 1, 
+            collectionTileSize: 1200,
+            collectionTileMargin: 0,
+            
+            visibilityRatio: 0.2,
+            constrainDuringPan: true        
+        }
+        
+    } 
     
     /*
     

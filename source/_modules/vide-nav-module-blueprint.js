@@ -51,7 +51,7 @@ const EoNavModule = class EoNavModule extends EoModule {
     
         let navOverlay = document.createElement('div');
         navOverlay.id = containerID + '_navOverlay';
-        navOverlay.className = 'navOverlay';
+        navOverlay.className = 'navOverlay overview';
         
         let statenav = document.createElement('div');
         statenav.id = containerID + '_stateNavigation';
@@ -554,6 +554,7 @@ const EoNavModule = class EoNavModule extends EoModule {
     
     _openSingleScar(containerID, scarId, currentState = '', activeStates = []) {
         let editionID = this._eohub.getEdition();
+        this._highlightScarForNav(containerID, scarId);
         this._getStateData(editionID).then((stateJson) => {
             let scarObj = stateJson.find((elem) => {
                 return elem.id === scarId;
@@ -562,6 +563,8 @@ const EoNavModule = class EoNavModule extends EoModule {
             this._setupStatesNav(containerID, scarObj, currentState, activeStates);
             
             try {
+                document.querySelector('#' + containerID + ' .navOverlay').classList.add('scarOpen')
+                document.querySelector('#' + containerID + ' .navOverlay').classList.remove('overview')
                 document.querySelector('#' + containerID + '_scarLabel .openScarBtnLabel').style.display = 'none';
                 document.querySelector('#' + containerID + '_scarLabel .itemCount').style.display = 'none';    
             } catch(err) {
@@ -580,6 +583,8 @@ const EoNavModule = class EoNavModule extends EoModule {
         document.getElementById(containerID + '_statesBox').style.visibility = 'hidden';
         
         try {
+            document.querySelector('#' + containerID + ' .navOverlay').classList.remove('scarOpen')
+            document.querySelector('#' + containerID + ' .navOverlay').classList.add('overview')
             document.querySelector('#' + containerID + '_scarLabel .openScarBtnLabel').style.display = 'inline';
             document.querySelector('#' + containerID + '_scarLabel .itemCount').style.display = 'inline';   
         } catch(err) {
