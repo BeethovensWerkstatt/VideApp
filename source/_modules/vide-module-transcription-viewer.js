@@ -166,21 +166,11 @@ const VideTranscriptionViewer = class VideTranscriptionViewer extends EoNavModul
                     //console.log('building new viewer')
                     let verovio = this._eohub.getVerovio();
                     
-                    console.log('------------------------------71')
-                    console.log(stateJson)
-                    console.log('Is there more than one scar? ' + stateJson.length === 1)
-                    
+                    //set things up as required –> if there's just one scar, use a special mode for that
                     if(stateJson.length > 1) {
-                        // do the old stuff
-                        
                         this._setupMultiScarViewer(stateJson,measureJson,verovio,editionID,containerID,resolve)
-                         
                     } else if(stateJson.length === 1) {
-                        // do the new stuff
-                        console.log('---------888')
-                        console.log(resolve)
                         this._setupSingleScarViewer(stateJson,measureJson,verovio,editionID,containerID,resolve)
-                        
                     } else {
                         console.log('[ERROR] The edition ' + editionID + ' apparently has no textual scar, and thus cannot be displayed with the current version of vide-module-transcription-viewer.js.')
                     }
@@ -216,101 +206,8 @@ const VideTranscriptionViewer = class VideTranscriptionViewer extends EoNavModul
             //store viewer for later use
             this._cache.set(containerID + '_viewer', viewer)
             
-            //log position of view when view changes
-            viewer.addHandler('animation-finish',(event) => {
-                let newState = {bounds: viewer.viewport.getBounds()};
-                this._confirmView(containerID,newState);
-            });
-            
-            viewer.addHandler('zoom',(event) => {
-                let scaleRatioFix = 1 / viewer.viewport.getMaxZoom();
-                /*console.log(event.zoom + ' – ' + viewer.viewport.getMaxZoom() + ' – ' + viewer.viewport.getMinZoom())
-                console.log('zoomin to ' + (event.zoom * scaleRatioFix))*/
-                let infos = document.querySelectorAll('#' + containerID + ' .scarInfoContent *');
-                for (let info of infos) {
-                    info.style.transform = 'scale(' + (event.zoom * scaleRatioFix) + ')';
-                }
-            });
-            
-            // as soon as the Verovio output is rendered, add scars
-            viewer.addOnceHandler('add-overlay',(event) => {
-                
-                let tiledImage = viewer.world.getItemAt(0);
-                let i = 0;
-                let j = stateJson.length;
-                
-                //insert scars
-                for(i; i<j; i++) {
-                
-                    
-                    let scar = stateJson[i]; 
-                    let firstMeasure = scar.firstMeasure;
-                    let firstState = scar.states[0];
-                    
-                    //rectangle used as background for textual scars
-                    //attention: positioning is broken 
-                    /*let scarRect = this._createRect(viewer,containerID, scar.affectedNotes);
-                    viewer.addOverlay({
-                        id: containerID + '_' + scar.id,
-                        className: 'scarHighlight',
-                        location: scarRect,
-                        checkResize: true
-                    });*/
-                    
-                    let p = 0;
-                    let q = scar.affectedNotes.length;
-                    
-                    for(p; p<q; p++) {
-                        try {
-                            let elem = document.querySelector('#' + containerID + ' #' + scar.affectedNotes[p]);
-                            elem.classList.add('affectedByScar');
-                            elem.addEventListener('click',(e) => {
-                                
-                                let req = {
-                                    id: firstState.id,
-                                    object: VIDE_PROTOCOL.OBJECT.STATE,
-                                    contexts: [],
-                                    perspective: this._supportedPerspective,
-                                    operation: VIDE_PROTOCOL.OPERATION.VIEW,
-                                    state: {}
-                                };
-                                this._eohub.sendSelfRequest(req,this,containerID);
-                                
-                            })
-                        } catch(err) {
-                            
-                        }
-                    }
-                    
-                }
-                
-                // jump to first measure
-                this._focusShape(containerID,viewer,measureJson.measures[0].id);
-                
-            });
-            
-            //do internal setup after images are loaded
-            viewer.addHandler('open', (event) => {
-                
-                let svgBox = document.createElement('div');
-                svgBox.className = 'svgBox';
-                svgBox.innerHTML= svgString;
-                
-                let bounds = viewer.world.getItemAt(0).getBounds();
-                
-                //place Verovio
-                viewer.addOverlay({
-                    element: svgBox,
-                    y: bounds.y,
-                    x: bounds.x,
-                    width: bounds.width,
-                    height: bounds.height,
-                    checkResize: true,
-                    placement: 'TOP_LEFT'
-                });
-                
-                resolve(viewer);
-            });
+            //add required handlers
+            this._setOsdHandlers(containerID, viewer, stateJson, svgString, resolve, 'multiScar');
             
         });
         
@@ -341,6 +238,7 @@ const VideTranscriptionViewer = class VideTranscriptionViewer extends EoNavModul
             //store viewer for later use
             this._cache.set(containerID + '_viewer', viewer)
             
+            //add required handlers
             this._setOsdHandlers(containerID, viewer, stateJson, svgString, resolve, 'singleScar');
         });       
     }
@@ -372,6 +270,59 @@ const VideTranscriptionViewer = class VideTranscriptionViewer extends EoNavModul
         // as soon as the Verovio output is rendered, add scars
         viewer.addOnceHandler('add-overlay',(event) => {
             
+            //add the following listeners only if required
+            if(mode === 'multiScar') {
+                
+                let tiledImage = viewer.world.getItemAt(0);
+                let i = 0;
+                let j = stateJson.length;
+                
+                //insert scars
+                for(i; i<j; i++) {
+                
+                    
+                    let scar = stateJson[i]; 
+                    let firstMeasure = scar.firstMeasure;
+                    let firstState = scar.states[0];
+                    
+                    //rectangle used as background for textual scars
+                    //attention: positioning is broken 
+                    let scarRect = this._createRect(viewer,containerID, scar.affectedNotes);
+                    viewer.addOverlay({
+                        id: containerID + '_' + scar.id,
+                        className: 'scarHighlight',
+                        location: scarRect,
+                        checkResize: true
+                    });
+                    
+                    let p = 0;
+                    let q = scar.affectedNotes.length;
+                    
+                    for(p; p<q; p++) {
+                        try {
+                            let elem = document.querySelector('#' + containerID + ' #' + scar.affectedNotes[p]);
+                            elem.classList.add('affectedByScar');
+                            elem.addEventListener('click',(e) => {
+                                
+                                let req = {
+                                    id: firstState.id,
+                                    object: VIDE_PROTOCOL.OBJECT.STATE,
+                                    contexts: [],
+                                    perspective: this._supportedPerspective,
+                                    operation: VIDE_PROTOCOL.OPERATION.VIEW,
+                                    state: {}
+                                };
+                                this._eohub.sendSelfRequest(req,this,containerID);
+                                
+                            })
+                        } catch(err) {
+                            
+                        }
+                    }
+                    
+                }    
+            }
+            
             // jump to first measure
             this._focusShape(containerID,viewer,stateJson[0].firstMeasure);
             
@@ -398,6 +349,7 @@ const VideTranscriptionViewer = class VideTranscriptionViewer extends EoNavModul
             });
             
             resolveFunc(viewer);
+            
         });
         
     }
