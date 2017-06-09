@@ -370,8 +370,39 @@ const VideTranscriptionViewer = class VideTranscriptionViewer extends EoNavModul
                         }
                     }
                     
+                    
+                    
                 }    
+            
+                
+                //add contextMenu listeners for base text only
+                let notes = document.querySelectorAll('#' + containerID + ' g.note, #' + containerID + ' g.rest');
+                let notesArray = [...notes];
+                
+                let onClick = (e) => {
+                    let note = e.currentTarget;
+                    this._clickNote(containerID, viewer, note, e);
+                    e.preventDefault(); 
+                };
+                
+                notesArray.forEach(function(elem, i) {
+                    elem.addEventListener('click',onClick,false)
+                });
             }
+            
+            /*//handler for svg shapes being clicked
+            let onClick = (e) => {
+                let shape = e.target;
+                this._clickShape(containerID, viewer, shape, e);
+                e.preventDefault(); 
+            };
+            let paths = svgBox.querySelectorAll('path');
+            
+            //adding the handler to each svg shape
+            for(let x=0; x < paths.length; x++) {
+                let path = paths[x];
+                path.addEventListener('click', onClick, false);
+            }*/
             
             // jump to first measure
             this._focusShape(containerID,viewer,stateJson[0].firstMeasure);
@@ -717,7 +748,7 @@ const VideTranscriptionViewer = class VideTranscriptionViewer extends EoNavModul
         
         return newArray;
     }
-    
+    /*
     _prepareRendering(mei, containerID) {
         let _this = this;
         
@@ -777,7 +808,7 @@ const VideTranscriptionViewer = class VideTranscriptionViewer extends EoNavModul
             
         return Promise.resolve(svg);
     }
-    
+    */
     _getVerovioDimensions(renderedSvg) {
         try {
             let viewBoxHeight = parseInt(renderedSvg.querySelector('svg#definition-scale').getAttribute('viewBox').split(' ')[3],10)
@@ -807,6 +838,77 @@ const VideTranscriptionViewer = class VideTranscriptionViewer extends EoNavModul
             }
         }
         
+    }
+    
+    //listener that triggers the context menu
+    _clickNote(containerID, viewer, note, e) {
+        let supportedRequests = this._eohub.getSupportedRequests();
+        let requests = [];
+        let filteredRequests = supportedRequests.filter((request) => {
+            return (request.object === VIDE_PROTOCOL.OBJECT.NOTATION && request.perspective !== this._supportedPerspective);
+        });
+        
+        filteredRequests.forEach((request, j) => {
+            let req = Object.assign({}, request);
+            req.id = note.id;
+            requests.push(req);
+        });
+        
+        let closeFunc = () => {
+            console.log('nothing happened')
+        };
+        try {
+            this._eohub._viewManager.setContextMenu(requests, e, containerID, closeFunc);    
+        } catch(err) {
+            console.log('[ERROR] Unable to open context menu: ' + err);
+        }
+        
+        
+        /*this.requestData(shapeReq,false)
+            .then(
+                (json) => {
+                    
+                    let elem = json[0];
+                    
+                    let requests = [];
+                    let filteredRequests = supportedRequests.filter((request) => {
+                        return (request.object === elem.type && request.perspective !== this._supportedPerspective);
+                    }); 
+                    
+                    filteredRequests.forEach((request, j) => {
+                        let req = Object.assign({}, request);
+                        req.id = elem.id;
+                        if(request.perspective === VIDE_PROTOCOL.PERSPECTIVE.TRANSCRIPTION) {
+                            let states = elem.states.filter(function(state){
+                                return state.type !== 'del';
+                            });
+                            
+                            for(let k=0; k<states.length; k++) {
+                                let reqCopy = {
+                                    object: req.object, 
+                                    id: req.id,
+                                    operation: req.operation,
+                                    perspective: req.perspective,
+                                    contexts: [{id: states[k].id, context:VIDE_PROTOCOL.CONTEXT.STATE}]
+                                };
+                                
+                                requests.push(reqCopy);
+                            }
+                        } else {
+                            requests.push(req);
+                        }
+                    });
+                    
+                    let closeFunc = () => {
+                        this._focusShape(containerID, viewer, shape);
+                    };
+                    try {
+                        this._eohub._viewManager.setContextMenu(requests, event, containerID, closeFunc);    
+                    } catch(err) {
+                        console.log('[ERROR] Unable to open context menu: ' + err);
+                    }
+                }
+            );*/
     }
     
     _createRect(viewer,containerID, shapesArray) {
