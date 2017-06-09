@@ -42,12 +42,14 @@
         .scarHighlight {
             background-color: $spotColor;
             opacity: .2;
+            cursor: pointer;
+            border-radius: 3px;
         }
         
         .affectedByScar {
             fill: $spotColor;
             stroke: $spotColor;
-            cursor:pointer;
+            /*cursor:pointer;*/
         }
         
         .scarInfo {
@@ -96,6 +98,16 @@
             }
         }
         
+    }
+    
+    .navOverlay {
+        .invarianceBtn {
+            position: absolute;
+            top: 6px;
+            right: 45px;
+            cursor: pointer;
+            font-size: 90%;
+        }
     }
     
     .navOverlay.scarOpen .transcriptionNavContainer {

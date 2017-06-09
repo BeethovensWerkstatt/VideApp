@@ -96,6 +96,13 @@ const VideTranscriptionViewer = class VideTranscriptionViewer extends EoNavModul
         
         this._setupNavHtml(containerID);
         
+        let invarianceBtn = document.createElement('div');
+        invarianceBtn.id = containerID + '_activateInvariance';
+        invarianceBtn.className = 'invarianceBtn toggleBtn';
+        invarianceBtn.innerHTML = '<i class="fa fa-random fa-rotate-90" aria-hidden="true"></i>';
+        
+        document.getElementById( containerID + '_navOverlay').appendChild(invarianceBtn);
+        
         let scarBox = document.getElementById(containerID + '_stateNavigation');
         
         let transcriptionNavContainer = document.createElement('div');
@@ -149,20 +156,27 @@ const VideTranscriptionViewer = class VideTranscriptionViewer extends EoNavModul
         let stateDataPromise = this._getStateData(editionID);
         let measureDataPromise = this._getMeasureData(editionID);
         
-        let t0 = performance.now();
+        //let t0 = performance.now();
         return Promise.all([stateDataPromise,measureDataPromise]).then((results) => {
             //let finalState = results[0];
             let stateJson = results[0];
             let measureJson = results[1];
             
-            let t1 = performance.now();
-            console.log('[DEBUG] setupViewer took ' + (t1 - t0) + ' millisecs');
+            //let t1 = performance.now();
+            //console.log('[DEBUG] setupViewer took ' + (t1 - t0) + ' millisecs');
                 
             if(this._cache.has(containerID + '_viewer')) {
                 //console.log('getting viewer from cache')
                 return Promise.resolve(this._cache.get(containerID + '_viewer'))
             } else {
                 return new Promise((resolve, reject) => {
+                    
+                    //set up listener for invariance mode
+                    document.getElementById(containerID + '_activateInvariance').addEventListener('click',(e)=> {
+                        console.log('clicked on invariance activator');
+                        //todo from here on
+                    });
+                    
                     //console.log('building new viewer')
                     let verovio = this._eohub.getVerovio();
                     
@@ -270,7 +284,7 @@ const VideTranscriptionViewer = class VideTranscriptionViewer extends EoNavModul
         // as soon as the Verovio output is rendered, add scars
         viewer.addOnceHandler('add-overlay',(event) => {
             
-            //add the following listeners only if required
+            //add boxes around scars when in multiScar mode
             if(mode === 'multiScar') {
                 
                 let tiledImage = viewer.world.getItemAt(0);
@@ -287,13 +301,49 @@ const VideTranscriptionViewer = class VideTranscriptionViewer extends EoNavModul
                     
                     //rectangle used as background for textual scars
                     //attention: positioning is broken 
-                    let scarRect = this._createRect(viewer,containerID, scar.affectedNotes);
-                    viewer.addOverlay({
-                        id: containerID + '_' + scar.id,
-                        className: 'scarHighlight',
-                        location: scarRect,
-                        checkResize: true
-                    });
+                    
+                    window.setTimeout(() => {
+                        let scarRect = this._createRect(viewer,containerID, scar.affectedNotes);
+                        
+                        if(typeof scarRect === 'undefined') {
+                            //console.log('--------------66 lacking scarRect for ' + scar.label)
+                            
+                            let baseDimensions = this._baseDimensions.get(this._eohub.getEdition());
+                            
+                            let attachmentMeasureRect = document.querySelector('#' + containerID + ' svg #' +scar.firstMeasure).getBoundingClientRect();
+                
+                            let ul = viewer.viewport.windowToViewportCoordinates(new OpenSeadragon.Point(attachmentMeasureRect.left, attachmentMeasureRect.top));
+                            let lr = viewer.viewport.windowToViewportCoordinates(new OpenSeadragon.Point(attachmentMeasureRect.right, attachmentMeasureRect.bottom));
+                            
+                            let height = lr.y - ul.y;
+                            let dist = height * baseDimensions.relation;
+                            
+                            scarRect = new OpenSeadragon.Rect(ul.x - dist, ul.y, dist * 2, height);
+                                    
+                        }
+                        
+                        let elem = document.createElement('div');
+                        elem.className = 'scarHighlight';
+                        elem.id = containerID + '_' + scar.id;
+                        elem.addEventListener('click',(e) => {
+                            let req = {
+                                id: firstState.id,
+                                object: VIDE_PROTOCOL.OBJECT.STATE,
+                                contexts: [],
+                                perspective: this._supportedPerspective,
+                                operation: VIDE_PROTOCOL.OPERATION.VIEW,
+                                state: {}
+                            };
+                            this._eohub.sendSelfRequest(req,this,containerID);
+                        });
+                        
+                        viewer.addOverlay({
+                            element: elem,
+                            location: scarRect,
+                            checkResize: true
+                        });
+                    }, 1000)
+                    
                     
                     let p = 0;
                     let q = scar.affectedNotes.length;
@@ -302,7 +352,7 @@ const VideTranscriptionViewer = class VideTranscriptionViewer extends EoNavModul
                         try {
                             let elem = document.querySelector('#' + containerID + ' #' + scar.affectedNotes[p]);
                             elem.classList.add('affectedByScar');
-                            elem.addEventListener('click',(e) => {
+                            /*elem.addEventListener('click',(e) => {
                                 
                                 let req = {
                                     id: firstState.id,
@@ -314,7 +364,7 @@ const VideTranscriptionViewer = class VideTranscriptionViewer extends EoNavModul
                                 };
                                 this._eohub.sendSelfRequest(req,this,containerID);
                                 
-                            })
+                            })*/
                         } catch(err) {
                             
                         }
@@ -468,15 +518,28 @@ const VideTranscriptionViewer = class VideTranscriptionViewer extends EoNavModul
         
     _renderState(containerID, scar, viewer, stateID, activeStates = []) {
         
-        console.log('RENDERING STATE ' + stateID)
-        
         try {
-            console.log('starting')
             let editionID = this._eohub.getEdition();
             
             //first state
             this._getStateAsMEI(editionID,stateID,activeStates).then((stateMEI) => {
-                console.log('--------21')
+                
+                //get rid of old rendering (if any)
+                try {
+            
+                    let list = document.querySelectorAll('#' + containerID + '_currentState');
+                    /*console.log('removing ' + list.length + ' overlay(s)')
+                    console.log(list);
+                    */
+                    for (let item of list) {
+                        viewer.removeOverlay(containerID + '_currentState');
+                        //console.log(item);
+                        item.parentNode.removeChild(elem);
+                    }
+                } catch(err) {
+                    //console.log('[INFO] There is no overlay to be removed: ' + err)
+                }
+                
                 //the OSD dimensions of the base layer
                 let allBounds = viewer.world.getItemAt(0).getBounds();
                 
@@ -487,14 +550,20 @@ const VideTranscriptionViewer = class VideTranscriptionViewer extends EoNavModul
                 
                 //determine dimensions
                 let dimensions = this._getVerovioDimensions(stateSvg);
+                
+                //if the state is "empty", it automatically gets a relation property of -1
+                //so if relation is -1, there's really nothing to render…
+                if(dimensions.relation === -1) {
+                    console.log('[DEBUG] Keep going, there is nothing to see here for state ' + stateID);
+                    return false;
+                }
+                
                 let baseDimensions = this._baseDimensions.get(editionID);
                                                     
                 let attachmentMeasureRect = document.querySelector('#' + containerID + ' svg #' +scar.firstMeasure).getBoundingClientRect();
                 
                 let ul = viewer.viewport.windowToViewportCoordinates(new OpenSeadragon.Point(attachmentMeasureRect.left, attachmentMeasureRect.top));
                 let lr = viewer.viewport.windowToViewportCoordinates(new OpenSeadragon.Point(attachmentMeasureRect.right, attachmentMeasureRect.bottom));
-                
-                let rect = new OpenSeadragon.Rect(ul.x, ul.y, lr.x - ul.x, lr.y - ul.y);
                 
                 let dist = allBounds.height / (baseDimensions.viewBoxHeight / baseDimensions.staffHeight);
                 
@@ -515,20 +584,6 @@ const VideTranscriptionViewer = class VideTranscriptionViewer extends EoNavModul
                     });*/
                     
                     //generate HTML container for Verovio
-                    console.log('--------22') 
-                    
-                    try {
-            
-                        let list = document.querySelectorAll('#' + containerID + '_currentState');
-                        console.log('removing ' + list.length + ' overlay(s)')
-                        
-                        for (let item of list) {
-                            viewer.removeOverlay(containerID + '_currentState');
-                            item.parentNode.removeChild(elem);
-                        }
-                    } catch(err) {
-                        console.log('[INFO] There is no overlay to be removed: ' + err)
-                    }
                     
                     let stateBox = document.createElement('div');
                     stateBox.id = containerID + '_currentState';
@@ -542,7 +597,7 @@ const VideTranscriptionViewer = class VideTranscriptionViewer extends EoNavModul
                     let rectHeight = rectWidth / dimensions.width * dimensions.height;
                     
                     let rectBounds = new OpenSeadragon.Rect(ulx, uly - rectHeight, rectWidth, rectHeight);
-                    console.log('--------23')
+                                        
                     //place Verovio
                     viewer.addOverlay({
                         element: stateBox,
@@ -555,7 +610,7 @@ const VideTranscriptionViewer = class VideTranscriptionViewer extends EoNavModul
                         placement: 'BOTTOM_LEFT'
                     });
                     viewer.viewport.fitBoundsWithConstraints(rectBounds);
-                    console.log('--------25')
+                    
                 } catch(err) {
                     console.log('problems at: ' + err)
                 }
@@ -580,7 +635,7 @@ const VideTranscriptionViewer = class VideTranscriptionViewer extends EoNavModul
     }
     
     prepareStateRequest(stateID, containerID) {
-        console.log('prepareStateRequest(' + stateID + ',' + containerID+')');
+        //console.log('prepareStateRequest(' + stateID + ',' + containerID+')');
         
         let guiStates = document.querySelectorAll('#' + containerID + ' .stateBox.active');
         
@@ -615,8 +670,6 @@ const VideTranscriptionViewer = class VideTranscriptionViewer extends EoNavModul
                 };
                 
                 let request = new Request(containerID, this._eohub.getEdition(), query);
-                console.log('-----------------request:');
-                console.log(request);
                 return request;
             })
         );
@@ -759,7 +812,7 @@ const VideTranscriptionViewer = class VideTranscriptionViewer extends EoNavModul
     _createRect(viewer,containerID, shapesArray) {
     
         if(shapesArray.length === 0) {
-            console.log('[WARNING] no shapes provided that could be focussed on')
+            //console.log('[WARNING] no shapes provided that could be focussed on')
             return false;
         }
     
@@ -888,7 +941,7 @@ const VideTranscriptionViewer = class VideTranscriptionViewer extends EoNavModul
             collectionRows: 1, 
             collectionTileSize: 1200,
             collectionTileMargin: 0,
-            
+            collectionImmediately: true,
             visibilityRatio: 0.2,
             constrainDuringPan: true        
         }

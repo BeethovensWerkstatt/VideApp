@@ -71,11 +71,11 @@ const View = React.createClass({
         if(!needsUpdate && nextProps.view.request !== this.props.view.request) {
             //console.log('sending request from inside shouldComponentUpdate')
             
-            console.log('----------------------42')
+            /*console.log('----------------------42')
             console.log(this.props)
             console.log(nextProps)
             console.log(this.state)
-            console.log(nextState)
+            console.log(nextState)*/
             this.sendRequest(nextProps, this.state);
         }
             
@@ -130,9 +130,9 @@ const View = React.createClass({
             try {
                 module.handleRequest(props.pos,req);
                 
-                console.log('------------------------------43')
+                /*console.log('------------------------------43')
                 console.log(props.layout)
-                console.log(props.otherView)
+                console.log(props.otherView)*/
                 
                 if(props.synced && (props.layout === ViewLayouts.VERTICAL_SPLIT || props.layout === ViewLayouts.HORIZONTAL_SPLIT)) {
                     let altPos = (props.pos === 'view1' ? 'view2' : 'view1');
@@ -142,10 +142,10 @@ const View = React.createClass({
                         perspective: altModule.getSupportedPerspective()
                     });
                     
-                    console.log('--------------------------------44')
+                    /*console.log('--------------------------------44')
                     console.log('Trying to do weird things at ' + altPos + ' with ' + altModuleKey)
                     console.log(altModule)
-                    console.log(modReq)
+                    console.log(modReq)*/
                     
                     altModule.handleRequest(altPos,modReq);
                 }
