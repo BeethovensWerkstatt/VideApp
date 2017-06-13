@@ -25,6 +25,9 @@ const EoModule = class EoModule {
         this._server;
         this._socket;
         this._cache;// = new Map();
+        
+        //used for additional features like invariance or reconstruction
+        this._feature = false;
          
         this._requestMap = new Map(); 
     }
@@ -59,8 +62,18 @@ const EoModule = class EoModule {
      * This function activates the current module and returns it.
      * @return {Object} returns current module
      */
-    activate() {
+    activate(feature) {
         this._active = true;
+        
+        console.log('------ Activating module ' + this._key + ' – feature: ' + feature)
+        
+        if(typeof feature !== 'undefined') {
+            this._feature = true;
+            console.log('-------1')
+        } else {
+            this._feature = false;
+            console.log('-------2')
+        }
         return this;
     }
     

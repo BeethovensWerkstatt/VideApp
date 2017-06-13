@@ -143,5 +143,14 @@
         }
     }
     
+    /* overwrite how active states are rendered in invariance mode */   
+    &[data-invariance='visible'] .navOverlay .stateNavigation .statesBox .columnsBox .state.active::before, &[data-invariance='visible'] .navOverlay .stateNavigation .statesBox .columnsBox .state.active::before, &[data-invariance='visible'] .navOverlay .stateNavigation .statesBox .columnsBox .state.active::before, &[data-invariance='visible'] .navOverlay .stateNavigation .statesBox .columnsBox .state.current::before {
+        display: none;
+    }
+    
+    &[data-invariance='visible'] .invarianceBtn {
+        color: rgb(78, 155, 186);
+    }
+    
 }
 

@@ -68,7 +68,7 @@ const VideFacsimileViewer = class VideFacsimileViewer extends EoNavModule {
      * returns {Object} a Promise with the json object containing info about all pages 
      */
     _getPageData(editionID) {
-        let t0 = performance.now();
+        //let t0 = performance.now();
         let req = {id:editionID,type:'getPages'};
         return this.requestData(req,true).then((pageJson) => {
             
@@ -103,8 +103,8 @@ const VideFacsimileViewer = class VideFacsimileViewer extends EoNavModule {
             }
             
             return Promise.all(promises).then((results) => {
-                let t1 = performance.now();
-                console.log('[DEBUG] getPageData took ' + (t1 - t0) + ' millisecs');
+                //let t1 = performance.now();
+                //console.log('[DEBUG] getPageData took ' + (t1 - t0) + ' millisecs');
                 return Promise.resolve(pageJson);
             });
         })

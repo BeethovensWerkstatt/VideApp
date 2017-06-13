@@ -144,7 +144,7 @@ const EoNavModule = class EoNavModule extends EoModule {
             div.appendChild(header);
             div.appendChild(ul);
             
-            console.log(div)
+            //console.log(div)
             
             let drop;
     
@@ -334,7 +334,7 @@ const EoNavModule = class EoNavModule extends EoModule {
                     contexts: [],
                     perspective: this._supportedPerspective,
                     operation: VIDE_PROTOCOL.OPERATION.VIEW,
-                    state: {}
+                    state: this._getModuleState(containerID) //{}
                 };
                 this._eohub.sendSelfRequest(req,this,containerID);
                            
@@ -458,7 +458,7 @@ const EoNavModule = class EoNavModule extends EoModule {
                             contexts: requiredStates,
                             perspective: this._supportedPerspective,
                             operation: VIDE_PROTOCOL.OPERATION.VIEW,
-                            state: {}
+                            state: this._getModuleState(containerID) //{}
                         }
                         
                         this._eohub.sendSelfRequest(req,this,containerID);
@@ -564,9 +564,9 @@ const EoNavModule = class EoNavModule extends EoModule {
             
             try {
                 document.querySelector('#' + containerID + ' .navOverlay').classList.add('scarOpen')
-                document.querySelector('#' + containerID + ' .navOverlay').classList.remove('overview')
                 document.querySelector('#' + containerID + '_scarLabel .openScarBtnLabel').style.display = 'none';
                 document.querySelector('#' + containerID + '_scarLabel .itemCount').style.display = 'none';    
+                document.querySelector('#' + containerID + ' .navOverlay').classList.remove('overview')
             } catch(err) {
                 console.log('Unable to get ' + '#' + containerID + '_scarLabel .openScarBtnLabel')
                 console.log(document.querySelector('#' + containerID + '_scarLabel'))
@@ -592,6 +592,11 @@ const EoNavModule = class EoNavModule extends EoModule {
             console.log(document.querySelector('#' + containerID + '_scarLabel'))
         }
         
+    }
+    
+    //expected to be overwritten by instances
+    _getModuleState(containerID) {
+        return {};
     }
     
 };

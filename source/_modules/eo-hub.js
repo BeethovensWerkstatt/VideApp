@@ -71,15 +71,24 @@ const EoHub = class EoHub {
         this.options.editionID = id;
         this.options.revision = revision;
         
-        console.log('me here with ' + id + ' -- ' + revision)
+        //console.log('me here with ' + id + ' -- ' + revision)
         
         let supportedViews = this._viewManager.getSupportedViews(id);
         
-        let _this = this;
         for(let i=0; i<supportedViews.length; i++) {
-            let viewKey = supportedViews[i].id;
-            //console.log('[eohub] activating module ' + viewKey + ' for edition ' + id)
-            _this.activateModule(viewKey);
+            
+            let appModule = supportedViews[i];
+            
+            let viewKey = appModule.id;
+            
+            /*console.log('[eohub] activating module ' + viewKey + ' for edition ' + id)
+            console.log('has feature: ' + appModule.feature)*/
+            
+            if(typeof appModule.feature !== 'undefined') {
+                this.activateModule(viewKey,appModule.feature);   
+            } else {
+                this.activateModule(viewKey);    
+            }
         }
         
         return this;
@@ -117,6 +126,7 @@ const EoHub = class EoHub {
      * @returns {Object} the module
      */
     registerModule(module) {
+        //console.log('------------- registering module ' + module.getKey())
         this._modules.set(module.getKey(), module);
         module.registerHub(this);
         return module;
@@ -128,11 +138,11 @@ const EoHub = class EoHub {
      * the current edition (i.e., turn on facsimile view)
      * @param {string} moduleKey specifies a module which needs to be available for the current edition
      */
-    activateModule(moduleKey) {
+    activateModule(moduleKey,feature) {
         try {
-            this._modules.get(moduleKey).activate();    
+            this._modules.get(moduleKey).activate(feature);    
         } catch(err) {
-            console.log('[WARNING] Unable to activate module ' +moduleKey + ': ' + err);
+            console.log('[WARNING] Unable to activate module ' + moduleKey + ': ' + err + ' This is likely to be an error in the encded MEI file.');
         }
     }
     
@@ -223,15 +233,15 @@ const EoHub = class EoHub {
      * @param {Object} req is sent to all modules
      * @returns {boolean} if there is no adequate module
      */
-    broadcastRequest(object) {
+    /*broadcastRequest(object) {
         let req = object.req;
         let containerID = object.target;
         
-        /*if(req instanceof Request) {
+        /\*if(req instanceof Request) {
             request = req;
         } else {
             request = new Request(req.containerID, req.editionID, req.query);
-        }*/
+        }*\/
         
         let fittingModules = [];
         
@@ -257,7 +267,7 @@ const EoHub = class EoHub {
         let module = fittingModules[0];
         
         this._viewManager.prepareView(containerID, module.getKey(), req);
-    }
+    }*/
     
     
     changeView(containerID,targetView) {

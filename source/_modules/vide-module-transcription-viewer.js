@@ -31,12 +31,26 @@ const VideTranscriptionViewer = class VideTranscriptionViewer extends EoNavModul
             noLayout: 1          //results in a continuous system without page breaks
         };
         
+        //colors used for highlighting
+        //todo: make those interoperable with other modules and allow users to modify them
+        this._colors = {
+            random: ['#4e9bba', '#c380dd', '#c63e00', '#6fdb3d', '#b75122', 
+                '#5a6ece', '#c10937', '#cb25d1', '#ce6c5a', '#2140dd', 
+                '#2b88af', '#4e50c4', '#859900', '#33b0ea', '#268bd2', 
+                '#bc6827', '#2aa198', '#cb4b16', '#6c71c4', '#d33682', 
+                '#dc322f', '#b58900'],
+            supplied: '#999999'
+        }
+        
         //used for I18n to identify how individual states are labeled
         this._stateLabelKeySingular = 'variant';
         this._stateLabelKeyPlural = 'variants';
         
         //whether genetic states which are pure deletions shall be rendered in navigation or not
         this._showDeletions = false;
+        
+        //whether invariance is available for the current edition or not; automatically set in blueprint
+        //this._feature;
         
         return this;
     }
@@ -96,12 +110,14 @@ const VideTranscriptionViewer = class VideTranscriptionViewer extends EoNavModul
         
         this._setupNavHtml(containerID);
         
-        let invarianceBtn = document.createElement('div');
-        invarianceBtn.id = containerID + '_activateInvariance';
-        invarianceBtn.className = 'invarianceBtn toggleBtn';
-        invarianceBtn.innerHTML = '<i class="fa fa-random fa-rotate-90" aria-hidden="true"></i>';
-        
-        document.getElementById( containerID + '_navOverlay').appendChild(invarianceBtn);
+        //render only when invariance is supported by current edition
+        if(this._feature) {
+            let invarianceBtn = document.createElement('div');
+            invarianceBtn.id = containerID + '_activateInvariance';
+            invarianceBtn.className = 'invarianceBtn toggleBtn';
+            invarianceBtn.innerHTML = '<i class="fa fa-random fa-rotate-90" aria-hidden="true"></i>';
+            document.getElementById( containerID + '_navOverlay').appendChild(invarianceBtn);
+        }
         
         let scarBox = document.getElementById(containerID + '_stateNavigation');
         
@@ -148,7 +164,7 @@ const VideTranscriptionViewer = class VideTranscriptionViewer extends EoNavModul
     /* 
      * sets up the viewer, or retrieves it from cache when available
      */
-    _setupViewer(containerID) {
+    _setupViewer(containerID,request) {
         this._setupHtml(containerID);
         
         let editionID = this._eohub.getEdition();
@@ -162,32 +178,54 @@ const VideTranscriptionViewer = class VideTranscriptionViewer extends EoNavModul
             let stateJson = results[0];
             let measureJson = results[1];
             
+            let mode = stateJson.length > 1 ? 'multiScar' : 'singleScar';
+            
+            if(stateJson.length === 1) {
+                console.log('[ERROR] The edition ' + editionID + ' apparently has no textual scar, and thus cannot be displayed with the current version of vide-module-transcription-viewer.js.')
+            }
+            
             //let t1 = performance.now();
             //console.log('[DEBUG] setupViewer took ' + (t1 - t0) + ' millisecs');
                 
-            if(this._cache.has(containerID + '_viewer')) {
-                //console.log('getting viewer from cache')
+            if(this._cache.has(containerID + '_viewer') && mode === 'multiScar') {
+                console.log('getting viewer from cache')
                 return Promise.resolve(this._cache.get(containerID + '_viewer'))
             } else {
                 return new Promise((resolve, reject) => {
                     
                     //set up listener for invariance mode
-                    document.getElementById(containerID + '_activateInvariance').addEventListener('click',(e)=> {
-                        console.log('clicked on invariance activator');
-                        //todo from here on
-                    });
+                    if(this._feature) {
+                    
+                        //prepare listener
+                        let listener = (e) => {
+                            e.preventDefault();
+                            e.stopPropagation();
+                            
+                            if(document.getElementById(containerID).getAttribute('data-invariance') === 'visible') {
+                                this._deactivateInvariance(containerID);
+                            } else {
+                                this._activateInvariance(containerID);
+                            }
+                        }
+                        
+                        //try to remove old listener, then add new listener
+                        try {
+                            document.getElementById(containerID + '_activateInvariance').removeEventListener('click',listener)
+                        } catch(err) {
+                            //console.log('-------nooo listener yet: ' + err)
+                        }
+                        document.getElementById(containerID + '_activateInvariance').addEventListener('click',listener)
+                    }
                     
                     //console.log('building new viewer')
                     let verovio = this._eohub.getVerovio();
                     
                     //set things up as required –> if there's just one scar, use a special mode for that
-                    if(stateJson.length > 1) {
-                        this._setupMultiScarViewer(stateJson,measureJson,verovio,editionID,containerID,resolve)
-                    } else if(stateJson.length === 1) {
-                        this._setupSingleScarViewer(stateJson,measureJson,verovio,editionID,containerID,resolve)
+                    if(mode === 'multiScar') {
+                        this._setupMultiScarViewer(stateJson,measureJson,verovio,editionID,containerID,request,resolve)
                     } else {
-                        console.log('[ERROR] The edition ' + editionID + ' apparently has no textual scar, and thus cannot be displayed with the current version of vide-module-transcription-viewer.js.')
-                    }
+                        this._setupSingleScarViewer(stateJson,measureJson,verovio,editionID,containerID,request,resolve)
+                    } 
                     
                 });
             
@@ -200,7 +238,7 @@ const VideTranscriptionViewer = class VideTranscriptionViewer extends EoNavModul
      * render transcription with the last state of the work rendered as base text, and
      * individual states above (mode is used when there is more than one scar available)
      */
-    _setupMultiScarViewer(stateJson,measureJson,verovio,editionID, containerID,resolve) {
+    _setupMultiScarViewer(stateJson,measureJson,verovio,editionID, containerID, request, resolve) {
         this._getFinalState(editionID).then((finalState) => {
                         
             let svgString = verovio.renderData(finalState + '\n', this._verovioOptions);
@@ -221,7 +259,7 @@ const VideTranscriptionViewer = class VideTranscriptionViewer extends EoNavModul
             this._cache.set(containerID + '_viewer', viewer)
             
             //add required handlers
-            this._setOsdHandlers(containerID, viewer, stateJson, svgString, resolve, 'multiScar');
+            this._setOsdHandlers(containerID, viewer, request, stateJson, svgString, resolve, 'multiScar');
             
         });
         
@@ -231,10 +269,20 @@ const VideTranscriptionViewer = class VideTranscriptionViewer extends EoNavModul
      * render only one state of the text, with no base text below. Mode is used when there is only
      * one textual scar. This means that there is no context shown. 
      */
-    _setupSingleScarViewer(stateJson,measureJson,verovio,editionID,containerID,resolve) {
+    _setupSingleScarViewer(stateJson,measureJson,verovio,editionID,containerID, request, resolve) {
         
         let firstState = stateJson[0].states[0];
-        this._getStateAsMEI(editionID,firstState.id,[]).then((stateMEI) => {
+        let otherStates = [];
+        for(let i=0; i < request.contexts.length; i++) {
+            let context = request.contexts[i]; 
+            if(context.context === VIDE_PROTOCOL.CONTEXT.STATE) {
+                otherStates.push(context.id);
+            }
+        }
+        
+        //console.log('------- // looking for state ' + request.id + ' based on ' + otherStates.length + ' other states')
+        
+        this._getStateAsMEI(editionID,request.id,otherStates).then((stateMEI) => {
             
             let svgString = verovio.renderData(stateMEI + '\n', this._verovioOptions);
             this._cache.set('firstState',svgString)
@@ -243,8 +291,20 @@ const VideTranscriptionViewer = class VideTranscriptionViewer extends EoNavModul
             let baseDimensions = this._getVerovioDimensions(svg);
             this._baseDimensions.set(editionID,baseDimensions);
             
-            /*console.log('dimensions: ' + width + ' / ' + height);
-            console.log(document.getElementById(containerID + '_verovioBox'))*/
+            if(this._cache.has(containerID + '_viewer')) {
+                try {
+                    let oldViewer = this._cache.get(containerID + '_viewer');
+                    let oldElem = oldViewer.getOverlayById(containerID + '_currentState');
+                    if(oldElem !== null) {
+                        oldViewer.removeOverlay(containerID + '_currentState');
+                        //console.log('[INFO] Successfully removed previous state rendering')
+                    }
+                    oldViewer.destroy();
+                } catch(err) {
+                    console.log('[DEBUG] Unable to remove previous state rendering')
+                }
+            }
+            
             
             //OSD viewer with all properties
             let viewer = OpenSeadragon(this._setOsdOptions(containerID, baseDimensions));
@@ -252,13 +312,19 @@ const VideTranscriptionViewer = class VideTranscriptionViewer extends EoNavModul
             //store viewer for later use
             this._cache.set(containerID + '_viewer', viewer)
             
+            //make sure only that scar is visible
+            this._openSingleScar(containerID, stateJson[0].id,stateJson[0].states[0].id,[]);
+            document.querySelector('#' + containerID + ' .prevScarBtn').style.display = 'none';
+            document.querySelector('#' + containerID + ' .nextScarBtn').style.display = 'none';
+            
             //add required handlers
-            this._setOsdHandlers(containerID, viewer, stateJson, svgString, resolve, 'singleScar');
+            this._setOsdHandlers(containerID, viewer, request, stateJson, svgString, resolve, 'singleScar');
+            
         });       
     }
     
     //sets all handlers required in OpenSeadragon. Called from _setupSingleScarViewer (and _setupMultiScarViewer)
-    _setOsdHandlers(containerID, viewer, stateJson, svg, resolveFunc, mode = 'multiScar') {
+    _setOsdHandlers(containerID, viewer, request, stateJson, svg, resolveFunc, mode = 'multiScar') {
         
         if(mode !== 'multiScar' && mode !== 'singleScar') {
             resolveFunc(viewer);
@@ -281,11 +347,11 @@ const VideTranscriptionViewer = class VideTranscriptionViewer extends EoNavModul
             }
         });
         
-        // as soon as the Verovio output is rendered, add scars
-        viewer.addOnceHandler('add-overlay',(event) => {
-            
-            //add boxes around scars when in multiScar mode
-            if(mode === 'multiScar') {
+        //add boxes around scars when in multiScar mode
+        if(mode === 'multiScar') {
+        
+            // as soon as the Verovio output is rendered, add scars
+            viewer.addOnceHandler('add-overlay',(event) => {
                 
                 let tiledImage = viewer.world.getItemAt(0);
                 let i = 0;
@@ -388,32 +454,22 @@ const VideTranscriptionViewer = class VideTranscriptionViewer extends EoNavModul
                 notesArray.forEach(function(elem, i) {
                     elem.addEventListener('click',onClick,false)
                 });
-            }
+                
+                // jump to first measure
+                this._focusShape(containerID,viewer,stateJson[0].firstMeasure);
+                
+            });
             
-            /*//handler for svg shapes being clicked
-            let onClick = (e) => {
-                let shape = e.target;
-                this._clickShape(containerID, viewer, shape, e);
-                e.preventDefault(); 
-            };
-            let paths = svgBox.querySelectorAll('path');
-            
-            //adding the handler to each svg shape
-            for(let x=0; x < paths.length; x++) {
-                let path = paths[x];
-                path.addEventListener('click', onClick, false);
-            }*/
-            
-            // jump to first measure
-            this._focusShape(containerID,viewer,stateJson[0].firstMeasure);
-            
-        });
+        }
         
         //do internal setup after images are loaded
-        viewer.addHandler('open', (event) => {
+        viewer.addOnceHandler('open', (event) => {
             
             let svgBox = document.createElement('div');
-            svgBox.className = 'svgBox';
+            svgBox.className = 'svgBox' + (mode === 'singleScar' ? ' currentState' : '');
+            if(mode === 'singleScar') {
+                svgBox.id = containerID + '_currentState';
+            }
             svgBox.innerHTML= svg;
             
             let bounds = viewer.world.getItemAt(0).getBounds();
@@ -428,6 +484,22 @@ const VideTranscriptionViewer = class VideTranscriptionViewer extends EoNavModul
                 checkResize: true,
                 placement: 'TOP_LEFT'
             });
+            
+            if(mode === 'singleScar') {
+                //add contextMenu listeners for base text only
+                let notes = document.querySelectorAll('#' + containerID + ' svg g.note, #' + containerID + ' svg g.rest');
+                let notesArray = [...notes];
+                
+                let onClick = (e) => {
+                    let note = e.currentTarget;
+                    this._clickNote(containerID, viewer, note, e);
+                    e.preventDefault(); 
+                };
+                
+                notesArray.forEach(function(elem, i) {
+                    elem.addEventListener('click',onClick,false)
+                });    
+            }
             
             resolveFunc(viewer);
             
@@ -469,7 +541,7 @@ const VideTranscriptionViewer = class VideTranscriptionViewer extends EoNavModul
             return false;
         }
         
-        this._setupViewer(containerID).then((viewer) => {
+        this._setupViewer(containerID,request).then((viewer) => {
             
             let editionID = this._eohub.getEdition();
             
@@ -529,18 +601,25 @@ const VideTranscriptionViewer = class VideTranscriptionViewer extends EoNavModul
                     
                     this._openSingleScar(containerID,scar.id,request.id,activeStates);
                     
-                    
-                    
                     //state needs to be rendered only if there is more than one scar
                     if(stateJson.length > 1) {
                         
-                        this._renderState(containerID,scar,viewer,request.id,activeStates);    
+                        this._renderState(containerID,scar,viewer,request.id,activeStates);
+                        
                     }
                     
                 });
                 
             } else {
                 console.log('Dunno how to handle request (yet)')
+            }
+            
+            if(typeof request.state !== 'undefined' && request.state.invariance === true) {
+                //console.log('----------I need to activate invariance coloration')
+                this._activateInvariance(containerID, request);
+            } else {
+                //console.log('----------I need to turn off invariance coloration')
+                this._deactivateInvariance(containerID);
             }
             
         });
@@ -585,7 +664,7 @@ const VideTranscriptionViewer = class VideTranscriptionViewer extends EoNavModul
                 //if the state is "empty", it automatically gets a relation property of -1
                 //so if relation is -1, there's really nothing to render…
                 if(dimensions.relation === -1) {
-                    console.log('[DEBUG] Keep going, there is nothing to see here for state ' + stateID);
+                    //console.log('[DEBUG] Keep going, there is nothing to see here for state ' + stateID);
                     return false;
                 }
                 
@@ -641,7 +720,7 @@ const VideTranscriptionViewer = class VideTranscriptionViewer extends EoNavModul
                         placement: 'BOTTOM_LEFT'
                     });
                     viewer.viewport.fitBoundsWithConstraints(rectBounds);
-                    
+                    document.getElementById(containerID).setAttribute('data-activeState',stateID);
                 } catch(err) {
                     console.log('problems at: ' + err)
                 }
@@ -855,7 +934,7 @@ const VideTranscriptionViewer = class VideTranscriptionViewer extends EoNavModul
         });
         
         let closeFunc = () => {
-            console.log('nothing happened')
+            //console.log('nothing happened')
         };
         try {
             this._eohub._viewManager.setContextMenu(requests, e, containerID, closeFunc);    
@@ -1049,6 +1128,150 @@ const VideTranscriptionViewer = class VideTranscriptionViewer extends EoNavModul
         }
         
     } 
+    
+    _activateInvariance(containerID,request) {
+        //console.log('--------------41.5 activating invariance')
+        
+        let req = {
+            edition: this._eohub.getEdition(),
+            version: this._eohub.getRevision(),
+            type: 'getInvariance'
+        }
+        this.requestData(req,true).then((json) => {
+            try {
+                let activeState = document.getElementById(containerID).getAttribute('data-activeState');
+                
+                let list = document.querySelectorAll('#' + containerID + '_currentState svg g.note, #' + containerID + '_currentState svg g.rest, #' + containerID + '_currentState svg g.chord, #' + containerID + '_currentState svg g.beam');
+                
+                list.forEach((elem,i) => {
+                    try {
+                        let id = elem.id;
+                        let state = json.baseStates[id];
+                        let index = json.states.indexOf(state);
+                        if(index !== -1) {
+                            let color = this._colors.random[index];
+                            elem.style.fill = color;
+                            elem.style.stroke = color;
+                        }
+                        
+                        let relation = json.relations[id];
+                        if(typeof relation !== 'undefined') {
+                            let originState = relation.originState;
+                            let originIndex = json.states.indexOf(originState);
+                            if(originIndex !== -1) {
+                                let originColor = this._colors.random[originIndex];
+                                elem.style.fill = originColor;
+                                elem.style.stroke = originColor;
+                            }
+                        }
+                    } catch(err) {
+                        console.log('[ERROR] Unable to highlight invariance of ' + id)
+                    }
+                    
+                    
+                });
+                
+                /*
+                for(let i = 0; i < invarianceData.suppliedIDs.length; i++) {
+                    try {
+                        let elem = document.querySelector('#' + containerID + ' svg #' + invarianceData.suppliedIDs[i]);
+                        if(elem !== null) {
+                            elem.setAttribute('fill', suppliedColor);
+                            elem.setAttribute('stroke', suppliedColor);    
+                        }
+                    } catch(err) {
+                        console.log('[ERROR] Unable to higlight suppliedID ' + invarianceData.suppliedIDs[i] + ' at index ' + i + ' | ' + err);
+                    }
+                }*/
+                
+                for(let i = 0; i < json.states.length; i++) {
+                    let stateID = json.states[i];
+                    try {
+                        let elem = document.getElementById(containerID + '_' + stateID);
+                        //only colorize when present -> deletions are omitted
+                        if(elem !== null) {
+                            //when a request is available, use that
+                            if(typeof request !== 'undefined') {
+                                let colorize = false;
+                                if(request.id === stateID) {
+                                    colorize = true;
+                                }
+                                if(!colorize) {
+                                    for(let j = 0; j < request.contexts.length; j++) {
+                                        if(request.contexts[j].context === VIDE_PROTOCOL.CONTEXT.STATE && request.contexts[j].id === stateID)
+                                            colorize = true;
+                                    }
+                                }
+                                
+                                if(colorize) {
+                                    let color = this._colors.random[i];
+                                    elem.style.backgroundColor = color;
+                                } else {
+                                    elem.style.backgroundColor = '#e5e5e533';
+                                }   
+                                
+                            } else {
+                            //fall back to simpler mechanism
+                                if(elem.classList.contains('active') || elem.classList.contains('current')) {
+                                    let color = this._colors.random[i];
+                                    elem.style.backgroundColor = color;
+                                } else {
+                                    elem.style.backgroundColor = '#e5e5e533';
+                                }   
+                                
+                            }
+                        
+                        }
+                    } catch(err) {
+                        console.log('[ERROR] Unable to colorize state box for ' + stateID + ': ' + err)
+                    }
+                }
+                
+                //if everything went well, set the attribute to "visible"
+                document.getElementById(containerID).setAttribute('data-invariance','visible');    
+            } catch(err) {
+                console.log('[ERROR] Unable to activate invariance coloration') 
+            }
+        });
+        
+    }
+    
+    _deactivateInvariance(containerID) {
+        
+        //remove color on all notes
+        let list = document.querySelectorAll('#' + containerID + '_currentState svg g.note[style], #' + containerID + '_currentState svg g.rest[style], #' + containerID + '_currentState svg g.chord[style], #' + containerID + '_currentState svg g.beam[style]');
+        list.forEach((elem,i) => {
+            try {
+                if(elem.hasAttribute('style')) {
+                    elem.removeAttribute('style');   
+                }                
+            } catch(err) {
+                //console.log('[ERROR] Unable to remove invariance highlighting on ' + id + ': ' + err)
+            }
+        });
+        
+        let stateBoxes = document.querySelectorAll('#' + containerID + '_statesBox .state');
+        //console.log(' ------- try to remove ' + stateBoxes.length + ' things')
+        stateBoxes.forEach((box,i) => {
+            try {
+                if(box.hasAttribute('style')) {
+                    box.removeAttribute('style');   
+                }                
+            } catch(err) {
+                //console.log('[ERROR] Unable to remove invariance highlighting on ' + id + ': ' + err)
+            }
+        });
+        
+        document.getElementById(containerID).setAttribute('data-invariance','hidden');
+    }
+    
+    _getModuleState(containerID) {
+        
+        let invariance = document.getElementById(containerID).getAttribute('data-invariance') === 'visible';
+        return {
+            invariance: invariance
+        }
+    }
     
     /*
     
