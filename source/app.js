@@ -25,8 +25,6 @@ import VideXmlViewer from './_modules/vide-module-xml-viewer';
 import VideTranscriptionViewer from './_modules/vide-module-transcription-viewer';
 import VideTextViewer from './_modules/vide-module-text-viewer';
 import VideFacsimileViewer from './_modules/vide-module-facsimile-viewer';
-import VideReconstructionViewer from './_modules/vide-module-reconstruction-viewer';
-import VideInvarianceViewer from './_modules/vide-module-invariance-viewer';
 
 
 /*import VidePageOverlayViewer from './_modules/vide-module-pageOverlay-viewer';*/
@@ -56,11 +54,7 @@ eohub.registerModule(transcriptionViewer);
 let videTextViewer = new VideTextViewer();
 eohub.registerModule(videTextViewer);
 
-let videReconstructionViewer = new VideReconstructionViewer();
-eohub.registerModule(videReconstructionViewer);
-
-let videInvarianceViewer = new VideInvarianceViewer();
-eohub.registerModule(videInvarianceViewer);*/
+*/
 
 
 /*store.dispatch(switchLanguage('de'));

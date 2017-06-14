@@ -85,7 +85,7 @@ const VideFacsimileViewer = class VideFacsimileViewer extends EoNavModule {
                         //let s0 = performance.now();
                         let svgPromise = new Promise((resolve, reject) => {
                             
-                            let svgReq = {id: page.shapes,type:'getPageShapesSvg'};
+                            let svgReq = {id: page.shapesRef,type:'getPageShapesSvg'};
                             resolve(
                                 this.requestData(svgReq, true).then(
                                     (svg) => {
@@ -180,13 +180,40 @@ const VideFacsimileViewer = class VideFacsimileViewer extends EoNavModule {
                 return new Promise((resolve, reject) => {
                     let pageURIs = [];
                     let i=0;
+                    
+                    let rasterX = pageJson.maxDimensions.width + 50;
+                    let rasterY = pageJson.maxDimensions.height + 50;
+                    
                     for(i; i<pageJson.sources.length; i++) {
                         let source = pageJson.sources[i];
                         let j=0;
                         for(j; j<source.pages.length; j++) {
                             let page = source.pages[j];
-                            let uri = page.uri + '/info.json';
-                            pageURIs.push(uri);
+                            let uri = page.facsRef + '/info.json';
+                            
+                            let baseX = j * rasterX;
+                            let baseY = i * rasterY;
+                            
+                            let x;
+                            let y = baseY + ((rasterY - page.height_mm) / 2);
+                            
+                            if(page.type === 'recto') {
+                                x = baseX;
+                            } else {
+                                x = baseX + (rasterX - page.width_mm);
+                            }
+                            
+                            let opacity = (!page.visible) ? .2 : 1;
+                            
+                            let tileSource = {
+                               tileSource: uri,
+                               x: x,
+                               y: y,
+                               opacity: opacity,
+                               width: page.width_mm
+                            }
+                            
+                            pageURIs.push(tileSource);
                         }
                     }
                     
@@ -216,10 +243,10 @@ const VideFacsimileViewer = class VideFacsimileViewer extends EoNavModule {
                             clickToZoom: false,
                             dblClickToZoom: true
                         },
-                        collectionMode: true,
+                        collectionMode: false/*,
                         collectionRows: 1, 
                         collectionTileSize: 1200,
-                        collectionTileMargin: 0
+                        collectionTileMargin: 0*/
                     });
                     
                     //store viewer for later use
@@ -237,31 +264,51 @@ const VideFacsimileViewer = class VideFacsimileViewer extends EoNavModule {
                     //do internal setup after images are loaded
                     viewer.addHandler('open', (event) => {
                         let i=0;
+                        let pageCount = 0;
                         
                         for(i; i<pageJson.sources.length; i++) {
                             let source = pageJson.sources[i];
                             for(let j=0; j<source.pages.length; j++) {
                                 let page = source.pages[j];
+                                
+                                let bounds = viewer.world.getItemAt(pageCount).getBounds();
+                                pageCount++;
+                                
+                                //set source label
+                                if(j===0) {
+                                    
+                                    let sourceLabel = document.createElement('div');
+                                    sourceLabel.id = containerID + '_pageLabel_' + source.id;
+                                    sourceLabel.className = 'pageLabel';
+                                    sourceLabel.innerHTML = source.label;
+                                    
+                                    viewer.addOverlay({
+                                        element: sourceLabel,
+                                        y: bounds.y + (bounds.height / 2),
+                                        x: -10,
+                                        placement: 'RIGHT'
+                                    });
+                                    
+                                }
+                                
+                                //set page label
                                 let pageLabel = document.createElement('div');
                                 pageLabel.id = containerID + '_pageLabel_' + page.id;
                                 pageLabel.className = 'pageLabel';
                                 pageLabel.innerHTML = page.label;
                                 
-                                let bounds = viewer.world.getItemAt(j).getBounds();
-                                
-                                //create page label
                                 viewer.addOverlay({
                                     element: pageLabel,
-                                    //location: new OpenSeadragon.Rect(0.33, 0.75, 1.2, 1.25)
                                     y: bounds.y + bounds.height,
                                     x: bounds.x + (bounds.width / 2),
                                     placement: 'TOP'
                                 });
                                 
-                                let cacheKey = JSON.stringify({id: page.shapes,type:'getPageShapesSvg'});
+                                let cacheKey = JSON.stringify({id: page.shapesRef,type:'getPageShapesSvg'});
                                 
                                 //if possible, load svg overlays
-                                if(page.shapes !== '') {
+                                if(page.shapesRef !== '') {
+                                    console.log('huhuhuhuhuhuhu')
                                     if(this._cache.has(cacheKey)) {
                                         let svgBox = document.createElement('div');
                                         svgBox.className = 'svgBox';
@@ -485,9 +532,9 @@ const VideFacsimileViewer = class VideFacsimileViewer extends EoNavModule {
     
     handleRequest(containerID,request,state = {}) {
         
-        console.log('[INFO] received the following request for VideFacsimileViewer at ' + containerID + ':')
+        /*console.log('[INFO] received the following request for VideFacsimileViewer at ' + containerID + ':')
         console.log(containerID)
-        console.log(request)
+        console.log(request)*/
         
         //determine type of request
         let type;
