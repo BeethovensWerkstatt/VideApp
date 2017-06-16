@@ -12,6 +12,8 @@ const VideFacsimileViewer = class VideFacsimileViewer extends EoNavModule {
         this._supportedPerspective = VIDE_PROTOCOL.PERSPECTIVE.FACSIMILE;
         this._supportedRequests = [];
         this._viewerStore = new Map();
+        //a store that holds all page positions
+        this._tiledImages = new Map();
         
         let stateReq = {object: VIDE_PROTOCOL.OBJECT.STATE, 
             contexts:[], 
@@ -58,6 +60,9 @@ const VideFacsimileViewer = class VideFacsimileViewer extends EoNavModule {
         let viewer = this._cache.get(containerID + '_viewer', viewer)
         viewer.destroy();
         this._cache.delete(containerID + '_viewer');
+        
+        this._positionsMap.clear();
+        
         document.getElementById(containerID).innerHTML = '';
     }
     
@@ -156,7 +161,7 @@ const VideFacsimileViewer = class VideFacsimileViewer extends EoNavModule {
      * This function sets up the Openseadragon viewer
      * @param {string} containerID describes the HTML element that contains the facsimile
      */
-    _setupViewer(containerID) {
+    _setupViewer(containerID,request) {
         
         this._setupHtml(containerID);
         
@@ -164,6 +169,15 @@ const VideFacsimileViewer = class VideFacsimileViewer extends EoNavModule {
         let pageData = this._getPageData(editionID);
         let stateData = this._getStateData(editionID);
         let measureData = this._getMeasureData(editionID);
+        
+        let otherStates = [];
+        for(let i = 0; i<request.contexts.length;i++) {
+            let context = request.contexts[i];
+            if(context.context === VIDE_PROTOCOL.CONTEXT.STATE) {
+                otherStates.push(context.id);
+            }
+        }
+        let activeStateID = (request.object === VIDE_PROTOCOL.OBJECT.STATE) ? request.id : null;
         
         let t0 = performance.now();
         return Promise.all([pageData, stateData,measureData]).then((results) => {
@@ -175,186 +189,435 @@ const VideFacsimileViewer = class VideFacsimileViewer extends EoNavModule {
                 console.log('[DEBUG] setupViewer took ' + (t1 - t0) + ' millisecs');
             
             if(this._cache.has(containerID + '_viewer')) {
-                return Promise.resolve(this._cache.get(containerID + '_viewer'))
-            } else {
-                return new Promise((resolve, reject) => {
-                    let pageURIs = [];
-                    let i=0;
+                let newPositions = this._getRequiredPositions(containerID, activeStateID, otherStates,pageJson);
+                
+                for(let [uri, newPos] of newPositions.positions.entries()) {
+                    /*console.log('working on an image ' + uri + ':')*/
+                    /*console.log(tiledImage);*/
                     
-                    let rasterX = pageJson.maxDimensions.width + 50;
-                    let rasterY = pageJson.maxDimensions.height + 50;
-                    
-                    for(i; i<pageJson.sources.length; i++) {
-                        let source = pageJson.sources[i];
-                        let j=0;
-                        for(j; j<source.pages.length; j++) {
-                            let page = source.pages[j];
-                            let uri = page.facsRef + '/info.json';
+                    if(this._tiledImages.has(uri)) {
+                        let tiledImage = this._tiledImages.get(uri);
+                        let currentBounds = tiledImage.getBounds() 
+                        
+                        if((typeof newPos.newX === 'number' 
+                            && typeof newPos.newY === 'number' 
+                            && (newPos.newX !== currentBounds.x || newPos.newY !== currentBounds.y))
+                            || (newPos.x !== currentBounds.x || newPos.y !== currentBounds.y)) {
                             
-                            let baseX = j * rasterX;
-                            let baseY = i * rasterY;
-                            
-                            let x;
-                            let y = baseY + ((rasterY - page.height_mm) / 2);
-                            
-                            if(page.type === 'recto') {
-                                x = baseX;
+                            if(typeof newPos.newX !== 'undefined' && typeof newPos.newY !== 'undefined') {
+                                tiledImage.setPosition(new OpenSeadragon.Point(newPos.newX,newPos.newY),false);    
                             } else {
-                                x = baseX + (rasterX - page.width_mm);
+                                tiledImage.setPosition(new OpenSeadragon.Point(newPos.x,newPos.y),false);
                             }
                             
-                            let opacity = (!page.visible) ? .2 : 1;
-                            
-                            let tileSource = {
-                               tileSource: uri,
-                               x: x,
-                               y: y,
-                               opacity: opacity,
-                               width: page.width_mm
-                            }
-                            
-                            pageURIs.push(tileSource);
                         }
+                    } else {
+                    
+                        console.log('calling add for ' + newPos.uri)
+                        //add things pages or patches which aren't on stage yet
+                        this._cache.get(containerID + '_viewer').addTiledImage({
+                            tileSource: newPos.uri,
+                            x: - 100,
+                            y: newPos.y - 100,
+                            width: newPos.width,
+                            success: (e) => {
+                                this._tiledImages.set(newPos.uri,e.item);
+                                e.item.setPosition(new OpenSeadragon.Point(newPos.x,newPos.y),false)
+                            }
+                        });
                     }
                     
-                    //OSD viewer with all properties
-                    let viewer = OpenSeadragon({
-                        id: containerID + '_facsimile',
-                        tileSources: pageURIs,
-                        sequenceMode: false,
-                        showReferenceStrip: true,
-                        showRotationControl: true,
-                        showNavigator: true,
-                        navigatorRotate: false,
-                        navigatorId: containerID + '_facsimileNavigator',
-                        showFullPageControl: false,
-                        zoomInButton: containerID + '_zoomIn',
-                        zoomOutButton: containerID + '_zoomOut',
-                        homeButton: containerID + '_zoomHome',
-                        rotateLeftButton: containerID + '_rotateLeft',
-                        rotateRightButton: containerID + '_rotateRight',
-                        //toolbar: containerID + '_menubar',
-                        pixelsPerWheelLine: 60,
-                        // Enable touch rotation on tactile devices
-                        gestureSettingsTouch: {
-                            pinchRotate: true
-                        },
-                        gestureSettingsMouse: {
-                            clickToZoom: false,
-                            dblClickToZoom: true
-                        },
-                        collectionMode: false/*,
-                        collectionRows: 1, 
-                        collectionTileSize: 1200,
-                        collectionTileMargin: 0*/
-                    });
-                    
-                    //store viewer for later use
-                    this._cache.set(containerID + '_viewer', viewer)
-                    
-                    //log position of view when view changes
-                    viewer.addHandler('animation-finish',(event) => {
+                }
+                
+                //remove things which aren't required anymore
+                for(let [uri, existingImage] of this._tiledImages.entries()) {
+                    if(!newPositions.positions.has(uri)) {
                         
-                        let newState = {bounds: viewer.viewport.getBounds()};
-                        
-                        this._confirmView(containerID,newState);
-                        
-                    });
-                    
-                    //do internal setup after images are loaded
-                    viewer.addHandler('open', (event) => {
-                        let i=0;
-                        let pageCount = 0;
-                        
-                        for(i; i<pageJson.sources.length; i++) {
-                            let source = pageJson.sources[i];
-                            for(let j=0; j<source.pages.length; j++) {
-                                let page = source.pages[j];
-                                
-                                let bounds = viewer.world.getItemAt(pageCount).getBounds();
-                                pageCount++;
-                                
-                                //set source label
-                                if(j===0) {
-                                    
-                                    let sourceLabel = document.createElement('div');
-                                    sourceLabel.id = containerID + '_pageLabel_' + source.id;
-                                    sourceLabel.className = 'pageLabel';
-                                    sourceLabel.innerHTML = source.label;
-                                    
-                                    viewer.addOverlay({
-                                        element: sourceLabel,
-                                        y: bounds.y + (bounds.height / 2),
-                                        x: -10,
-                                        placement: 'RIGHT'
-                                    });
-                                    
-                                }
-                                
-                                //set page label
-                                let pageLabel = document.createElement('div');
-                                pageLabel.id = containerID + '_pageLabel_' + page.id;
-                                pageLabel.className = 'pageLabel';
-                                pageLabel.innerHTML = page.label;
-                                
-                                viewer.addOverlay({
-                                    element: pageLabel,
-                                    y: bounds.y + bounds.height,
-                                    x: bounds.x + (bounds.width / 2),
-                                    placement: 'TOP'
-                                });
-                                
-                                let cacheKey = JSON.stringify({id: page.shapesRef,type:'getPageShapesSvg'});
-                                
-                                //if possible, load svg overlays
-                                if(page.shapesRef !== '') {
-                                    console.log('huhuhuhuhuhuhu')
-                                    if(this._cache.has(cacheKey)) {
-                                        let svgBox = document.createElement('div');
-                                        svgBox.className = 'svgBox';
-                                        svgBox.innerHTML = this._cache.get(cacheKey);
-                                        viewer.addOverlay({
-                                            element: svgBox,
-                                            y: bounds.y,
-                                            x: bounds.x,
-                                            width: bounds.width,
-                                            height: bounds.height,
-                                            placement: 'TOP_LEFT'
-                                        });
-                                        
-                                        //handler for svg shapes being clicked
-                                        let onClick = (e) => {
-                                            let shape = e.target;
-                                            this._clickShape(containerID, viewer, shape, e);
-                                            e.preventDefault(); 
-                                        };
-                                        let paths = svgBox.querySelectorAll('path');
-                                        
-                                        //adding the handler to each svg shape
-                                        for(let x=0; x < paths.length; x++) {
-                                            let path = paths[x];
-                                            path.addEventListener('click', onClick, false);
-                                        }
-                                    } else {
-                                        console.log('[ERROR] failed to load things in correct order – svg shapes not available for ' + page.id + ' (yet)');
-                                    }
-                                } else {
-                                    console.log('no shapes to retrieve for page ' + page.label);
-                                }
-                                
-                                
-                            }
-                        }
-                        resolve(viewer);
-                    });
-                    
-                    
-                });
-            
+                        console.log('calling destroy for ' + uri)
+                        this._tiledImages.delete(uri);
+                        this._cache.get(containerID + '_viewer').world.removeItem(existingImage);
+                    }
+                }
+                
+                //
+                
+                return Promise.resolve(this._cache.get(containerID + '_viewer'))
+            } else {
+                let positions = this._getRequiredPositions(containerID, activeStateID, otherStates,pageJson).positions;
+                this._initializeViewer(containerID,positions).then(
+                    console.log('____________________ this._initializeViewer complete __________________')
+                )
             }
         });
         
     }
+    
+    //this function determines the positions necessary for the current request
+    _getRequiredPositions(containerID, activeStateID, otherStates, pageJson) {
+        
+        let rasterX = pageJson.maxDimensions.width + 50;
+        let rasterY = pageJson.maxDimensions.height + 50;
+        
+        let newPosMap = new Map();
+        let animations = {
+            remove: [],
+            add: [],
+            move: []
+        }
+        let index = {n: 0};
+        
+        
+        for(let i = 0; i<pageJson.sources.length; i++) {
+            let source = pageJson.sources[i];
+            for(let j = 0; j<source.pages.length; j++) {
+                let page = source.pages[j];
+                
+                this._evaluatePage(newPosMap,page,index,i,j,activeStateID,otherStates,animations,rasterX,rasterY,null)
+                
+            }
+        }
+        
+        return {
+            positions: newPosMap,
+            animations: animations
+        }
+        
+    }
+    
+    _evaluatePage(positionMap,page,totalIndex,sourceIndex,pageInSourceIndex,activeStateID,otherStates = [],animations,rasterX,rasterY,patch) {
+    
+        //decide whether this page needs to be rendered
+        let showThis = page.visible;
+        let currentAdd = false;
+        let currentRemove = false;
+        
+        //page has been added in a state that is supposed to be rendered
+        if(page.added !== '' && otherStates.indexOf(page.added) !== -1) {
+            showThis = true;
+        }
+        
+        //page gets added in current state -> animate there, don't show immediately
+        if(page.added !== '' && page.added === activeStateID) {
+            showThis = true;
+            currentAdd = true;
+        }
+        
+        //page is a patch added in an earlier state
+        if(patch !== null && patch.isAdded && otherStates.indexOf(patch.enterState) !== -1) {
+            showThis = true;
+        }
+        
+        //page is a patch added in an earlier state
+        if(patch !== null && patch.isAdded && patch.enterState === activeStateID) {
+            showThis = true;
+            currentAdd = true;
+        }
+        
+        //page has been removed in the past
+        if(page.removed !== '' && otherStates.indexOf(page.removed) !== -1) {
+            showThis = false;
+        }
+        
+        //page gets removed in current state -> animate to new position, don't remove immediately
+        if(page.removed !== '' && page.removed === activeStateID) {
+            showThis = true;
+            currentRemove = true;
+        }
+        
+        //todo: are there patches witch can be removed?
+        
+        if(showThis) {
+            
+            let uri = page.facsRef + '/info.json';
+            
+            if(positionMap.has(uri)) {
+                //page has been set at a different position already
+                 
+                let positionObject = positionMap.get(uri);
+                
+                //page gets added here
+                if(currentAdd) {
+                    //page has been removed elsewhere already
+                    if(positionObject.currentRemove) {
+                        let newX = pageInSourceIndex * rasterX;
+                        let newY = (sourceIndex * rasterY) + ((rasterY - page.height_mm) / 2);
+                        
+                        if(page.type === 'verso') {
+                            newX = newX + (rasterX - page.width_mm)
+                        }
+                        
+                        if(patch !== null && typeof patch.offsetY === 'number' && typeof patch.offsetY === 'number') {
+                            newX = newX + patch.offsetX;
+                            newY = (sourceIndex * rasterY) + ((rasterY - patch.parentPage.height_mm) / 2) + patch.offsetY;
+                        }
+                        
+                        positionObject.currentAdd = true;
+                        positionObject.newX = newX;
+                        positionObject.newY = newY;
+                        animations.move.push(positionObject);
+                    
+                    //page is completely new and needs to come from the "outside"
+                    } else {
+                        console.log('------//-------//-------// I do not know why this could happen')
+                    }
+                    
+                }
+                
+                //page gets removed
+                if(currentRemove) {
+                
+                    //page will be added elsewhere
+                    if(positionObject.currentAdd) {
+                        let oldX = pageInSourceIndex * rasterX;
+                        let oldY = (sourceIndex * rasterY) + ((rasterY - page.height_mm) / 2);
+                        
+                        if(page.type === 'verso') {
+                            oldX = oldX + (rasterX - page.width_mm)
+                        }
+                        
+                        if(patch !== null && typeof patch.offsetY === 'number' && typeof patch.offsetY === 'number') {
+                            oldX = oldX + patch.offsetX;
+                            oldY = (sourceIndex * rasterY) + ((rasterY - patch.parentPage.height_mm) / 2) + patch.offsetY;
+                        }
+                        
+                        positionObject.currentRemove = true;
+                        positionObject.newX = positionObject.x;
+                        positionObject.newy = positionObject.y;
+                        positionObject.x = oldX;
+                        positionObject.y = oldY;
+                        animations.move.push(positionObject);
+                    
+                    //page gets removed completely
+                    } else {
+                        console.log('------//-------//-------// I do not know why this could happen')
+                    }
+                    
+                }
+            
+            } else if(patch !== null && page.type === 'verso') {
+                //page is the backside of a patch -> ignored for now
+                //todo: allow flipping of patches
+                
+            } else {
+                //page will be added to new layout    
+                
+                let baseX = pageInSourceIndex * rasterX;
+                let baseY = sourceIndex * rasterY;
+                
+                let x;
+                let y = baseY + ((rasterY - page.height_mm) / 2);
+                
+                if(page.type === 'recto') {
+                    x = baseX;
+                } else {
+                    x = baseX + (rasterX - page.width_mm);
+                }
+                
+                if(patch !== null && typeof patch.offsetY === 'number' && typeof patch.offsetY === 'number') {
+                    x = x + patch.offsetX;
+                    y = baseY + ((rasterY - patch.parentPage.height_mm) / 2) + patch.offsetY;
+                }
+                
+                let positionObject = {
+                    id: page.id,
+                    uri: uri,
+                    x: x,
+                    y: y,
+                    width: page.width_mm,
+                    index: totalIndex.n
+                }
+                
+                if(currentAdd) {
+                    positionObject.currentAdd = true;
+                }
+                
+                if(currentRemove) {
+                    positionObject.currentRemove = true;
+                }
+                
+                positionMap.set(uri, positionObject)
+                totalIndex.n++;
+                
+                //deal with patches
+                for(let n = 0; n < page.patches.length; n++) {
+                    let childPatch = page.patches[n];
+                    childPatch.parentPage = page;
+                    for (let m = 0; m < childPatch.pages.length; m++) {
+                        this._evaluatePage(positionMap,childPatch.pages[m],totalIndex,sourceIndex,pageInSourceIndex,activeStateID,otherStates,animations,rasterX,rasterY,childPatch)
+                        //todo: right now, patches on patches don't use the right offsets; they are always relative to the underlying page, but not the intermediate patch
+                    }
+                }
+                
+            }
+            
+        }
+    }
+    
+    //this function initializes the OSD viewer
+    _initializeViewer(containerID,positions) {
+        
+        return new Promise((resolve, reject) => {
+            let tileSources = [];
+            
+            for(let positionedObject of positions.values()) {
+                tileSources.push({
+                    tileSource: positionedObject.uri,
+                    x: positionedObject.x,
+                    y: positionedObject.y,
+                    width: positionedObject.width,
+                    success: (e) => {
+                        this._tiledImages.set(positionedObject.uri,e.item);
+                    }
+                });
+            }
+            
+            //OSD viewer with all properties
+            let viewer = OpenSeadragon({
+                id: containerID + '_facsimile',
+                tileSources: tileSources,
+                sequenceMode: false,
+                showReferenceStrip: true,
+                showRotationControl: true,
+                showNavigator: true,
+                navigatorRotate: false,
+                navigatorId: containerID + '_facsimileNavigator',
+                showFullPageControl: false,
+                zoomInButton: containerID + '_zoomIn',
+                zoomOutButton: containerID + '_zoomOut',
+                homeButton: containerID + '_zoomHome',
+                rotateLeftButton: containerID + '_rotateLeft',
+                rotateRightButton: containerID + '_rotateRight',
+                //toolbar: containerID + '_menubar',
+                pixelsPerWheelLine: 60,
+                // Enable touch rotation on tactile devices
+                gestureSettingsTouch: {
+                    pinchRotate: true
+                },
+                gestureSettingsMouse: {
+                    clickToZoom: false,
+                    dblClickToZoom: true
+                },
+                collectionMode: false/*,
+                collectionRows: 1, 
+                collectionTileSize: 1200,
+                collectionTileMargin: 0*/
+            });
+            
+            //store viewer for later use
+            this._cache.set(containerID + '_viewer', viewer)
+            
+            //log position of view when view changes
+            viewer.addHandler('animation-finish',(event) => {
+                
+                let newState = {bounds: viewer.viewport.getBounds()};
+                
+                this._confirmView(containerID,newState);
+                
+            });
+            
+            //do internal setup after images are loaded
+            viewer.addHandler('open', (event) => {
+                /*let i=0;
+                let pageCount = 0;
+                
+                for(i; i<pageJson.sources.length; i++) {
+                    let source = pageJson.sources[i];
+                    for(let j=0; j<source.pages.length; j++) {
+                        let page = source.pages[j];
+                        
+                        let bounds = viewer.world.getItemAt(pageCount).getBounds();
+                        pageCount++;
+                        
+                        //set source label
+                        if(j===0) {
+                            
+                            let sourceLabel = document.createElement('div');
+                            sourceLabel.id = containerID + '_pageLabel_' + source.id;
+                            sourceLabel.className = 'pageLabel';
+                            sourceLabel.innerHTML = source.label;
+                            
+                            viewer.addOverlay({
+                                element: sourceLabel,
+                                y: bounds.y + (bounds.height / 2),
+                                x: -10,
+                                placement: 'RIGHT'
+                            });
+                            
+                        }
+                        
+                        //set page label
+                        let pageLabel = document.createElement('div');
+                        pageLabel.id = containerID + '_pageLabel_' + page.id;
+                        pageLabel.className = 'pageLabel';
+                        pageLabel.innerHTML = page.label;
+                        
+                        viewer.addOverlay({
+                            element: pageLabel,
+                            y: bounds.y + bounds.height,
+                            x: bounds.x + (bounds.width / 2),
+                            placement: 'TOP'
+                        });
+                        
+                        let cacheKey = JSON.stringify({id: page.shapesRef,type:'getPageShapesSvg'});
+                        
+                        //if possible, load svg overlays
+                        if(page.shapesRef !== '') {
+                            if(this._cache.has(cacheKey)) {
+                                let svgBox = document.createElement('div');
+                                svgBox.className = 'svgBox';
+                                svgBox.innerHTML = this._cache.get(cacheKey);
+                                viewer.addOverlay({
+                                    element: svgBox,
+                                    y: bounds.y,
+                                    x: bounds.x,
+                                    width: bounds.width,
+                                    height: bounds.height,
+                                    placement: 'TOP_LEFT'
+                                });
+                                
+                                //handler for svg shapes being clicked
+                                let onClick = (e) => {
+                                    let shape = e.target;
+                                    this._clickShape(containerID, viewer, shape, e);
+                                    e.preventDefault(); 
+                                };
+                                let paths = svgBox.querySelectorAll('path');
+                                
+                                //adding the handler to each svg shape
+                                for(let x=0; x < paths.length; x++) {
+                                    let path = paths[x];
+                                    path.addEventListener('click', onClick, false);
+                                }
+                            } else {
+                                console.log('[ERROR] failed to load things in correct order – svg shapes not available for ' + page.id + ' (yet)');
+                            }
+                        } else {
+                            console.log('no shapes to retrieve for page ' + page.label);
+                        }
+                        
+                        
+                    }
+                }
+                */
+                
+                console.log('is this event firing?')
+                //todo: load all events
+                
+                
+                resolve(viewer);
+            });
+            
+            
+        });
+    }
+    
+    _animatePage() {
+        
+    }
+    
+    
+    
+/* **************************************************************************************** */
     
     _focusShape(containerID, viewer, shape) {
         let rect = this._getShapeRect(containerID, viewer, shape);
@@ -435,8 +698,7 @@ const VideFacsimileViewer = class VideFacsimileViewer extends EoNavModule {
             operation: VIDE_PROTOCOL.OPERATION.VIEW
         };
         
-        this.handleRequest(containerID,req,{});     
-        //this._setupViewer(containerID);
+        this.handleRequest(containerID,req,{});  
         
     }
     
@@ -573,7 +835,7 @@ const VideFacsimileViewer = class VideFacsimileViewer extends EoNavModule {
             return false;
         }
         
-        this._setupViewer(containerID).then((viewer) => {
+        this._setupViewer(containerID,request).then((viewer) => {
             
             //todo: add more complex object when confirming state?
             this._confirmView(containerID,{});
