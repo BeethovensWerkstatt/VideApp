@@ -14,6 +14,7 @@ const VideFacsimileViewer = class VideFacsimileViewer extends EoNavModule {
         this._viewerStore = new Map();
         //a store that holds all page positions
         this._tiledImages = new Map();
+        this._pageMap = new Map();
         
         let stateReq = {object: VIDE_PROTOCOL.OBJECT.STATE, 
             contexts:[], 
@@ -85,8 +86,10 @@ const VideFacsimileViewer = class VideFacsimileViewer extends EoNavModule {
                 
                 for(let j=0; j<source.pages.length; j++) {
                     let page = source.pages[j];
-                        
-                    if(page.shapes !== '') {
+                    let uri = page.facsRef + '/info.json';
+                    this._pageMap.set(uri,page);
+                    
+                    if(page.shapesRef !== '') {
                         //let s0 = performance.now();
                         let svgPromise = new Promise((resolve, reject) => {
                             
@@ -103,6 +106,34 @@ const VideFacsimileViewer = class VideFacsimileViewer extends EoNavModule {
                         });
                     
                         promises.push(svgPromise);
+                    }
+                    
+                    for(let p=0;p<page.patches.length;p++) {
+                        for(let q=0;q<page.patches[p].pages.length;q++) {
+                            
+                            let patch = page.patches[p].pages[q];
+                            let uri = patch.facsRef + '/info.json';
+                            this._pageMap.set(uri,patch);
+                            
+                            if(patch.shapesRef !== '') {
+                                //let s0 = performance.now();
+                                let svgPromise = new Promise((resolve, reject) => {
+                                    
+                                    let svgReq = {id: patch.shapesRef,type:'getPageShapesSvg'};
+                                    resolve(
+                                        this.requestData(svgReq, true).then(
+                                            (svg) => {
+                                                //let s1 = performance.now();
+                                                //console.log('[DEBUG] loading svg for ' + page.label + ' took ' + (s1 - s0) + ' millisecs');
+                                                return Promise.resolve(patch.id);
+                                            }
+                                        )
+                                    );
+                                });
+                            
+                                promises.push(svgPromise);
+                            }
+                        }
                     }
                 }
             }
@@ -204,27 +235,15 @@ const VideFacsimileViewer = class VideFacsimileViewer extends EoNavModule {
                             && (newPos.newX !== currentBounds.x || newPos.newY !== currentBounds.y))
                             || (newPos.x !== currentBounds.x || newPos.y !== currentBounds.y)) {
                             
-                            if(typeof newPos.newX !== 'undefined' && typeof newPos.newY !== 'undefined') {
-                                tiledImage.setPosition(new OpenSeadragon.Point(newPos.newX,newPos.newY),false);    
-                            } else {
-                                tiledImage.setPosition(new OpenSeadragon.Point(newPos.x,newPos.y),false);
-                            }
+                            this._animatePage(containerID,tiledImage,newPos);
                             
                         }
                     } else {
                     
-                        console.log('calling add for ' + newPos.uri)
-                        //add things pages or patches which aren't on stage yet
-                        this._cache.get(containerID + '_viewer').addTiledImage({
-                            tileSource: newPos.uri,
-                            x: - 100,
-                            y: newPos.y - 100,
-                            width: newPos.width,
-                            success: (e) => {
-                                this._tiledImages.set(newPos.uri,e.item);
-                                e.item.setPosition(new OpenSeadragon.Point(newPos.x,newPos.y),false)
-                            }
-                        });
+                        //add pages or patches which aren't on stage yet
+                        
+                        this._addPage(containerID,newPos);
+                        
                     }
                     
                 }
@@ -232,23 +251,149 @@ const VideFacsimileViewer = class VideFacsimileViewer extends EoNavModule {
                 //remove things which aren't required anymore
                 for(let [uri, existingImage] of this._tiledImages.entries()) {
                     if(!newPositions.positions.has(uri)) {
-                        
-                        console.log('calling destroy for ' + uri)
-                        this._tiledImages.delete(uri);
-                        this._cache.get(containerID + '_viewer').world.removeItem(existingImage);
+                        this._removePage(containerID,existingImage,uri);
                     }
                 }
                 
                 //
-                
                 return Promise.resolve(this._cache.get(containerID + '_viewer'))
+            
+            //set up new viewer
             } else {
                 let positions = this._getRequiredPositions(containerID, activeStateID, otherStates,pageJson).positions;
-                this._initializeViewer(containerID,positions).then(
+                this._initializeViewer(containerID,positions,pageJson).then(
                     console.log('____________________ this._initializeViewer complete __________________')
                 )
             }
         });
+        
+    }
+    
+    _addPage(containerID,positionObject) {
+    
+        //code here doubles parts of initializeViewer -> improve that?
+        
+        let viewer = this._cache.get(containerID + '_viewer');
+        
+        //insert page on the left margin, slightly above the final position, then animate to final position
+        viewer.addTiledImage({
+            tileSource: positionObject.uri,
+            x: - 100,
+            y: positionObject.y - 100,
+            width: positionObject.width,
+            success: (e) => {
+                
+                this._tiledImages.set(positionObject.uri,e.item);
+                e.item.setPosition(new OpenSeadragon.Point(positionObject.x,positionObject.y),false);
+                
+                //adding labels etc. from here on
+                let page = this._pageMap.get(positionObject.uri);
+                let bounds = e.item.getBounds();
+                
+                let pageLabel = document.createElement('div');
+                pageLabel.id = containerID + '_pageLabel_' + page.id;
+                pageLabel.className = 'pageLabel';
+                pageLabel.innerHTML = page.label;
+                
+                viewer.addOverlay({
+                    element: pageLabel,
+                    y: bounds.y + bounds.height,
+                    x: bounds.x + (bounds.width / 2),
+                    placement: 'TOP'
+                });
+                
+                let cacheKey = JSON.stringify({id: page.shapesRef,type:'getPageShapesSvg'});
+                
+                //if possible, load svg overlays
+                if(page.shapesRef !== '') {
+                    if(this._cache.has(cacheKey)) {
+                        let svgBox = document.createElement('div');
+                        svgBox.className = 'svgBox';
+                        svgBox.id = containerID + '_' + page.id + '_shapes';
+                        svgBox.innerHTML = this._cache.get(cacheKey);
+                        viewer.addOverlay({
+                            element: svgBox,
+                            y: bounds.y,
+                            x: bounds.x,
+                            width: bounds.width,
+                            height: bounds.height,
+                            placement: 'TOP_LEFT'
+                        });
+                        
+                        //handler for svg shapes being clicked
+                        let onClick = (event) => {
+                            let shape = event.target;
+                            this._clickShape(containerID, viewer, shape, event);
+                            event.preventDefault(); 
+                        };
+                        let paths = svgBox.querySelectorAll('path');
+                        
+                        //adding the handler to each svg shape
+                        for(let x=0; x < paths.length; x++) {
+                            let path = paths[x];
+                            path.addEventListener('click', onClick, false);
+                        }
+                    } else {
+                        console.log('[ERROR] failed to load things in correct order – svg shapes not available for ' + page.id + ' (yet)');
+                    }
+                } else {
+                    console.log('no shapes to retrieve for page ' + page.label);
+                }
+                        
+                        
+                    
+                
+            }
+        });
+    }
+    
+    _removePage(containerID,tiledImage,uri) {
+        try {
+            //get required objects
+            let viewer = this._cache.get(containerID + '_viewer'); 
+            let page = this._pageMap.get(uri);
+            
+            this._tiledImages.delete(uri);
+            
+            viewer.world.removeItem(tiledImage);
+            viewer.removeOverlay(containerID + '_pageLabel_' + page.id);
+            viewer.removeOverlay(containerID + '_' + page.id + '_shapes');
+            
+        } catch(err) {
+            console.log('[ERROR] Failed to remove page ' + uri + ' from ' + containerID + ': ' + err);
+        }
+        
+    }
+    
+    _animatePage(containerID,tiledImage,positionObject) {
+    
+        try {
+            let viewer = this._cache.get(containerID + '_viewer'); 
+            let page = this._pageMap.get(positionObject.uri);
+    
+            let oldBounds = tiledImage.getBounds();
+            let x = typeof positionObject.newX === 'number' ? positionObject.newX : positionObject.x;
+            let y = typeof positionObject.newY === 'number' ? positionObject.newY : positionObject.y;
+            
+            let pageLabel = viewer.getOverlayById(containerID + '_pageLabel_' + page.id);
+            let shapesOverlay = viewer.getOverlayById(containerID + '_' + page.id + '_shapes');
+            
+            let labelBounds = pageLabel.getBounds(viewer.viewport);
+            let labelX = labelBounds.x - oldBounds.x + x;
+            let labelY = labelBounds.y - oldBounds.y + y;
+            
+            let shapesBounds = shapesOverlay.getBounds(viewer.viewport);
+            let shapesX = shapesBounds.x - oldBounds.x + x;
+            let shapesY = shapesBounds.y - oldBounds.y + y;
+            
+            tiledImage.setPosition(new OpenSeadragon.Point(x,y),false);
+            pageLabel.update(new OpenSeadragon.Point(labelX,labelY));
+            shapesOverlay.update(new OpenSeadragon.Point(shapesX,shapesY));
+            
+        } catch(err) {
+            console.log('[ERROR] Unable to animate page ' + positionObject.uri + ': ' + err);
+        }
+        
         
     }
     
@@ -454,7 +599,7 @@ const VideFacsimileViewer = class VideFacsimileViewer extends EoNavModule {
     }
     
     //this function initializes the OSD viewer
-    _initializeViewer(containerID,positions) {
+    _initializeViewer(containerID,positions,pageJson) {
         
         return new Promise((resolve, reject) => {
             let tileSources = [];
@@ -476,6 +621,7 @@ const VideFacsimileViewer = class VideFacsimileViewer extends EoNavModule {
                 id: containerID + '_facsimile',
                 tileSources: tileSources,
                 sequenceMode: false,
+                animationTime: 4,
                 showReferenceStrip: true,
                 showRotationControl: true,
                 showNavigator: true,
@@ -517,7 +663,7 @@ const VideFacsimileViewer = class VideFacsimileViewer extends EoNavModule {
             
             //do internal setup after images are loaded
             viewer.addHandler('open', (event) => {
-                /*let i=0;
+                let i=0;
                 let pageCount = 0;
                 
                 for(i; i<pageJson.sources.length; i++) {
@@ -525,10 +671,15 @@ const VideFacsimileViewer = class VideFacsimileViewer extends EoNavModule {
                     for(let j=0; j<source.pages.length; j++) {
                         let page = source.pages[j];
                         
-                        let bounds = viewer.world.getItemAt(pageCount).getBounds();
+                        let tiledImage = this._tiledImages.get(page.facsRef + '/info.json');
+                        let bounds = tiledImage.getBounds();
+                        
                         pageCount++;
                         
                         //set source label
+                        
+                        let rasterY = pageJson.maxDimensions.height + 50;
+                         
                         if(j===0) {
                             
                             let sourceLabel = document.createElement('div');
@@ -538,7 +689,7 @@ const VideFacsimileViewer = class VideFacsimileViewer extends EoNavModule {
                             
                             viewer.addOverlay({
                                 element: sourceLabel,
-                                y: bounds.y + (bounds.height / 2),
+                                y: i * rasterY + (rasterY / 2),
                                 x: -10,
                                 placement: 'RIGHT'
                             });
@@ -546,17 +697,22 @@ const VideFacsimileViewer = class VideFacsimileViewer extends EoNavModule {
                         }
                         
                         //set page label
-                        let pageLabel = document.createElement('div');
-                        pageLabel.id = containerID + '_pageLabel_' + page.id;
-                        pageLabel.className = 'pageLabel';
-                        pageLabel.innerHTML = page.label;
-                        
-                        viewer.addOverlay({
-                            element: pageLabel,
-                            y: bounds.y + bounds.height,
-                            x: bounds.x + (bounds.width / 2),
-                            placement: 'TOP'
-                        });
+                         
+                        let existingLabel = viewer.getOverlayById(containerID + '_pageLabel_' + page.id);
+                        //add label only once (in case of moving pages)
+                        if(existingLabel === null) {
+                            let pageLabel = document.createElement('div');
+                            pageLabel.id = containerID + '_pageLabel_' + page.id;
+                            pageLabel.className = 'pageLabel';
+                            pageLabel.innerHTML = page.label;
+                            
+                            viewer.addOverlay({
+                                element: pageLabel,
+                                y: bounds.y + bounds.height,
+                                x: bounds.x + (bounds.width / 2),
+                                placement: 'TOP'
+                            });
+                        }
                         
                         let cacheKey = JSON.stringify({id: page.shapesRef,type:'getPageShapesSvg'});
                         
@@ -565,6 +721,7 @@ const VideFacsimileViewer = class VideFacsimileViewer extends EoNavModule {
                             if(this._cache.has(cacheKey)) {
                                 let svgBox = document.createElement('div');
                                 svgBox.className = 'svgBox';
+                                svgBox.id = containerID + '_' + page.id + '_shapes';
                                 svgBox.innerHTML = this._cache.get(cacheKey);
                                 viewer.addOverlay({
                                     element: svgBox,
@@ -577,7 +734,7 @@ const VideFacsimileViewer = class VideFacsimileViewer extends EoNavModule {
                                 
                                 //handler for svg shapes being clicked
                                 let onClick = (e) => {
-                                    let shape = e.target;
+                                    let shape = e.currentTarget;
                                     this._clickShape(containerID, viewer, shape, e);
                                     e.preventDefault(); 
                                 };
@@ -598,11 +755,6 @@ const VideFacsimileViewer = class VideFacsimileViewer extends EoNavModule {
                         
                     }
                 }
-                */
-                
-                console.log('is this event firing?')
-                //todo: load all events
-                
                 
                 resolve(viewer);
             });
@@ -610,12 +762,7 @@ const VideFacsimileViewer = class VideFacsimileViewer extends EoNavModule {
             
         });
     }
-    
-    _animatePage() {
         
-    }
-    
-    
     
 /* **************************************************************************************** */
     
@@ -638,7 +785,7 @@ const VideFacsimileViewer = class VideFacsimileViewer extends EoNavModule {
         let supportedRequests = this._eohub.getSupportedRequests();
         
         let shapeReq = {id: shape.id, edition: this._eohub.getEdition(), type: 'getShapeInfo'}
-        
+                
         this.requestData(shapeReq,false)
             .then(
                 (json) => {
@@ -711,6 +858,8 @@ const VideFacsimileViewer = class VideFacsimileViewer extends EoNavModule {
         try {
             let baseRect = this._getShapeRect(containerID, viewer, document.querySelector('#' + containerID + ' #' + state.shapes[0]));
             
+            let problems = [];
+            
             for(let i=0; i<state.shapes.length; i++) {
                 let shape = document.querySelector('#' + containerID + ' #' + state.shapes[i]);
                 try {
@@ -718,8 +867,12 @@ const VideFacsimileViewer = class VideFacsimileViewer extends EoNavModule {
                     let rect = this._getShapeRect(containerID, viewer, shape);
                     baseRect = baseRect.union(rect);  
                 } catch(error) {
-                    console.log('[ERROR] invalid shape ' + state.shapes[i] + ' in state ' + state.label + ': ' + error);
+                    problems.push({shape:state.shapes[i],state: state.id,error: error})
                 }
+            }
+            
+            if(problems.length > 0) {
+                console.log('[ERROR] found ' + problems.length + ' problems when highlighting state ' + state.label);                
             }
             viewer.viewport.fitBoundsWithConstraints(baseRect);
             

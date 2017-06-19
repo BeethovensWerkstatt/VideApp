@@ -508,10 +508,6 @@ const EoNavModule = class EoNavModule extends EoModule {
         let editionID = this._eohub.getEdition();
         this._getStateData(editionID).then((stateJson) => {
             
-            console.log('--------------88')
-            console.log(stateJson)
-            console.log('has this been a valid stateJson?')
-            
             let scarObj = stateJson.find((elem) => {
                 return elem.id === scarId;
             });
