@@ -6,8 +6,13 @@
     flex-direction: column-reverse;  
     
     .visSlider {
+        display: none;
         width: 90px;
         margin: 8px 0;
+        
+        &.visible {
+            display: block;
+        }
     }
 }
 
@@ -38,6 +43,20 @@
             height: 100% !important;
         }  
     } 
+    
+    .pageBack {
+    
+        opactiy: 0;
+    
+        svg {
+            width: 100% !important;
+            height: 100% !important;        
+        }   
+    }
+    
+    .svgBox {
+        opacity: 0;
+    }
     
     .svgBox svg {
         width: 100% !important;

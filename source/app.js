@@ -49,12 +49,8 @@ eohub.registerModule(videPageOverlayViewer);
 let transcriptionViewer = new VideTranscriptionViewer();
 eohub.registerModule(transcriptionViewer);
 
-/* 
-
 let videTextViewer = new VideTextViewer();
 eohub.registerModule(videTextViewer);
-
-*/
 
 
 /*store.dispatch(switchLanguage('de'));

@@ -3,25 +3,29 @@ import VIDE_PROTOCOL from './vide-protocol';
 import {EoModule, Request} from './vide-module-blueprint';
 
 
-const VideTextViewer = class VideMEITextViewer extends EoModule {
+const VideTextViewer = class VideTextViewer extends EoModule {
 
     /*Constructor method*/
     constructor() {
         super();
-        this._supportedPerspective = EO_Protocol.Perspective.PERSPECTIVE_TEXT;
+        this._supportedPerspective = VIDE_PROTOCOL.PERSPECTIVE.TEXT;
         this._supportedRequests = [];
-        let _this = this;
+        
+        let textReq = {object: VIDE_PROTOCOL.OBJECT.TEXT, 
+            contexts:[], 
+            perspective: this._supportedPerspective, 
+            operation: VIDE_PROTOCOL.OPERATION.VIEW};
+        this._supportedRequests.push(textReq);
         
         this._meiTextStore = new Map();
         this._meiTextStoreVideos = new Map();
         
-        this._key = 'videMEITextViewer';
-        this._serverConfig = {host: 'http://localhost', port: ':32107', basepath:'/'};
+        this._key = 'VideTextViewer';
         return this;
     }
     
     unmount(containerID) {
-        containerID = containerID.replace(/videMEITextViewer/, 'VIEWTYPE_TEXTVIEW_MEI');    
+        //containerID = containerID.replace(/videMEITextViewer/, 'VIEWTYPE_TEXTVIEW_MEI');    
         if(this._meiTextStoreVideos.has(containerID)) {
             let array = this._meiTextStoreVideos.get(containerID);
             try {
@@ -36,11 +40,46 @@ const VideTextViewer = class VideMEITextViewer extends EoModule {
         //document.getElementById(containerID).innerHTML = '';
     }
     
+    _getIntroText(editionID) {
+        let req = {id: editionID,type:'getIntroText'}
+        return this.requestData(req,true);
+    }
+    
+    _setupHtml(containerID) {
+        
+        //create html for menu
+        let menuElem = document.createElement('div');
+        menuElem.id = containerID + '_menu';
+        menuElem.classList.add('menu');
+        document.getElementById(containerID).appendChild(menuElem);
+        
+        //create html for content
+        let containerElem = document.createElement('div');
+        containerElem.id = containerID + '_content';
+        containerElem.classList.add('contentBox');
+        document.getElementById(containerID).appendChild(containerElem);
+        
+        this._setupViewSelect(containerID + '_menu', containerID);
+        
+        return Promise.resolve(containerElem);
+        
+    }
+    
     getDefaultView(containerID) {
-        containerID = containerID.replace(/videMEITextViewer/, 'VIEWTYPE_TEXTVIEW_MEI');
+        
         let edition = this._eohub.getEdition();
         
-        if(this._meiTextStore.has(edition) && typeof this._meiTextStore.get(edition).introduction !== 'undefined') {
+        let req = {
+            id: edition,
+            object: VIDE_PROTOCOL.OBJECT.TEXT,
+            contexts: [],
+            perspective: this._supportedPerspective,
+            operation: VIDE_PROTOCOL.OPERATION.VIEW
+        }
+        
+        this.handleRequest(containerID,req,{});  
+        
+        /*if(this._meiTextStore.has(edition) && typeof this._meiTextStore.get(edition).introduction !== 'undefined') {
             document.getElementById(containerID).innerHTML = this._meiTextStore.get(edition).introduction;
             this._activateVideos(containerID);
             
@@ -62,7 +101,7 @@ const VideTextViewer = class VideMEITextViewer extends EoModule {
                         }
                     })
             );
-        }
+        }*/
     }
     
     _activateVideos(containerID) {
@@ -87,38 +126,19 @@ const VideTextViewer = class VideMEITextViewer extends EoModule {
         }
     }
     
-    handleRequest(request) {
-        console.log('[DEBUG] At this point, its not possible to handle the following request in videMEITextViewer.js:');
-        console.log(request);
+    handleRequest(containerID,request,state = {}) {
         
-        /*let fullContainer = (request.getContainer() + '_' + this._key).replace(/videXMLviewer/,'VIEWTYPE_XMLVIEW');
+        let editionID = this._eohub.getEdition();
         
-        let edition = this._eohub.getEdition();
-        let targetObject = request.getObjectID();
-        
-        let htmlElem = document.getElementById(fullContainer + '_editor');
-        
-        let func = (editor) => {
+        this._getIntroText(editionID).then((html) => {
+            this._setupHtml(containerID).then((container) => {
+                console.log('-------75')
+                container.innerHTML = html;
+                this._activateVideos(containerID);
+            });
             
-            editor.resize(true);
-            editor.find('id="' + targetObject + '"',{},true);
-            
-        };
+        });
         
-        if(typeof window.aceStore === 'undefined' || typeof window.aceStore[this._eohub.getEdition()] === 'undefined')
-            this.getDefaultView(fullContainer, func);
-        else if(htmlElem === null) {
-            //console.log('[DEBUG] need to set up HTML first');
-            let editor = this._setupHtml(fullContainer);
-            editor.setValue(window.aceStore[this._eohub.getEdition()].xml);
-            editor.clearSelection();
-            
-            func(editor);
-        }
-            
-        else
-            func(window.aceStore[this._eohub.getEdition()].editor);
-        */
     }
     
 };

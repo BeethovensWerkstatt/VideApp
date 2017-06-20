@@ -79,6 +79,10 @@
         "de":"Transkription",
         "en":"Transcription"
     },
+    "VideTextViewer":{
+        "de":"Einführung",
+        "en":"Introduction"
+    },
     "contextMenu_showIn_VIDE_PROTOCOL_PERSPECTIVE_FACSIMILE":{
         "de":"Im Faksimile anzeigen",
         "en":"Show Facsimile"
