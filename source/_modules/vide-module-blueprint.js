@@ -65,14 +65,10 @@ const EoModule = class EoModule {
     activate(feature) {
         this._active = true;
         
-        console.log('------ Activating module ' + this._key + ' – feature: ' + feature)
-        
         if(typeof feature !== 'undefined') {
             this._feature = true;
-            console.log('-------1')
         } else {
             this._feature = false;
-            console.log('-------2')
         }
         return this;
     }
@@ -113,8 +109,12 @@ const EoModule = class EoModule {
                 enhancedRequest.key = Math.uuidCompact();
                 enhancedRequest.state = {};
                 
+                this._eohub.notifyLoadingDataStart(enhancedRequest.key,enhancedRequest.type);
+                
                 this._socket.once(enhancedRequest.key,(data) => {
                     this._cache.set(key,data);
+                    //add second parameter in next row to indicate success / failure
+                    this._eohub.notifyLoadingDataStop(enhancedRequest.key);
                     resolve(data);
                 });
                 

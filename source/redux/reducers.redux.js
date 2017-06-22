@@ -363,6 +363,7 @@ export function handleContextMenu(state = {visible: false, items:[], x: 0, y: 0}
  */
 export function handleNetwork(state = {
     dataStatus: StatusCodes.NO_CONNECTION,
+    activeRequests: [],
     nolog: false,
 }, action) {
     switch (action.type) {
@@ -385,6 +386,30 @@ export function handleNetwork(state = {
             
         case ActionTypes.HIGHLIGHT_EDITION: 
             return Object.assign({}, state, {
+                nolog: true
+            });
+            
+        case ActionTypes.START_LOADING_DATA:
+        
+            let newRequests = [...state.activeRequests];
+            newRequests.push({key: action.key, type: action.requestType});
+            return Object.assign({}, state, {
+                activeRequests: newRequests,
+                nolog: true
+            });
+            
+        case ActionTypes.STOP_LOADING_DATA:
+        
+            let index = state.activeRequests.findIndex((request,index) => {
+                return request.key === action.key;
+            })
+            let cleanedRequests = [...state.activeRequests];
+            if(index > -1) {
+                cleanedRequests.splice(index,1);
+            }
+        
+            return Object.assign({}, state, {
+                activeRequests: cleanedRequests,
                 nolog: true
             });
            
@@ -410,6 +435,7 @@ export function handleNetwork(state = {
             
             return {
                 dataStatus: StatusCodes.NO_CONNECTION,
+                activeRequests: {},
                 nolog: false,
             };
         

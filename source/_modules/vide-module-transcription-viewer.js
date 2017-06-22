@@ -10,14 +10,13 @@ const VideTranscriptionViewer = class VideTranscriptionViewer extends EoNavModul
         super();
         this._supportedPerspective = VIDE_PROTOCOL.PERSPECTIVE.TRANSCRIPTION;
         this._supportedRequests = [];
-        let _this = this;
         
         //shows a complete state, without highlighting
-        _this._supportedRequests.push({objectType: VIDE_PROTOCOL.OBJECT.STATE, contexts:[VIDE_PROTOCOL.CONTEXT.STATE], perspective: this._supportedPerspective, operation: VIDE_PROTOCOL.OPERATION.VIEW});
+        this._supportedRequests.push({object: VIDE_PROTOCOL.OBJECT.STATE, contexts:[VIDE_PROTOCOL.CONTEXT.STATE], perspective: this._supportedPerspective, operation: VIDE_PROTOCOL.OPERATION.VIEW});
         //highlights a note (or similar) within a state
-        _this._supportedRequests.push({objectType: VIDE_PROTOCOL.OBJECT.NOTATION, contexts:[VIDE_PROTOCOL.CONTEXT.STATE], perspective: this._supportedPerspective, operation: VIDE_PROTOCOL.OPERATION.VIEW});
-        _this._supportedRequests.push({objectType: VIDE_PROTOCOL.OBJECT.LYRICS, contexts:[VIDE_PROTOCOL.CONTEXT.STATE], perspective: this._supportedPerspective, operation: VIDE_PROTOCOL.OPERATION.VIEW});
-        _this._supportedRequests.push({objectType: VIDE_PROTOCOL.OBJECT.DIR, contexts:[VIDE_PROTOCOL.CONTEXT.STATE], perspective: this._supportedPerspective, operation: VIDE_PROTOCOL.OPERATION.VIEW});
+        this._supportedRequests.push({object: VIDE_PROTOCOL.OBJECT.NOTATION, contexts:[VIDE_PROTOCOL.CONTEXT.STATE], perspective: this._supportedPerspective, operation: VIDE_PROTOCOL.OPERATION.VIEW});
+        this._supportedRequests.push({object: VIDE_PROTOCOL.OBJECT.LYRICS, contexts:[VIDE_PROTOCOL.CONTEXT.STATE], perspective: this._supportedPerspective, operation: VIDE_PROTOCOL.OPERATION.VIEW});
+        this._supportedRequests.push({object: VIDE_PROTOCOL.OBJECT.DIR, contexts:[VIDE_PROTOCOL.CONTEXT.STATE], perspective: this._supportedPerspective, operation: VIDE_PROTOCOL.OPERATION.VIEW});
         
         this._key = 'VideTranscriptionViewer';
         
@@ -772,7 +771,7 @@ const VideTranscriptionViewer = class VideTranscriptionViewer extends EoNavModul
                 }
                 
                 let query = {
-                    objectType: VIDE_PROTOCOL.OBJECT.STATE,
+                    object: VIDE_PROTOCOL.OBJECT.STATE,
                     objectID: stateID,
                     contexts: contexts,
                     perspective: this._supportedPerspective,
@@ -852,7 +851,7 @@ const VideTranscriptionViewer = class VideTranscriptionViewer extends EoNavModul
             
             //filter for notation
         let filteredRequests = supportedRequests.filter(function(request){
-            return (request.objectType === VIDE_PROTOCOL.OBJECT.NOTATION && request.perspective !== _this._supportedPerspective);
+            return (request.object === VIDE_PROTOCOL.OBJECT.NOTATION && request.perspective !== _this._supportedPerspective);
         });
             
         let notes = document.querySelectorAll('#' + containerID + ' g.note, #' + containerID + ' g.rest');
@@ -942,52 +941,6 @@ const VideTranscriptionViewer = class VideTranscriptionViewer extends EoNavModul
             console.log('[ERROR] Unable to open context menu: ' + err);
         }
         
-        
-        /*this.requestData(shapeReq,false)
-            .then(
-                (json) => {
-                    
-                    let elem = json[0];
-                    
-                    let requests = [];
-                    let filteredRequests = supportedRequests.filter((request) => {
-                        return (request.object === elem.type && request.perspective !== this._supportedPerspective);
-                    }); 
-                    
-                    filteredRequests.forEach((request, j) => {
-                        let req = Object.assign({}, request);
-                        req.id = elem.id;
-                        if(request.perspective === VIDE_PROTOCOL.PERSPECTIVE.TRANSCRIPTION) {
-                            let states = elem.states.filter(function(state){
-                                return state.type !== 'del';
-                            });
-                            
-                            for(let k=0; k<states.length; k++) {
-                                let reqCopy = {
-                                    object: req.object, 
-                                    id: req.id,
-                                    operation: req.operation,
-                                    perspective: req.perspective,
-                                    contexts: [{id: states[k].id, context:VIDE_PROTOCOL.CONTEXT.STATE}]
-                                };
-                                
-                                requests.push(reqCopy);
-                            }
-                        } else {
-                            requests.push(req);
-                        }
-                    });
-                    
-                    let closeFunc = () => {
-                        this._focusShape(containerID, viewer, shape);
-                    };
-                    try {
-                        this._eohub._viewManager.setContextMenu(requests, event, containerID, closeFunc);    
-                    } catch(err) {
-                        console.log('[ERROR] Unable to open context menu: ' + err);
-                    }
-                }
-            );*/
     }
     
     _createRect(viewer,containerID, shapesArray) {

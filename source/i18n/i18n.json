@@ -214,5 +214,73 @@
     "bwTerm_micro_Variant" : {
         "de":"Mikro-Variante",
         "en":"Micro variant"
+    },
+    "loadData_getXmlFile" : {
+        "de":"lade XML",
+        "en":"loading XML"
+    },
+    "loadData_getPages" : {
+        "de":"lade Seiteninformationen",
+        "en":"retrieving page setup"
+    },
+    "loadData_getStates" : {
+        "de":"lade Daten",
+        "en":"retrieving genetic states"
+    },
+    "loadData_getState" : {
+        "de":"lade Textzustand",
+        "en":"retrieving genetic state"
+    },
+    "loadData_getScarCategories" : {
+        "de":"lade Kategorien",
+        "en":"retrieving categories"
+    },
+    "loadData_getMeasures" : {
+        "de":"lade Taktdaten",
+        "en":"retrieving measure setup"
+    },
+    "loadData_getShapeInfo" : {
+        "de":"lade Daten",
+        "en":"retrieving shape information"
+    },
+    "loadData_getShapesForObject" : {
+        "de":"lade SVG-Shapes",
+        "en":"retrieving shapes for object"
+    },
+    "loadData_getInvariance" : {
+        "de":"lade Invarianz-Daten",
+        "en":"retrieving invariance data"
+    },
+    "loadData_getElementDesc" : {
+        "de":"lade Beschreibung",
+        "en":"retrieving description"
+    },
+    "loadData_getPageShapesSvg" : {
+        "de":"lade SVG",
+        "en":"retrieving SVG"
+    },
+    "loadData_getRenderedPageOverlay" : {
+        "de":"lade Transkription",
+        "en":"retrieving overlay"
+    },
+    "loadData_getElementXml" : {
+        "de":"lade XML",
+        "en":"retrieving XML"
+    },
+    "loadData_getFinalState" : {
+        "de":"lade endgültigen Werktext",
+        "en":"retriving final text"
+    },
+    "loadData_getIntroText" : {
+        "de":"lade Einführungstext",
+        "en":"retrieving introduction"
+    },
+    "loadData_getElementFacsimileInfo" : {
+        "de":"lade Vorschau",
+        "en":"retrieving preview"
+    },
+    "loadData_getTranscriptionPreview" : {
+        "de":"lade Transkription",
+        "en":"retrieving transcription"
     }
 }

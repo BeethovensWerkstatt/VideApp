@@ -73,6 +73,8 @@ const EoHub = class EoHub {
         
         //console.log('me here with ' + id + ' -- ' + revision)
         
+        this.deactivateAllModules();
+        
         let supportedViews = this._viewManager.getSupportedViews(id);
         
         for(let i=0; i<supportedViews.length; i++) {
@@ -233,22 +235,22 @@ const EoHub = class EoHub {
      * @param {Object} req is sent to all modules
      * @returns {boolean} if there is no adequate module
      */
-    /*broadcastRequest(object) {
+    broadcastRequest(object) {
         let req = object.req;
         let containerID = object.target;
         
-        /\*if(req instanceof Request) {
+        /*if(req instanceof Request) {
             request = req;
         } else {
             request = new Request(req.containerID, req.editionID, req.query);
-        }*\/
+        }*/
         
         let fittingModules = [];
         
         for (var eoModule of this._modules.values()) {
             try {
                 let fits = eoModule.checkRequest(req);
-                if(fits !== false) {
+                if(fits !== false && eoModule.isActive()) {
                     fittingModules.push(eoModule);
                 }
             } catch(err) {
@@ -267,11 +269,19 @@ const EoHub = class EoHub {
         let module = fittingModules[0];
         
         this._viewManager.prepareView(containerID, module.getKey(), req);
-    }*/
+    }
     
     
     changeView(containerID,targetView) {
         this._viewManager.prepareView(containerID, targetView);
+    }
+    
+    notifyLoadingDataStart(key,type) {
+        this._viewManager.notifyLoadingDataStart(key,type);
+    }
+    
+    notifyLoadingDataStop(key,success) {
+        this._viewManager.notifyLoadingDataStop(key,success);
     }
     
     /*

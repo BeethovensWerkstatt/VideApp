@@ -154,3 +154,15 @@
     
 }
 
+.previewItem.transcriptionPreview {
+    svg * {
+        fill: #999999;
+        stroke: #999999;
+        
+        &.highlighted, &.highlighted * {
+            fill: #000000;
+            stroke: #000000;
+        }
+    }
+}
+

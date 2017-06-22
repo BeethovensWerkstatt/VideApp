@@ -11,8 +11,8 @@ Math.uuidCompact = function() {
     });
 };
 
-const PreviewItem = ({ object }) => {
-        
+const PreviewItem = ({ object, clickFunc }) => {
+    
     try {
     //facsimiles
      
@@ -41,8 +41,14 @@ const PreviewItem = ({ object }) => {
             
             return (
                 <div className='previewItem facs'>
-                    <div className='imgBox' id={'img' + key}></div>
-                    <span className='sliderItemLabel' id={'label' + key}></span>
+                    <div className='imgBox' id={'img' + key} onClick={e => {
+                            e.preventDefault();
+                            clickFunc(object);
+                        }}></div>
+                    <span className='sliderItemLabel' id={'label' + key} onClick={e => {
+                            e.preventDefault();
+                            clickFunc(object);
+                        }}></span>
                 </div>
             );
         } else if(object.req.perspective === VIDE_PROTOCOL.PERSPECTIVE.XML) {
@@ -81,58 +87,74 @@ const PreviewItem = ({ object }) => {
                     <div className='editorBox' id={key}>
                         
                     </div>
-                    <span className='sliderItemLabel'><I18n content={'contextMenu_showIn_' + object.req.perspective}/></span>
+                    <span className='sliderItemLabel' onClick={e => {
+                            console.log('-----------------71 onClick XML labels')
+                            e.preventDefault();
+                            clickFunc(object);
+                        }}><I18n content={'contextMenu_showIn_' + object.req.perspective}/></span>
                 </div>
             );
+            
+        //Transcription Preview    
         } else if(object.req.perspective === VIDE_PROTOCOL.PERSPECTIVE.TRANSCRIPTION) {
-            let id = 'x' + Math.uuidCompact();
+            
+            let key = 'x' + Math.uuidCompact();
             
             let states = [];
-            for(let i=0, ii=object.query.contexts.length; i<ii; i++) {
-                let context = object.query.contexts[i];
+            for(let i=0, ii=object.req.contexts.length; i<ii; i++) {
+                let context = object.req.contexts[i];
                 if(typeof context === 'object' && context.type === VIDE_PROTOCOL.CONTEXT.STATE) {
                     states.push(context.id);
                 }
             }
-            let statesString = states.length === 0 ? '_' : states.join('___');
             
-            let url = 'http://localhost:8080/exist/apps/exist-module/edition/' + object.editionID + '/element/' + object.req.objectID + '/states/' + statesString + '/preview.xml';
+            let req = {
+                id: object.req.id,
+                edition: eohub.getEdition(),
+                otherStates: states,
+                type: 'getTranscriptionPreview',
+                key: key
+            }
             
-            let request = new DataRequest('text', url);
-            window.EoHub.requestData(request).then(
-                (mei) => {
-                    let vrvToolkit = window.vrvStore.vrvToolkit;
+            let socket = io(eohub._server + eohub._socketID);
+            
+            socket.once(key,(mei) => {
+                let verovio = eohub.getVerovio();
                 
-                    var options = JSON.stringify({
-                        inputFormat: 'mei',
-                        border: 0,
-                        scale: 35,           //scale is in percent (1 - 100)
-                        ignoreLayout: 0,
-                        noLayout: 1          //results in a continuous system without page breaks
-                    });
-                    
-                    vrvToolkit.setOptions(options);
-                    let svg = vrvToolkit.renderData(mei + '\n', '');
-                    
-                    document.getElementById(id).innerHTML = svg;
-                    document.querySelector('#' + id + ' svg #' + object.req.objectID).classList.add('highlighted');
-                }
-            );
-        
+                var options = {
+                    inputFormat: 'mei',
+                    border: 0,
+                    scale: 35,           //scale is in percent (1 - 100)
+                    ignoreLayout: 0,
+                    noLayout: 1          //results in a continuous system without page breaks
+                };
+                
+                //verovio.setOptions(options);
+                let svg = verovio.renderData(mei + '\n', options);
+                
+                document.getElementById(key).innerHTML = svg;
+                document.querySelector('#' + key + ' svg #' + object.req.id).classList.add('highlighted');
+            });
+            
+            socket.emit('requestData', req);
+            
             return (
                 <div className='previewItem transcriptionPreview'>
-                    <div className='renderingBox' id={id}><I18n content={'networkStatus_100'}/></div>
-                    <span className='sliderItemLabel'><I18n content={'contextMenu_showIn_' + object.req.perspective}/></span>
+                    <div className='renderingBox' id={key} onClick={e => {
+                            e.preventDefault();
+                            clickFunc(object);
+                        }}>
+                        <I18n content={'networkStatus_100'}/>
+                    </div>
+                    <span className='sliderItemLabel' onClick={e => {
+                            e.preventDefault();
+                            clickFunc(object);
+                        }}>
+                        <I18n content={'contextMenu_showIn_' + object.req.perspective}/>
+                    </span>
                 </div>
             );
-        } else if(object.req.perspective === VIDE_PROTOCOL.PERSPECTIVE.RECONSTRUCTION) {
-            //todo: add preview for reconstruction
-            return (
-                <div className='previewItem reconstructionPreview'>
-                    <I18n content={'no_preview_available'}/>
-                    <span className='sliderItemLabel'><I18n content={'contextMenu_showIn_' + object.req.perspective}/></span>
-                </div>
-            );
+        
         } else if(object.req.perspective === VIDE_PROTOCOL.PERSPECTIVE.TEXT) {
             //todo: add preview for text
             return (
@@ -141,6 +163,7 @@ const PreviewItem = ({ object }) => {
                     <span className='sliderItemLabel'><I18n content={'contextMenu_showIn_' + object.req.perspective}/></span>
                 </div>
             );
+        
         } else {
             return (
                 <div className='previewItem unknown'>
@@ -160,7 +183,8 @@ const PreviewItem = ({ object }) => {
 };
 
 PreviewItem.propTypes = {
-  object: PropTypes.object.isRequired
+  object: PropTypes.object.isRequired,
+  clickFunc: PropTypes.func.isRequired
 };
 
 export default PreviewItem;

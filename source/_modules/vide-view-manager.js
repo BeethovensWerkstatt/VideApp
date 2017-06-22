@@ -1,5 +1,5 @@
 import 'babel-polyfill';
-import {openContextMenu, setFirstView, setSecondView, confirmView} from './../redux/actions.redux';
+import {openContextMenu, setFirstView, setSecondView, confirmView, startLoadingData, stopLoadingData} from './../redux/actions.redux';
 import {ViewLayouts} from './../redux/layout.constants';
 import VIDE_PROTOCOL from './vide-protocol';
 import VideHistoryManager from './vide-history-manager';
@@ -57,6 +57,14 @@ const VideViewManager = class VideViewManager {
         } else {
             console.log('[ERROR] unable to determine target that wanted to confirm its view: ' + containerID)
         }
+    }
+    
+    notifyLoadingDataStart(key,type) {
+        this._store.dispatch(startLoadingData(key,type));
+    }
+    
+    notifyLoadingDataStop(key,success) {
+        this._store.dispatch(stopLoadingData(key,success));
     }
     
     //todo: remove this

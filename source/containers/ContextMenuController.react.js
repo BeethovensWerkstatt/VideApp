@@ -18,9 +18,14 @@ const mapDispatchToProps = (dispatch, ownProps) => {
             dispatch(closeContextMenu());
         },
         submitRequest: (item) => {
+            console.log(' ')
+            console.log('---------------------------------------------------------------')
+            console.log('jlkjkljkljlkjlkjlkjlkjlkjkljkljkljlkjlkjkljkljlkjlkjkljlkjlkjlk')
+            console.log('---------------------------------------------------------------')
+            console.log(' ')
+            console.log(item)
+            
             try {
-                console.log('--------now what to do with this item:')
-                console.log(item)
                 eohub.broadcastRequest(item);    
             } catch(err) {
                 console.log('[ERROR] Unable to submit request: ' + err);

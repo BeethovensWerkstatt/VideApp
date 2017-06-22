@@ -41,7 +41,10 @@ export const ActionTypes = {
     
     RESTORE_STATE: 'RESTORE_STATE',
     RESET_STATE: 'RESET_STATE',
-    CONFIRM_VIEW: 'CONFIRM_VIEW'
+    CONFIRM_VIEW: 'CONFIRM_VIEW',
+    
+    START_LOADING_DATA: 'START_LOADING_DATA',
+    STOP_LOADING_DATA: 'STOP_LOADING_DATA'
 };
 
 /** 
@@ -79,6 +82,14 @@ export function setSyncViews(synced = false) {
  */
 export function confirmView(state = null,view = -1) {
     return {type: ActionTypes.CONFIRM_VIEW, state, view};
+}
+
+export function startLoadingData(key,type) {
+    return {type: ActionTypes.START_LOADING_DATA, key, requestType: type};
+}
+
+export function stopLoadingData(key,success) {
+    return {type: ActionTypes.STOP_LOADING_DATA, key, success};
 }
 
 /**

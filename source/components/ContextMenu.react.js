@@ -54,11 +54,8 @@ const ContextMenu = ({ items, visible, closeContextMenu, submitRequest, x, y }) 
                         <Slider {...sliderSettings}>
                             {
                                 items.map(function(item, i) {
-                                    return <div className="contextSliderItem" key={i} onClick={e => {
-                                        e.preventDefault();
-                                        submitRequest(item);
-                                    }}> 
-                                        <PreviewItem object={item}/>
+                                    return <div className="contextSliderItem" key={i}> 
+                                        <PreviewItem object={item} clickFunc={submitRequest}/>
                                     </div>;
                                 })
                             }    

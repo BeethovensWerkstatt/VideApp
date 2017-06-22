@@ -3,6 +3,7 @@ var AppHeader = require('./AppHeader.react');
 
 import ViewsController from '../containers/ViewsController.react';
 import ContextMenuController from '../containers/ContextMenuController.react';
+import LoadingIndicatorController from '../containers/LoadingIndicatorController.react';
 
 
 /*var AppFooter = require('./AppFooter.react');
@@ -24,6 +25,7 @@ var Application = React.createClass({
                 <AppHeader text="Beethovens Werkstatt"/>
                 <ViewsController/>
                 <ContextMenuController/>
+                <LoadingIndicatorController/>
             </div>
             
         );
