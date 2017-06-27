@@ -3,32 +3,34 @@
 
 #loadingIndicator {
     position: absolute;
-    top: 6px;
-    right: 150px;
-    width: 200px;
-    height: 20px;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    background-color: rgba(0,0,0,0.6);
     
     .loadingItem {
         position: absolute;
-        top: 0;
-        right: 0;
-        bottom: 0;
-        left: 0;
+        top: 50%;
+        left: 50%;
+        
+        width: 500px;
+        margin-left: -250px;
+        
         /*background-color: #ff000066;*/
         color: #aaaaaa;
         font-weight: 100;
-        font-size: 14px;
+        font-size: 40px;
+        text-align: center;
         
         span {
-            margin-left: 5px;
+            display: block;
         }
         
-        i.fa {
+        & + .loadingItem {
             display: none;
         }
-        
-        &:first-child i.fa {
-            display: inline;
-        }
     }
+    
+    
 }

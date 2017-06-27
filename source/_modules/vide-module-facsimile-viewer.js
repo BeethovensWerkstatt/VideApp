@@ -57,15 +57,15 @@ const VideFacsimileViewer = class VideFacsimileViewer extends EoNavModule {
     }
     
     unmount(containerID) {
-        console.log('---------- Unmounting facsimileViewer')
-        let viewer = this._cache.get(containerID + '_viewer', viewer)
+        //console.log('---------- Unmounting facsimileViewer')
+        let viewer = this._cache.get(containerID + '_facsViewer')
         viewer.destroy();
-        this._cache.delete(containerID + '_viewer');
-        
         this._tiledImages.clear();
+        this._cache.delete(containerID + '_facsViewer');
         
         document.getElementById(containerID).innerHTML = '';
-        console.log('---------- Unmounted facsimileViewer')
+        //console.log('---------- Unmounted facsimileViewer: ' + containerID + '_facsViewer | ' + this._cache.has(containerID + '_facsViewer'))
+        
     }
     
     /** 
@@ -219,13 +219,24 @@ const VideFacsimileViewer = class VideFacsimileViewer extends EoNavModule {
             '<div id="' + containerID + '_zoomHome" class="menuButton"><i class="fa fa-arrows-alt"></i></div>' + 
             '<div id="' + containerID + '_rotateLeft" class="menuButton"><i class="fa fa-rotate-left"></i></div>' + 
             '<div id="' + containerID + '_rotateRight" class="menuButton"><i class="fa fa-rotate-right"></i></div>' +
-            '<input id="' + containerID + '_visSlider" class="visSlider" type="range" name="vis" min="0" max="1" step="0.1" value="0">';
+            '<input id="' + containerID + '_visSlider" class="visSlider" type="range" name="vis" min="0" max="1" step="0.1" value="0.4">';
         
         container.appendChild(facs);
         container.appendChild(facsNav);
         container.appendChild(facsNavMenu);
         
         this._setupNavHtml(containerID);
+        
+        //show measure numbers btn
+        let showMeasureNumbersBtn = document.createElement('div');
+        showMeasureNumbersBtn.id = containerID + '_showMeasureNumbersBtn';
+        showMeasureNumbersBtn.className = 'showMeasureNumbersBtn toggleBtn';
+        showMeasureNumbersBtn.innerHTML = '<i class="fa fa-th" aria-hidden="true"></i>';
+        document.getElementById( containerID + '_navOverlay').appendChild(showMeasureNumbersBtn);
+        
+        showMeasureNumbersBtn.addEventListener('click',(e) => {
+            this._toggleMeasureNumbers(containerID);
+        })
         
         //listeners for background slider
         document.getElementById(containerID + '_visSlider').addEventListener('change', (e) => {
@@ -235,6 +246,8 @@ const VideFacsimileViewer = class VideFacsimileViewer extends EoNavModule {
             for(let i = 0; i<boxes.length; i++) {
                 boxes[i].style.opacity = val;
             }
+            
+            this._confirmView(containerID,this._getModuleState(containerID));
         });
         
         document.getElementById(containerID + '_visSlider').addEventListener('input', (e) => {
@@ -244,12 +257,21 @@ const VideFacsimileViewer = class VideFacsimileViewer extends EoNavModule {
             for(let i = 0; i<boxes.length; i++) {
                 boxes[i].style.opacity = val;
             }
+            
+            //this._confirmView(containerID,this._getModuleState(containerID));
         });
     }
     
-    _openSingleScar(containerID, scarId, currentState = '', activeStates = []) {
+    _toggleMeasureNumbers(containerID) {
+        document.getElementById(containerID).classList.toggle('hideMeasureNumbers');
+        document.getElementById(containerID + '_showMeasureNumbersBtn').classList.toggle('off');
+    }
+    
+    _openSingleScar(containerID, scarId, currentState = '', activeStates = [],overlayOpacity = .4) {
         super._openSingleScar(containerID, scarId, currentState,activeStates);
-        document.getElementById(containerID + '_visSlider').value = .2;
+        
+        //console.log('-----calling openSingleScar with value: ' + overlayOpacity)
+        document.getElementById(containerID + '_visSlider').value = overlayOpacity;
         document.getElementById(containerID + '_visSlider').dispatchEvent(new Event('change'));
         document.getElementById(containerID + '_visSlider').classList.add('visible');
     }
@@ -292,7 +314,10 @@ const VideFacsimileViewer = class VideFacsimileViewer extends EoNavModule {
             let t1 = performance.now();
                 console.log('[DEBUG] setupViewer took ' + (t1 - t0) + ' millisecs');
             
-            if(this._cache.has(containerID + '_viewer')) {
+            if(this._cache.has(containerID + '_facsViewer') && this._cache.get(containerID + '_facsViewer') !== null) {
+                
+                console.log('%%% Re-using existing viewer: ' + containerID + '_facsViewer')
+            
                 let newPositions = this._getRequiredPositions(containerID, activeStateID, otherStates,pageJson);
                 
                 for(let [uri, newPos] of newPositions.positions.entries()) {
@@ -329,13 +354,16 @@ const VideFacsimileViewer = class VideFacsimileViewer extends EoNavModule {
                 }
                 
                 //
-                return Promise.resolve(this._cache.get(containerID + '_viewer'))
+                return Promise.resolve(this._cache.get(containerID + '_facsViewer'))
             
             //set up new viewer
             } else {
+            
+                console.log('%%% Setting up new viewer: ' + containerID + '_facsViewer')
+                
                 let positions = this._getRequiredPositions(containerID, activeStateID, otherStates,pageJson).positions;
                 this._initializeViewer(containerID,positions,pageJson).then(
-                    console.log('____________________ this._initializeViewer complete __________________')
+                    //console.log('____________________ this._initializeViewer complete __________________')
                 )
             }
         });
@@ -346,7 +374,7 @@ const VideFacsimileViewer = class VideFacsimileViewer extends EoNavModule {
     
         //code here doubles parts of initializeViewer -> improve that?
         
-        let viewer = this._cache.get(containerID + '_viewer');
+        let viewer = this._cache.get(containerID + '_facsViewer');
         
         //insert page on the left margin, slightly above the final position, then animate to final position
         viewer.addTiledImage({
@@ -435,6 +463,8 @@ const VideFacsimileViewer = class VideFacsimileViewer extends EoNavModule {
                 } else {
                     console.log('no shapes to retrieve for page ' + page.label);
                 }
+                
+                
             }
         });
     }
@@ -442,7 +472,7 @@ const VideFacsimileViewer = class VideFacsimileViewer extends EoNavModule {
     _removePage(containerID,tiledImage,uri) {
         try {
             //get required objects
-            let viewer = this._cache.get(containerID + '_viewer'); 
+            let viewer = this._cache.get(containerID + '_facsViewer'); 
             let page = this._pageMap.get(uri);
             
             this._tiledImages.delete(uri);
@@ -461,7 +491,7 @@ const VideFacsimileViewer = class VideFacsimileViewer extends EoNavModule {
     _animatePage(containerID,tiledImage,positionObject) {
     
         try {
-            let viewer = this._cache.get(containerID + '_viewer'); 
+            let viewer = this._cache.get(containerID + '_facsViewer'); 
             let page = this._pageMap.get(positionObject.uri);
     
             let oldBounds = tiledImage.getBounds();
@@ -750,14 +780,12 @@ const VideFacsimileViewer = class VideFacsimileViewer extends EoNavModule {
             });
             
             //store viewer for later use
-            this._cache.set(containerID + '_viewer', viewer)
+            this._cache.set(containerID + '_facsViewer', viewer)
             
             //log position of view when view changes
             viewer.addHandler('animation-finish',(event) => {
                 
-                let newState = {bounds: viewer.viewport.getBounds()};
-                
-                this._confirmView(containerID,newState);
+                this._confirmView(containerID,this._getModuleState(containerID));
                 
             });
             
@@ -797,7 +825,6 @@ const VideFacsimileViewer = class VideFacsimileViewer extends EoNavModule {
                         }
                         
                         //set page label
-                         
                         let existingLabel = viewer.getOverlayById(containerID + '_pageLabel_' + page.id);
                         //add label only once (in case of moving pages)
                         if(existingLabel === null) {
@@ -844,6 +871,7 @@ const VideFacsimileViewer = class VideFacsimileViewer extends EoNavModule {
                         if(page.shapesRef !== '' && existingShapes === null) {
                             let cacheKey = JSON.stringify({id: page.shapesRef,type:'getPageShapesSvg'});
                             if(this._cache.has(cacheKey)) {
+                            
                                 let svgBox = document.createElement('div');
                                 svgBox.className = 'svgBox';
                                 svgBox.id = containerID + '_' + page.id + '_shapes';
@@ -875,6 +903,59 @@ const VideFacsimileViewer = class VideFacsimileViewer extends EoNavModule {
                             }
                         } else {
                             console.log('no shapes to retrieve for page ' + page.label);
+                        }
+                        
+                        //load measure overlays
+                        for(let i=0;i<page.measures.length;i++) {
+                            let measure = page.measures[i];
+                            
+                            let measureLabel = document.createElement('div');
+                            measureLabel.className = 'measureLabel';
+                            measureLabel.id = containerID + '_measureLabel_' + measure.id;
+                            measureLabel.innerHTML = 'm' + ((measure.label !== '') ? measure.label : measure.n);
+                            
+                            let x = bounds.x + ((measure.ulx + measure.width / 2) / page.dpm);
+                            let y = bounds.y + ((measure.uly + measure.height / 2) / page.dpm);
+                            
+                            viewer.addOverlay({
+                                element: measureLabel,
+                                x: x,
+                                y: y,
+                                placement: 'CENTER'
+                            });
+                            
+                            measureLabel.addEventListener('mouseenter', (e) => {
+                                
+                                if(document.getElementById(containerID + '_measureRect') !== null) {
+                                    viewer.removeOverlay(containerID + '_measureRect');
+                                }
+                                
+                                let measureRect = document.createElement('div');
+                                measureRect.className = 'measureRect';
+                                measureRect.id = containerID + '_measureRect';
+                                
+                                let x = bounds.x + (measure.ulx / page.dpm);
+                                let y = bounds.y + (measure.uly / page.dpm);
+                                let width = measure.width / page.dpm;
+                                let height = measure.height / page.dpm;
+                                
+                                viewer.addOverlay({
+                                    element: measureRect,
+                                    x: x,
+                                    y: y,
+                                    width: width,
+                                    height: height,
+                                    placement: 'TOP_LEFT'
+                                });
+                                
+                                measureRect.addEventListener('mouseleave', (e) => {
+                                
+                                    viewer.removeOverlay(containerID + '_measureRect');
+                                    
+                                });
+                            });
+                            
+                            
                         }
                         
                     }
@@ -973,7 +1054,9 @@ const VideFacsimileViewer = class VideFacsimileViewer extends EoNavModule {
         
     }
     
-    _highlightState(state, containerID, viewer,className = 'active') {
+    _highlightState(state, containerID, className = 'active') {
+        
+        let viewer = this._cache.get(containerID + '_facsViewer');
         
         if(state.shapes.length === 0) {
             return false;
@@ -1047,10 +1130,21 @@ const VideFacsimileViewer = class VideFacsimileViewer extends EoNavModule {
     _getShapeRect(containerID, viewer, input) {
         //decide if I have an ID or the element itself already
         
+        if(input === null) {
+            console.log('[ERROR] Unable to retrieve shapeRect for input of type ' + typeof input + ':')
+            console.log(input)
+            return null;
+        }
+        
         let elem;
         if(typeof input === 'string') {
             input = input.replace(/#/, '');
             elem = document.querySelector('#' + containerID + ' #' + input);
+            if(elem === null) {
+                console.log('[ERROR] Unable to retrieve shapeRect for input of type ' + typeof input + ':')
+                console.log(input)
+                return null;
+            }
         } else if(typeof input === 'object') {
             elem = input;
         } else {
@@ -1069,11 +1163,37 @@ const VideFacsimileViewer = class VideFacsimileViewer extends EoNavModule {
         return rect;
     }
     
+    _getModuleState(containerID) {
+        
+        let obj = {};
+        
+        let viewer = this._cache.get(containerID + '_facsViewer');
+        if(typeof viewer !== 'undefined') {
+            obj.bounds = viewer.viewport.getBounds();
+        }
+        
+        if(document.getElementById(containerID + '_navOverlay').classList.contains('scarOpen')) {
+            try {
+                let overlayOpacity = document.getElementById(containerID + '_visSlider').value;
+                obj.overlayOpacity = overlayOpacity;
+                obj.mode = 'scar';
+            } catch(err) {
+                console.log('Unable to retrieve overlay opacity')
+            }
+        } else {
+            obj.mode = 'overview';
+        }
+        
+        return obj;
+        
+    }
+    
     handleRequest(containerID,request,state = {}) {
         
-        /*console.log('[INFO] received the following request for VideFacsimileViewer at ' + containerID + ':')
+        console.log('[INFO] received the following request for VideFacsimileViewer at ' + containerID + ':')
         console.log(containerID)
-        console.log(request)*/
+        console.log(request)
+        console.log(state)
         
         //determine type of request
         let type;
@@ -1114,10 +1234,13 @@ const VideFacsimileViewer = class VideFacsimileViewer extends EoNavModule {
         
         this._setupViewer(containerID,request).then((viewer) => {
             
-            //todo: add more complex object when confirming state?
-            this._confirmView(containerID,{});
+            //todo: should this happen later?
+            //this._confirmView(containerID,this._getModuleState(containerID));
             
             let editionID = this._eohub.getEdition();
+            
+            console.log('')
+            console.log('------------------842 ' + type)
             
             if(type === 'getRect') {
                 
@@ -1139,13 +1262,28 @@ const VideFacsimileViewer = class VideFacsimileViewer extends EoNavModule {
                 };
                 
                 this.requestData(req,false).then((json) => {
+                
                     if(typeof json.dimensions !== 'undefined') {
+                        console.log('')
                         console.log('I need to highlight rect: ')
                         console.log(json.dimensions);
                     } else {
-                        this.highlightItem(viewer,containerID,json.shapes);  
+                        console.log('down there')
+                        try {
+                            setTimeout(()=> {
+                                let viewer = this._cache.get(containerID + '_facsViewer');
+                                
+                                this.highlightItem(viewer,containerID,json.shapes);
+                                
+                            }, 1000)    
+                        } catch(err) {
+                            console.log('[ERROR] Unable to highlight ' + request.id)
+                            console.log(json)
+                        }
+                        
+                          
                     }
-                });    
+                });
             } else if(type === 'highlightState') {
                 
                 let editionID = this._eohub.getEdition();
@@ -1175,7 +1313,12 @@ const VideFacsimileViewer = class VideFacsimileViewer extends EoNavModule {
                         activeStates.push(request.contexts[i].id)
                     }
                     
-                    this._openSingleScar(containerID,scar.id,request.id,activeStates);
+                    //restore overlay opacity
+                    if(typeof request.state !== 'undefined' && typeof request.state.overlayOpacity !== 'undefined') {
+                        this._openSingleScar(containerID,scar.id,request.id,activeStates,request.state.overlayOpacity);
+                    } else {
+                        this._openSingleScar(containerID,scar.id,request.id,activeStates);
+                    }
                     
                     //highlight states in facsimile
                     
@@ -1190,10 +1333,10 @@ const VideFacsimileViewer = class VideFacsimileViewer extends EoNavModule {
                         });
                         
                         if(stateObj.id !== request.id) {
-                            this._highlightState(stateObj, containerID, viewer,'active')
+                            this._highlightState(stateObj, containerID, 'active')
                         } else {
                             currentHandled = true;
-                            this._highlightState(stateObj, containerID, viewer,'current')
+                            this._highlightState(stateObj, containerID, 'current')
                         }
                     }
                     
@@ -1201,7 +1344,7 @@ const VideFacsimileViewer = class VideFacsimileViewer extends EoNavModule {
                         let stateObj = scar.states.find((obj) => {
                             return obj.id === request.id; 
                         });
-                        this._highlightState(stateObj, containerID, viewer,'current')
+                        this._highlightState(stateObj, containerID, 'current')
                     }
                     
                 });

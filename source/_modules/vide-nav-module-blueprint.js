@@ -281,7 +281,7 @@ const EoNavModule = class EoNavModule extends EoModule {
         
         this._getStateData(this._eohub.getEdition()).then((stateJson) => {
         
-            //listener for next scar button
+            //listener for previous scar button
             prevScar.addEventListener('click',(e) => {
                 let currentScar = document.getElementById(containerID + '_scarLabel').getAttribute('data-scarId');
                 let index = stateJson.findIndex((elem) => {
@@ -299,7 +299,7 @@ const EoNavModule = class EoNavModule extends EoModule {
                 
             });
             
-            //listener for previous scar button
+            //listener for next scar button
             nextScar.addEventListener('click',(e) => {
                 let currentScar = document.getElementById(containerID + '_scarLabel').getAttribute('data-scarId');
                 let index = stateJson.findIndex((elem) => {
@@ -566,10 +566,10 @@ const EoNavModule = class EoNavModule extends EoModule {
             try {
                 document.querySelector('#' + containerID + ' .navOverlay').classList.add('scarOpen')
                 document.querySelector('#' + containerID + '_scarLabel .openScarBtnLabel').style.display = 'none';
-                document.querySelector('#' + containerID + '_scarLabel .itemCount').style.display = 'none';    
+                //document.querySelector('#' + containerID + '_scarLabel .itemCount').style.display = 'none';    
                 document.querySelector('#' + containerID + ' .navOverlay').classList.remove('overview')
             } catch(err) {
-                console.log('Unable to get ' + '#' + containerID + '_scarLabel .openScarBtnLabel')
+                console.log('Unable to get ' + '#' + containerID + '_scarLabel .openScarBtnLabel: ' + err)
                 console.log(document.querySelector('#' + containerID + '_scarLabel'))
             }
             
@@ -587,9 +587,9 @@ const EoNavModule = class EoNavModule extends EoModule {
             document.querySelector('#' + containerID + ' .navOverlay').classList.remove('scarOpen')
             document.querySelector('#' + containerID + ' .navOverlay').classList.add('overview')
             document.querySelector('#' + containerID + '_scarLabel .openScarBtnLabel').style.display = 'inline';
-            document.querySelector('#' + containerID + '_scarLabel .itemCount').style.display = 'inline';   
+            //document.querySelector('#' + containerID + '_scarLabel .itemCount').style.display = 'inline';   
         } catch(err) {
-            console.log('Unable to get ' + '#' + containerID + '_scarLabel .openScarBtnLabel')
+            console.log('Unable to get ' + '#' + containerID + '_scarLabel .openScarBtnLabel: ' + err)
             console.log(document.querySelector('#' + containerID + '_scarLabel'))
         }
         

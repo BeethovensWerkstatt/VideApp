@@ -135,6 +135,11 @@ const VideTranscriptionViewer = class VideTranscriptionViewer extends EoNavModul
      * this is supposed to kill the current instance
      */
     unmount(containerID) {
+    
+        let viewer = this._cache.get(containerID + '_transcriptionViewer')
+        viewer.destroy();
+        this._cache.delete(containerID + '_transcriptionViewer');
+        
         document.getElementById(containerID).innerHTML = '';
         //this._currentRenderingDimensions.delete(containerID);
     }
@@ -179,17 +184,36 @@ const VideTranscriptionViewer = class VideTranscriptionViewer extends EoNavModul
             
             let mode = stateJson.length > 1 ? 'multiScar' : 'singleScar';
             
-            if(stateJson.length === 1) {
+            if(stateJson.length === 0) {
                 console.log('[ERROR] The edition ' + editionID + ' apparently has no textual scar, and thus cannot be displayed with the current version of vide-module-transcription-viewer.js.')
             }
             
             //let t1 = performance.now();
             //console.log('[DEBUG] setupViewer took ' + (t1 - t0) + ' millisecs');
-                
-            if(this._cache.has(containerID + '_viewer') && mode === 'multiScar') {
+            
+            //multiScar, already initialized
+            if(this._cache.has(containerID + '_transcriptionViewer') && mode === 'multiScar') {
                 console.log('getting viewer from cache')
-                return Promise.resolve(this._cache.get(containerID + '_viewer'))
+                return Promise.resolve(this._cache.get(containerID + '_transcriptionViewer'))
+            
+            //singleScar, already initialized
+            } else if(this._cache.has(containerID + '_transcriptionViewer') && mode === 'singleScar') {
+                console.log('')
+                console.log('\\\\\\\\\\\\////////////')
+                console.log('there is already a viewer for singleScar, so I should not have to recreate it…')
+                
+                let viewer = this._cache.get(containerID + '_transcriptionViewer');
+                let verovio = this._eohub.getVerovio();
+                return new Promise((resolve,reject) => {
+                    this._setupSingleScarViewer(stateJson,measureJson,verovio,editionID,containerID, request, resolve);    
+                });
+                
+                
+            //needs to be initialized
             } else {
+            
+                
+            
                 return new Promise((resolve, reject) => {
                     
                     //set up listener for invariance mode
@@ -238,6 +262,7 @@ const VideTranscriptionViewer = class VideTranscriptionViewer extends EoNavModul
      * individual states above (mode is used when there is more than one scar available)
      */
     _setupMultiScarViewer(stateJson,measureJson,verovio,editionID, containerID, request, resolve) {
+        
         this._getFinalState(editionID).then((finalState) => {
                         
             let svgString = verovio.renderData(finalState + '\n', this._verovioOptions);
@@ -255,7 +280,7 @@ const VideTranscriptionViewer = class VideTranscriptionViewer extends EoNavModul
             let viewer = OpenSeadragon(this._setOsdOptions(containerID, baseDimensions));
             
             //store viewer for later use
-            this._cache.set(containerID + '_viewer', viewer)
+            this._cache.set(containerID + '_transcriptionViewer', viewer)
             
             //add required handlers
             this._setOsdHandlers(containerID, viewer, request, stateJson, svgString, resolve, 'multiScar');
@@ -270,18 +295,85 @@ const VideTranscriptionViewer = class VideTranscriptionViewer extends EoNavModul
      */
     _setupSingleScarViewer(stateJson,measureJson,verovio,editionID,containerID, request, resolve) {
         
-        let firstState = stateJson[0].states[0];
+        let type;
+        
+        if(request.object === VIDE_PROTOCOL.OBJECT.NOTATION && request.contexts.length === 0) {
+            type = 'highlightMeasure';
+        } else if(request.object === VIDE_PROTOCOL.OBJECT.NOTATION && request.contexts.length > 0) {
+            type = 'highlightMusic';
+        } else if(request.object === VIDE_PROTOCOL.OBJECT.LYRICS && request.contexts.length > 0) {
+            type = 'highlightMusic';
+        } else if(request.object === VIDE_PROTOCOL.OBJECT.DIR && request.contexts.length > 0) {
+            type = 'highlightMusic';    
+        } else if(request.object === VIDE_PROTOCOL.OBJECT.STATE) {
+            type = 'highlightState';
+        }
+        
+        let mainState;
         let otherStates = [];
-        for(let i=0; i < request.contexts.length; i++) {
-            let context = request.contexts[i]; 
-            if(context.context === VIDE_PROTOCOL.CONTEXT.STATE) {
-                otherStates.push(context.id);
+        
+        if(type === 'highlightMeasure') {
+            
+            console.log('---- DUNNO if this works properly – I doubt it')
+            
+            mainState = stateJson[0].states[0].id;
+            for(let i=0; i < request.contexts.length; i++) {
+                let context = request.contexts[i]; 
+                if(context.context === VIDE_PROTOCOL.CONTEXT.STATE) {
+                    otherStates.push(context.id);
+                }
+            }
+        } else if(type === 'highlightState') {
+            
+            console.log('----state')
+            
+            mainState = request.id;
+            for(let i=0; i < request.contexts.length; i++) {
+                let context = request.contexts[i]; 
+                if(context.context === VIDE_PROTOCOL.CONTEXT.STATE) {
+                    otherStates.push(context.id);
+                }
+            }
+        } else if(type === 'highlightMusic') {
+            
+            console.log('----music')
+            
+            mainState = request.contexts[0].id;
+            let scar;
+            let stateObj;
+            
+            loops:{
+                for(let i = 0; i<stateJson.length;i++) {
+                    let current = stateJson[i];
+                    
+                    for(let j = 0; j<current.states.length;j++) {
+                        let state = current.states[j];
+                        if(state.id === mainState) {
+                            scar = current;
+                            stateObj = current;
+                            break loops;
+                        }
+                    }
+                }
+            }
+            
+            //iterate over all states, identify the ones that need to be activated
+            for(let p = 0; p<scar.states.length; p++) {
+                let queriedState = scar.states[p];
+                
+                let lesserPos = (queriedState.position < stateObj.position && !queriedState.deletion);
+                let isActive = (queriedState.position <= stateObj.position && (queriedState.id === stateObj.id));
+                if(lesserPos || isActive) {
+                    
+                    //console.log('…and accordingly, it should be kept active…')
+                    otherStates.push(queriedState.id);
+                }
             }
         }
         
-        //console.log('------- // looking for state ' + request.id + ' based on ' + otherStates.length + ' other states')
+        console.log('------- // looking for state ' + mainState + ' based on ' + otherStates.length + ' other states (' + otherStates.join(', ') + ')')
         
-        this._getStateAsMEI(editionID,request.id,otherStates).then((stateMEI) => {
+        this._getStateAsMEI(editionID,mainState,otherStates).then((stateMEI) => {
             
             let svgString = verovio.renderData(stateMEI + '\n', this._verovioOptions);
             this._cache.set('firstState',svgString)
@@ -290,9 +382,9 @@ const VideTranscriptionViewer = class VideTranscriptionViewer extends EoNavModul
             let baseDimensions = this._getVerovioDimensions(svg);
             this._baseDimensions.set(editionID,baseDimensions);
             
-            if(this._cache.has(containerID + '_viewer')) {
+            if(this._cache.has(containerID + '_transcriptionViewer')) {
                 try {
-                    let oldViewer = this._cache.get(containerID + '_viewer');
+                    let oldViewer = this._cache.get(containerID + '_transcriptionViewer');
                     let oldElem = oldViewer.getOverlayById(containerID + '_currentState');
                     if(oldElem !== null) {
                         oldViewer.removeOverlay(containerID + '_currentState');
@@ -309,7 +401,7 @@ const VideTranscriptionViewer = class VideTranscriptionViewer extends EoNavModul
             let viewer = OpenSeadragon(this._setOsdOptions(containerID, baseDimensions));
             
             //store viewer for later use
-            this._cache.set(containerID + '_viewer', viewer)
+            this._cache.set(containerID + '_transcriptionViewer', viewer)
             
             //make sure only that scar is visible
             this._openSingleScar(containerID, stateJson[0].id,stateJson[0].states[0].id,[]);
@@ -528,14 +620,16 @@ const VideTranscriptionViewer = class VideTranscriptionViewer extends EoNavModul
             type = 'default'
         } else if(request.object === VIDE_PROTOCOL.OBJECT.NOTATION && request.contexts.length === 0) {
             type = 'highlightMeasure';
-        } else if(request.object === VIDE_PROTOCOL.OBJECT.LYRICS && request.contexts.length === 0) {
+        } else if(request.object === VIDE_PROTOCOL.OBJECT.NOTATION && request.contexts.length > 0) {
             type = 'highlightMusic';
-        } else if(request.object === VIDE_PROTOCOL.OBJECT.DIR && request.contexts.length === 0) {
+        } else if(request.object === VIDE_PROTOCOL.OBJECT.LYRICS && request.contexts.length > 0) {
+            type = 'highlightMusic';
+        } else if(request.object === VIDE_PROTOCOL.OBJECT.DIR && request.contexts.length > 0) {
             type = 'highlightMusic';    
         } else if(request.object === VIDE_PROTOCOL.OBJECT.STATE) {
             type = 'highlightState';
         } else {
-            console.log('[ERROR] unable to determine the type of the following request in VideFacsimileViewer:')
+            console.log('[ERROR] unable to determine the type of the following request in VideTranscriptionViewer:')
             console.log(request)
             return false;
         }
@@ -602,12 +696,99 @@ const VideTranscriptionViewer = class VideTranscriptionViewer extends EoNavModul
                     
                     //state needs to be rendered only if there is more than one scar
                     if(stateJson.length > 1) {
-                        
+                        console.log('')
+                        console.log('yodelayhehoo')
                         this._renderState(containerID,scar,viewer,request.id,activeStates);
                         
                     }
                     
                 });
+                
+            } else if(type === 'highlightMusic') {
+                
+                try {
+                    
+                    let elem = document.querySelector('#' + containerID + ' #' + request.id);
+                    elem.classList.add('highlight');
+                    setTimeout(() => {
+                        elem.classList.remove('highlight');
+                    },10000);
+                    
+                    this._focusShape(containerID,viewer,request.id);
+                    
+                } catch(err) {
+                    console.log('[ERROR] Unable to highlight object ' + request.id + ': ' + err);
+                }
+            
+                
+                /*let editionID = this._eohub.getEdition();
+                this._getStateData(editionID).then((stateJson) => {
+                    let scar;
+                    let stateObj;
+                    let i = 0;
+                    
+                    loops:{
+                        for(i; i<stateJson.length;i++) {
+                            let current = stateJson[i];
+                            
+                            let j = 0;
+                            for(j; j<current.states.length;j++) {
+                                let state = current.states[j];
+                                if(state.id === request.contexts[0].id) {
+                                    scar = current;
+                                    stateObj = state;
+                                    break loops;
+                                }
+                            }
+                        }
+                    }
+                    
+                    let requiredStates = [];
+                    //todo: add possibility to deactivate state
+                    
+                    let p = 0;
+                    let q = scar.states.length;
+                    
+                    //iterate over all states, identify the ones that need to be activated
+                    for(p; p<q; p++) {
+                        let queriedState = scar.states[p];
+                        
+                        let lesserPos = (queriedState.position < stateObj.position && !queriedState.deletion);
+                        let isActive = (queriedState.position <= stateObj.position && (queriedState.id === stateObj.id));
+                        if(lesserPos || isActive) {
+                            
+                            //console.log('…and accordingly, it should be kept active…')
+                            requiredStates.push(queriedState.id);
+                        }
+                    }
+                    
+                    console.log(' ')
+                    console.log('-----------------------------663')
+                    console.log(requiredStates)
+                    console.log(' ')
+                    
+                    //let btn = document.getElementById(containerID + '_' + stateObj.id);
+                    //btn.dispatchEvent(new Event('click'));
+                    
+                    
+                    //this._openSingleScar(containerID,scar.id,stateObj.id,requiredStates);
+                    
+                    
+                    
+                    //state needs to be rendered only if there is more than one scar
+                    /\*this._renderState(containerID,scar,viewer,stateObj.id,requiredStates).then(() => {
+                        console.log('rendered again: ' + stateObj.id)
+                        console.log(requiredStates)
+                        try {
+                            this._focusShape(containerID,viewer,request.id);
+                            //todo: have more complex object
+                            //this._confirmView(containerID,{});
+                        } catch(err) {
+                            console.log('[ERROR] Unable to highlight measure ' + request.id + ': ' + err);
+                        }
+                    });*\/
+                    
+                });*/
                 
             } else {
                 console.log('Dunno how to handle request (yet)')
@@ -616,7 +797,11 @@ const VideTranscriptionViewer = class VideTranscriptionViewer extends EoNavModul
             if(typeof request.state !== 'undefined' && request.state.invariance === true) {
                 //console.log('----------I need to activate invariance coloration')
                 this._activateInvariance(containerID, request);
-            } else {
+            } else if(state.invariance === true) {
+                //console.log('----------I need to activate invariance coloration')
+                this._activateInvariance(containerID, request);
+            }
+            else {
                 //console.log('----------I need to turn off invariance coloration')
                 this._deactivateInvariance(containerID);
             }
@@ -627,6 +812,7 @@ const VideTranscriptionViewer = class VideTranscriptionViewer extends EoNavModul
         
     _renderState(containerID, scar, viewer, stateID, activeStates = []) {
         
+        //console.log('--------------- _renderState')
         try {
             let editionID = this._eohub.getEdition();
             
@@ -659,7 +845,7 @@ const VideTranscriptionViewer = class VideTranscriptionViewer extends EoNavModul
                 
                 //determine dimensions
                 let dimensions = this._getVerovioDimensions(stateSvg);
-                
+                console.log(dimensions)
                 //if the state is "empty", it automatically gets a relation property of -1
                 //so if relation is -1, there's really nothing to render…
                 if(dimensions.relation === -1) {
@@ -730,7 +916,7 @@ const VideTranscriptionViewer = class VideTranscriptionViewer extends EoNavModul
             
         } catch(err) {
             console.log('[ERROR] failed to render state ' + stateID + ': ' + err);
-        }
+        } 
         
     }
     
@@ -888,6 +1074,12 @@ const VideTranscriptionViewer = class VideTranscriptionViewer extends EoNavModul
     }
     */
     _getVerovioDimensions(renderedSvg) {
+    
+        console.log('')
+        console.log('/////////////////////////////////////////// getVerovioDimensions param renderedScg:')
+        console.log(renderedSvg)
+        console.log('')
+    
         try {
             let viewBoxHeight = parseInt(renderedSvg.querySelector('svg#definition-scale').getAttribute('viewBox').split(' ')[3],10)
             let firstStaffLineYPos = parseInt(renderedSvg.querySelector('g.measure g.staff path:first-of-type').getAttribute('d').split(' ')[1],10)

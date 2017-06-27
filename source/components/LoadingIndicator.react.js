@@ -3,24 +3,22 @@ import I18n from './../containers/I18n.react';
 
 const LoadingIndicator = ({ requests }) => {
     
-    return (
+    if(requests.length === 0) {
+        return null;
+    }
+    
+    return ( 
+        
         <div id="loadingIndicator">
-            {
-                requests.map(function(request, i) {
-                    if(i === 0) {
-                        return <div className="loadingItem" key={i}>
-                            <i className="fa fa-cloud-download fa-fw"></i>
-                            <I18n content={'loadData_' + request.type}/>
-                        </div>;
-                        
-                        
-                    }
-                    return null;
-                })
-                
-            }
+            <div className="loadingItem">
+                <i className="fa fa-spinner fa-pulse fa-fw"></i>
+                <I18n content={'loadData_' + requests[0].type}/>
+            </div>;
         </div>
-    );
+        
+    )    
+                
+            
 };
 
 LoadingIndicator.propTypes = {

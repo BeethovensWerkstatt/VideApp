@@ -38,7 +38,7 @@ const ContextMenu = ({ items, visible, closeContextMenu, submitRequest, x, y }) 
                 document.getElementById(key + '_measure').innerHTML = json[0].measure;
                 document.getElementById(key + '_position').innerHTML = json[0].position;
             } catch(err) {
-                console.log('Unable to render results')
+                //console.log('[ERROR] Unable to render results')
             }
         });
         

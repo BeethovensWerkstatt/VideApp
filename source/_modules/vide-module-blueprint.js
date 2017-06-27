@@ -53,7 +53,7 @@ const EoModule = class EoModule {
         this._eohub = eohub;
         this._server = eohub._server;
         this._socketID = eohub._socketID;
-        this._cache = eohub.cache;
+        this._cache = eohub.cache; //new Map();
         
         this._socket = io(this._server + this._socketID);
     }
@@ -155,7 +155,7 @@ const EoModule = class EoModule {
             let reqTest;
             
             if(req.contexts.length > 0 && typeof req.contexts[0] === 'string') {
-                console.log('---------not sure I have ever been here…')
+                //console.log('---------not sure I have ever been here…')
                 reqTest = Object.assign(req, {contexts:req.contexts});
             } else {
                 reqTest = req;

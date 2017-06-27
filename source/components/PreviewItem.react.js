@@ -28,12 +28,15 @@ const PreviewItem = ({ object, clickFunc }) => {
             
             let socket = io(eohub._server + eohub._socketID);
             
-            socket.once(key,(json) => {        
-                let img = document.createElement('img');
-                img.setAttribute('src', json.pages[0].uri);
-                img.setAttribute('alt', json.pages[0].label);
-                document.getElementById('img' + key).appendChild(img);
-                document.getElementById('label' + key).innerHTML = json.pages[0].label;
+            socket.once(key,(json) => {       
+                try {
+                    let img = document.createElement('img');
+                    img.setAttribute('src', json.pages[0].uri);
+                    img.setAttribute('alt', json.pages[0].label);
+                    document.getElementById('img' + key).appendChild(img);
+                } catch(err) {
+                    //console.log('[ERROR] Context Menu has been closed too early')
+                }
             });
             
             socket.emit('requestData', req);
@@ -48,7 +51,9 @@ const PreviewItem = ({ object, clickFunc }) => {
                     <span className='sliderItemLabel' id={'label' + key} onClick={e => {
                             e.preventDefault();
                             clickFunc(object);
-                        }}></span>
+                        }}>
+                        <I18n content={'contextMenu_showIn_' + object.req.perspective}/>
+                    </span>
                 </div>
             );
         } else if(object.req.perspective === VIDE_PROTOCOL.PERSPECTIVE.XML) {
@@ -64,7 +69,8 @@ const PreviewItem = ({ object, clickFunc }) => {
             let socket = io(eohub._server + eohub._socketID);
             
             socket.once(key,(xml) => {
-                let editor = ace.edit(key);
+                try {
+                    let editor = ace.edit(key);
                     editor.setTheme('ace/theme/textmate');
                     editor.getSession().setMode('ace/mode/xml');
                     editor.getSession().setUseWrapMode(true);
@@ -78,6 +84,9 @@ const PreviewItem = ({ object, clickFunc }) => {
                     editor.clearSelection();
                     editor.scrollToLine(0, false, false, function () {});
                     editor.scrollPageUp();
+                } catch(err) {
+                    //console.log('[ERROR] Context Menu has been closed too early')
+                }
             });
             
             socket.emit('requestData', req);
@@ -119,21 +128,27 @@ const PreviewItem = ({ object, clickFunc }) => {
             let socket = io(eohub._server + eohub._socketID);
             
             socket.once(key,(mei) => {
-                let verovio = eohub.getVerovio();
+                try {
+                    
+                    let verovio = eohub.getVerovio();
+                    
+                    var options = {
+                        inputFormat: 'mei',
+                        border: 0,
+                        scale: 35,           //scale is in percent (1 - 100)
+                        ignoreLayout: 0,
+                        noLayout: 1          //results in a continuous system without page breaks
+                    };
+                    
+                    //verovio.setOptions(options);
+                    let svg = verovio.renderData(mei + '\n', options);
+                    
+                    document.getElementById(key).innerHTML = svg;
+                    document.querySelector('#' + key + ' svg #' + object.req.id).classList.add('highlighted');
                 
-                var options = {
-                    inputFormat: 'mei',
-                    border: 0,
-                    scale: 35,           //scale is in percent (1 - 100)
-                    ignoreLayout: 0,
-                    noLayout: 1          //results in a continuous system without page breaks
-                };
-                
-                //verovio.setOptions(options);
-                let svg = verovio.renderData(mei + '\n', options);
-                
-                document.getElementById(key).innerHTML = svg;
-                document.querySelector('#' + key + ' svg #' + object.req.id).classList.add('highlighted');
+                } catch(err) {
+                    //console.log('[ERROR] Context Menu has been closed too early')
+                }
             });
             
             socket.emit('requestData', req);

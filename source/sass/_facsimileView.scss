@@ -14,6 +14,27 @@
             display: block;
         }
     }
+    
+    .showMeasureNumbersBtn {
+        position: absolute;
+        top: 5px;
+        right: 20px;
+        cursor: pointer;
+        
+        &.off {
+            color: #666666;
+        }
+    }
+    
+    &.hideMeasureNumbers .measureLabel {
+        display: none !important;
+    }
+    
+    .measureRect {
+        box-shadow: 0 0 25px #000000;
+        border-radius: 5px;
+    }
+    
 }
 
 .facsimile {
@@ -34,6 +55,13 @@
         box-shadow: 0 1px 3px rgba(0,0,0,0.3);
     }
     
+    .measureLabel {
+        cursor: default;
+        background-color: rgba(0,0,0,.2);
+        padding: 0 2px;
+        border-radius: 3px;
+    }
+    
     .verovioOverlay {
         
         background-color: rgba(255,255,255,.4);
@@ -46,7 +74,7 @@
     
     .pageBack {
     
-        opactiy: 0;
+        opacity: 0;
     
         svg {
             width: 100% !important;
