@@ -43,6 +43,7 @@ const ContextMenu = ({ items, visible, closeContextMenu, submitRequest, x, y }) 
         });
         
         socket.emit('requestData', req);
+        items.reverse();
         return (
         
             <div className="contextMenuBack" onClick={e => {

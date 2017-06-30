@@ -120,6 +120,8 @@ const View = React.createClass({
             try {
                 module.getDefaultView(props.pos);
             } catch(err) {
+                console.log('----------------------11a')
+                console.log(props)
                 console.log('[ERROR] unable to request default for ' + props.view.perspective + ': ' + err);
             }
         } else {

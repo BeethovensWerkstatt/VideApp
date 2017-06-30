@@ -295,8 +295,8 @@ export function handleViews(state = {
                 layout: ViewLayouts.INTRODUCTION,
                 ratio: .5,
                 synced: false,
-                view1: {perspective: Perspectives.FACSIMILE, target: null, temp: false},
-                view2: {perspective: Perspectives.TRANSCRIPTION, target: null, temp: false}
+                view1: {moduleKey: 'VideFacsimileViewer', request: null, state: null, log: false},
+                view2: {moduleKey: 'VideTranscriptionViewer', request: null, state: null, log: false}
             };
             
         default: 
@@ -435,7 +435,7 @@ export function handleNetwork(state = {
             
             return {
                 dataStatus: StatusCodes.NO_CONNECTION,
-                activeRequests: {},
+                activeRequests: [],
                 nolog: false,
             };
         

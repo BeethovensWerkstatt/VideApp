@@ -37,7 +37,7 @@ const VideTextViewer = class VideTextViewer extends EoModule {
             }            
         }
         
-        //document.getElementById(containerID).innerHTML = '';
+        document.getElementById(containerID).innerHTML = '';
     }
     
     _getIntroText(editionID) {
@@ -132,7 +132,6 @@ const VideTextViewer = class VideTextViewer extends EoModule {
         
         this._getIntroText(editionID).then((html) => {
             this._setupHtml(containerID).then((container) => {
-                console.log('-------75')
                 container.innerHTML = html;
                 this._activateVideos(containerID);
             });

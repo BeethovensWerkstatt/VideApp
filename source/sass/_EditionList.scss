@@ -101,18 +101,21 @@ $rowBottomMargin: 40px;
 .editionDetails {
     border-top: 1px solid $spotColor;
     background-color: #303030;
-    margin: -$rowBottomMargin 0 20px;
+    margin: -$rowBottomMargin 0 40px;
     padding: 10px 0;
     color: #868686;
     
     h2 {
-        margin: 10px 20px !important;
+        margin: 10px auto !important;
         font-size: 16px;
         font-weight: 500;
+        padding: 0 20px 0 10px;
+        max-width: 1200px;
     }
     
     p {
         font-weight: 300;
+        color: #868686 !important;
     }
     
     .openButton {

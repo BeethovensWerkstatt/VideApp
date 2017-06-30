@@ -198,9 +198,9 @@ const VideTranscriptionViewer = class VideTranscriptionViewer extends EoNavModul
             
             //singleScar, already initialized
             } else if(this._cache.has(containerID + '_transcriptionViewer') && mode === 'singleScar') {
-                console.log('')
+                /*console.log('')
                 console.log('\\\\\\\\\\\\////////////')
-                console.log('there is already a viewer for singleScar, so I should not have to recreate it…')
+                console.log('there is already a viewer for singleScar, so I should not have to recreate it…')*/
                 
                 let viewer = this._cache.get(containerID + '_transcriptionViewer');
                 let verovio = this._eohub.getVerovio();
@@ -212,7 +212,8 @@ const VideTranscriptionViewer = class VideTranscriptionViewer extends EoNavModul
             //needs to be initialized
             } else {
             
-                
+                /*console.log('')
+                console.log('new request for viewer')*/
             
                 return new Promise((resolve, reject) => {
                     
@@ -311,6 +312,7 @@ const VideTranscriptionViewer = class VideTranscriptionViewer extends EoNavModul
         
         let mainState;
         let otherStates = [];
+        let scar;
         
         if(type === 'highlightMeasure') {
             
@@ -325,7 +327,7 @@ const VideTranscriptionViewer = class VideTranscriptionViewer extends EoNavModul
             }
         } else if(type === 'highlightState') {
             
-            console.log('----state')
+            //console.log('----state')
             
             mainState = request.id;
             for(let i=0; i < request.contexts.length; i++) {
@@ -336,10 +338,9 @@ const VideTranscriptionViewer = class VideTranscriptionViewer extends EoNavModul
             }
         } else if(type === 'highlightMusic') {
             
-            console.log('----music')
+            //console.log('----music')
             
             mainState = request.contexts[0].id;
-            let scar;
             let stateObj;
             
             loops:{
@@ -350,7 +351,7 @@ const VideTranscriptionViewer = class VideTranscriptionViewer extends EoNavModul
                         let state = current.states[j];
                         if(state.id === mainState) {
                             scar = current;
-                            stateObj = current;
+                            stateObj = state;
                             break loops;
                         }
                     }
@@ -371,7 +372,7 @@ const VideTranscriptionViewer = class VideTranscriptionViewer extends EoNavModul
             }
         }
         
-        console.log('------- // looking for state ' + mainState + ' based on ' + otherStates.length + ' other states (' + otherStates.join(', ') + ')')
+        //console.log('------- // looking for state ' + mainState + ' based on ' + otherStates.length + ' other states (' + otherStates.join(', ') + ')')
         
         this._getStateAsMEI(editionID,mainState,otherStates).then((stateMEI) => {
             
@@ -404,7 +405,7 @@ const VideTranscriptionViewer = class VideTranscriptionViewer extends EoNavModul
             this._cache.set(containerID + '_transcriptionViewer', viewer)
             
             //make sure only that scar is visible
-            this._openSingleScar(containerID, stateJson[0].id,stateJson[0].states[0].id,[]);
+            this._openSingleScar(containerID, scar.id,mainState,otherStates);
             document.querySelector('#' + containerID + ' .prevScarBtn').style.display = 'none';
             document.querySelector('#' + containerID + ' .nextScarBtn').style.display = 'none';
             
@@ -696,8 +697,6 @@ const VideTranscriptionViewer = class VideTranscriptionViewer extends EoNavModul
                     
                     //state needs to be rendered only if there is more than one scar
                     if(stateJson.length > 1) {
-                        console.log('')
-                        console.log('yodelayhehoo')
                         this._renderState(containerID,scar,viewer,request.id,activeStates);
                         
                     }
@@ -762,18 +761,11 @@ const VideTranscriptionViewer = class VideTranscriptionViewer extends EoNavModul
                         }
                     }
                     
-                    console.log(' ')
-                    console.log('-----------------------------663')
-                    console.log(requiredStates)
-                    console.log(' ')
-                    
                     //let btn = document.getElementById(containerID + '_' + stateObj.id);
                     //btn.dispatchEvent(new Event('click'));
                     
                     
                     //this._openSingleScar(containerID,scar.id,stateObj.id,requiredStates);
-                    
-                    
                     
                     //state needs to be rendered only if there is more than one scar
                     /\*this._renderState(containerID,scar,viewer,stateObj.id,requiredStates).then(() => {
@@ -845,7 +837,7 @@ const VideTranscriptionViewer = class VideTranscriptionViewer extends EoNavModul
                 
                 //determine dimensions
                 let dimensions = this._getVerovioDimensions(stateSvg);
-                console.log(dimensions)
+                //console.log(dimensions)
                 //if the state is "empty", it automatically gets a relation property of -1
                 //so if relation is -1, there's really nothing to render…
                 if(dimensions.relation === -1) {
@@ -1075,10 +1067,10 @@ const VideTranscriptionViewer = class VideTranscriptionViewer extends EoNavModul
     */
     _getVerovioDimensions(renderedSvg) {
     
-        console.log('')
-        console.log('/////////////////////////////////////////// getVerovioDimensions param renderedScg:')
+        /*console.log('')
+        console.log('/////////////////////////////////////////// getVerovioDimensions param renderedSvg:')
         console.log(renderedSvg)
-        console.log('')
+        console.log('')*/
     
         try {
             let viewBoxHeight = parseInt(renderedSvg.querySelector('svg#definition-scale').getAttribute('viewBox').split(' ')[3],10)
@@ -1102,7 +1094,7 @@ const VideTranscriptionViewer = class VideTranscriptionViewer extends EoNavModul
                 height: height
             }
         } catch(err) {
-            console.log('[ERROR] Unable to determine dimensions of rendered SVG: ' + err)
+            //console.log('[ERROR] Unable to determine dimensions of rendered SVG: ' + err)
             return {
                 relation: -1
             }

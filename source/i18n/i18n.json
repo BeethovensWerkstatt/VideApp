@@ -215,6 +215,10 @@
         "de":"Mikro-Variante",
         "en":"Micro variant"
     },
+    "show_MeasureNumbers" : {
+        "de":"Taktzahlen einblenden",
+        "en":"show measure numbers"
+    },
     "loadData_getXmlFile" : {
         "de":"lade XML",
         "en":"loading XML"

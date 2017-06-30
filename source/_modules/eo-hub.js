@@ -71,7 +71,7 @@ const EoHub = class EoHub {
         this.options.editionID = id;
         this.options.revision = revision;
         
-        //console.log('me here with ' + id + ' -- ' + revision)
+        console.log('me here with ' + id + ' -- ' + revision)
         
         this.deactivateAllModules();
         
@@ -83,8 +83,8 @@ const EoHub = class EoHub {
             
             let viewKey = appModule.id;
             
-            /*console.log('[eohub] activating module ' + viewKey + ' for edition ' + id)
-            console.log('has feature: ' + appModule.feature)*/
+            console.log('[eohub] activating module ' + viewKey + ' for edition ' + id)
+            console.log('has feature: ' + appModule.feature)
             
             if(typeof appModule.feature !== 'undefined') {
                 this.activateModule(viewKey,appModule.feature);   
@@ -117,6 +117,7 @@ const EoHub = class EoHub {
      * @returns {Object} the EoHub instance
      */
     unsetEdition() {
+        console.log('unsetting')
         this.options.editionID = null;
         this.options.revision = '';
         return this;
@@ -184,6 +185,8 @@ const EoHub = class EoHub {
     getActiveModules() {
         
         let moduleArray = [...this._modules.keys()].sort();
+        moduleArray = ['VideTextViewer','VideFacsimileViewer','VideTranscriptionViewer','VideXmlViewer']
+        
         let array = [];
         let i=0;
         for(i;i<moduleArray.length;i++) {
@@ -192,7 +195,7 @@ const EoHub = class EoHub {
                 array.push(module.getKey());
             }
         }
-    
+        
         return array;
     }
     

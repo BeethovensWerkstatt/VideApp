@@ -219,7 +219,8 @@ const VideFacsimileViewer = class VideFacsimileViewer extends EoNavModule {
             '<div id="' + containerID + '_zoomHome" class="menuButton"><i class="fa fa-arrows-alt"></i></div>' + 
             '<div id="' + containerID + '_rotateLeft" class="menuButton"><i class="fa fa-rotate-left"></i></div>' + 
             '<div id="' + containerID + '_rotateRight" class="menuButton"><i class="fa fa-rotate-right"></i></div>' +
-            '<input id="' + containerID + '_visSlider" class="visSlider" type="range" name="vis" min="0" max="1" step="0.1" value="0.4">';
+            '<input id="' + containerID + '_visSlider" class="visSlider" type="range" name="vis" min="0" max="1" step="0.1" value="0.4">' + 
+            '<div id="' + containerID + '_showMeasureNumbersBtn" class="menuRow"><i class="fa fa-fw fa-check-square-o" aria-hidden="true"></i> <span data-i18n-text="show_MeasureNumbers">' + this._eohub.getI18nString('show_MeasureNumbers') + '</span></div>';
         
         container.appendChild(facs);
         container.appendChild(facsNav);
@@ -228,11 +229,7 @@ const VideFacsimileViewer = class VideFacsimileViewer extends EoNavModule {
         this._setupNavHtml(containerID);
         
         //show measure numbers btn
-        let showMeasureNumbersBtn = document.createElement('div');
-        showMeasureNumbersBtn.id = containerID + '_showMeasureNumbersBtn';
-        showMeasureNumbersBtn.className = 'showMeasureNumbersBtn toggleBtn';
-        showMeasureNumbersBtn.innerHTML = '<i class="fa fa-th" aria-hidden="true"></i>';
-        document.getElementById( containerID + '_navOverlay').appendChild(showMeasureNumbersBtn);
+        let showMeasureNumbersBtn = document.getElementById(containerID + '_showMeasureNumbersBtn');
         
         showMeasureNumbersBtn.addEventListener('click',(e) => {
             this._toggleMeasureNumbers(containerID);
@@ -264,7 +261,8 @@ const VideFacsimileViewer = class VideFacsimileViewer extends EoNavModule {
     
     _toggleMeasureNumbers(containerID) {
         document.getElementById(containerID).classList.toggle('hideMeasureNumbers');
-        document.getElementById(containerID + '_showMeasureNumbersBtn').classList.toggle('off');
+        document.querySelector('#' + containerID + '_showMeasureNumbersBtn .fa').classList.toggle('fa-square-o');
+        document.querySelector('#' + containerID + '_showMeasureNumbersBtn .fa').classList.toggle('fa-check-square-o');
     }
     
     _openSingleScar(containerID, scarId, currentState = '', activeStates = [],overlayOpacity = .4) {
@@ -751,7 +749,7 @@ const VideFacsimileViewer = class VideFacsimileViewer extends EoNavModule {
                 id: containerID + '_facsimile',
                 tileSources: tileSources,
                 sequenceMode: false,
-                animationTime: 4,
+                animationTime: 1.5,
                 showReferenceStrip: true,
                 showRotationControl: true,
                 showNavigator: true,
@@ -787,6 +785,7 @@ const VideFacsimileViewer = class VideFacsimileViewer extends EoNavModule {
                 
                 this._confirmView(containerID,this._getModuleState(containerID));
                 
+                this._adjustMeasureNumberDisplay(containerID,viewer);
             });
             
             //do internal setup after images are loaded
@@ -911,8 +910,12 @@ const VideFacsimileViewer = class VideFacsimileViewer extends EoNavModule {
                             
                             let measureLabel = document.createElement('div');
                             measureLabel.className = 'measureLabel';
-                            measureLabel.id = containerID + '_measureLabel_' + measure.id;
-                            measureLabel.innerHTML = 'm' + ((measure.label !== '') ? measure.label : measure.n);
+                            measureLabel.id = containerID + '_measureLabel_' + measure.zone;
+                            let label = '' + ((measure.label !== '') ? measure.label : measure.n);
+                            if(label === '') {
+                                label = 'ERROR';
+                            }
+                            measureLabel.innerHTML = label;
                             
                             let x = bounds.x + ((measure.ulx + measure.width / 2) / page.dpm);
                             let y = bounds.y + ((measure.uly + measure.height / 2) / page.dpm);
@@ -966,6 +969,28 @@ const VideFacsimileViewer = class VideFacsimileViewer extends EoNavModule {
             
             
         });
+    }
+    
+    //removes measure numbers if pages are too small
+    _adjustMeasureNumberDisplay(containerID,viewer) {
+        let keys = [...this._tiledImages.keys()];
+        let image = this._tiledImages.get(keys[0]);
+        
+        let ratio = image.getBounds().width * viewer.viewport.getZoom();
+        //console.log('--------------------- ratio is ' + ratio)
+        
+        if(ratio < .25) {
+            let labels = document.querySelectorAll('#' + containerID + ' .measureLabel');
+            for(let i=0;i<labels.length;i++) {
+                labels[i].style.display = 'none';
+            }
+            //todo: add summary of pages
+        } else {
+            let labels = document.querySelectorAll('#' + containerID + ' .measureLabel');
+            for(let i=0;i<labels.length;i++) {
+                labels[i].style.display = 'block';
+            }
+        }
     }
         
     

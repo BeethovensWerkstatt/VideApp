@@ -46,7 +46,8 @@
     bottom: 0;
     left: 0;
     
-    @include linearGradient(#333333,#151515);
+    /*@include linearGradient(#333333,#151515);*/
+    background-color: #a5a5a5;
     
     .pageLabel {
         background-color: rgba(255,255,255,.4);
@@ -146,7 +147,14 @@
     right: 0;
     width: 300px;
     height: 80px;
-    @include linearGradient(#333333,#151515);
+    @include linearGradient(rgba(80,80,80,.9),rgba(60,60,60,.9));
+    padding: 10px !important;
+    box-sizing: border-box;
+    
+    @supports (-webkit-backdrop-filter: blur(8px)) {
+        background-color: rgba(0,0,0,.5);
+        -webkit-backdrop-filter: blur(18px);
+    }
     
     .displayregion {
         border-color: $spotColor;
@@ -158,11 +166,10 @@
     top: 80px;
     width: 300px;
     right: 0;
-    height: 40px;
-    border-top: .5px solid #999999;
-    border-bottom: .5px solid #999999;
+    /*height: 40px;*/
     box-sizing: border-box;
-    background-color: #e5e5e5;
+    background-color: rgba(60,60,60,.9);
+    border-radius: 0 0 0 3px;
     
     .menuButton {
         float: left;
@@ -173,11 +180,26 @@
         padding: 7px 8px;
         border-radius: 5px;
         font-size: 1.1em;
-        color: #333333;
-        text-shadow: 0 1px 3px #ffffff;
+        color: #cccccc;
+        text-shadow: 0 1px 3px #151515;
         
         &:hover {
-            background-color: #cccccc;
+            color: #999999;
+        }
+    }
+    
+    .menuRow {
+        clear: both;
+        color: #cccccc;
+        text-shadow: 0 1px 3px #151515;
+        padding: 2px 10px 10px 10px;
+        font-weight: 100;
+        user-select: none;
+        cursor: default;
+        
+        .fa {
+            margin-right: 10px;
+            cursor: pointer;
         }
     }
 }
