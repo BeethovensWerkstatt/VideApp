@@ -83,8 +83,8 @@ const EoHub = class EoHub {
             
             let viewKey = appModule.id;
             
-            console.log('[eohub] activating module ' + viewKey + ' for edition ' + id)
-            console.log('has feature: ' + appModule.feature)
+            //console.log('[eohub] activating module ' + viewKey + ' for edition ' + id)
+            //console.log('has feature: ' + appModule.feature)
             
             if(typeof appModule.feature !== 'undefined') {
                 this.activateModule(viewKey,appModule.feature);   

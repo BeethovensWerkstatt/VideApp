@@ -96,7 +96,7 @@ const VideTranscriptionViewer = class VideTranscriptionViewer extends EoNavModul
         overlayInserter.id = containerID + '_overlayInserter';
         
         let transcriptionNavMenu = document.createElement('div');
-        transcriptionNavMenu.id = containerID + '_transcriptionNavMenu';
+        transcriptionNavMenu.id = containerID + '_navOverlayMenu';
         transcriptionNavMenu.className = 'transcriptionNavMenu';
         
         transcriptionNavMenu.innerHTML = '<div id="' + containerID + '_zoomIn" class="menuButton"><i class="fa fa-plus"></i></div>' +
@@ -248,6 +248,10 @@ const VideTranscriptionViewer = class VideTranscriptionViewer extends EoNavModul
                     if(mode === 'multiScar') {
                         this._setupMultiScarViewer(stateJson,measureJson,verovio,editionID,containerID,request,resolve)
                     } else {
+                        console.log('')
+                        console.log('        new singleScar')
+                        console.log(stateJson)
+                        console.log(measureJson)
                         this._setupSingleScarViewer(stateJson,measureJson,verovio,editionID,containerID,request,resolve)
                     } 
                     
@@ -312,7 +316,7 @@ const VideTranscriptionViewer = class VideTranscriptionViewer extends EoNavModul
         
         let mainState;
         let otherStates = [];
-        let scar;
+        let scar = stateJson[0];
         
         if(type === 'highlightMeasure') {
             
@@ -548,7 +552,7 @@ const VideTranscriptionViewer = class VideTranscriptionViewer extends EoNavModul
                 });
                 
                 // jump to first measure
-                this._focusShape(containerID,viewer,stateJson[0].firstMeasure);
+                this._focusShape(containerID,viewer,stateJson[0].firstMeasure);    
                 
             });
             
@@ -634,172 +638,126 @@ const VideTranscriptionViewer = class VideTranscriptionViewer extends EoNavModul
             console.log(request)
             return false;
         }
-        
-        this._setupViewer(containerID,request).then((viewer) => {
+        try {
+            this._setupViewer(containerID,request).then((viewer) => {
             
-            let editionID = this._eohub.getEdition();
-            
-            if(typeof state.bounds !== 'undefined') {
-                try{
-                    viewer.viewport.fitBoundsWithConstraints(state.bounds);
-                    //this._confirmView(containerID,state);
-                } catch(err) {
-                    console.log('[ERROR] Unable to move to rect: ' + err)
-                    console.log(request)
-                    console.log(state)
-                }
+                let editionID = this._eohub.getEdition();
                 
-            } else if(type === 'default') {
-                
-                console.log('[DEBUG] default transcription loaded at ' + containerID);
-                //todo: have more complex object
-                //this._confirmView(containerID,{});
-                
-            } else if(type === 'highlightMeasure') {
-                
-                try {
-                    this._focusShape(containerID,viewer,request.id);
+                /*if(typeof state.bounds !== 'undefined') {
+                    try{
+                        viewer.viewport.fitBoundsWithConstraints(state.bounds);
+                        //this._confirmView(containerID,state);
+                    } catch(err) {
+                        console.log('[ERROR] Unable to move to rect: ' + err)
+                        console.log(request)
+                        console.log(state)
+                    }
+                    
+                } else*/ if(type === 'default') {
+                    
+                    console.log('[DEBUG] default transcription loaded at ' + containerID);
                     //todo: have more complex object
                     //this._confirmView(containerID,{});
-                } catch(err) {
-                    console.log('[ERROR] Unable to highlight measure ' + request.id + ': ' + err);
-                }
-                
-            } else if(type === 'highlightState') {
-                
-                let editionID = this._eohub.getEdition();
-                this._getStateData(editionID).then((stateJson) => {
-                    let scar;
-                    let i = 0;
                     
-                    loops:{
-                        for(i; i<stateJson.length;i++) {
-                            let current = stateJson[i];
-                            
-                            let j = 0;
-                            for(j; j<current.states.length;j++) {
-                                let state = current.states[j];
-                                if(state.id === request.id) {
-                                    scar = current;
-                                    break loops;
+                } else if(type === 'highlightMeasure') {
+                    
+                    try {
+                        this._focusShape(containerID,viewer,request.id);
+                        //todo: have more complex object
+                        //this._confirmView(containerID,{});
+                    } catch(err) {
+                        console.log('[ERROR] Unable to highlight measure ' + request.id + ': ' + err);
+                    }
+                    
+                } else if(type === 'highlightState') {
+                    
+                    let editionID = this._eohub.getEdition();
+                    this._getStateData(editionID).then((stateJson) => {
+                        let scar;
+                        let stateObj;
+                        let i = 0;
+                        
+                        loops:{
+                            for(i; i<stateJson.length;i++) {
+                                let current = stateJson[i];
+                                
+                                let j = 0;
+                                for(j; j<current.states.length;j++) {
+                                    let state = current.states[j];
+                                    if(state.id === request.id) {
+                                        scar = current;
+                                        stateObj = state;
+                                        break loops;
+                                    }
                                 }
                             }
                         }
-                    }
-                    
-                    let activeStates = [];
-                    i = 0;
-                    for(i;i<request.contexts.length;i++) {
-                        activeStates.push(request.contexts[i].id)
-                    }
-                    
-                    this._openSingleScar(containerID,scar.id,request.id,activeStates);
-                    
-                    //state needs to be rendered only if there is more than one scar
-                    if(stateJson.length > 1) {
-                        this._renderState(containerID,scar,viewer,request.id,activeStates);
                         
-                    }
-                    
-                });
-                
-            } else if(type === 'highlightMusic') {
-                
-                try {
-                    
-                    let elem = document.querySelector('#' + containerID + ' #' + request.id);
-                    elem.classList.add('highlight');
-                    setTimeout(() => {
-                        elem.classList.remove('highlight');
-                    },10000);
-                    
-                    this._focusShape(containerID,viewer,request.id);
-                    
-                } catch(err) {
-                    console.log('[ERROR] Unable to highlight object ' + request.id + ': ' + err);
-                }
-            
-                
-                /*let editionID = this._eohub.getEdition();
-                this._getStateData(editionID).then((stateJson) => {
-                    let scar;
-                    let stateObj;
-                    let i = 0;
-                    
-                    loops:{
-                        for(i; i<stateJson.length;i++) {
-                            let current = stateJson[i];
-                            
-                            let j = 0;
-                            for(j; j<current.states.length;j++) {
-                                let state = current.states[j];
-                                if(state.id === request.contexts[0].id) {
-                                    scar = current;
-                                    stateObj = state;
-                                    break loops;
-                                }
-                            }
+                        let activeStates = [];
+                        i = 0;
+                        for(i;i<request.contexts.length;i++) {
+                            activeStates.push(request.contexts[i].id)
                         }
-                    }
-                    
-                    let requiredStates = [];
-                    //todo: add possibility to deactivate state
-                    
-                    let p = 0;
-                    let q = scar.states.length;
-                    
-                    //iterate over all states, identify the ones that need to be activated
-                    for(p; p<q; p++) {
-                        let queriedState = scar.states[p];
                         
-                        let lesserPos = (queriedState.position < stateObj.position && !queriedState.deletion);
-                        let isActive = (queriedState.position <= stateObj.position && (queriedState.id === stateObj.id));
-                        if(lesserPos || isActive) {
-                            
-                            //console.log('…and accordingly, it should be kept active…')
-                            requiredStates.push(queriedState.id);
+                        if(typeof stateObj === 'object' && stateObj.deletion) {
+                            console.log('[INFO] Cannot render state ' + request.id + ', as its a pure deletion.')
+                            return false;
                         }
-                    }
-                    
-                    //let btn = document.getElementById(containerID + '_' + stateObj.id);
-                    //btn.dispatchEvent(new Event('click'));
-                    
-                    
-                    //this._openSingleScar(containerID,scar.id,stateObj.id,requiredStates);
-                    
-                    //state needs to be rendered only if there is more than one scar
-                    /\*this._renderState(containerID,scar,viewer,stateObj.id,requiredStates).then(() => {
-                        console.log('rendered again: ' + stateObj.id)
-                        console.log(requiredStates)
+                        
                         try {
-                            this._focusShape(containerID,viewer,request.id);
-                            //todo: have more complex object
-                            //this._confirmView(containerID,{});
+                            this._openSingleScar(containerID,scar.id,request.id,activeStates);
+                        
+                            //state needs to be rendered only if there is more than one scar
+                            if(stateJson.length > 1) {
+                                this._renderState(containerID,scar,viewer,request.id,activeStates);
+                                
+                            }
                         } catch(err) {
-                            console.log('[ERROR] Unable to highlight measure ' + request.id + ': ' + err);
+                             console.log('[ERROR] Unable to resolve request for state ' + request.id + ': ' + err)   
                         }
-                    });*\/
+                        
+                        
+                    });
                     
-                });*/
+                } else if(type === 'highlightMusic') {
+                    
+                    try {
+                        
+                        let elem = document.querySelector('#' + containerID + ' #' + request.id);
+                        elem.classList.add('highlight');
+                        setTimeout(() => {
+                            elem.classList.remove('highlight');
+                        },10000);
+                        
+                        this._focusShape(containerID,viewer,request.id);
+                        
+                    } catch(err) {
+                        console.log('[ERROR] Unable to highlight object ' + request.id + ': ' + err);
+                    }
                 
-            } else {
-                console.log('Dunno how to handle request (yet)')
-            }
-            
-            if(typeof request.state !== 'undefined' && request.state.invariance === true) {
-                //console.log('----------I need to activate invariance coloration')
-                this._activateInvariance(containerID, request);
-            } else if(state.invariance === true) {
-                //console.log('----------I need to activate invariance coloration')
-                this._activateInvariance(containerID, request);
-            }
-            else {
-                //console.log('----------I need to turn off invariance coloration')
-                this._deactivateInvariance(containerID);
-            }
-            
-        });
-    
+                } else {
+                    console.log('Dunno how to handle request (yet)')
+                }
+                
+                if(typeof request.state !== 'undefined' && request.state.invariance === true) {
+                    //console.log('----------I need to activate invariance coloration')
+                    this._activateInvariance(containerID, request);
+                } else if(state.invariance === true) {
+                    //console.log('----------I need to activate invariance coloration')
+                    this._activateInvariance(containerID, request);
+                }
+                else {
+                    //console.log('----------I need to turn off invariance coloration')
+                    this._deactivateInvariance(containerID);
+                }
+                
+            });
+        } catch(err) {
+            console.log('[ERROR] Unable to handle the following request: (' + err + ')')
+            console.log(request)
+            return false;
+        }
+        
     }
         
     _renderState(containerID, scar, viewer, stateID, activeStates = []) {
@@ -821,7 +779,7 @@ const VideTranscriptionViewer = class VideTranscriptionViewer extends EoNavModul
                     for (let item of list) {
                         viewer.removeOverlay(containerID + '_currentState');
                         //console.log(item);
-                        item.parentNode.removeChild(elem);
+                        item.parentNode.removeChild(item);
                     }
                 } catch(err) {
                     //console.log('[INFO] There is no overlay to be removed: ' + err)
@@ -896,6 +854,21 @@ const VideTranscriptionViewer = class VideTranscriptionViewer extends EoNavModul
                         checkResize: true,
                         placement: 'BOTTOM_LEFT'
                     });
+                    
+                    //add listeners for added states
+                    let notes = stateBox.querySelectorAll('#' + containerID + ' g.note, #' + containerID + ' g.rest');
+                    let notesArray = [...notes];
+                    
+                    let onClick = (e) => {
+                        let note = e.currentTarget;
+                        this._clickNote(containerID, viewer, note, e);
+                        e.preventDefault(); 
+                    };
+                    
+                    notesArray.forEach(function(elem, i) {
+                        elem.addEventListener('click',onClick,false)
+                    });
+                    
                     viewer.viewport.fitBoundsWithConstraints(rectBounds);
                     document.getElementById(containerID).setAttribute('data-activeState',stateID);
                 } catch(err) {
@@ -1408,6 +1381,25 @@ const VideTranscriptionViewer = class VideTranscriptionViewer extends EoNavModul
         return {
             invariance: invariance
         }
+    }
+    
+    _closeSingleScar(containerID) {
+        super._closeSingleScar(containerID);
+        
+        //get rid of old rendering (if any)
+        try {
+    
+            let list = document.querySelectorAll('#' + containerID + '_currentState');
+            let viewer = this._cache.get(containerID + '_transcriptionViewer');
+            for (let item of list) {
+                viewer.removeOverlay(containerID + '_currentState');
+                //console.log(item);
+                item.parentNode.removeChild(item);
+            }
+        } catch(err) {
+            //console.log('[INFO] There is no overlay to be removed: ' + err)
+        }
+        
     }
     
     /*

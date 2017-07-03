@@ -92,7 +92,7 @@ const EoNavModule = class EoNavModule extends EoModule {
         
         document.getElementById(containerID).appendChild(navOverlay);
         
-        this._setupViewSelect(containerID + '_navOverlay', containerID);
+        this._setupViewSelect(containerID + '_navOverlayMenu', containerID);
         
         //setup scar selector box
         this._getScarCategories(this._eohub.getEdition()).then((categories) => {

@@ -80,6 +80,8 @@ div.contextMenuBack {
                         .renderingBox {
                             text-align: center;
                             padding-top: 10px;
+                            height: 120px;
+                            overflow-y: hidden;
                         }
                     }
                     
@@ -119,7 +121,8 @@ div.contextMenuBack {
             }
             
             .position {
-                display: inline-block;
+                /*display: inline-block;*/
+                display: none;
                 padding: 0 0 0 5px;
                 &:before {
                     content: '('
@@ -335,13 +338,13 @@ div.contextMenuBack {
     .slick-dots
     {
         position: absolute;
-        bottom: -30px;
+        bottom: -27px;
         
         display: block;
     
-        width: 40%;
+        width: 60%;
         padding: 0;
-        margin: 0 30%;
+        margin: 0 20%;
     
         list-style: none;
         text-align: center;

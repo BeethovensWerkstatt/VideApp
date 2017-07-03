@@ -194,13 +194,44 @@
         text-shadow: 0 1px 3px #151515;
         padding: 2px 10px 10px 10px;
         font-weight: 100;
-        user-select: none;
+        @include noSelect();
         cursor: default;
         
         .fa {
             margin-right: 10px;
             cursor: pointer;
+            
+            &.fa-check-square-o {
+                position: relative;
+                left: 1px;
+            }
         }
+    }
+}
+
+.VideFacsimileViewer .viewMenu {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 300px;
+    height: 30px;
+    @include linearGradient(rgba(80,80,80,.9),rgba(72.5,72.5,72.5,.9));
+    color: #cccccc;
+    text-shadow: 0 1px 3px #151515;
+    
+    &:hover {
+        color: #999999;
+    }
+    
+    .select-target.select-theme-chosen {
+        border: none;
+        box-shadow: unset;
+        background: unset;
+        color: #e5e5e5;
+        font-size: 14px;
+        position: absolute;
+        top: 1px;
+        left: 10px;
     }
 }
 

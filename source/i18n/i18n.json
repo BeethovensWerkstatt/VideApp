@@ -221,7 +221,7 @@
     },
     "loadData_getXmlFile" : {
         "de":"lade XML",
-        "en":"loading XML"
+        "en":"retrieving XML"
     },
     "loadData_getPages" : {
         "de":"lade Seiteninformationen",
@@ -273,7 +273,7 @@
     },
     "loadData_getFinalState" : {
         "de":"lade endgültigen Werktext",
-        "en":"retriving final text"
+        "en":"retrieving final text"
     },
     "loadData_getIntroText" : {
         "de":"lade Einführungstext",

@@ -49,7 +49,7 @@ const VideTextViewer = class VideTextViewer extends EoModule {
         
         //create html for menu
         let menuElem = document.createElement('div');
-        menuElem.id = containerID + '_menu';
+        menuElem.id = containerID + '_navOverlayMenu';
         menuElem.classList.add('menu');
         document.getElementById(containerID).appendChild(menuElem);
         
@@ -59,7 +59,7 @@ const VideTextViewer = class VideTextViewer extends EoModule {
         containerElem.classList.add('contentBox');
         document.getElementById(containerID).appendChild(containerElem);
         
-        this._setupViewSelect(containerID + '_menu', containerID);
+        this._setupViewSelect(containerID + '_navOverlayMenu', containerID);
         
         return Promise.resolve(containerElem);
         
@@ -126,6 +126,56 @@ const VideTextViewer = class VideTextViewer extends EoModule {
         }
     }
     
+    _activateInternalLinks(containerID) {
+    
+        let links = document.getElementsByClassName('internalLink');
+        
+        
+        
+        for(let link of links) {
+            let targets = link.getAttribute('data-target').split(' ');
+            link.targets = targets;
+            
+            link.addEventListener('click',(e) => {this._clickInternalLink(e,containerID)})
+        
+        }
+    }
+    
+    _clickInternalLink(e,containerID) {
+        let link = e.target;
+        let targets = link.targets;
+        
+        let supportedRequests = this._eohub.getSupportedRequests();
+        let requests = [];
+        let filteredRequests = supportedRequests.filter((request) => {
+            return (request.object === VIDE_PROTOCOL.OBJECT.NOTATION && request.perspective !== this._supportedPerspective);
+        });
+        
+        for(let i=0;i<targets.length;i++) {
+            filteredRequests.forEach((request, j) => {
+                let req = Object.assign({}, request);
+                req.id = targets[i].replace(/#/,'');
+                requests.push(req);
+            });
+        }
+        
+        /*console.log('     --     --requests')
+        console.log(requests)
+        console.log('targets:')
+        console.log(targets)*/
+        
+        //todo: include function to check what type the targets are and use request types other than notation
+        
+        let closeFunc = () => {
+            //console.log('nothing happened')
+        };
+        try {
+            this._eohub._viewManager.setContextMenu(requests, e, containerID, closeFunc);    
+        } catch(err) {
+            console.log('[ERROR] Unable to open context menu: ' + err);
+        }
+    }
+    
     handleRequest(containerID,request,state = {}) {
         
         let editionID = this._eohub.getEdition();
@@ -134,6 +184,7 @@ const VideTextViewer = class VideTextViewer extends EoModule {
             this._setupHtml(containerID).then((container) => {
                 container.innerHTML = html;
                 this._activateVideos(containerID);
+                this._activateInternalLinks(containerID);
             });
             
         });

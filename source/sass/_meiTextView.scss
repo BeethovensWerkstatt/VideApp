@@ -47,6 +47,17 @@
                 text-decoration: underline;
             }
         }
+        
+        span.internalLink {
+            text-decoration: none;
+            color: #000000;
+            cursor: pointer;
+            font-weight: 500;
+            
+            &:hover {
+                color: #c93b22;
+            }
+        }
     }
     
     .videoContainer {

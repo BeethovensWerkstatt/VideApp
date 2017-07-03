@@ -51,13 +51,13 @@ const VideXmlViewer = class VideXMLviewer extends EoModule {
         
         
         //create html for menu
-        let menuID = containerID + '_menu';
+        let menuID = containerID + '_navOverlayMenu';
         let menuElem = document.createElement('div');
         menuElem.id = menuID;
         menuElem.classList.add('xmlMenu');
         document.getElementById(containerID).appendChild(menuElem);
         
-        this._setupViewSelect(containerID + '_menu', containerID);
+        this._setupViewSelect(containerID + '_navOverlayMenu', containerID);
         
         //create html for editor
         let key = containerID + '_editor';
@@ -194,9 +194,9 @@ const VideXmlViewer = class VideXMLviewer extends EoModule {
             id: this._eohub.getEdition(),
             type: 'getXmlFile'
         }
-        
+        console.log('--------------997')
         this._getEditor(containerID).then((editor) => {
-        
+            
             this.requestData(req, true).then((xml) => {
                 
                 editor.session.setValue(xml)
