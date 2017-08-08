@@ -114,8 +114,8 @@ const VideTranscriptionViewer = class VideTranscriptionViewer extends EoNavModul
             let invarianceBtn = document.createElement('div');
             invarianceBtn.id = containerID + '_activateInvariance';
             invarianceBtn.className = 'invarianceBtn toggleBtn';
-            invarianceBtn.innerHTML = '<i class="fa fa-random fa-rotate-90" aria-hidden="true"></i>';
-            document.getElementById( containerID + '_navOverlay').appendChild(invarianceBtn);
+            invarianceBtn.innerHTML = '<i class="fa fa-fw fa-square-o" aria-hidden="true"></i> <i class="fa fa-fw fa-check-square-o" aria-hidden="true"></i>  <span data-i18n-text="show_Invariance">' + this._eohub.getI18nString('show_Invariance') + '</span>';
+            document.getElementById( containerID + '_navOverlayMenu').appendChild(invarianceBtn);
         }
         
         let scarBox = document.getElementById(containerID + '_stateNavigation');
@@ -248,10 +248,10 @@ const VideTranscriptionViewer = class VideTranscriptionViewer extends EoNavModul
                     if(mode === 'multiScar') {
                         this._setupMultiScarViewer(stateJson,measureJson,verovio,editionID,containerID,request,resolve)
                     } else {
-                        console.log('')
+                        /*console.log('')
                         console.log('        new singleScar')
                         console.log(stateJson)
-                        console.log(measureJson)
+                        console.log(measureJson)*/
                         this._setupSingleScarViewer(stateJson,measureJson,verovio,editionID,containerID,request,resolve)
                     } 
                     
@@ -565,6 +565,7 @@ const VideTranscriptionViewer = class VideTranscriptionViewer extends EoNavModul
             svgBox.className = 'svgBox' + (mode === 'singleScar' ? ' currentState' : '');
             if(mode === 'singleScar') {
                 svgBox.id = containerID + '_currentState';
+                console.log(' setting id')
             }
             svgBox.innerHTML= svg;
             
@@ -594,7 +595,8 @@ const VideTranscriptionViewer = class VideTranscriptionViewer extends EoNavModul
                 
                 notesArray.forEach(function(elem, i) {
                     elem.addEventListener('click',onClick,false)
-                });    
+                });   
+                
             }
             
             resolveFunc(viewer);
@@ -706,7 +708,6 @@ const VideTranscriptionViewer = class VideTranscriptionViewer extends EoNavModul
                         
                         try {
                             this._openSingleScar(containerID,scar.id,request.id,activeStates);
-                        
                             //state needs to be rendered only if there is more than one scar
                             if(stateJson.length > 1) {
                                 this._renderState(containerID,scar,viewer,request.id,activeStates);
@@ -762,7 +763,6 @@ const VideTranscriptionViewer = class VideTranscriptionViewer extends EoNavModul
         
     _renderState(containerID, scar, viewer, stateID, activeStates = []) {
         
-        //console.log('--------------- _renderState')
         try {
             let editionID = this._eohub.getEdition();
             
@@ -1383,7 +1383,8 @@ const VideTranscriptionViewer = class VideTranscriptionViewer extends EoNavModul
         }
     }
     
-    _closeSingleScar(containerID) {
+    //the following function removes renderings in single mode -> todo: fix that it only affects multi Scar mode
+    /*_closeSingleScar(containerID) {
         super._closeSingleScar(containerID);
         
         //get rid of old rendering (if any)
@@ -1400,7 +1401,7 @@ const VideTranscriptionViewer = class VideTranscriptionViewer extends EoNavModul
             //console.log('[INFO] There is no overlay to be removed: ' + err)
         }
         
-    }
+    }*/
     
     /*
     

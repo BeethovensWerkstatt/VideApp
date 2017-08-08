@@ -165,7 +165,7 @@ export function handleViews(state = {
     ratio: .5,
     synced: false,
     view1: {moduleKey: 'VideFacsimileViewer', request: null, state: null, log: false},
-    view2: {moduleKey: 'VideTranscriptionViewer', request: null, state: null, log: false}
+    view2: {moduleKey: 'VideXmlViewer', request: null, state: null, log: false}
 }, action) {
     switch (action.type) {
         
@@ -296,7 +296,7 @@ export function handleViews(state = {
                 ratio: .5,
                 synced: false,
                 view1: {moduleKey: 'VideFacsimileViewer', request: null, state: null, log: false},
-                view2: {moduleKey: 'VideTranscriptionViewer', request: null, state: null, log: false}
+                view2: {moduleKey: 'VideXmlViewer', request: null, state: null, log: false}
             };
             
         default: 

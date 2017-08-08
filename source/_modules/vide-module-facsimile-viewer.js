@@ -54,6 +54,7 @@ const VideFacsimileViewer = class VideFacsimileViewer extends EoNavModule {
         this._stateLabelKeyPlural = 'writingLayers';
         
         this._overlayDefaultOpacity = .7;
+        this._showMeasureNumbersMinimumSize = .3;
         
         return this;
     }
@@ -1031,7 +1032,7 @@ const VideFacsimileViewer = class VideFacsimileViewer extends EoNavModule {
         let ratio = image.getBounds().width * viewer.viewport.getZoom();
         //console.log('--------------------- ratio is ' + ratio)
         
-        if(ratio < .35) {
+        if(ratio < this._showMeasureNumbersMinimumSize) {
             let labels = document.querySelectorAll('#' + containerID + ' .measureLabel');
             for(let i=0;i<labels.length;i++) {
                 labels[i].style.display = 'none';

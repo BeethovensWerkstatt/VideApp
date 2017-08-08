@@ -100,16 +100,6 @@
         
     }
     
-    .navOverlay {
-        .invarianceBtn {
-            position: absolute;
-            top: 6px;
-            right: 20px;/* 45px; */
-            cursor: pointer;
-            font-size: 90%;
-        }
-    }
-    
     .navOverlay.scarOpen .transcriptionNavContainer {
         display: none;
     }
@@ -160,10 +150,43 @@
         display: none;
     }
     
-    &[data-invariance='visible'] .invarianceBtn {
-        color: rgb(78, 155, 186);
+    .invarianceBtn {
+        position: absolute;
+        top: 6px;
+        right: 120px;/* 45px; */
+        cursor: pointer;
+        font-size: 90%;
+        text-align: left;
+        color: #cccccc;
+        text-shadow: 0 1px 3px #151515;
+        width: 150px;
+        @include noSelect();
+        
+        i.fa-check-square-o {
+            position: relative;
+            left: 1px;
+        }
     }
     
+    &[data-invariance='visible'] .invarianceBtn {
+        i.fa-check-square-o {
+            display: inline-block;
+        }
+        
+        i.fa-square-o {
+            display: none;
+        }
+    }
+    
+    &[data-invariance='hidden'] .invarianceBtn {
+        i.fa-check-square-o {
+            display: none;
+        }
+        
+        i.fa-square-o {
+            display: inline-block;
+        }
+    }
 }
 
 .previewItem.transcriptionPreview {

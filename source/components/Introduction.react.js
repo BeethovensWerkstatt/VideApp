@@ -7,56 +7,51 @@ const Introduction = ({language }) => {
             <div className="introduction">
                 <h1>Beethovens Werkstatt</h1>
                 <p>
-                    Das Projekt Beethovens Werkstatt kombiniert zwei Forschungsansätze – Genetische Textkritik und Digitale Musikedition – um kompositorische Prozesse im Œuvre Beethovens zu untersuchen.
-                    Dabei erarbeiten wir Ergebnisse verschiedenster Art. Zunächst schaffen wir eine terminologische Grundlage, um uns überhaupt über textgenetische Prozesse
-                    im Bereich Musik austauschen zu können. Dokumentiert wird diese kontinuierliche Arbeit in unserem <a href="http://beethovens-werkstatt.de/philologisches-glossar/" target="_blank">Glossar</a>. Anhand
-                    unseres <a href="http://beethovens-werkstatt.de/projekt/" target="_blank">Arbeitsplans</a> untersuchen wir ausgehend von dieser Terminologie ausgewählte Werke Beethovens mit dem Ziel, kompositorische
-                    Prozesse nachvollziehen zu können. Unsere Erkenntnisse modellieren wir in einer <a href="https://github.com/BeethovensWerkstatt/Data-Model" target="_blank">angepassten</a> Version von <a href="http://music-encoding.org" target="_blank">MEI</a>.
-                    Aufbauend auf diesen Codierungen versuchen wir, die beobachteten kompositorischen Prozesse mit unserer <a href="https://github.com/BeethovensWerkstatt/VideApp" target="_blank">neu entwickelten</a> VideApp
-                    leichter zugänglich und nachvollziehbar zu machen. Diese Anwendung greift viele Konzepte digitaler Editionen auf, darunter insbesondere <a href="http://edirom.de" target="_blank">Edirom</a>.
-                    Der Schwerpunkt der VideApp liegt darauf, eine möglichst flexible und modulare Basis für die sehr unterschiedlichen Anforderungen unseres bis 2029 laufenden Projekts
-                    zu bieten.
+                    Das Projekt Beethovens Werkstatt kombiniert zwei Forschungsansätze – Genetische Textkritik und Digitale Musikedition – um kompositorische Prozesse im Œuvre Beethovens zu untersuchen. 
+                    In den einzelnen Modulen werden, begleitet von einer kontinuierlichen Erarbeitung terminologischer Verständigungsgrundlagen, die in unserem <a href="http://beethovens-werkstatt.de/philologisches-glossar/" target="_blank">Glossar</a> dokumentiert sind, ausgewählte Werke 
+                    Beethovens mit dem Ziel untersucht, kompositorische Prozesse nachvollziehen zu können. Unsere Erkenntnisse modellieren wir in einer <a href="https://github.com/BeethovensWerkstatt/Data-Model" target="_blank">angepassten</a> Version der Codierungssprache <a href="http://music-encoding.org" target="_blank">MEI</a>. 
+                    Die beobachteten kompositorischen Prozesse sollen auf der Basis dieser Codierungen mit der <a href="https://github.com/BeethovensWerkstatt/VideApp" target="_blank">neu entwickelten</a> VideApp leichter zugänglich
+                    und nachvollziehbar gemacht werden. Diese Anwendung greift bestehend Konzepte digitaler Editionen auf, darunter insbesondere <a href="http://edirom.de" target="_blank">Edirom</a>. Der Schwerpunkt der VideApp liegt darauf, 
+                    eine möglichst flexible und modulare Basis für die sehr unterschiedlichen Anforderungen unseres bis 2029 laufenden Projekts bereitzustellen.
                 </p>
                 {/* <h3>Was Sie hier finden</h3>*/}
                 <p>
-                    Nachfolgend finden Sie die bislang von uns bearbeiteten Fallstudien (die beidenFallstudien zur <a href="http://beethovens-werkstatt.de/demo" target="_blank">Klaviersonate Op.111</a> 
-                    und zum <a href="http://beethovens-werkstatt.de/demo2" target="_blank">Streichquartett Op.59,3</a> werden hier zu einem späteren Zeitpunkt integriert). Sobald wir vorzeigbare
-                    Ergebnisse aus unserem zweiten Modul haben, werden sie ebenfalls an dieser Stelle präsentiert. Dabei konzentriert sich jede Fallstudie auf andere Aspekte unserer Forschung, und nicht
-                    jedes Beispiel unterstützt alle Features der Anwendung. Nach einem Klick auf die untenstehenden Werke erhalten Sie eine kurze Erläuterung, wo unser Hauptaugenmerk für die jeweilige
-                    Fallstudie liegt.
+                    Nachfolgend finden Sie die bislang von uns bearbeiteten Fallstudien (die beiden noch separat zugänglichen Fallstudien zur <a href="http://beethovens-werkstatt.de/demo" target="_blank">Klaviersonate Op.111</a> 
+                    und zum <a href="http://beethovens-werkstatt.de/demo2" target="_blank">Streichquartett Op.59,3</a> werden zu einem späteren Zeitpunkt integriert). Erste Ergebnisse aus unserem zweiten Modul werden ebenfalls an dieser 
+                    Stelle präsentiert. Dabei konzentriert sich jede Fallstudie auf andere Aspekte unserer Forschung, und nicht jedes Beispiel unterstützt alle Features der Anwendung. Nach einem Klick auf die untenstehenden Werke erhalten 
+                    Sie eine kurze Erläuterung, wo unser Hauptaugenmerk für die jeweilige Fallstudie liegt.
                 </p>
                 <EditionListController mode={EditionListMode.ROW}/>   
                 {/*<h3>What this is not</h3>*/}
                 <p>
-                    Im Umgang mit diesen Fallstudien ist es wichtig, diese als Grundlagenforschung einzuordnen. Wir sind uns bewusst, dass diese in vielerlei Hinsicht unvollständig, vereinfachend und 
-                    teilweise auch schlicht falsch sind. Natürlich bemühen wir uns, diese Einschränkungen zu gegebener Zeit zu beheben, aber es ist uns wichtig, dennoch möglichst frühzeitig in einen offen Austausch
-                    zu treten. Bitte betrachten Sie daher sowohl sämtliche Inhalte als auch die gezeigte Anwendung als <b>öffentliche Beta-Version</b>. 
+                    Im Umgang mit diesen Fallstudien ist es wichtig, deren Charakter als Grundlagenforschung zu bedenken. Wir sind uns bewusst, dass diese Fallstudien in vielerlei Hinsicht unvollständig, vereinfachend und 
+                    teilweise auch noch schlicht fehlerhaft sind. Gerade weil wir uns bemühen möchten, diese Einschränkungen im Laufe der Arbeiten zu beheben, ist es für uns wichtig, frühzeitig mit Ihnen als Nutzerin oder Nutzer 
+                    in einen offenen Austausch zu treten. Bitte betrachten Sie daher sowohl sämtliche Inhalte als auch die gezeigte Anwendung als <b>öffentliche Beta-Version</b>. 
                 </p>
                 <p>
-                    In einigen Fällen ist unsere inhaltliche Auseinandersetzung mit den gewählten Fallstudien noch nicht abgeschlossen, an manchen Stellen sind unsere Codierungsmodelle noch 
-                    nicht hinreichend ausgereift, um unsere Erkenntnisse angemessen wiederzugeben, und in vielen Fällen ist die Software noch nicht stabil genug, um alles wie gewünscht zu 
-                    vermitteln. Unser Ziel ist es nicht, wissenschaftliche Editionen von Beethoven-Werken im traditionellen Sinn zu erarbeiten, sondern vielmehr eine Methodik für textgenetische 
-                    Editionen von Musik zu entwickeln und in digitaler Form umzusetzen. Die Erstellung einer vollständigen Edition ist ein Fernziel unseres Projekts. Auf dem Weg dorthin liegen
-                    noch viele Zwischenschritte, die jeweils in einer eigenen Fallstudie versuchen, einzelne fachliche Aspekte in einer konkreten technischen Umsetzung zu erproben. 
+                    In einigen Fällen ist unsere inhaltliche Auseinandersetzung mit den gewählten Fallstudien noch nicht abgeschlossen oder sind unsere Codierungsmodelle noch nicht hinreichend ausgereift, um unsere Erkenntnisse 
+                    angemessen wiederzugeben, und in vielen Fällen ist die Software noch nicht stabil genug, um alles wie gewünscht zu vermitteln. Unser Ziel ist es nicht, wissenschaftliche Editionen von Beethoven-Werken im
+                    traditionellen Sinn zu erarbeiten, sondern vielmehr eine Methodik für textgenetische Editionen von Musik zu entwickeln und in digitaler Form umzusetzen. Die exemplarische Erstellung einer vollständigen Edition
+                    ist ein Fernziel unseres Projekts. In Zwischenschritten versuchen wir  anhand einzelner Fallstudie, ausgewählte fachliche Aspekte in einer konkreten technischen Umsetzung zu erproben.
                 </p>
                 <p>
-                    In einer der nächsten Revisionen der VideApp planen wir, diese so zu erweitern, dass jeder Zustand der Anwendung über einen eindeutigen Link identifiziert und 
-                    damit auch in Publikationen o.ä. referenziert werden kann. Diese Funktion ist teilweise bereits in der aktuell vorliegenden Version integriert. Allerdings bitten wir Sie ausdrücklich, Sich
-                    vorläufig nicht auf die nachhaltige Verfügbarkeit der aktuell generierten Links zu verlassen. Falls Sie einen Eindruck von der Komplexität einer Anwendung wie der VideApp
-                    bekommen möchten, legen wir Ihnen unseren Bericht zur <a href="http://beethovens-werkstatt.de/softwareentwicklung-2017/" target="_blank">Softwareentwicklung</a> innerhalb 
-                    des Projekts ans Herz.
+                    In einer der nächsten Revisionen der VideApp soll diese so erweitert werden, dass jeder Zustand der Anwendung über einen eindeutigen Link identifiziert und damit auch in Publikationen o.ä. referenziert werden
+                    kann. Diese Funktion ist teilweise bereits in der aktuell vorliegenden Version integriert. Allerdings bitten wir Sie ausdrücklich, Sich vorläufig nicht auf die nachhaltige Verfügbarkeit der aktuell generierten 
+                    Links zu verlassen. Falls Sie einen Eindruck von der Komplexität einer Anwendung wie der VideApp bekommen möchten, empfehlen wir Ihnen die Lektüre unseres Berichts
+                    zur <a href="http://beethovens-werkstatt.de/softwareentwicklung-2017/" target="_blank">Softwareentwicklung</a> innerhalb 
+                    des Projekts.
                 </p>
                 <h3>Feedback</h3>
                 <p>
-                    Selbstverständlich sind wir sehr an Ihren Rückmeldungen interessiert, sowohl hinsichtlich unserer Fallstudien, der Codierungsmodelle und der VideApp. Bitte senden Sie uns
+                    Selbstverständlich sind wir sehr an Ihren Rückmeldungen interessiert, sowohl hinsichtlich unserer Fallstudien, der Codierungsmodelle und der VideApp. Bitte senden Sie uns 
                     einfach eine <a href="mailto:info@beethovens-werkstatt.de">Email</a> mit ihren Beobachtungen, Vorschlägen oder Fragen.
                 </p>
                 <h3>Zum Datenschutz</h3>
                 <p>
-                    Jeder Gebrauch der VideApp wird serverseitig gespeichert. Dies ist eine leider unumgängliche Voraussetzung, um die Anwendung vollständig referenzierbar zu machen. Um die
-                    Dabei werden jedoch keinerlei Informationen gespeichert, die eine Identifizierung des Benutzers erlauben. An personenbezogenen Daten werden lediglich Informationen zum 
-                    genutzten Browser (der sogenannte "userAgent", der z.B. wie folgt aussehen kann: "<span className='sample'>Mozilla/5.0 (Macintosh; Intel Mac OS X 10.12; rv:54.0) Gecko/20100101 Firefox/54.0</span>"), 
-                    sowie die im Browser hinterlegte bevorzugte Sprache (z.B. "<span className='sample'>de</span>") gespeichert. Darüber hinaus werden keine weiteren Daten erhoben.
+                    Jede Nutzung der VideApp wird serverseitig gespeichert. Dies ist eine leider unumgängliche Voraussetzung, um die Anwendung vollständig referenzierbar zu machen. Dabei werden jedoch keinerlei Informationen gespeichert, 
+                    die eine Identifizierung des Benutzers erlauben! An personenbezogenen Daten werden lediglich Informationen zum genutzten 
+                    Browser (der sogenannte "userAgent", der z.B. wie folgt aussehen kann: "<span className='sample'>Mozilla/5.0 (Macintosh; Intel Mac OS X 10.12; rv:54.0) Gecko/20100101 Firefox/54.0</span>"), 
+                    sowie die im Browser hinterlegte bevorzugte Sprache (z.B. "<span className='sample'>de</span>") gespeichert. Darüber hinaus werden keine weiteren personenbezogenen Daten erhoben.
                 </p>
             </div>
         );
@@ -77,8 +72,8 @@ const Introduction = ({language }) => {
             </p>
             <h3>What you will find here</h3>
             <p>
-                In the box below, you will find all the case studies we've been working on so far (the <a href="http://beethovens-werkstatt.de/demo" target="_blank">piano sonata Op.111</a> 
-                and <a href="http://beethovens-werkstatt.de/demo2" target="_blank">string quartet Op.59,3</a> examples will be integrated here at a later stage). As soon as there
+                In the box below, you will find all the case studies we've been working on so far (the <a href="http://beethovens-werkstatt.de/demo" target="_blank">piano sonata Op.111</a> and <a href="http://beethovens-werkstatt.de/demo2" target="_blank">string
+                quartet Op.59,3</a> examples will be integrated here at a later stage). As soon as there
                 is something to show, we will include works from our second module here as well. Each example will showcase different aspects of our research, and not every feature
                 will be available in each case study. If you click on one of the images, you will get a brief explanation of what our focus was in that case. 
             </p>
