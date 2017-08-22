@@ -13,7 +13,7 @@
     */
     
     width: 720px;
-    height: 125px;
+    height: 185px;
     flex-shrink: 0;
     
     color: #cccccc;
@@ -37,58 +37,145 @@
         
         box-sizing: border-box;
         
-        .scarBox {
+        .currentMeasureIndicator {
+            position: absolute;
+            top: 20px;
+            height: 130px;
+            border-left: 1px solid rgba(240,240,240,.3);
+            z-index: 1;
+            color: rgba(240,240,240,.8);
+            font-size: 80%;
+            font-weight: 100;
+            padding-left: 3px;
+            
+            &.hidden {
+                display: none;
+            }
+        }
         
+        .measuresBox {
             overflow: auto;
             
             position: absolute;
-            top: 30px;
+            top: 20px;
             right: 70px;
-            bottom: 30px;
+            height: 14px;
             left: 70px;
-            display: flex;
             
-            z-index: 1;
+            background-color: rgba(240,240,240,.0);
+            z-index: 3;
+            padding: 0 3px;
             
-            .measure {
-                width: 60px;
-                height: 60px;
-                /*border-left: .5px solid rgba(240,240,240,.04);*/
+            .measureNumber {
+                position: absolute;
+                top: 0;
+                display: inline;
+                border-left: .5px solid rgb(240,240,240);
+                color: rgba(240,240,240,.8);
+                font-size: 80%;
+                font-weight: 100;
+                padding-left: 3px;
+                opacity: .3;
+            }
+            
+        }
+        
+        .braceBox {
+            position: absolute;
+            top: 38px;
+            height: 100px;
+            left: 54px;
+            width: 15px;
+            background-image: url('../pix/brace.png');
+            opacity: .4;
+        }
+        
+        .scarBox {
+        
+            position: absolute;
+            top: 38px;
+            right: 70px;
+            height: 100px;
+            left: 70px;
+            background-color: rgba(240,240,240,.1);
+            z-index: 2;
+            padding: 0 3px;
+            
+            .staff {
+                position: absolute;
+                left: 0;
+                right: 0;
                 background-color: rgba(240,240,240,.3);
-                position: relative;
                 
-                &.unflex {
-                    flex-shrink: .9993;
+                &.hovered {
+                    background-color: rgba(240,240,240,.4);
                 }
                 
-                .scar {
-                    background-color: rgba(240,240,240,.6);
+                &.hovered:before {
                     position: absolute;
-                    
-                    &.complete {
-                        height: 90%;
-                        width: 100%;
-                        top: 5%;
-                    }
-                    
-                    &.staff {
-                        width: 100%;
-                        /* height set by javascript */
-                        /* top set by javascript */
-                    }
-                    
-                    &.highlight {
-                        background-color: $spotColor;
-                        opacity: .6;
-                        z-index: 1;
-                    }
-                    
-                    &.hidden {
-                        visibility: hidden;
-                    }
+                    top: 50%;
+                    left: -65px;
+                    width: 50px;
+                    margin-top: -10px;
+                    text-align: right;
+                    font-weight:100;
+                    content: attr(data-label);
                 }
             }
             
+            .scar {
+                background-color: rgba(lighten($spotColor,20%),.75);
+                position: absolute;
+                top: 5px;
+                height: 55px;
+                min-width: 2px;
+                border-radius: 2px;
+                z-index: 3;
+                
+                &:hover {
+                    background-color: rgba(lighten($spotColor,10%),.95);
+                }
+                
+                /* these scars are not affecting the final measures */
+                &.intermediate {
+                    margin-left: -1px;
+                    /*background-color: desaturate($spotColor,30%);*/
+                    
+                    &:before {
+                        position: absolute;
+                        top: -1px;
+                        left: -2px;
+                        width: 6px;
+                        height: 6px;
+                        content: '';
+                        border-radius: 3px;
+                        background-color: rgba(lighten($spotColor,10%),.95);
+                    }
+                    
+                    &:hover:before {
+                        background-color: rgba(lighten($spotColor,10%),.95);
+                    }
+                }
+                
+                &.complete {
+                    height: 96%;
+                    top: 2%;
+                }
+                
+                /*&.staff {
+                    background-color: rgba(20,240,240,.5);
+                }*/
+                
+                &.highlight {
+                    background-color: $spotColor;
+                    opacity: .6;
+                    z-index: 1;
+                }
+                
+                &.hidden {
+                    visibility: hidden;
+                }
+            }
             
         }
         

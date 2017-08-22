@@ -57,6 +57,19 @@ const EoNavModule = class EoNavModule extends EoModule {
         statenav.id = containerID + '_stateNavigation';
         statenav.className = 'stateNavigation';
         
+        let measuresBox = document.createElement('div');
+        measuresBox.id = containerID + '_measuresBox';
+        measuresBox.className = 'measuresBox';
+        
+        let currentMeasureIndicator = document.createElement('div');
+        currentMeasureIndicator.id = containerID + '_currentMeasuresIndicator';
+        currentMeasureIndicator.classList.add('currentMeasureIndicator');
+        currentMeasureIndicator.classList.add('hidden');
+        
+        let braceBox = document.createElement('div');
+        braceBox.id = containerID + '_braceBox';
+        braceBox.className = 'braceBox';
+        
         let scarBox = document.createElement('div');
         scarBox.id = containerID + '_scarBox';
         scarBox.className = 'scarBox';
@@ -65,6 +78,9 @@ const EoNavModule = class EoNavModule extends EoModule {
         statesBox.id = containerID + '_statesBox';
         statesBox.className = 'statesBox';
         
+        statenav.appendChild(measuresBox);
+        statenav.appendChild(currentMeasureIndicator);
+        statenav.appendChild(braceBox);
         statenav.appendChild(scarBox);
         statenav.appendChild(statesBox);
         
@@ -173,12 +189,70 @@ const EoNavModule = class EoNavModule extends EoModule {
             
             //load scar overview
             let staffCount = measureJson.staves.length;
+            let scarBoxHeight = 100; //this value is also used in _stateNavigation.scss!!!
             
-            let m=0;
-            let n=measureJson.measures.length;
+            //total number of measures in the final text
+            let measureCount = measureJson.measures.length;
+            
+            //this function inserts a measure number at the given index
+            let measureNumberInsertionFunc = (index) => {
+                index = Math.round(index);
+                let measure = measureJson.measures[index];
+                
+                //try to avoid upbeats
+                if(measure.label === '0') {
+                    measureNumberInsertionFunc(index + 1);
+                } else {
+                    let measureNumberElem = document.createElement('div');
+                    measureNumberElem.classList.add('measureNumber');
+                    measureNumberElem.style.left = (100 / measureCount * index) + '%';
+                    measureNumberElem.innerHTML = measure.label;
+                    
+                    measuresBox.appendChild(measureNumberElem)   
+                }
+            };
+            
+            //insert measure numbers for better orientation as appropriate
+            if(measureCount < 10) {
+                //have two measure numbers above
+                measureNumberInsertionFunc(0);
+                measureNumberInsertionFunc(measureCount / 2);
+            } else if(measureCount < 20) {
+                //have three measure numbers above
+                measureNumberInsertionFunc(0);
+                measureNumberInsertionFunc(measureCount / 3);
+                measureNumberInsertionFunc(measureCount * 2 / 3);
+            } else {
+                //have four measure numbers above
+                measureNumberInsertionFunc(0);
+                measureNumberInsertionFunc(measureCount / 4);
+                measureNumberInsertionFunc(measureCount * 2 / 4);
+                measureNumberInsertionFunc(measureCount * 3 / 4);
+            }
+            
+            //insert staves into preview for better orientation
+            for(let index = 0; index < staffCount; index++) {
+                let staff = measureJson.staves[index];
+                
+                let unit = scarBoxHeight / staffCount;
+                let topDist = index * unit + .2 * unit;
+                let staffHeight = unit * .6;
+                
+                let staffElem = document.createElement('div');
+                staffElem.classList.add('staff');
+                staffElem.style.top = topDist + 'px';
+                staffElem.style.height = staffHeight + 'px';
+                staffElem.setAttribute('data-label', (staff.label.length > 0) ? staff.label : index + 1);
+                staffElem.setAttribute('data-index', index);
+                scarBox.appendChild(staffElem)
+            }
+            
+            
+            /*let m=0;
+            let n=measureJson.measures.length;*/
             
             //insert measures in scarBox
-            for(m; m<n; m++) {
+            /*for(m; m<n; m++) {
                 let measure = measureJson.measures[m]
                 let elem = document.createElement('div');
                 elem.classList.add('measure');
@@ -275,6 +349,242 @@ const EoNavModule = class EoNavModule extends EoModule {
                     
                 }
             }
+            */
+            
+            
+            //generate boxes for scars
+            this._getStateData(this._eohub.getEdition()).then((stateJson) => {
+                for (let i = 0; i<stateJson.length;i++) {
+                    let indizes = [];
+                    let scar = stateJson[i];
+                    for (let j=0; j < measureJson.measures.length;j++) {
+                        if(scar.affectedMeasures.indexOf(measureJson.measures[j].id) !== -1) {
+                            indizes.push(j);
+                        }
+                    }
+                    
+                    if(indizes.length > 0) {
+                        let min = Math.min(...indizes);
+                        let max = Math.max(...indizes);
+                        
+                        if(scar.complete) {
+                            let scarElem = document.createElement('div');
+                            scarElem.classList.add('scar');
+                            scarElem.classList.add('complete');
+                            scarElem.style.left = (100 / measureCount * min) + '%';
+                            scarElem.style.right = (100 - (100 / measureCount * (max + 1))) + '%';
+                            scarElem.setAttribute('data-scar',scar.id);
+                            scarBox.append(scarElem);
+                            
+                            scarElem.addEventListener('click',(e) => {
+                                let elem = e.currentTarget;
+                                this._highlightScarForNav(containerID,scar.id);
+                                //e.stopPropagation();
+                            })
+                        } else {
+                            //scar affects only some staves
+                             
+                            let p = 0;
+                            let q = scar.staves.length;
+                            for(p; p<q; p++) {
+                                let n = scar.staves[p] ;
+                                let jsn = n - 1;
+                                
+                                let label = measureJson.staves[jsn].label;
+                                if(label === '' || typeof label === 'undefined') {
+                                    label = n;
+                                }
+                                
+                                let unit = (scarBoxHeight / staffCount);
+                                let top = jsn * unit + .1 * unit;
+                                
+                                let scarElem = document.createElement('div');
+                                scarElem.classList.add('scar');
+                                scarElem.classList.add('staff-only');
+                                scarElem.setAttribute('data-scar',scar.id);
+                                scarElem.setAttribute('data-staff-n',n);
+                                scarElem.setAttribute('title',label);
+                                scarElem.style.left = (100 / measureCount * min) + '%';
+                                scarElem.style.right = (100 - (100 / measureCount * (max + 1))) + '%';
+                                scarElem.style.top = top + '%';
+                                scarElem.style.height = (unit * .8) + '%';
+                                
+                                /*let t = 0;
+                                let s = scarObj.categories.length;
+                                for(t; t < s; t++) {
+                                    scarElem.classList.add(scarObj.categories[t]);
+                                }*/
+                                
+                                scarBox.append(scarElem);
+                                
+                                scarElem.addEventListener('click',(e) => {
+                                    let elem = e.currentTarget;
+                                    this._highlightScarForNav(containerID,scar.id);
+                                    //e.stopPropagation();
+                                })
+                                
+                            }
+                        }
+                    //scar seems to affect only measures which aren't part of the final text
+                    } else {
+                        
+                        let index = -1;
+                        for(let j = 0; j< measureJson.measures.length;j++) {
+                            if(measureJson.measures[j].id === scar.firstMeasure) {
+                                index = j;
+                                break;
+                            }
+                        }
+                        
+                        //check if firstMeasure has been found
+                        if(index > -1) {
+                            let scarElem = document.createElement('div');
+                            scarElem.classList.add('scar');
+                            scarElem.classList.add('intermediate');
+                            //todo: check if only some staves are affected
+                            scarElem.classList.add('complete');
+                            scarElem.style.left = (100 / measureCount * index) + '%';
+                            //scarElem.style.right = (100 - (100 / measureCount * (max + 1))) + '%';
+                            scarElem.setAttribute('data-scar',scar.id);
+                            scarBox.append(scarElem);
+                            
+                            scarElem.addEventListener('click',(e) => {
+                                let elem = e.currentTarget;
+                                this._highlightScarForNav(containerID,scar.id);
+                                //e.stopPropagation();
+                            })
+                        } else {
+                            console.log('[ERROR] Unable to render the following scar:')
+                            console.log(scar)
+                        }
+                        
+                    }
+                    
+                    
+                }
+            });
+            
+            //listener for clicks on measures
+            let measureClickFunc = (e) => {
+                
+                e.preventDefault();
+                e.stopPropagation();
+                
+                let totalWidth = scarBox.clientWidth;
+                let layerX;
+                
+                if(e.target.id !== containerID + '_measuresBox') {
+                    layerX = e.layerX + e.target.offsetLeft;
+                } else {
+                    layerX = e.layerX;
+                }
+                
+                let index = Math.floor(measureCount / totalWidth * layerX);
+                let measureObj = measureJson.measures[index];
+                
+                let req = {
+                    id: measureObj.id,
+                    object: VIDE_PROTOCOL.OBJECT.NOTATION,
+                    contexts: [],
+                    perspective: this._supportedPerspective,
+                    operation: VIDE_PROTOCOL.OPERATION.VIEW,
+                    state: {}
+                };
+                
+                this._eohub.sendSelfRequest(req,this,containerID);
+                
+            };
+            
+            let measureHoverFunc = (e) => {
+                /*console.log('mousemove')
+                console.log(e)*/
+                try {
+                    currentMeasureIndicator.classList.remove('hidden');
+                    
+                    let layerX;
+                    if(e.target.id !== measuresBox.id) {
+                        layerX = e.layerX + e.target.offsetLeft;
+                    } else {
+                        layerX = e.layerX;
+                    }
+                    
+                    let relativeX = (layerX + measuresBox.offsetLeft);
+                    let totalWidth = scarBox.clientWidth;
+                    let index = Math.floor(measureCount / totalWidth * layerX);
+                    let measureObj = measureJson.measures[index];
+                    
+                    currentMeasureIndicator.innerHTML = measureObj.label;                    
+                    currentMeasureIndicator.style.left = relativeX + 'px';    
+                } catch(err) {
+                    //console.log('[ERROR] Unable to show measure indicator')
+                }
+                
+            };
+            
+            let measureLeaveFunc = (e) => {
+                try {
+                    currentMeasureIndicator.classList.add('hidden');                    
+                } catch(err) {
+                    //console.log('[ERROR] Unable to hide measure indicator')
+                }
+            };
+            
+            let scarBoxLeaveFunc = (e) => {
+                try {
+                    currentMeasureIndicator.classList.add('hidden');  
+                
+                    let oldStaff = document.querySelector('#' + containerID + ' .scarBox .staff.hovered');
+                    if(oldStaff !== null) {
+                        oldStaff.classList.remove('hovered');
+                    }
+                } catch(err) {
+                    //console.log('[ERROR] Unable to hide measure indicator')
+                }
+            };
+            
+            let scarBoxHoverFunc = (e) => {
+                try {
+                    let layerX = e.layerX;
+                    let layerY = e.layerY;
+                    
+                    if(e.target.id !== scarBox.id) {
+                        layerX = layerX + e.target.offsetLeft;
+                        layerY = layerY + e.target.offsetTop;
+                    }
+                    
+                    //adjust measure indicator
+                    let totalWidth = scarBox.clientWidth;
+                    let measureIndex = Math.floor(measureCount / totalWidth * layerX);
+                    let measureObj = measureJson.measures[measureIndex];
+                    currentMeasureIndicator.innerHTML = measureObj.label;                    
+                    currentMeasureIndicator.style.left = (layerX + scarBox.offsetLeft) + 'px';
+                    currentMeasureIndicator.classList.remove('hidden');
+                    
+                    //adjust staff highlight
+                    let totalHeight = scarBox.clientHeight;
+                    let staffIndex = Math.floor(staffCount / totalHeight * layerY);
+                    
+                    let oldStaff = document.querySelector('#' + containerID + ' .scarBox .staff.hovered');
+                    if(oldStaff !== null/* && oldStaff.getAttribute('data-index' !== staffIndex)*/) {
+                        oldStaff.classList.remove('hovered');
+                    } 
+                    
+                    let newStaff = document.querySelector('#' + containerID + ' .scarBox .staff[data-index="' + staffIndex + '"]');
+                    if(newStaff !== null) {
+                        newStaff.classList.add('hovered')
+                    }
+                    
+                } catch(err) {
+                    //console.log('[ERROR] Unable to do proper highlighting')
+                }
+            }
+            
+            scarBox.addEventListener('mousemove',scarBoxHoverFunc);
+            scarBox.addEventListener('mouseout',scarBoxLeaveFunc);
+            
+            measuresBox.addEventListener('click',measureClickFunc);
+            measuresBox.addEventListener('mousemove',measureHoverFunc);
+            measuresBox.addEventListener('mouseout',measureLeaveFunc);
             
             //todo: deal with navMode, and what is actually highlighted in here…
         });    
@@ -502,6 +812,10 @@ const EoNavModule = class EoNavModule extends EoModule {
     
     
     _highlightScarForNav(containerID, scarId) {
+        
+        console.log('_highlightScarForNav with scarId:')
+        console.log(scarId)
+        
         this._removeScarHighlightForNav(containerID);
         this._closeSingleScar(containerID);
         
