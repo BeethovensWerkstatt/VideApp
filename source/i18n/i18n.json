@@ -290,5 +290,33 @@
     "loadData_getTranscriptionPreview" : {
         "de":"lade Transkription",
         "en":"retrieving transcription"
+    },
+    "stateNav_textOverview" : {
+        "de":"Textübersicht",
+        "en":"Overview of musical text"
+    },
+    "stateNav_scarDetail" : {
+        "de":"Entwicklung der Textnarbe in Takt",
+        "en":"Detail of the textual scar in measure"
+    },
+    "prevScarTooltip" : {
+        "de":"Vorhergehende Textnarbe öffnen",
+        "en":"Show previous textual scar"
+    },
+    "nextScarTooltip" : {
+        "de":"Nachfolgende Textnarbe öffnen",
+        "en":"Show next textual scar"
+    },
+    "closeScarTooltip" : {
+        "de":"zurück zur Übersicht",
+        "en":"Close textual scar detail"
+    },
+    "scarLabel" : {
+        "de":"Textnarbe in Takt",
+        "en":"Textual scar in measure"
+    },
+    "openScarDetails" : {
+        "de":"Detailansicht öffnen",
+        "en":"Open details"
     }
 }

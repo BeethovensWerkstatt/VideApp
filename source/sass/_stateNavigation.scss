@@ -33,20 +33,63 @@
         font-size: 14px;
     }
     
+    .navLabel {
+        position: absolute;
+        top: 2px;
+        left: 5px;
+        font-weight: 100;
+        
+        &.hidden {
+            display: none;
+        }
+    }
+    
+    &.scarOpen {
+        background-image: url('../pix/timeline.png');
+        background-repeat: no-repeat;
+        background-position: 30px 110px;
+    }
+    
+    .scarFrame {
+        display: none;
+        position: absolute;
+        border-width: none;
+        background-color: $spotColor;
+        opacity: .6;
+        &.animated {
+            -webkit-transition: all 2s;
+            transition: all 2s;   
+        }
+    }
+    
+    &.scarOpen .scarFrame {
+        display: block;
+        top: 0 !important;
+        left: 0 !important;
+        right: 0 !important;
+        height: 100% !important;
+        box-sizing: border-box;
+        border: 2px solid rgba(240,240,240,.5);
+        border-radius: 5px;
+        background-color: rgba(240,240,240,.2);
+        opacity: 1;
+    }
+    
     .stateNavigation {
         
         box-sizing: border-box;
         
         .currentMeasureIndicator {
             position: absolute;
-            top: 20px;
+            top: -18px;
             height: 130px;
             border-left: 1px solid rgba(240,240,240,.3);
-            z-index: 1;
+            z-index: -1;
             color: rgba(240,240,240,.8);
             font-size: 80%;
             font-weight: 100;
             padding-left: 3px;
+            pointer-events: none;
             
             &.hidden {
                 display: none;
@@ -57,10 +100,10 @@
             overflow: auto;
             
             position: absolute;
-            top: 20px;
-            right: 70px;
+            top: -18px;
+            right: 0;
             height: 14px;
-            left: 70px;
+            left: 0;
             
             background-color: rgba(240,240,240,.0);
             z-index: 3;
@@ -82,9 +125,9 @@
         
         .braceBox {
             position: absolute;
-            top: 38px;
+            top: 0;
             height: 100px;
-            left: 54px;
+            left: -16px;
             width: 15px;
             background-image: url('../pix/brace.png');
             opacity: .4;
@@ -105,6 +148,7 @@
                 position: absolute;
                 left: 0;
                 right: 0;
+                z-index: 2;
                 background-color: rgba(240,240,240,.3);
                 
                 &.hovered {
@@ -133,7 +177,7 @@
                 z-index: 3;
                 
                 &:hover {
-                    background-color: rgba(lighten($spotColor,10%),.95);
+                    background-color: rgba(lighten($spotColor,10%),.65);
                 }
                 
                 /* these scars are not affecting the final measures */
@@ -143,7 +187,7 @@
                     
                     &:before {
                         position: absolute;
-                        top: -1px;
+                        bottom: -5px;
                         left: -2px;
                         width: 6px;
                         height: 6px;
@@ -153,7 +197,7 @@
                     }
                     
                     &:hover:before {
-                        background-color: rgba(lighten($spotColor,10%),.95);
+                        background-color: rgba(lighten($spotColor,10%),.6);
                     }
                 }
                 
@@ -184,16 +228,149 @@
             overflow: auto;
             
             position: absolute;
-            top: 30px;
+            top: 26px;
             right: 70px;
-            bottom: 30px;
+            height: 140px;
             left: 70px;
             display: flex;
             visibility: hidden;
             
             z-index: 1;
             
-            .columnsBox {
+            .timelineBox {
+                position: absolute;
+                border: 1px solid rgba(240,240,240,.6);
+                border-radius: 5px;
+                background-color: rgba(240,240,240,.1);
+                padding: 7px 5px 0 5px;
+                width: 40px;
+                box-sizing: border-box;
+                /*display: flex;*/
+                /*flex-direction: column;*/
+                
+                &.variantsColumn {
+                    bottom: 65px;
+                    
+                    &.singleVariant {
+                        /*height: 30px;*/
+                        
+                        &:after {
+                            content: '';
+                            position: absolute;
+                            bottom:-13px;
+                            left: 12px;
+                            background-image: url('../pix/timeline_singleVariant.png');
+                            height: 12px;
+                            width: 15px;
+                        }
+                    }
+                    
+                    &.multipleVariants {
+                        /*min-height: 60px;*/
+                        
+                        &:after {
+                            content: '';
+                            position: absolute;
+                            bottom:-13px;
+                            left: 12px;
+                            background-image: url('../pix/timeline_multipleVariants.png');
+                            height: 12px;
+                            width: 15px;
+                        }
+                    }
+                    
+                }
+                
+                &.deletionsColumn {
+                    top: 100px;
+                    
+                    &:before {
+                        content: '';
+                        position: absolute;
+                        top:-13px;
+                        left: 12px;
+                        background-image: url('../pix/timeline_deletion.png');
+                        height: 12px;
+                        width: 15px;
+                    }
+                    
+                    &.singleDeletion {
+                        /*height: 30px;*/
+                    }
+                    
+                    &.multipleDeletions {
+                        height: 40px;
+                        overflow-y: auto;
+                    }
+                    
+                    .state {
+                        background-color: #bbbbbb;
+                        
+                        margin: 0 0 7px 6px;
+                        
+                        label {
+                            display: none;
+                        }
+                        
+                        &:after {
+                            content:'/';
+                            color: #777777;
+                            font-size: 18px;
+                            position: absolute;
+                            top: -4px;
+                            left: 4px;
+                        }
+                    }
+                }
+                
+                .state {
+                    border: .5px solid #ffffff;
+                    width: 12px;
+                    height: 12px;
+                    margin: 0 0 7px 0;
+                    border-radius: 2px;
+                    background-color: #e5e5e533;
+                    position: relative;
+                    /*flex: none;*/
+                    cursor: pointer;
+                    
+                    label {
+                        position: absolute;
+                        top: -3px;
+                        left: 17px;
+                        font-weight: 300;
+                    }
+                    
+                    &.active:before {
+                        display: block;
+                        position: absolute;
+                        top: 2px;
+                        left: 2px;
+                        width: 8px;
+                        height: 8px;
+                        border-radius: 3px;
+                        content: '';
+                        z-index: 1;
+                        background-color: lighten($spotColor,30%);
+                    }
+                    
+                    &.current:before {
+                        display: block;
+                        position: absolute;
+                        top: 2px;
+                        left: 2px;
+                        width: 8px;
+                        height: 8px;
+                        border-radius: 3px;
+                        content: '';
+                        z-index: 1;
+                        background-color: $spotColor;
+                    }
+                }
+                
+            }
+            
+            /*.columnsBox {
                 margin: 0 25px 0 0;
                 float: left;
                 width: 10px;
@@ -256,7 +433,7 @@
                         }
                     }
                 }
-            }
+            }*/
             
             /*  
             .rowBox { 
@@ -290,13 +467,37 @@
 
     .scarLabel {
         position: absolute;
-        bottom: 5px;
+        bottom: 20px;
         left: 10%;
         width: 80%;
         height: 20px;
         text-align: center;
         cursor: pointer;
+        
+        .detailsLink {
+            display: block;
+            font-weight: 100;
+            font-size: 90%;
+        }
     }
+    
+    &.scarOpen .scarLabel {
+        display: none;
+    }
+    
+    .closeScarBtn {
+        display: none;
+        position: absolute;
+        top: 17px;
+        right: 64px;
+        font-size: 1.2em;
+        z-index: 8;
+        cursor: pointer;
+    }
+    
+    &.scarOpen .closeScarBtn {
+        display: block;
+    } 
     
     .prevScarBtn {
         position: absolute;
@@ -305,11 +506,21 @@
         cursor: pointer;
     }
     
+    &.scarOpen .prevScarBtn {
+        bottom: 35px;
+        left: 50px;
+    }
+    
     .nextScarBtn {
         position: absolute;
         bottom: 5px;
         right: 20px;
         cursor: pointer;
+    }
+    
+    &.scarOpen .nextScarBtn {
+        bottom: 35px;
+        right: 50px;
     }
     
     .categoryFilterBtn {
@@ -355,4 +566,8 @@
         }
     }
     
+}
+
+*[data-invariance="visible"] .navOverlay .stateNavigation .statesBox .timelineBox .state::before {
+    display: none;
 }
