@@ -69,3 +69,4 @@ ReactDOM.render(<Provider store={store}><Application/></Provider>, document.getE
 store.dispatch(fetchEditions()).then(() =>
   console.log(store.getState())
 );
+

@@ -447,6 +447,42 @@ export function handleNetwork(state = {
     }
 }
 
+/** 
+ * handleTour is a Redux reducer composition which takes care of application tours
+ * @param {object} state the default state, overridden with real object if specified
+ * @param {object} action the action that modifies the current state
+ * @returns {object} the (potentially modified) state object
+ */
+export function handleTour(state = '', action) {
+    switch (action.type) {
+        
+        case ActionTypes.CLOSE_TOUR:   
+            return '';
+            
+        case ActionTypes.LOAD_TOURSTEP:   
+            return action.id;
+        
+        case ActionTypes.RESTORE_STATE:
+            
+            let tour = action.newState.tour;
+            
+            if(typeof tour !== 'string') {
+                return state;
+            }
+            
+            return tour;
+        
+        case ActionTypes.RESET_STATE:
+            
+            return '';
+        
+        //closing the context menu is no different from the default…
+        default: 
+            return state;
+    
+    }
+}
+
 /**
  * This function pulls together the different bits and pieces and builds the complete state object
  */
@@ -455,7 +491,8 @@ const VideAppState = combineReducers({
     edition: handleEdition,
     views: handleViews,
     contextMenu: handleContextMenu,
-    network: handleNetwork
+    network: handleNetwork,
+    tour: handleTour
 });
 
 export default VideAppState;

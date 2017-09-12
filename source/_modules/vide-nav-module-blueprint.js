@@ -901,7 +901,7 @@ const EoNavModule = class EoNavModule extends EoModule {
                     if(deletions.length > 1) {
                         deletionsColumn.classList.add('multipleDeletions')
                     } else {
-                        deletionsColumn.classList.add('singleDeletion')
+/*                        deletionsColumn.classList.add('singleDeletion')*/
                     }
                     deletionsColumn.style.left = leftDist;
                     

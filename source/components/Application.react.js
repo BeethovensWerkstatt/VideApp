@@ -4,6 +4,7 @@ var AppHeader = require('./AppHeader.react');
 import ViewsController from '../containers/ViewsController.react';
 import ContextMenuController from '../containers/ContextMenuController.react';
 import LoadingIndicatorController from '../containers/LoadingIndicatorController.react';
+import TourController from '../containers/TourController.react';
 
 
 /*var AppFooter = require('./AppFooter.react');
@@ -26,6 +27,7 @@ var Application = React.createClass({
                 <ViewsController/>
                 <ContextMenuController/>
                 <LoadingIndicatorController/>
+                <TourController/>
             </div>
             
         );

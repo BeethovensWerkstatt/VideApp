@@ -44,7 +44,10 @@ export const ActionTypes = {
     CONFIRM_VIEW: 'CONFIRM_VIEW',
     
     START_LOADING_DATA: 'START_LOADING_DATA',
-    STOP_LOADING_DATA: 'STOP_LOADING_DATA'
+    STOP_LOADING_DATA: 'STOP_LOADING_DATA',
+    
+    CLOSE_TOUR: 'CLOSE_TOUR',
+    LOAD_TOURSTEP: 'LOAD_TOURSTEP'
 };
 
 /** 
@@ -272,4 +275,20 @@ export function restoreState(newState = {}) {
  */
 export function resetState() {
     return {type: ActionTypes.RESET_STATE};
+}
+
+/** 
+ * Function closeTour closes a currently rendered tour
+ * @returns {object} the actionType that's required for Redux
+ */
+export function closeTour() {
+    return {type: ActionTypes.CLOSE_TOUR};
+}
+
+/**
+ * Function loadTourStep loads a step for a demo or explanatory tour 
+ * @returns {object} the actionType that's required for Redux
+ */
+export function loadTourStep(stepId) {
+    return {type: ActionTypes.LOAD_TOURSTEP,id:stepId};
 }
