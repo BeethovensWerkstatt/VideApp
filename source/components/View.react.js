@@ -1,13 +1,14 @@
-import React, { PropTypes } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 
 import VIDE_PROTOCOL from '../_modules/vide-protocol';
 import { ViewLayouts } from './../redux/layout.constants';
 
 import {eohub} from '../_modules/eo-hub';
 
-const View = React.createClass({
+class View extends React.Component {
     
-    unmount: function() {
+    unmount() {
         
         let viewType = this.props.view.moduleKey;
         
@@ -17,22 +18,22 @@ const View = React.createClass({
         } catch(err) {
             console.log('[DEBUG] no module for ' + this.props.view.perspective + ' available. Cannot unmount() -> ' + err);
         }
-    },
+    }
     
     /*componentWillMount: function() {
         //console.log('INFO: componentWillMount');
     },*/
     
-    componentDidMount: function() {
+    componentDidMount() {
         //console.log('INFO: componentDidMount');
         this.sendRequest(this.props, this.state);
-    },
+    }
     
     /*componentWillReceiveProps: function(nextProps) {
         //console.log('INFO: componentWillReceiveProps on ' + nextProps.pos);
     },*/
     
-    shouldComponentUpdate: function(nextProps, nextState) {
+    shouldComponentUpdate(nextProps, nextState) {
         //console.log('INFO: shouldComponentUpdate');
         let needsUpdate = true;
         if(this.props.pos === nextProps.pos 
@@ -71,45 +72,40 @@ const View = React.createClass({
         if(!needsUpdate && nextProps.view.request !== this.props.view.request) {
             //console.log('sending request from inside shouldComponentUpdate')
             
-            /*console.log('----------------------42')
-            console.log(this.props)
-            console.log(nextProps)
-            console.log(this.state)
-            console.log(nextState)*/
             this.sendRequest(nextProps, this.state);
         }
             
         return needsUpdate;
-    },
+    }
     
-    componentWillUpdate: function(nextProps, nextState) {
+    componentWillUpdate(nextProps, nextState) {
         if(this.props.view.moduleKey !== nextProps.view.moduleKey) {
             //console.log('[DEBUG]: will call unmount()');
             this.unmount();
         }
-    },
+    }
     
-    componentDidUpdate: function (prevProps, prevState) {
+    componentDidUpdate(prevProps, prevState) {
         //console.log('[DEBUG] componentDidUpdate')
         
         //console.log('sending request from inside componentDidUpdate')
         this.sendRequest(this.props, this.state);
-    },
+    }
     
-    componentWillUnmount: function() {
+    componentWillUnmount() {
         this.unmount();            
-    },
+    }
     
-    render: function() { 
+    render() { 
         //console.log('[DEBUG] rendering view ' + this.props.view.perspective + ' at ' + this.props.pos)
         return (
             <div id={this.props.pos} className={'view ' + this.props.pos + ' ' + this.props.view.moduleKey}>
                 
             </div>
         );
-    },
+    }
     
-    sendRequest: function(props, state) {
+    sendRequest(props, state) {
         
         let moduleKey = props.view.moduleKey;
         let module = eohub.getModule(moduleKey);
@@ -120,8 +116,6 @@ const View = React.createClass({
             try {
                 module.getDefaultView(props.pos);
             } catch(err) {
-                console.log('----------------------11a')
-                console.log(props)
                 console.log('[ERROR] unable to request default for ' + props.view.perspective + ': ' + err);
             }
         } else {
@@ -158,7 +152,7 @@ const View = React.createClass({
             }
         }
     }
-});
+};
 
 
 View.propTypes = {

@@ -1,17 +1,12 @@
-import React, { PropTypes } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 import LanguageSwitch from '../containers/LanguageSwitch.react';
 import HomeButtonController from '../containers/HomeButtonController.react';
 import PerspectivesBar from './PerspectivesBar.react';
 
-var AppHeader = React.createClass({
+class AppHeader extends React.Component {
     
-    getDefaultProps: function () {
-        return {
-            text: 'Beethovens Werkstatt'
-        };
-    },
-    
-    render: function() {
+    render() {
         return (
             <header className='appHeader'>
                 <HomeButtonController/>
@@ -25,6 +20,10 @@ var AppHeader = React.createClass({
             </header>
         );
     } 
-});
+};
+
+AppHeader.defaultProps = {
+    text: 'Beethovens Werkstatt'
+}
 
 module.exports = AppHeader;

@@ -318,5 +318,9 @@
     "openScarDetails" : {
         "de":"Detailansicht öffnen",
         "en":"Open details"
+    },
+    "followMetaMarkLink" : {
+        "de":"Verweis folgen",
+        "en":"Follow Link"
     }
 }

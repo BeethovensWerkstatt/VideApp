@@ -1,4 +1,5 @@
-import React, { PropTypes } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 import I18n from './../containers/I18n.react';
 import VIDE_PROTOCOL from './../_modules/vide-protocol';
 import {eohub} from './../_modules/eo-hub';

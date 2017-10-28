@@ -1,4 +1,5 @@
-import React, { PropTypes } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 import { ViewLayouts } from '../redux/layout.constants';
 
 const SyncViewsButton = ({ hidden, synced, onClick }) => {

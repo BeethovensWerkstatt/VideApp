@@ -1,8 +1,10 @@
-import React, { PropTypes } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 import I18n from './../containers/I18n.react';
 import PreviewItem from './PreviewItem.react';
 import {eohub} from './../_modules/eo-hub';
-const Slider = require('react-slick');
+import VIDE_PROTOCOL from './../_modules/vide-protocol';
+import Slider from 'react-slick';
 
 
 const ContextMenu = ({ items, visible, closeContextMenu, submitRequest, x, y }) => {
@@ -10,15 +12,32 @@ const ContextMenu = ({ items, visible, closeContextMenu, submitRequest, x, y }) 
     if(visible) {
         let menuStyle = {top: (y + 10) + 'px', left: (x + 10) + 'px'};
         
-        let sliderSettings = {
-            dots: true,
-            infinite: true,
-            draggable: false,
-            centerMode: true,
-            slidesToShow: 1,
-            slidesToScroll: 1,
-            centerPadding: 0
-        };
+        let sliderSettings;
+        
+        if(items.length > 1) {
+            sliderSettings = {
+                dots: true,
+                infinite: true,
+                draggable: false,
+                centerMode: true,
+                slidesToShow: 1,
+                slidesToScroll: 1,
+                centerPadding: 0
+            };
+        } else {
+            sliderSettings = {
+                dots: false,
+                infinite: true,
+                draggable: false,
+                centerMode: true,
+                slidesToShow: 1,
+                slidesToScroll: 1,
+                centerPadding: 0,
+                arrows: false,
+                swipeToSlide: false,
+                autoplay: false
+            };
+        }
         
         let key = Math.uuidCompact()
         let req = {
@@ -32,11 +51,44 @@ const ContextMenu = ({ items, visible, closeContextMenu, submitRequest, x, y }) 
         
         socket.once(key,(json) => {
             
+            //only the first response will be used
+            let res = json[0];
+            
             try {
-                document.getElementById(key + '_bravura').innerHTML = json[0].bravura;
-                document.getElementById(key + '_desc').innerHTML = json[0].desc;
-                document.getElementById(key + '_measure').innerHTML = json[0].measure;
-                document.getElementById(key + '_position').innerHTML = json[0].position;
+                document.getElementById(key + '_bravura').innerHTML = res.bravura;
+                document.getElementById(key + '_desc').innerHTML = res.desc;
+                document.getElementById(key + '_measure').innerHTML = res.measure;
+                document.getElementById(key + '_position').innerHTML = res.position;
+                
+                //in case of links, make them accessible
+                if(typeof res.target !== 'undefined' && res.target !== '') {
+                    
+                    let link = document.createElement('span');
+                    link.classList.add('metaMarkLink');
+                    link.innerHTML = '<span data-i18n-text="followMetaMarkLink">' + eohub.getI18nString('followMetaMarkLink') + '</span>';
+                        
+                    let div = document.getElementById(key + '_desc');
+                    div.appendChild(link)
+                    
+                    link.addEventListener('click',(e) => {
+                        
+                        let metaMarkReq = {
+                            object: VIDE_PROTOCOL.OBJECT.METAMARK, 
+                            id: res.target,
+                            operation: VIDE_PROTOCOL.OPERATION.VIEW,
+                            perspective: VIDE_PROTOCOL.PERSPECTIVE.FACSIMILE,
+                            contexts: []
+                        };
+                        
+                        let wrapper = {
+                            target: items[0].target, //open link where context menu item would have been opened 
+                            req: metaMarkReq
+                        }
+                        submitRequest(wrapper);
+                    });
+                    
+                }
+                
             } catch(err) {
                 //console.log('[ERROR] Unable to render results')
             }
@@ -44,6 +96,9 @@ const ContextMenu = ({ items, visible, closeContextMenu, submitRequest, x, y }) 
         
         socket.emit('requestData', req);
         items.reverse();
+        console.log('------- this should be the format:')
+        console.log(items[0])
+        
         return (
         
             <div className="contextMenuBack" onClick={e => {
@@ -52,6 +107,7 @@ const ContextMenu = ({ items, visible, closeContextMenu, submitRequest, x, y }) 
             }}>
                 <div className="contextMenu" style={menuStyle} onClick={e => {e.stopPropagation();}}>
                     <div className="sliderFrame">
+                        
                         <Slider {...sliderSettings}>
                             {
                                 items.map(function(item, i) {
@@ -76,9 +132,6 @@ const ContextMenu = ({ items, visible, closeContextMenu, submitRequest, x, y }) 
             </div>
         );   
         
-        /*return (
-            <h1>HURZ!!!</h1>
-        );*/
     }
     
     return null;

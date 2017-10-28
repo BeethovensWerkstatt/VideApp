@@ -454,12 +454,14 @@ export function handleNetwork(state = {
  * @returns {object} the (potentially modified) state object
  */
 export function handleTour(state = '', action) {
+    
     switch (action.type) {
         
         case ActionTypes.CLOSE_TOUR:   
             return '';
             
-        case ActionTypes.LOAD_TOURSTEP:   
+        case ActionTypes.LOAD_TOURSTEP:
+        
             return action.id;
         
         case ActionTypes.RESTORE_STATE:

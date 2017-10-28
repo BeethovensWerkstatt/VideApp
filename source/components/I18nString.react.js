@@ -1,4 +1,5 @@
-import React, { PropTypes } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 var langfile = require('../i18n/i18n.json');
 
 const I18nString = ({ lang, content, tooltip }) => {

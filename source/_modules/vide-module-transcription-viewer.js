@@ -709,9 +709,12 @@ const VideTranscriptionViewer = class VideTranscriptionViewer extends EoNavModul
                         try {
                             this._openSingleScar(containerID,scar.id,request.id,activeStates);
                             //state needs to be rendered only if there is more than one scar
+                            
+                            console.log('-----55')
+                            
                             if(stateJson.length > 1) {
+                                console.log(' ---------------55+1')
                                 this._renderState(containerID,scar,viewer,request.id,activeStates);
-                                
                             }
                         } catch(err) {
                              console.log('[ERROR] Unable to resolve request for state ' + request.id + ': ' + err)   
@@ -765,7 +768,6 @@ const VideTranscriptionViewer = class VideTranscriptionViewer extends EoNavModul
         
         try {
             let editionID = this._eohub.getEdition();
-            
             //first state
             this._getStateAsMEI(editionID,stateID,activeStates).then((stateMEI) => {
                 
@@ -782,7 +784,7 @@ const VideTranscriptionViewer = class VideTranscriptionViewer extends EoNavModul
                         item.parentNode.removeChild(item);
                     }
                 } catch(err) {
-                    //console.log('[INFO] There is no overlay to be removed: ' + err)
+                    console.log('[INFO] There is no overlay to be removed: ' + err)
                 }
                 
                 //the OSD dimensions of the base layer
@@ -795,7 +797,6 @@ const VideTranscriptionViewer = class VideTranscriptionViewer extends EoNavModul
                 
                 //determine dimensions
                 let dimensions = this._getVerovioDimensions(stateSvg);
-                //console.log(dimensions)
                 //if the state is "empty", it automatically gets a relation property of -1
                 //so if relation is -1, there's really nothing to render…
                 if(dimensions.relation === -1) {
@@ -806,7 +807,6 @@ const VideTranscriptionViewer = class VideTranscriptionViewer extends EoNavModul
                 let baseDimensions = this._baseDimensions.get(editionID);
                                                     
                 let attachmentMeasureRect = document.querySelector('#' + containerID + ' svg #' +scar.firstMeasure).getBoundingClientRect();
-                
                 let ul = viewer.viewport.windowToViewportCoordinates(new OpenSeadragon.Point(attachmentMeasureRect.left, attachmentMeasureRect.top));
                 let lr = viewer.viewport.windowToViewportCoordinates(new OpenSeadragon.Point(attachmentMeasureRect.right, attachmentMeasureRect.bottom));
                 

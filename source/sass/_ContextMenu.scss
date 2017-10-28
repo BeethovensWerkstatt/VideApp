@@ -53,6 +53,7 @@ div.contextMenuBack {
                     font-weight: 100;
                     left: 10px;
                     font-size: 14px;
+                    cursor: pointer;
                 }
                 
                 .previewItem{
@@ -104,16 +105,18 @@ div.contextMenuBack {
         
         .descBox {
             padding: 10px 20px;
+            position: relative;
             
             .bravura {
                 display: inline-block;
                 font-family: Bravura;
                 margin: -20px 0;
+                padding: 0 5px 0 0;
             }
             
             .desc {
                 display: inline-block;
-                padding: 0 0 0 5px;
+                padding: 0;
             }
             
             .measure {
@@ -129,6 +132,25 @@ div.contextMenuBack {
                 }
                 &:after {
                     content: ')'
+                }
+            }
+            
+            .metaMarkLink {
+                margin: 0 0 0 10px;
+                border: .5px solid #666666;
+                border-radius: 3px;
+                background-color: #ffffff66;
+                color: #333333;
+                font-weight: 300;
+                padding: 1px 5px;
+                z-index: 12;
+                cursor: pointer;
+                position: absolute;
+                top: 9px;
+                right: 10px;
+                
+                &:after {
+                    content: ' →'
                 }
             }
         }

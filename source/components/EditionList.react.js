@@ -1,4 +1,5 @@
-import React, { PropTypes } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 import EditionListEntryController from './../containers/EditionListEntryController.react';
 import { StatusCodes } from './../redux/actions.redux';
 import I18n from './../containers/I18n.react';

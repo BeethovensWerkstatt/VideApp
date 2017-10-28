@@ -18,9 +18,9 @@ import SupportedViewsListController from '../containers/SupportedViewsListContro
 import I18n from '../containers/I18n.react';
 */
 
-var Application = React.createClass({
+class Application extends React.Component {
     
-    render: function() {
+    render() {
         return (
             <div className='appContainer'>
                 <AppHeader text="Beethovens Werkstatt"/>
@@ -32,7 +32,7 @@ var Application = React.createClass({
             
         );
     } 
-});
+};
 
 module.exports = Application;
 

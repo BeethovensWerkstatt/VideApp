@@ -1,4 +1,5 @@
 import 'babel-polyfill';
+require('./polyfills'); //is this really the correct way to load polyfills?
 
 //React
 var React = require('react');

@@ -37,6 +37,16 @@
         .stateBox > svg {
             width: 100%;
             height: 100%;
+            
+            .supplied * {
+                fill: #aaaaaa;
+                stroke: #aaaaaa;
+            }
+            
+            .staffDef * {
+                fill: #aaaaaa;
+                stroke: #aaaaaa;
+            }
         }
         
         .scarHighlight {

@@ -1073,12 +1073,20 @@ const VideFacsimileViewer = class VideFacsimileViewer extends EoNavModule {
             .then(
                 (json) => {
                     
+                    console.log('--------------776')
+                    console.log(json)
+                    console.log('')
+                    
                     let elem = json[0];
                     
                     let requests = [];
                     let filteredRequests = supportedRequests.filter((request) => {
                         return (request.object === elem.type && request.perspective !== this._supportedPerspective);
                     }); 
+                    
+                    console.log('---------------777 filtered requests:')
+                    console.log(filteredRequests)
+                    
                     
                     filteredRequests.forEach((request, j) => {
                         let req = Object.assign({}, request);
@@ -1088,6 +1096,7 @@ const VideFacsimileViewer = class VideFacsimileViewer extends EoNavModule {
                                 return state.type !== 'del';
                             });
                             
+                            //handle notes that are part of a state
                             for(let k=0; k<states.length; k++) {
                                 let reqCopy = {
                                     object: req.object, 
@@ -1099,6 +1108,20 @@ const VideFacsimileViewer = class VideFacsimileViewer extends EoNavModule {
                                 
                                 requests.push(reqCopy);
                             }
+                            
+                            //handle notes which aren't part of a state'
+                            if(elem.states.length === 0) {
+                                let reqCopy = {
+                                    object: req.object, 
+                                    id: req.id,
+                                    operation: req.operation,
+                                    perspective: req.perspective,
+                                    contexts: []
+                                };
+                                
+                                requests.push(reqCopy);
+                            }
+                            
                         } else {
                             requests.push(req);
                         }

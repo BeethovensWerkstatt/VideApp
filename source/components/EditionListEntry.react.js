@@ -1,9 +1,10 @@
-import React, { PropTypes } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 import I18n from './../containers/I18n.react';
 
-const EditionListEntry = React.createClass({
+class EditionListEntry extends React.Component {
     
-    render: function() {
+    render() {
         let allClasses = 'editionPreview' + (this.props.highlighted ? ' highlighted' : '');
         let uri = (this.props.highlighted || this.props.noneHighlighted) ? this.props.edition.previewUri : this.props.edition.previewUri.replace('/default.jpg', '/gray.jpg');
         return (
@@ -17,7 +18,7 @@ const EditionListEntry = React.createClass({
             </div>
         );
     }
-});
+};
 
 
 

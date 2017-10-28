@@ -1,4 +1,5 @@
-import React, { PropTypes } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 import PerspectiveController from '../containers/PerspectiveController.react';
 import SyncViewsController from '../containers/SyncViewsController.react';
 
