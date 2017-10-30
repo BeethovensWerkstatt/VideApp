@@ -952,12 +952,35 @@ const VideFacsimileViewer = class VideFacsimileViewer extends EoNavModule {
     //load measure overlays
     _loadMeasureLabels(page,bounds,viewer,containerID) {
         
+        //decide what to render initially
+        let keys = [...this._tiledImages.keys()];
+        let image = this._tiledImages.get(keys[0]);
+        let ratio = image.getBounds().width * viewer.viewport.getZoom();
+        let showSummary = (ratio < this._showMeasureNumbersMinimumSize);
+        
+        //prepare for summary
+        let lowestMeasure = { n: parseInt(page.measures[0].n), label: page.measures[0].label }
+        let highestMeasure = { n: parseInt(page.measures[0].n), label: page.measures[0].label }
+        
         for(let i=0;i<page.measures.length;i++) {
             let measure = page.measures[i];
+            
+            //prepare for summary
+            if(parseInt(measure.n) <= lowestMeasure.n) {
+                lowestMeasure.n = parseInt(measure.n);
+                lowestMeasure.label = ((measure.label !== '') ? measure.label : measure.n);
+            }            
+            if(parseInt(measure.n) >= highestMeasure.n) {
+                highestMeasure.n = parseInt(measure.n);
+                highestMeasure.label = ((measure.label !== '') ? measure.label : measure.n);
+            }
             
             let measureLabel = document.createElement('div');
             measureLabel.className = 'measureLabel';
             measureLabel.id = containerID + '_measureLabel_' + measure.zone;
+            if(showSummary) {
+                measureLabel.style.display = 'none';   
+            }
             let label = '' + ((measure.label !== '') ? measure.label : measure.n);
             if(label === '') {
                 label = 'ERROR';
@@ -1005,9 +1028,26 @@ const VideFacsimileViewer = class VideFacsimileViewer extends EoNavModule {
                 });
             });
             
-            
         }
         
+        //create summary of measures on page
+        let measuresSummary = document.createElement('div');
+        measuresSummary.className = 'measureSummary';
+        measuresSummary.id = containerID + '_measuresSummary_' + page.id;
+        if(!showSummary) {
+                measuresSummary.style.display = 'none';   
+            }
+        let label = lowestMeasure.label + ' – ' + highestMeasure.label;
+        measuresSummary.innerHTML = label;
+        let x = bounds.x + (bounds.width / 2);
+        let y = bounds.y + (bounds.height / 2);
+        
+        viewer.addOverlay({
+            element: measuresSummary,
+            x: x,
+            y: y,
+            placement: 'CENTER'
+        });
     }
     
     _removeMeasureLabels(page,viewer,containerID) {
@@ -1036,12 +1076,19 @@ const VideFacsimileViewer = class VideFacsimileViewer extends EoNavModule {
             let labels = document.querySelectorAll('#' + containerID + ' .measureLabel');
             for(let i=0;i<labels.length;i++) {
                 labels[i].style.display = 'none';
+            }            
+            let summaries = document.querySelectorAll('#' + containerID + ' .measureSummary');
+            for(let i=0;i<summaries.length;i++) {
+                summaries[i].style.display = 'block';
             }
-            //todo: add summary of pages
         } else {
             let labels = document.querySelectorAll('#' + containerID + ' .measureLabel');
             for(let i=0;i<labels.length;i++) {
                 labels[i].style.display = 'block';
+            }
+            let summaries = document.querySelectorAll('#' + containerID + ' .measureSummary');
+            for(let i=0;i<summaries.length;i++) {
+                summaries[i].style.display = 'none';
             }
         }
     }
