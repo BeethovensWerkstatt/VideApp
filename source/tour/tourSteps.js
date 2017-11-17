@@ -2,7 +2,107 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 const TourSteps = {
-    nav1: {
+    
+    tool001: {
+        restrictsAction: true,
+        allowedTargets: [
+            {selector:'.editionPreview[data-editionID = "Codierung_op.75.2"]',state:'tool002'}
+        ],
+        content: {
+            de: (
+                <div>
+                    <h1>Willkommen in der VideApp</h1>
+                    <p>Diese Tour wird Sie mit der Bedienung der VideApp vertraut machen. Um zu beginnen, klicken Sie bitte auf Op. 75,2 in der unten stehenden Liste.</p>
+                </div>
+            ),
+            en: (
+                <div>
+                    <h1>Welcome to the VideApp</h1>
+                    <p>This tour will introduce you with the functionality of the VideApp. To get started, please click on Op. 75,2 in the list below.</p>
+                </div>
+            )
+        },
+        attachTo: '.editionList',
+        attachWhere: 'top'
+    },
+    
+    tool002: {
+        restrictsAction: true,
+        allowedTargets: [
+            {selector:'.editionPreview[data-editionID = "Codierung_op.75.2"]',state:'tool003'},//these objects may have a state property
+            {selector:'.editionDetails .openButton',state:'tool003'},
+        ],
+        content: {
+            de: (
+                <div>
+                    <h1>Vorschau der Fallstudie</h1>
+                    <p>Sie sehen nun eine kurze Beschreibung dessen, was die Fallstudie zu Op. 75,2 auszeichnet. Um sie zu öffnen, klicken Sie bitte entweder
+                        erneut auf den Faksimile-Ausschnitt, oder auf die Schaltfläche "Öffne Edition" rechts unten.</p>
+                </div>
+            ),
+            en: (
+                <div>
+                    <h1>Preview of the Case Study</h1>
+                    <p>You now see a brief description of the specifics of this case study. For the time being, all contents are available in german only. 
+                        In order to open this case study in the VideApp, either click on its facsimile again or on the button "Open Edition" in the lower right.</p>
+                </div>
+            )
+        },
+        attachTo: '.introduction > div',
+        attachWhere: 'bottom'
+    },
+    
+    tool003: {
+        restrictsAction: true,
+        allowedTargets: [
+            {selector:'.openseadragon-container'},
+            {selector:'.facsNav.navigator'},
+            {selector:'.facsNavMenu .menuRow',state:'tool004'}//these objects may have a state property
+        ],
+        content: {
+            de: (
+                <div>
+                    <h1>Faksimile-Ansicht</h1>
+                    <p>Die Fallstudie öffnet sich in der Faksimile-Ansicht. TODO. Aufgabe: Taktzahlen ausblenden</p>
+                </div>
+            ),
+            en: (
+                <div>
+                    <h1>Facsimile View</h1>
+                    <p>TODO. Next step: Hide Measure Numbers.</p>
+                </div>
+            )
+        },
+        attachTo: '.facsNavMenu',
+        attachWhere: 'left'
+    },
+    
+    tool004: {
+        restrictsAction: true,
+        allowedTargets: [
+            {selector:'.openseadragon-container'},
+            {selector:'.facsNav.navigator'},
+            {selector:'.facsNavMenu .menuRow:first-child'/*,state:'tool005'*/}//these objects may have a state property
+        ],
+        content: {
+            de: (
+                <div>
+                    <h1>Faksimile-Ansicht</h1>
+                    <p>Herzlichen Glückwunsch – Sie haben die richtige Schaltfläche gefunden. Bitte blenden Sie die Taktzahlen nun wieder ein. </p>
+                </div>
+            ),
+            en: (
+                <div>
+                    <h1>Facsimile View</h1>
+                    <p>Congrats, you've found the right button. Now please turn the measure numbers back on.</p>
+                </div>
+            )
+        },
+        attachTo: '.facsNavMenu',
+        attachWhere: 'left'
+    },
+
+    /*nav1: {
         restrictsAction: true,
         allowedTargets: [
             {selector:'.editionPreview:first-child',state:'nav2'}//these objects may have a state property
@@ -118,7 +218,7 @@ const TourSteps = {
         },
         attachTo: '.scarFrame',
         attachWhere: 'top'
-    }
+    }*/
 };
 
 export default TourSteps;
