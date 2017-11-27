@@ -96,8 +96,6 @@ const ContextMenu = ({ items, visible, closeContextMenu, submitRequest, x, y }) 
         
         socket.emit('requestData', req);
         items.reverse();
-        console.log('------- this should be the format:')
-        console.log(items[0])
         
         return (
         

@@ -18,12 +18,6 @@ const mapDispatchToProps = (dispatch, ownProps) => {
             dispatch(closeContextMenu());
         },
         submitRequest: (item) => {
-            console.log(' ')
-            console.log('---------------------------------------------------------------')
-            console.log('jlkjkljkljlkjlkjlkjlkjlkjkljkljkljlkjlkjkljkljlkjlkjkljlkjlkjlk')
-            console.log('---------------------------------------------------------------')
-            console.log(' ')
-            console.log(item)
             
             try {
                 eohub.broadcastRequest(item);    
