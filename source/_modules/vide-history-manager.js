@@ -68,13 +68,17 @@ const VideHistoryManager = class VideHistoryManager {
     _checkState() {
         let state = this._store.getState();
         
-        //logs each change of the state into the console
-        console.log('[LOG] state has changed:');
-        console.log(state);
-        
         if(!state.views.view1.temp && !state.views.view2.temp && !state.network.nolog) {
             sessionStorage.setItem('stateHash', this._getHash(state));
             this._storeState(state);
+            
+            //logs each change of the state into the console
+            console.log('[LOG] preserving state ' + this._getHash(state));
+            console.log(state);
+        } else {
+            //logs each change of the state into the console
+            console.log('[LOG] temporary state ' + this._getHash(state));
+            console.log(state);
         }
     }
     
