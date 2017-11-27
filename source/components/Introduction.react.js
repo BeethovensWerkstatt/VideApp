@@ -21,7 +21,7 @@ const Introduction = ({language }) => {
                     Nachfolgend finden Sie die bislang von uns bearbeiteten Fallstudien (die beiden noch separat zugänglichen Fallstudien zur <a href="http://beethovens-werkstatt.de/demo" target="_blank">Klaviersonate Op.111</a> 
                     und zum <a href="http://beethovens-werkstatt.de/demo2" target="_blank">Streichquartett Op.59,3</a> werden zu einem späteren Zeitpunkt integriert). Erste Ergebnisse aus unserem zweiten Modul werden ebenfalls an dieser 
                     Stelle präsentiert. Dabei konzentriert sich jede Fallstudie auf andere Aspekte unserer Forschung, und nicht jedes Beispiel unterstützt alle Features der Anwendung. Nach einem Klick auf die untenstehenden Werke erhalten 
-                    Sie eine kurze Erläuterung, wo unser Hauptaugenmerk für die jeweilige Fallstudie liegt. Alternativ können Sie mit einer <TourStartButtonController firstStep='nav1'/> die wichtigsten Funktionen der Software kennenlernen. 
+                    Sie eine kurze Erläuterung, wo unser Hauptaugenmerk für die jeweilige Fallstudie liegt. Alternativ können Sie mit einer <TourStartButtonController firstStep='tool001'/> die wichtigsten Funktionen der Software kennenlernen.
                 </p>
                 <EditionListController mode={EditionListMode.ROW}/>   
                 {/*<h3>What this is not</h3>*/}
@@ -78,7 +78,7 @@ const Introduction = ({language }) => {
                 quartet Op.59,3</a> examples will be integrated here at a later stage). As soon as there
                 is something to show, we will include works from our second module here as well. Each example will showcase different aspects of our research, and not every feature
                 will be available in each case study. If you click on one of the images, you will get a brief explanation of what our focus was in that case. 
-                Alternatively, you may take a <TourStartButtonController firstStep='nav1'/> explaining the functionality of the VideApp.
+                Alternatively, you may take a <TourStartButtonController firstStep='tool001'/> explaining the functionality of the VideApp.
             </p>
             <EditionListController mode={EditionListMode.ROW}/>
             <h3>What this is not</h3>
