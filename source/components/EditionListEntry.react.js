@@ -8,7 +8,7 @@ class EditionListEntry extends React.Component {
         let allClasses = 'editionPreview' + (this.props.highlighted ? ' highlighted' : '');
         let uri = (this.props.highlighted || this.props.noneHighlighted) ? this.props.edition.previewUri : this.props.edition.previewUri.replace('/default.jpg', '/gray.jpg');
         return (
-            <div className={allClasses} onClick={e => {
+            <div className={allClasses} data-editionID={this.props.edition.id} onClick={e => {
                 e.preventDefault();
                 this.props.onSelect();
             }}>
