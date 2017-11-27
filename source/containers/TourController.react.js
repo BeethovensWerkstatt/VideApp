@@ -5,7 +5,8 @@ import { loadTourStep, closeTour } from '../redux/actions.redux';
 const mapStateToProps = (state, ownProps) => {
     return {
         tour: state.tour,
-        language: state.preferences.language
+        language: state.preferences.language,
+        nolog: state.network.nolog
     };
 };
 

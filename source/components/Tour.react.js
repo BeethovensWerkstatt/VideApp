@@ -59,7 +59,7 @@ class Tour extends React.Component {
         }
         
         let tourClass = 'currentTourStep ' + this.props.tour;
-        console.log('RENDERING');
+        console.log('[DEBUG] rendering ' + tourClass);
         
         return (
             <div className="tourBackground"></div>
@@ -68,8 +68,17 @@ class Tour extends React.Component {
     
     componentDidUpdate(prevProps,prevState) {
         //console.log('[DEBUG] componentDidUpdate')
-        if(typeof this.props.tour === 'string' && this.props.tour !== '') {
+        if(typeof this.props.tour === 'string' && this.props.tour !== ''/* && !this.props.nolog*/) {
             this.renderTour(this.props.tour)    
+        }
+    }
+    
+    shouldComponentUpdate(nextProps, nextState) {
+        console.log('----------- nextProps.tour: ' + nextProps.tour);
+        if(typeof nextProps.tour === 'string' && nextProps.tour !== ''/* && !nextProps.nolog*/) {
+            return true;
+        } else {
+            return false;
         }
     }
     
@@ -151,14 +160,18 @@ class Tour extends React.Component {
         
         let drop = new Drop({
             target: targetElem,
-            classes: 'tourDrop',
-            classPrefix: 'tourDrop', //todo: fix classes!!!
+            //classes: 'tourDrop',
+            //classPrefix: 'tourDrop', //todo: fix classes!!!
             content: div,
             /*position: 'bottom left',*/
             openOn: 'always',
             constrainToWindow: true,
-              classes: 'drop-theme-arrows',
-              tetherOptions: {
+            classes: 'drop-theme-arrows tourDrop',
+            beforeClose: () => {
+                console.log('the drop is supposed to close now… (but I try to prevent that)');
+                return false;
+            },
+            tetherOptions: {
                 attachment: attachment,
                 targetAttachment: targetAttachment,
                 constraints: [
@@ -168,8 +181,13 @@ class Tour extends React.Component {
                     attachment: 'both'
                   }
                 ]
-              }
+            }
         });
+        
+        drop.on('close',(e) => {
+            console.log('and it has been closed now. Sheeet')
+            console.log(e)
+        })
         
         let appElem = document.querySelector('body');
         let handlingFunc;
@@ -232,6 +250,7 @@ Tour.propTypes = {
     language: PropTypes.string.isRequired,
     closeTour: PropTypes.func.isRequired,
     loadTourStep: PropTypes.func.isRequired,
+    nolog: PropTypes.bool.isRequired
 };
 
 export default Tour;

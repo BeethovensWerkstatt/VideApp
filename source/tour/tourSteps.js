@@ -22,8 +22,8 @@ const TourSteps = {
                 </div>
             )
         },
-        attachTo: '.editionList',
-        attachWhere: 'top'
+        attachTo: '.editionPreview[data-editionID = "Codierung_op.75.2"]',
+        attachWhere: 'top right'
     },
     
     tool002: {
@@ -55,8 +55,8 @@ const TourSteps = {
     tool003: {
         restrictsAction: true,
         allowedTargets: [
-            {selector:'.openseadragon-container'},
-            {selector:'.facsNav.navigator'},
+            {selector:'.openseadragon-container',state: 'tool003'},
+            {selector:'.facsNav.navigator',state: 'tool003'},
             {selector:'.facsNavMenu .menuRow',state:'tool004'}//these objects may have a state property
         ],
         content: {
@@ -82,7 +82,7 @@ const TourSteps = {
         allowedTargets: [
             {selector:'.openseadragon-container'},
             {selector:'.facsNav.navigator'},
-            {selector:'.facsNavMenu .menuRow:first-child'/*,state:'tool005'*/}//these objects may have a state property
+            {selector:'.facsNavMenu .menuRow',state:'tool005'}//these objects may have a state property
         ],
         content: {
             de: (
@@ -101,6 +101,66 @@ const TourSteps = {
         attachTo: '.facsNavMenu',
         attachWhere: 'left'
     },
+    
+    tool005: {
+        restrictsAction: true,
+        allowedTargets: [
+            {selector:'.openseadragon-container'},
+            {selector:'.facsNav.navigator'},
+	        {selector:'.facsNavMenu'},
+            {selector:'.facsNavMenu #view1_zoomHome.menuButton',state:'tool006'}
+        ],
+        content: {
+            de: (
+                <div>
+                    <h1>Faksimile-Menü</h1>
+                    <p>In diesem Menü haben Sie die Möglichkeit zu zoomen, das Faksimile zu drehen, oder wieder zu maximieren. Während sie an das 
+                    Faksimile heranzoomen zeigt Ihnen ein rotes Kästchen in dem Menü an, wo sie sich in dem Werk befinden. 
+                    Darüber hinaus haben Sie die Möglichkeit das Faksimile innerhalb des Hauptfensters beliebig hin- und her zu bewegen. 
+                    Probieren Sie die Funktionen aus und klicken Sie dann auf die "Maximieren" Taste, sobald Sie die Tour fortsetzen wollen.</p>
+                </div>
+            ),
+            en: (
+                <div>
+                    <h1>Facsimile Menu</h1>
+                    <p>In this menu you can use different tools, to zoom in and out of the facsimile...</p>
+                </div>
+            )
+        },
+        attachTo: '.facsNavMenu',
+        attachWhere: 'left'
+    },
+    
+    tool006: {
+        restrictsAction: true,
+        allowedTargets: [
+            {selector:'.openseadragon-container'},
+            {selector:'.facsNav.navigator'},
+	        {selector:'.facsNavMenu'},
+	        {selector:'.navOverlay.overview'},
+            {selector:'.navOverlay .stateNavigation .measuresBox',state:'tool007'}
+        ],
+        content: {
+            de: (
+                <div>
+                    <h1>Werkübersicht</h1>
+                    <p>Diese Navigationsbox zeigt eine Übersicht der vorkommenden Textnarben innerhalb der Fallstudie an. 
+                    Alle im Werk vorhandenen Textnarben sind mit einem roten Kästchen versehen.
+                    Die Taktzahlen sind über der Box in grau hinterlegt. Wird mit der Maus über die Navigationsbox gefahren, 
+                    erscheinen die genauen Taktzahlen, die durch einen Klick ausgewählt werden können. 
+                    Nächster Schritt: Wählen Sie einen Takt innerhalb der Textnarbe aus.</p>
+                </div>
+            ),
+            en: (
+                <div>
+                    <h1>Overview of musical text</h1>
+                    <p>Here you can view the musical text... Next Step: Open any measure you want from the text scar.</p>
+                </div>
+            )
+        },
+        attachTo: '.navOverlay.overview',
+        attachWhere: 'top'
+    }
 
     /*nav1: {
         restrictsAction: true,
