@@ -160,6 +160,259 @@ const TourSteps = {
         },
         attachTo: '.navOverlay.overview',
         attachWhere: 'top'
+    },
+	    
+	
+	tool007: {
+        restrictsAction: true,
+        allowedTargets: [
+        {selector:'.openseadragon-container'},
+        {selector:'.facsNav.navigator'},
+	{selector:'.facsNavMenu'},
+	{selector:'.navOverlay.overview'},
+        {selector:'.navOverlay .scarLabel .detailsLink',state:'tool008'}
+        ],
+        content: {
+            de: (
+                <div>
+                    <h1>Detailansicht</h1>
+                    <p>Klicken sie "Detailansicht öffnen" um sich die Übersicht zu den einzelnen Textschichten innerhalb dieser 
+		    Textnarbe anzeigen zu lassen.</p>
+                </div>
+            ),
+            en: (
+                <div>
+                    <h1>Details</h1>
+                    <p>Click on "Open Details" to open an overview of all the layer, that represent different states of the text scar.</p>
+                </div>
+            )
+        },
+        attachTo: '.navOverlay.overview',
+        attachWhere: 'top'
+    },
+
+
+    tool008: {
+        restrictsAction: true,
+        allowedTargets: [
+        {selector:'.openseadragon-container'},
+        {selector:'.facsNav.navigator'},
+	{selector:'.facsNavMenu'},
+	{selector:'.scarFrame.animated'},
+	{selector:'.navOverlay .stateNavigation .statesBox .timelineBox},
+        {selector:'.navOverlay .stateNavigation .statesBox .timelineBox #view1_qwertz9.state',state:'tool009'}
+        ],
+        content: {
+            de: (
+                <div>
+                    <h1>Detailansicht</h1>
+                    <p>Die horizontale Anordnung innerhalb der Box spiegelt den chronologischen Verlauf des Prozesses wider, 
+		    die vertikale Anordnung verdeutlicht das „Nicht-Bestimmen-Können“ einer zeitlichen Reihenfolge der Schichten. 
+		    Durch das Anwählen der einzelnen Kästchen können Sie nun durch die einzelnen Schichten des Schreibprozesses 
+		    navigieren, die aktuell ausgewählte Schicht wird durch einen roten Punkt markiert. Durchgestrichene Kästchen 
+		    deuten eine Streichung an. Zum Fortfahren wählen Sie bitte den Schritt "j" in dem Verlauf aus.</p>
+                </div>
+            ),
+            en: (
+                <div>
+                    <h1>Details</h1>
+                    <p>...</p>
+                </div>
+            )
+        },
+        attachTo: '.navOverlay.scarOpen',
+        attachWhere: 'top'
+    },
+
+
+ tool009: {
+        restrictsAction: true,
+        allowedTargets: [
+        {selector:'.openseadragon-container'},
+        {selector:'.facsNav.navigator'},
+	{selector:'.facsNavMenu'},
+	{selector:'.scarFrame.animated'},
+	{selector:'.facsimile .svgBox #shape_6a65ba10-92ef-40cf-a3de-6bbad48829c1.current',state:'tool010'}
+	{selector:'.facsimile .svgBox #shape_827f69ac-3f55-46e8-b5b5-1e4204246ec4.current',state:'tool010'}
+	{selector:'.facsimile .svgBox #shape_bbe9206c-fc3b-4499-a3f9-5c9784834ac2.current',state:'tool010'}
+	{selector:'.facsimile .svgBox #shape_881bcb75-a3af-4018-8031-fc382ccf7fee.current',state:'tool010'}
+        ],
+        content: {
+            de: (
+                <div>
+                    <h1>Schieberegler</h1>
+                    <p>Mit Hilfe des Schieberegles kann zwischen der Faksimile- und der Rekonstruktionsanschicht gewechselt werden. 
+		    Wird innerhalb des Faksimiles auf ein Zeichen geklickt, öffnet sich eine Informationsbox. Wählen sie eine 
+		    beliebige Note im Takt "130j" an um fortzufahren.</p>
+                </div>
+            ),
+            en: (
+                <div>
+                    <h1>Slider</h1>
+                    <p>...</p>
+                </div>
+            )
+        },
+        attachTo: '.facsNavMenu',
+        attachWhere: 'below'
+    },
+
+
+ tool010: {
+        restrictsAction: true,
+        allowedTargets: [
+        {selector:'.openseadragon-container'},
+        {selector:'.facsNav.navigator'},
+	{selector:'.facsNavMenu'},
+	{selector:'.scarFrame.animated'},
+	{selector:'.div.contextMenu .sliderFrame .contextSliderItem .sliderItemLabel .span.i18n',state:'tool011'}
+        ],
+        content: {
+            de: (
+                <div>
+                    <h1>Informationsbox</h1>
+                    <p>Diese Box enthält eine Beschreibung des angewählten Zeichens, die Transkriptionsansicht sowie die entsprechende Auszeichnung in MEI. Aus dieser Infobox heraus kann in eine andere Ansicht gewechselt werden, indem Sie auf "Transkription anzeigen" oder " XML anzeigen" klicken.</p>
+                </div>
+            ),
+            en: (
+                <div>
+                    <h1>Information</h1>
+                    <p>...</p>
+                </div>
+            )
+        },
+        attachTo: '.div.contextMenu',
+        attachWhere: 'right'
+    },
+
+
+ tool011: {
+        restrictsAction: true,
+        allowedTargets: [
+        {selector:'.openseadragon-container'},
+        {selector:'.facsNav.navigator'},
+	{selector:'.facsNavMenu'},
+	{selector: '.scarFrame.animated'},
+	{selector:'.view.VideTranscriptionViewer .invarianceBtn',state:'tool012'}
+        ],
+        content: {
+            de: (
+                <div>
+                    <h1>Transkription</h1>
+                    <p>Die Transkription-Ansicht enthält den transkribierten Notentext der einzelnen Schichten, gerendert mit Verovio. 
+		    Die Navigationsbox ist also dieselbe wie in der Faksimile-Ansicht mit Ausnahme der Streichungen. 
+		    Darüber hinaus bietet die Transkriptionsansicht die Möglichkeit zur Betrachtung der "Invarianzeinfärbung". 
+		    Lassen Sie sich die Invarianzen anzeigen.</p>
+                </div>
+            ),
+            en: (
+                <div>
+                    <h1>Transcription</h1>
+                    <p>...</p>
+                </div>
+            )
+        },
+        attachTo: '.invarianceBtn',
+        attachWhere: 'below'
+    },
+
+
+
+
+ tool012: {
+        restrictsAction: true,
+        allowedTargets: [
+        {selector:'.openseadragon-container'},
+        {selector:'.facsNav.navigator'},
+	{selector:'.facsNavMenu'},
+	{selector: '.scarFrame.animated'},
+	{selector:'.perspectivesBar .perspectiveButton .fa ',state:'tool013'}
+        ],
+        content: {
+            de: (
+                <div>
+                    <h1>Invarianz</h1>
+                    <p>In dieser Ansicht werden die einzelnen Schichten der Transkription bunt eingefärbt. 
+		    Änderungen die vorgenommen wurden bekommen eine neue Farbe, übernommene Zeichen behalten ihre Farbe.
+		    Diese werden in den Kästchen der Navigationsbox ebenfalls entsprechend ihrer Schicht übernommen. 
+		    Um zwei Ansichten gleichzeitig zu betrachten klicken Sie auf die Balken in der Kopfzeile oben rechts, 
+		    um beispielsweise Faksimile- und Transkriptionsansicht nebeneinander oder übereinander zu legen. 
+		    Tun Sie dies, um fortzufahren.</p>
+                </div>
+            ),
+            en: (
+                <div>
+                    <h1>Transcription</h1>
+                    <p>...</p>
+                </div>
+            )
+        },
+        attachTo: '.invarianceBtn',
+        attachWhere: 'below'
+    },
+
+ tool013: {
+        restrictsAction: true,
+        allowedTargets: [
+        {selector:'.openseadragon-container'},
+        {selector:'.facsNav.navigator'},
+	{selector:'.facsNavMenu'},
+	{selector: '.scarFrame.animated'},
+	{selector:'.perspectiveButton.syncViews',state:'tool014'}
+        ],
+        content: {
+            de: (
+                <div>
+                    <h1>Parallelansicht</h1>
+                    <p>Es erscheint ein zusätzliches Symbol, welches die Möglichkeit zur Synchronisation der Ansichten 
+		    anbietet sodass mit der Navigation in einer Ansicht, die andere automatisch mitläuft. 
+		    Nächster Schritt "Synchronisieren".</p>
+                </div>
+            ),
+            en: (
+                <div>
+                    <h1>Parallel views</h1>
+                    <p>...</p>
+                </div>
+            )
+        },
+        attachTo: '.perspectiveButton.syncViews',
+        attachWhere: 'below'
+    },
+
+
+ tool014: {
+        restrictsAction: true,
+        allowedTargets: [
+        {selector:'.openseadragon-container'},
+        {selector:'.facsNav.navigator'},
+	{selector:'.facsNavMenu'},
+	{selector: '.scarFrame.animated'},
+
+        ],
+        content: {
+            de: (
+                <div>
+                    <h1>Drop-Down-Menü</h1>
+                    <p> In dem Drop-down-Menü auf der linken seite besteht die Möglichkeit zwischen Einführung, Faksimile, 
+		    Trankription und XML-Ansicht zu wechseln.</p>
+<p> Die Einführungs-Ansicht besteht aus einem Text, der Informationen zum Werk und zur Quelle gibt, außerdem die Variantenstelle, 
+		    den zugrundeliegenden Schreibprozess und das kompositorische Problem detailliert erläutert. Entsprechende Stellen 
+		    sind verlinkt, derzeit jedoch nicht aktiv.</p>
+<p>In der XML-Ansicht befindet sich die MEI-Datei, welche sämtliche Daten enthält. Eine integrierte Suchfunktion 
+		    öffnet sich durch das Tastaturkürzel cmd+F. Eine XPath-Anfrage oder die Suche nach Text ist hier erlaubt.</p>
+<p>Um auf die Startseite zurück zu gelangen klicken Sie auf "VideApp“ oben links in der Kopfleiste</p>
+                </div>
+            ),
+            en: (
+                <div>
+                    <h1>Drop-down-menu</h1>
+                    <p>...</p>
+                </div>
+            )
+        },
+        attachTo: '.transcriptionNavMenu .select-target.select-theme-chosen',
+        attachWhere: 'below'
     }
 
     /*nav1: {
