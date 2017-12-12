@@ -322,5 +322,13 @@
     "followMetaMarkLink" : {
         "de":"Verweis folgen",
         "en":"Follow Link"
+    },
+    "unclearReading" : {
+        "de":"Unklare Lesart",
+        "en":"Unclear Reading"
+    },
+    "supplied" : {
+        "de":"Herausgeberzusatz",
+        "en":"Supplied by Editor"
     }
 }

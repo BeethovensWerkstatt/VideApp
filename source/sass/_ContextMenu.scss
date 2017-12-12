@@ -153,6 +153,12 @@ div.contextMenuBack {
                     content: ' →'
                 }
             }
+            
+            .supplied, .unclear {
+                i {
+                    margin: 5px 10px 0 0;
+                }
+            }
         }
         
         /* ul {

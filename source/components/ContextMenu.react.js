@@ -60,6 +60,14 @@ const ContextMenu = ({ items, visible, closeContextMenu, submitRequest, x, y }) 
                 document.getElementById(key + '_measure').innerHTML = res.measure;
                 document.getElementById(key + '_position').innerHTML = res.position;
                 
+                if(res.supplied) {
+                    document.getElementById(key + '_supplied').innerHTML = '<i class="fa fa-pencil"></i><span data-i18n-text="supplied">' + eohub.getI18nString('supplied') + '</span>';
+                }
+                
+                if(res.unclear) {
+                    document.getElementById(key + '_unclear').innerHTML = '<i class="fa fa-question"></i><span data-i18n-text="unclearReading">' + eohub.getI18nString('unclearReading') + '</span>';
+                }
+                
                 //in case of links, make them accessible
                 if(typeof res.target !== 'undefined' && res.target !== '') {
                     
@@ -124,6 +132,10 @@ const ContextMenu = ({ items, visible, closeContextMenu, submitRequest, x, y }) 
                         <div>
                             <div className="measure" id={key + '_measure'}></div>
                             <div className="position" id={key + '_position'}></div>
+                        </div>
+                        <div>
+                            <div className="supplied" id={key + '_supplied'}></div>
+                            <div className="unclear" id={key + '_unclear'}></div>
                         </div>
                     </div>
                 </div>
