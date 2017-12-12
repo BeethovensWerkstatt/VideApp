@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import ReactDOM from 'react-dom';
 import TourSteps from '../tour/tourSteps.js';
+import {eohub} from './../_modules/eo-hub';
 
 //Tours
 var Drop = require('tether-drop');
@@ -48,6 +49,17 @@ class Tour extends React.Component {
         }
     }
     
+    componentWillReceiveProps(nextProps) {
+        /*console.log('Tour.componentWillReceiveProps');*/
+        
+        if(typeof nextProps.fullState.tour === 'string' && nextProps.fullState.tour !== '') {
+            this.forceUpdate();
+            /*console.log('  ')
+            console.log(' forced update ')
+            console.log('  ')*/
+        }
+    }
+    
     render() {
         
         if(this.props.tour === '') {
@@ -59,7 +71,7 @@ class Tour extends React.Component {
         }
         
         let tourClass = 'currentTourStep ' + this.props.tour;
-        console.log('[DEBUG] rendering ' + tourClass);
+        /*console.log('[DEBUG] rendering ' + tourClass);*/
         
         return (
             <div className="tourBackground"></div>
@@ -74,7 +86,7 @@ class Tour extends React.Component {
     }
     
     shouldComponentUpdate(nextProps, nextState) {
-        console.log('----------- nextProps.tour: ' + nextProps.tour);
+        /*console.log('----------- nextProps.tour: ' + nextProps.tour);*/
         if(typeof nextProps.tour === 'string' && nextProps.tour !== ''/* && !nextProps.nolog*/) {
             return true;
         } else {
@@ -157,6 +169,20 @@ class Tour extends React.Component {
             offset = '10px 0';
         }  
         
+        let oldDrop = eohub.TourDrop;
+        if(typeof oldDrop !== 'undefined' && oldDrop !== null) {
+            
+            try {
+                let elems = document.querySelectorAll('.tourDrop.drop.drop-element'); 
+                for(let i=0;i<elems.length;i++) {
+                    elems[i].remove();  
+                }    
+            } catch(err) {
+                console.log('[ERROR] Unable to delete drop')
+            }
+            
+            /*oldDrop.destroy();*/
+        }
         
         let drop = new Drop({
             target: targetElem,
@@ -168,8 +194,8 @@ class Tour extends React.Component {
             constrainToWindow: true,
             classes: 'drop-theme-arrows tourDrop',
             beforeClose: () => {
-                console.log('the drop is supposed to close now… (but I try to prevent that)');
-                return false;
+                /*console.log('the drop is supposed to close now… (but I try to prevent that)');
+                return false;*/
             },
             tetherOptions: {
                 attachment: attachment,
@@ -184,9 +210,10 @@ class Tour extends React.Component {
             }
         });
         
+        eohub.TourDrop = drop;
+        
         drop.on('close',(e) => {
-            console.log('and it has been closed now. Sheeet')
-            console.log(e)
+            eohub.TourDrop = null;
         })
         
         let appElem = document.querySelector('body');
@@ -199,12 +226,17 @@ class Tour extends React.Component {
             
             let isOk = false;
             let nextStep;
+            let tourEnd = false;
             for(let i=0;i<tourObj.allowedTargets.length;i++) {
                 let elem = event.target.closest(tourObj.allowedTargets[i].selector);
                 if(elem !== null) {
                     isOk = true;
                     if(typeof tourObj.allowedTargets[i].state !== 'undefined') {
                         nextStep = tourObj.allowedTargets[i].state;
+                    }
+                    
+                    if(typeof tourObj.allowedTargets[i].tourEnd !== 'undefined') {
+                        tourEnd = tourObj.allowedTargets[i].tourEnd;
                     }
                 }
             }
@@ -227,7 +259,9 @@ class Tour extends React.Component {
                 appElem.removeEventListener('click',handlingFunc,true);
                 appElem.removeEventListener('mousedown',handlingFunc,true);
                 
-                if(typeof nextStep !== 'undefined') {
+                if(tourEnd) {
+                    this.props.closeTour();
+                } else if(typeof nextStep !== 'undefined') {
                     this.props.loadTourStep(nextStep);
                 } else {
                     /*this.props.closeTour();*/
@@ -250,7 +284,8 @@ Tour.propTypes = {
     language: PropTypes.string.isRequired,
     closeTour: PropTypes.func.isRequired,
     loadTourStep: PropTypes.func.isRequired,
-    nolog: PropTypes.bool.isRequired
+    nolog: PropTypes.bool.isRequired,
+    fullState: PropTypes.object.isRequired
 };
 
 export default Tour;

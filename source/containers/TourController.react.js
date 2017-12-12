@@ -6,7 +6,8 @@ const mapStateToProps = (state, ownProps) => {
     return {
         tour: state.tour,
         language: state.preferences.language,
-        nolog: state.network.nolog
+        nolog: state.network.nolog,
+        fullState: state
     };
 };
 
