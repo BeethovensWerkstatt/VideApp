@@ -164,7 +164,7 @@ export function handleViews(state = {
     layout: ViewLayouts.INTRODUCTION,
     ratio: .5,
     synced: false,
-    view1: {moduleKey: 'VideFacsimileViewer', request: null, state: null, log: false},
+    view1: {moduleKey: 'VideTextViewer', request: null, state: null, log: false},
     view2: {moduleKey: 'VideXmlViewer', request: null, state: null, log: false}
 }, action) {
     switch (action.type) {
