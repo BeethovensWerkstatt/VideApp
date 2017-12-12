@@ -4,6 +4,7 @@ const babelify = require('babelify'); //translates JSX to browser-compatible Jav
 const source = require('vinyl-source-stream'); //Use conventional text streams at the start of your gulp or vinyl pipelines
 const sass = require('gulp-sass');
 const eslint = require('gulp-eslint');
+const install = require("gulp-install");
 
 gulp.task('html', function() {
     return gulp.src('./source/index.html')
@@ -52,6 +53,18 @@ gulp.task('lint', function() {
         .pipe(source('resources/js/logWorker.js'))
         .pipe(gulp.dest('./build/'));
 });*/
+
+gulp.task('installServerDependencies', function() {
+    return gulp.src(['./server_setup/package.json'])
+        .pipe(gulp.dest('./server/'))
+        .pipe(install());
+});
+
+gulp.task('installServerConfig', function() {
+    return gulp.src(['./server_setup/**','!serverConfig.json.sample'])
+        .pipe(gulp.dest('./server/'))
+        .pipe(install());
+});
 
 gulp.task('socketClient', function() {
     return gulp.src('./node_modules/socket.io-client/dist/socket.io.min.js')
