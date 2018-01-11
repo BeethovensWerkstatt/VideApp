@@ -40,12 +40,45 @@ tour.start();*/
     );
 };*/
 
+let TourException = () => {
+    console.log('emitting a tour exception')
+}
+
+
 class Tour extends React.Component {
     
     componentDidMount() {
         //console.log('INFO: componentDidMount');
         if(typeof this.props.tour === 'string' && this.props.tour !== '') {
-            this.renderTour(this.props.tour)    
+        
+            let renders = false;
+            let iteration = 0;
+            
+            do {
+                
+                let func = () => {
+                    this.renderTour(this.props.tour,iteration)
+                }
+            
+                try {
+                    if(iteration === 0) {
+                        this.renderTour(this.props.tour,iteration);
+                    } else {
+                        console.log('[DEBUG] Trying to render tour for ' + (iteration + 1) + ' times now.')
+                        window.setTimeout(func,iteration * 100);    
+                    }
+                    
+                    renders = true;
+                    
+                } catch(err) {
+                    /*if(err.type !== 'TourException') {
+                        throw err;
+                    }*/
+                    //console.log('[ERROR] Tour error uncaught')
+                    iteration++;                    
+                }   
+                
+            } while (!renders);
         }
     }
     
@@ -81,7 +114,36 @@ class Tour extends React.Component {
     componentDidUpdate(prevProps,prevState) {
         //console.log('[DEBUG] componentDidUpdate')
         if(typeof this.props.tour === 'string' && this.props.tour !== ''/* && !this.props.nolog*/) {
-            this.renderTour(this.props.tour)    
+            
+            let renders = false;
+            let iteration = 0;
+            
+            do {
+                
+                let func = () => {
+                    this.renderTour(this.props.tour,iteration)
+                }
+            
+                try {
+                    if(iteration === 0) {
+                        this.renderTour(this.props.tour,iteration);
+                    } else {
+                        console.log('[DEBUG] Trying to render tour for ' + (iteration + 1) + ' times now.')
+                        window.setTimeout(func,iteration * 100);    
+                    }
+                    
+                    renders = true;
+                    
+                } catch(err) {
+                    /*if(err.type !== 'TourException') {
+                        throw err;
+                    }*/
+                    
+                    iteration++;                    
+                }   
+                
+            } while (!renders);
+            
         }
     }
     
@@ -94,7 +156,7 @@ class Tour extends React.Component {
         }
     }
     
-    renderTour(stepId) {
+    renderTour(stepId,delayCount = 0) {
         
         /*console.log('-------renderTour')*/
         let tourObj = TourSteps[stepId];
@@ -119,7 +181,8 @@ class Tour extends React.Component {
         if(targetElem === null) {
             console.log('[DEBUG] Unable to find anchors for tour "' + stepId + '", with an attachTo of "' + tourObj.attachTo + '"');
             //todo: revert tour
-            return false;
+            //return false;
+            throw new TourException(delayCount);
         }
         
         let div = document.createElement('div');
@@ -221,16 +284,21 @@ class Tour extends React.Component {
         
         handlingFunc = (event) => {
             
-            /*console.log('Event captured in capture phase: ')
+            /*console.log('')
+            console.log('New event captured in capture phase: ')
             console.log(event)*/
             
             let isOk = false;
             let nextStep;
             let tourEnd = false;
+            let allowedSelectors = [];
+            
             for(let i=0;i<tourObj.allowedTargets.length;i++) {
                 let elem = event.target.closest(tourObj.allowedTargets[i].selector);
                 if(elem !== null) {
                     isOk = true;
+                    allowedSelectors.push(tourObj.allowedTargets[i]);
+                    
                     if(typeof tourObj.allowedTargets[i].state !== 'undefined') {
                         nextStep = tourObj.allowedTargets[i].state;
                     }
@@ -241,39 +309,71 @@ class Tour extends React.Component {
                 }
             }
             
-            /*console.log('    values are isOk:' + isOk + ' | nextStep:' + nextStep + ' | stepId: ' + stepId);*/
+            //console.log('    values are isOk:' + isOk + ' | nextStep:' + nextStep + ' | stepId: ' + stepId);
             
             if(tourObj.restrictsAction && !isOk) {
                 event.stopPropagation();
                 event.preventDefault();
                 /*console.log('    stopped event on')
                 console.log(event.target);*/
-            } else if(event.type === 'click') {
+            } else if(event.type === 'click' || event.type === 'change') {
                 //only resolve event when it's a click
                 
-                /*console.log('passing event on')*/
+                //console.log('--------passing event of type ' + event.type + ' on to step ' + nextStep)
                 
                 //kill the existing Drop
                 drop.destroy();
                 //remove listener
                 appElem.removeEventListener('click',handlingFunc,true);
+                appElem.removeEventListener('change',handlingFunc,true);
                 appElem.removeEventListener('mousedown',handlingFunc,true);
                 
                 if(tourEnd) {
                     this.props.closeTour();
                 } else if(typeof nextStep !== 'undefined') {
+                    //console.log('-----------On my way to ' + nextStep)
                     this.props.loadTourStep(nextStep);
                 } else {
                     /*this.props.closeTour();*/
                 }
                 
+                //Special Treatment for Select Boxes
+                if(event.type === 'click' && typeof allowedSelectors[0].selectBox !== 'undefined') {
+                    
+                    document.VideApp = {};
+                    document.VideApp.openTour = (value) => {
+                       
+                        let target;
+                        
+                        for(let n=0; n<allowedSelectors[0].selectBox.allowedValues.length;n++) {
+                            let allowedValue = allowedSelectors[0].selectBox.allowedValues[n];
+                            
+                            if(value === allowedValue.value) {
+                                target = allowedValue.state;
+                            }
+                        }
+                        
+                        if(typeof target !== 'undefined') {
+                            this.props.loadTourStep(target);
+                            return true;
+                        } else {
+                            return false;
+                        }
+                        
+                    }
+                    
+                    //appElem.setAttribute('data-nextTourStep','tool004');
+                    
+                }
+                
             } else {
                 //other event types aren't resolved
-                /*console.log('passing event on without closing listeners')*/
+                //console.log('passing event on without closing listeners')
             }
         }
         
         appElem.addEventListener('click',handlingFunc,true);
+        appElem.addEventListener('change',handlingFunc,true);
         appElem.addEventListener('mousedown',handlingFunc,true);
         
     }

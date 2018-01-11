@@ -222,10 +222,28 @@ const EoModule = class EoModule {
         });
         
         selectInstance.change(this._key);
+        selectInstance.on('open',(e) => {
+            //console.log('opening select instance'); 
+        });
         selectInstance.on('change',(e) => {
-            console.log('vide-module-blueprint.js: _setupViewSelect')
-            console.log(e);
-            this._eohub.changeView(containerID,e.value);
+            /*console.log('vide-module-blueprint.js: _setupViewSelect')
+            console.log(e);*/
+            
+            let body = document.querySelector('body');
+            if(typeof document.VideApp !== 'undefined' && typeof document.VideApp.openTour === 'function') {
+                
+                let tourAllowsNextStep = document.VideApp.openTour(e.value);
+                if(tourAllowsNextStep) {
+                    this._eohub.changeView(containerID,e.value);
+                } else {
+                    //the target isn't allowed by the tour
+                }
+                
+            } else {
+                this._eohub.changeView(containerID,e.value);
+            }
+            
+            
         });
     }
     
