@@ -71,7 +71,7 @@ export function handlePreferences(state = {
             
             return {
                 showPreferences: false,
-                language: 'en',
+                language: state.language,
                 showAbout: false
             };
         
@@ -254,8 +254,10 @@ export function handleViews(state = {
         
         case ActionTypes.DEACTIVATE_EDITION:
             return Object.assign({}, state, {
-                view1: {perspective: Perspectives.FACSIMILE, target: null, temp: false},
-                view2: {perspective: Perspectives.TRANSCRIPTION, target: null, temp: false}
+                view1: {moduleKey: 'VideTextViewer', request: null, state: null, log: false},
+                view2: {moduleKey: 'VideXmlViewer', request: null, state: null, log: false}
+                /*view1: {perspective: Perspectives.FACSIMILE, target: null, temp: false},
+                view2: {perspective: Perspectives.TRANSCRIPTION, target: null, temp: false}*/
             });
             
         case ActionTypes.RESTORE_STATE:
@@ -295,7 +297,7 @@ export function handleViews(state = {
                 layout: ViewLayouts.INTRODUCTION,
                 ratio: .5,
                 synced: false,
-                view1: {moduleKey: 'VideFacsimileViewer', request: null, state: null, log: false},
+                view1: {moduleKey: 'VideTextViewer', request: null, state: null, log: false},
                 view2: {moduleKey: 'VideXmlViewer', request: null, state: null, log: false}
             };
             
@@ -476,7 +478,7 @@ export function handleTour(state = '', action) {
         
         case ActionTypes.RESET_STATE:
             
-            return '';
+            return state;//this is required to go across the start menu with a tour.
         
         //closing the context menu is no different from the default…
         default: 
