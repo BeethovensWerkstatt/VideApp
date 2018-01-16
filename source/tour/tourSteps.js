@@ -387,7 +387,7 @@ const TourSteps = {
                 <div>
                     <h1>Varianten-Detailansicht</h1>
                     <p>Wenn Sie in der Transkriptionsansicht die jeweilige Schreibschichten anwählen, erscheinen diese hier über dem Notentext. 
-                    Anhand des Beispiels "Op. 75,2" soll im Folgenden noch auf weitere Funktionen hingewiesen werden. Wechseln Sie hierfür auf die Startseite mit Hilfe des                        "VideApp-Symbols" oben links.</p>
+                    Anhand des Beispiels "Op. 75,2" soll im Folgenden noch auf weitere Funktionen hingewiesen werden. Wechseln Sie hierfür auf die Startseite mit Hilfe des "VideApp-Symbols" oben links.</p>
                 </div>
             ),
             en: (
@@ -588,6 +588,64 @@ const TourSteps = {
             en: (
                 <div>
                     <h1>Parallel views</h1>
+                    <p>...</p>
+                </div>
+            )
+        },
+        attachTo: '.perspectiveButton.syncViews',
+        attachWhere: 'below'
+    },
+	
+ tool022: {
+        restrictsAction: true,
+        allowedTargets: [
+        {selector:'.openseadragon-container'},
+        {selector:'.facsNav.navigator'},
+	{selector:'.facsNavMenu'},
+	{selector: '.scarFrame.animated'},
+	{selector: 'div.views .view.VideTextViewer .menu .select-target.select-theme-chosen .select-option'},
+	{selector:'.fa-square-o:before',state:'tool023'}
+        ],
+        content: {
+            de: (
+                <div>
+                    <h1>Parallelansicht</h1>
+                    <p>Nun sind beide Ansichten synchronisiert. Wenn Sie nun eine bestimmte Textnarbe in einem Beispiel auswählen, wird in der anderen Ansicht der selbe Bereich angezeigt. 
+                    Sie können in jedem Fenster beliebig zwischen den verschiedenen Anischten (Faksimile/Transkription/XML) umschalten. In der Trankriptionsansicht haben Sie bei diesem Beispiel 
+                    die Möglichkeit, sich die Invarianzeinfärbung anzeigen zu lassen. Wechseln Sie hierzu in einem Fenster in die Trankriptions-Ansicht und wählen Sie dort die "Invarianzeinfärbung" aus.</p>
+                </div>
+            ),
+            en: (
+                <div>
+                    <h1>Parallel views</h1>
+                    <p>...</p>
+                </div>
+            )
+        },
+        attachTo: '.perspectiveButton.syncViews',
+        attachWhere: 'below'
+    },
+	
+tool023: {
+        restrictsAction: true,
+        allowedTargets: [
+        {selector:'.openseadragon-container'},
+        {selector:'.facsNav.navigator'},
+	{selector:'.facsNavMenu'},
+	{selector: '.scarFrame.animated'},
+	{selector: 'div.views .view.VideTextViewer .menu .select-target.select-theme-chosen .select-option'},
+	{selector:'header.appHeader .videAppLogo'}
+        ],
+        content: {
+            de: (
+                <div>
+                    <p>Sie haben die Tour erfolgreich abgeschlossen. Wir hoffen, dass Ihnen der Umgang unserer Fallstudien mit der VideApp nun vertrauter 
+		    geworden sind. Mit einem Klick auf das VideApp-Logo gelangen Sie zurück zum Hauptmenü 
+		    und können die verfügbaren Fallstudien öffnen.</p>
+                </div>
+            ),
+            en: (
+                <div>
                     <p>...</p>
                 </div>
             )
