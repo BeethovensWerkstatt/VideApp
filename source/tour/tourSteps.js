@@ -6,7 +6,7 @@ const TourSteps = {
     tool001: {
         restrictsAction: true,
         allowedTargets: [
-            {selector:'.editionPreview[data-editionID = "Codierung_WoO32"]',state:'tool002'}
+            {selector:'.editionPreview[data-editionID="Codierung_WoO32"]',state:'tool002'}
         ],
         content: {
             de: (
@@ -22,14 +22,14 @@ const TourSteps = {
                 </div>
             )
         },
-        attachTo: '.editionPreview[data-editionID = "Codierung_WoO32"]',
+        attachTo: '.editionPreview[data-editionID="Codierung_WoO32"]',
         attachWhere: 'top right'
     },
     
     tool002: {
         restrictsAction: true,
         allowedTargets: [
-            {selector:'.editionPreview[data-editionID = "Codierung_WoO32"]',state:'tool003'},
+            {selector:'.editionPreview[data-editionID="Codierung_WoO32"]',state:'tool003'},
             {selector:'.editionDetails .openButton',state:'tool003'},
         ],
         content: {
@@ -55,9 +55,14 @@ const TourSteps = {
     tool003: {
         restrictsAction: true,
         allowedTargets: [
-            {selector:'.openseadragon-container',state: 'tool003'},
-            {selector:'.facsNav.navigator',state: 'tool003'},
-            {selector:'div.views .view.VideTextViewer .menu .select-target.select-theme-chosen .select-option[data-value = "VideFacsimileViewer"]',state:'tool004'} 
+            {selector:'.openseadragon-container'},
+            {selector:'.facsNav.navigator'},
+            {selector:'div.views .menu a.select-target.select-theme-chosen, .select-theme-chosen',
+                selectBox:{
+                    allowedValues: [{value:'VideFacsimileViewer',state:'tool004'}]
+                }
+            },
+            {selector:'.select.viewSelect',state:'tool004'} 
             //Bin mir unsicher, ob dieser selector den richtigen Schritt im Drop-Down Menü öffnet.
             
         ],
@@ -77,7 +82,7 @@ const TourSteps = {
                 </div>
             )
         },
-        attachTo: 'div.views .view.VideTextViewer .menu .select-target.select-theme-chosen',
+        attachTo: 'div.views .view.VideTextViewer .menu .select-target.select-theme-chosen, .select-theme-chosen',
         attachWhere: 'below'
     },
     
@@ -289,10 +294,10 @@ const TourSteps = {
  tool011: {
         restrictsAction: true,
         allowedTargets: [
-        {selector:'.openseadragon-container'},
-        {selector:'.facsNav.navigator'},
-	{selector:'.facsNavMenu'},
-	{selector:'.div.contextMenu .sliderFrame .contextSliderItem .sliderItemLabel',state:'tool012'}
+            {selector:'.openseadragon-container'},
+            {selector:'.facsNav.navigator'},
+           	{selector:'.facsNavMenu'},
+           	{selector:'div.contextMenu .sliderFrame .contextSliderItem .sliderItemLabel',state:'tool012'}
         ],
         content: {
             de: (
@@ -310,18 +315,18 @@ const TourSteps = {
                 </div>
             )
         },
-        attachTo: '.div.contextMenu',
+        attachTo: 'div.contextMenu',
         attachWhere: 'right'
     },
 
  tool012: {
         restrictsAction: true,
         allowedTargets: [
-        {selector:'.openseadragon-container'},
-        {selector:'.facsNav.navigator'},
-	{selector:'.facsNavMenu'},
-	{selector:'.scarFrame.animated'},
-	{selector:'.view.VideTranscriptionViewer .transcriptionNavMenu #view1_zoomHome.menuButton',state:'tool013'}
+            {selector:'.openseadragon-container'},
+            {selector:'.facsNav.navigator'},
+           	{selector:'.facsNavMenu'},
+           	{selector:'.scarFrame.animated'},
+           	{selector:'.view.VideTranscriptionViewer .transcriptionNavMenu #view1_zoomHome.menuButton',state:'tool013'}
         ],
         content: {
             de: (
@@ -401,7 +406,7 @@ const TourSteps = {
         attachWhere: 'left'
     },
 
-     tool015: {
+    tool015: {
         restrictsAction: true,
         allowedTargets: [
             {selector:'.editionPreview[data-editionID = "Codierung_op.75.2"]',state:'tool016'}
@@ -454,8 +459,13 @@ const TourSteps = {
         restrictsAction: true,
         allowedTargets: [
             {selector:'.openseadragon-container',state: 'tool017'},
-            {selector:'.facsNav.navigator',state: 'tool017'},
-            {selector:'div.views .view.VideTextViewer .menu .select-target.select-theme-chosen .select-option[data-value = "VideFacsimileViewer"]',state:'tool018'} 
+            {selector:'.facsNav.navigator',state: 'tool017'},//here
+            {selector:'div.views .menu a.select-target.select-theme-chosen',
+                selectBox:{
+                    allowedValues: [{value:'VideFacsimileViewer',state:'tool018'}]
+                }
+            }
+            //{selector:'div.views .view.VideTextViewer .menu .select-target.select-theme-chosen .select-option[data-value = "VideFacsimileViewer"]',state:'tool018'} 
             
         ],
         content: {

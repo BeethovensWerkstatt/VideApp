@@ -40,8 +40,8 @@ tour.start();*/
     );
 };*/
 
-let TourException = () => {
-    console.log('emitting a tour exception')
+let TourException = (count) => {
+    console.log('emitting a tour exception with count ' + count)
 }
 
 
@@ -57,14 +57,14 @@ class Tour extends React.Component {
             do {
                 
                 let func = () => {
-                    this.renderTour(this.props.tour,iteration)
+                    this.renderTour(iteration)
                 }
             
                 try {
                     if(iteration === 0) {
-                        this.renderTour(this.props.tour,iteration);
+                        this.renderTour(iteration);
                     } else {
-                        console.log('[DEBUG] Trying to render tour for ' + (iteration + 1) + ' times now.')
+                        //console.log('[DEBUG] Trying to render tour for ' + (iteration + 1) + ' times now.')
                         window.setTimeout(func,iteration * 100);    
                     }
                     
@@ -83,10 +83,14 @@ class Tour extends React.Component {
     }
     
     componentWillReceiveProps(nextProps) {
-        /*console.log('Tour.componentWillReceiveProps');*/
+        //console.log('Tour.componentWillReceiveProps');
+        if(this.props.tour === '' && nextProps.tour !== '') {
+            this.initializeTour(nextProps.tour);
+        }
+        
         
         if(typeof nextProps.fullState.tour === 'string' && nextProps.fullState.tour !== '') {
-            this.forceUpdate();
+            //this.forceUpdate();
             /*console.log('  ')
             console.log(' forced update ')
             console.log('  ')*/
@@ -121,12 +125,12 @@ class Tour extends React.Component {
             do {
                 
                 let func = () => {
-                    this.renderTour(this.props.tour,iteration)
+                    this.renderTour(iteration)
                 }
             
                 try {
                     if(iteration === 0) {
-                        this.renderTour(this.props.tour,iteration);
+                        this.renderTour(iteration);
                     } else {
                         console.log('[DEBUG] Trying to render tour for ' + (iteration + 1) + ' times now.')
                         window.setTimeout(func,iteration * 100);    
@@ -148,6 +152,7 @@ class Tour extends React.Component {
     }
     
     shouldComponentUpdate(nextProps, nextState) {
+    
         /*console.log('----------- nextProps.tour: ' + nextProps.tour);*/
         if(typeof nextProps.tour === 'string' && nextProps.tour !== ''/* && !nextProps.nolog*/) {
             return true;
@@ -156,9 +161,124 @@ class Tour extends React.Component {
         }
     }
     
-    renderTour(stepId,delayCount = 0) {
+    initializeTour(firstStep) {
+        console.log('\n \n \n INITIALIZING EVERYTHING \n \n \n \n')
         
-        /*console.log('-------renderTour')*/
+        let handler = (event) => {
+            this.handleTourEvent(event)
+        }
+        
+        let app = document.querySelector('body');
+        app.addEventListener('click',handler,true);
+        app.addEventListener('change',handler,true);
+        app.addEventListener('mousedown',handler,true);
+    }
+    
+    handleTourEvent(event) {
+        
+        console.log('\n \n handleTourEvent ' + event.type + ' \n ' + this.props.tour + '\n \n')
+        console.log(event)
+        console.log('\n ')
+        
+        let currentStepId = this.props.tour;
+        let tourObj = TourSteps[currentStepId];
+        
+        if(typeof tourObj === 'undefined') {
+            console.log('\n [DEBUG] Unable to get tour item "' + stepId + '"')
+            return false;
+        }
+        
+        let isOk = false;
+        let nextStep;
+        let tourEnd = false;
+        let allowedSelectors = [];
+            
+        for(let i=0;i<tourObj.allowedTargets.length;i++) {
+            let elem = event.target.closest(tourObj.allowedTargets[i].selector);
+            if(elem !== null) {
+                isOk = true;
+                allowedSelectors.push(tourObj.allowedTargets[i]);
+                
+                if(typeof tourObj.allowedTargets[i].state !== 'undefined') {
+                    nextStep = tourObj.allowedTargets[i].state;
+                }
+                
+                if(typeof tourObj.allowedTargets[i].tourEnd !== 'undefined') {
+                    tourEnd = tourObj.allowedTargets[i].tourEnd;
+                }
+            }
+        }
+            
+        console.log(' Values are isOk:' + isOk + ' | nextStep:' + nextStep + ' | stepId: ' + currentStepId);
+            
+        if(tourObj.restrictsAction && !isOk) {
+            event.stopPropagation();
+            event.preventDefault();
+            console.log('    stopped event on')
+            console.log(event.target);
+        } else if(event.type === 'click' || event.type === 'change') {
+            //only resolve event when it's a click
+            
+            console.log('--------passing event of type ' + event.type + ' on to step ' + nextStep)
+            
+            //kill the existing Drop
+            //drop.destroy();
+            //remove listener
+            
+            
+            if(tourEnd) {
+                this.props.closeTour();
+            } else if(typeof nextStep !== 'undefined') {
+                console.log('-----------On my way to ' + nextStep)
+                this.props.loadTourStep(nextStep);
+            } else {
+                console.log('dunno what this case is for')
+                console.log(event)
+                /*this.props.closeTour();*/
+            }
+            
+            //Special Treatment for Select Boxes
+            if(event.type === 'click' && typeof allowedSelectors[0].selectBox !== 'undefined') {
+                
+                document.VideApp = {};
+                document.VideApp.openTour = (value) => {
+                   
+                    let target;
+                    
+                    for(let n=0; n<allowedSelectors[0].selectBox.allowedValues.length;n++) {
+                        let allowedValue = allowedSelectors[0].selectBox.allowedValues[n];
+                        
+                        if(value === allowedValue.value) {
+                            target = allowedValue.state;
+                        }
+                    }
+                    
+                    if(typeof target !== 'undefined') {
+                        this.props.loadTourStep(target);
+                        return true;
+                    } else {
+                        return false;
+                    }
+                    
+                }
+                
+                //appElem.setAttribute('data-nextTourStep','tool004');
+                
+            }
+            
+        } else {
+            //other event types aren't resolved
+            //console.log('passing event on without further action')
+        }
+        
+        
+        
+    }
+    
+    renderTour(delayCount = 0) {
+        
+        console.log('\n-------renderTour---------')
+        let stepId = this.props.tour;
         let tourObj = TourSteps[stepId];
         
         if(typeof tourObj === 'undefined') {
@@ -232,19 +352,19 @@ class Tour extends React.Component {
             offset = '10px 0';
         }  
         
-        let oldDrop = eohub.TourDrop;
+        let oldDrop = this.Drop;
         if(typeof oldDrop !== 'undefined' && oldDrop !== null) {
             
             try {
                 let elems = document.querySelectorAll('.tourDrop.drop.drop-element'); 
                 for(let i=0;i<elems.length;i++) {
                     elems[i].remove();  
-                }    
+                }
+                oldDrop.destroy();
             } catch(err) {
                 console.log('[ERROR] Unable to delete drop')
             }
             
-            /*oldDrop.destroy();*/
         }
         
         let drop = new Drop({
@@ -273,108 +393,11 @@ class Tour extends React.Component {
             }
         });
         
-        eohub.TourDrop = drop;
-        
+        this.Drop = drop;
+        window.drop = drop;
         drop.on('close',(e) => {
             eohub.TourDrop = null;
         })
-        
-        let appElem = document.querySelector('body');
-        let handlingFunc;
-        
-        handlingFunc = (event) => {
-            
-            /*console.log('')
-            console.log('New event captured in capture phase: ')
-            console.log(event)*/
-            
-            let isOk = false;
-            let nextStep;
-            let tourEnd = false;
-            let allowedSelectors = [];
-            
-            for(let i=0;i<tourObj.allowedTargets.length;i++) {
-                let elem = event.target.closest(tourObj.allowedTargets[i].selector);
-                if(elem !== null) {
-                    isOk = true;
-                    allowedSelectors.push(tourObj.allowedTargets[i]);
-                    
-                    if(typeof tourObj.allowedTargets[i].state !== 'undefined') {
-                        nextStep = tourObj.allowedTargets[i].state;
-                    }
-                    
-                    if(typeof tourObj.allowedTargets[i].tourEnd !== 'undefined') {
-                        tourEnd = tourObj.allowedTargets[i].tourEnd;
-                    }
-                }
-            }
-            
-            //console.log('    values are isOk:' + isOk + ' | nextStep:' + nextStep + ' | stepId: ' + stepId);
-            
-            if(tourObj.restrictsAction && !isOk) {
-                event.stopPropagation();
-                event.preventDefault();
-                /*console.log('    stopped event on')
-                console.log(event.target);*/
-            } else if(event.type === 'click' || event.type === 'change') {
-                //only resolve event when it's a click
-                
-                //console.log('--------passing event of type ' + event.type + ' on to step ' + nextStep)
-                
-                //kill the existing Drop
-                drop.destroy();
-                //remove listener
-                appElem.removeEventListener('click',handlingFunc,true);
-                appElem.removeEventListener('change',handlingFunc,true);
-                appElem.removeEventListener('mousedown',handlingFunc,true);
-                
-                if(tourEnd) {
-                    this.props.closeTour();
-                } else if(typeof nextStep !== 'undefined') {
-                    //console.log('-----------On my way to ' + nextStep)
-                    this.props.loadTourStep(nextStep);
-                } else {
-                    /*this.props.closeTour();*/
-                }
-                
-                //Special Treatment for Select Boxes
-                if(event.type === 'click' && typeof allowedSelectors[0].selectBox !== 'undefined') {
-                    
-                    document.VideApp = {};
-                    document.VideApp.openTour = (value) => {
-                       
-                        let target;
-                        
-                        for(let n=0; n<allowedSelectors[0].selectBox.allowedValues.length;n++) {
-                            let allowedValue = allowedSelectors[0].selectBox.allowedValues[n];
-                            
-                            if(value === allowedValue.value) {
-                                target = allowedValue.state;
-                            }
-                        }
-                        
-                        if(typeof target !== 'undefined') {
-                            this.props.loadTourStep(target);
-                            return true;
-                        } else {
-                            return false;
-                        }
-                        
-                    }
-                    
-                    //appElem.setAttribute('data-nextTourStep','tool004');
-                    
-                }
-                
-            } else {
-                //other event types aren't resolved
-                //console.log('passing event on without closing listeners')
-            }
-        }
-        
-        appElem.addEventListener('click',handlingFunc,true);
-        appElem.addEventListener('change',handlingFunc,true);
-        appElem.addEventListener('mousedown',handlingFunc,true);
         
     }
 };
