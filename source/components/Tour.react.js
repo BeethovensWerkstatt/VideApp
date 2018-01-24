@@ -120,14 +120,14 @@ class Tour extends React.Component {
         if(typeof this.props.tour === 'string' && this.props.tour !== ''/* && !this.props.nolog*/) {
             
             let renders = false;
-            let iteration = 0;
+            let iteration = 1;
             
             do {
                 
                 let func = () => {
                     this.renderTour(iteration)
                 }
-            
+                
                 try {
                     if(iteration === 0) {
                         this.renderTour(iteration);
@@ -169,9 +169,12 @@ class Tour extends React.Component {
         }
         
         let app = document.querySelector('body');
-        app.addEventListener('click',handler,true);
-        app.addEventListener('change',handler,true);
-        app.addEventListener('mousedown',handler,true);
+        
+        this.tourHandlers = [];
+        
+        this.tourHandlers.push(app.addEventListener('click',handler,true));
+        this.tourHandlers.push(app.addEventListener('change',handler,true));
+        this.tourHandlers.push(app.addEventListener('mousedown',handler,true));
     }
     
     handleTourEvent(event) {
@@ -211,12 +214,12 @@ class Tour extends React.Component {
             
         console.log(' Values are isOk:' + isOk + ' | nextStep:' + nextStep + ' | stepId: ' + currentStepId);
             
-        if(tourObj.restrictsAction && !isOk) {
+        /*if(tourObj.restrictsAction && !isOk) {
             event.stopPropagation();
             event.preventDefault();
-            console.log('    stopped event on')
+            console.log(' stopped event on')
             console.log(event.target);
-        } else if(event.type === 'click' || event.type === 'change') {
+        } else */if(event.type === 'click' || event.type === 'change') {
             //only resolve event when it's a click
             
             console.log('--------passing event of type ' + event.type + ' on to step ' + nextStep)
@@ -232,13 +235,13 @@ class Tour extends React.Component {
                 console.log('-----------On my way to ' + nextStep)
                 this.props.loadTourStep(nextStep);
             } else {
-                console.log('dunno what this case is for')
+                console.log('just passing on')
                 console.log(event)
                 /*this.props.closeTour();*/
             }
             
             //Special Treatment for Select Boxes
-            if(event.type === 'click' && typeof allowedSelectors[0].selectBox !== 'undefined') {
+            if(event.type === 'click' && allowedSelectors[0].hasOwnProperty('selectBox')) {
                 
                 document.VideApp = {};
                 document.VideApp.openTour = (value) => {
@@ -301,8 +304,8 @@ class Tour extends React.Component {
         if(targetElem === null) {
             console.log('[DEBUG] Unable to find anchors for tour "' + stepId + '", with an attachTo of "' + tourObj.attachTo + '"');
             //todo: revert tour
-            //return false;
-            throw new TourException(delayCount);
+            return false;
+            //throw new TourException(delayCount);
         }
         
         let div = document.createElement('div');
@@ -394,11 +397,12 @@ class Tour extends React.Component {
         });
         
         this.Drop = drop;
-        window.drop = drop;
+        //window.drop = drop;
         drop.on('close',(e) => {
-            eohub.TourDrop = null;
+            this.Drop = null;
         })
         
+        return true;
     }
 };
 
