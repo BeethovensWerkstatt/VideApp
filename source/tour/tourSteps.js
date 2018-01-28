@@ -6,7 +6,7 @@ const TourSteps = {
     tool001: {
         restrictsAction: true,
         allowedTargets: [
-            {selector:'.editionPreview[data-editionID="Codierung_WoO32"]',state:'tool002'}
+            {selector:'.editionPreview[data-editionid="Codierung_WoO32"]',state:'tool002'}
         ],
         content: {
             de: (
@@ -22,14 +22,16 @@ const TourSteps = {
                 </div>
             )
         },
-        attachTo: '.editionPreview[data-editionID="Codierung_WoO32"]',
-        attachWhere: 'top right'
+        //attachTo: '.tourStartButton',
+        //attachTo: '.editionPreview[data-editionid="Codierung_WoO32"]',
+        attachTo: 'header.appHeader',
+        attachWhere: 'bottom'
     },
     
     tool002: {
         restrictsAction: true,
         allowedTargets: [
-            {selector:'.editionPreview[data-editionID="Codierung_WoO32"]',state:'tool003'},
+            {selector:'.editionPreview[data-editionid="Codierung_WoO32"]',state:'tool003'},
             {selector:'.editionDetails .openButton',state:'tool003'},
         ],
         content: {
@@ -48,8 +50,8 @@ const TourSteps = {
                 </div>
             )
         },
-        attachTo: '.editionPreview[data-editionID = "Codierung_WoO32"]',
-        attachWhere: 'top right'
+        attachTo: '.editionPreview[data-editionid="Codierung_WoO32"]',
+        attachWhere: 'top'
     },
     
     tool003: {
@@ -83,7 +85,7 @@ const TourSteps = {
             )
         },
         attachTo: 'div.views .view.VideTextViewer .menu .select-target.select-theme-chosen, .select-theme-chosen',
-        attachWhere: 'below'
+        attachWhere: 'right-start'
     },
     
     tool004: {
@@ -214,7 +216,7 @@ const TourSteps = {
             de: (
                 <div>
                     <h1>Detailansicht</h1>
-                    <p>Mit den Pfeifel an der Seite dieser Box, haben sie die Möglichkeit die nächste oder vorherige Textnarbe auszuwählen. 
+                    <p>Mit den Pfeilen an der Seite dieser Box, haben sie die Möglichkeit die nächste oder vorherige Textnarbe auszuwählen. 
                     Klicken sie als nächstes auf "Detailansicht öffnen" um sich die Übersicht zu den einzelnen Textschichten innerhalb dieser 
 		            Textnarbe anzeigen zu lassen.</p>
                 </div>
@@ -287,7 +289,7 @@ const TourSteps = {
             )
         },
         attachTo: '.facsNavMenu',
-        attachWhere: 'below'
+        attachWhere: 'bottom'
     },
 
 
@@ -345,7 +347,7 @@ const TourSteps = {
             )
         },
         attachTo: '.view.VideTranscriptionViewer .transcriptionNavMenu #view1_zoomHome.menuButton',
-        attachWhere: 'top'
+        attachWhere: 'bottom-end'
     },
 
  tool013: {
@@ -361,7 +363,7 @@ const TourSteps = {
             de: (
                 <div>
                     <h1>Transkription</h1>
-                    <p>Um eine weitere Besonderheit der Trasnkriptionsansicht anzusehen, öffnen Sie erneut die "Detailansicht".</p>
+                    <p>Um eine weitere Besonderheit der Transkriptionsansicht anzusehen, öffnen Sie erneut die "Detailansicht".</p>
                 </div>
             ),
             en: (
@@ -409,7 +411,7 @@ const TourSteps = {
     tool015: {
         restrictsAction: true,
         allowedTargets: [
-            {selector:'.editionPreview[data-editionID = "Codierung_op.75.2"]',state:'tool016'}
+            {selector:'.editionPreview[data-editionid="Codierung_op.75.2"]',state:'tool016'}
         ],
         content: {
             de: (
@@ -425,14 +427,14 @@ const TourSteps = {
                 </div>
             )
         },
-        attachTo: '.editionPreview[data-editionID = "Codierung_op.75.2"]',
-        attachWhere: 'top right'
+        attachTo: '.editionPreview[data-editionid="Codierung_op.75.2"]',
+        attachWhere: 'top-start'
     },
     
     tool016: {
         restrictsAction: true,
         allowedTargets: [
-            {selector:'.editionPreview[data-editionID = "Codierung_op.75.2"]',state:'tool017'},
+            {selector:'.editionPreview[data-editionid="Codierung_op.75.2"]',state:'tool017'},
             {selector:'.editionDetails .openButton',state:'tool017'},
         ],
         content: {
@@ -483,7 +485,7 @@ const TourSteps = {
             )
         },
         attachTo: 'div.views .view.VideTextViewer .menu .select-target.select-theme-chosen',
-        attachWhere: 'below'
+        attachWhere: 'right-start'
     },
     
 	
@@ -574,7 +576,7 @@ const TourSteps = {
             )
         },
         attachTo: '.facsNavMenu',
-        attachWhere: 'below'
+        attachWhere: 'bottom'
     },
 
  tool021: {
@@ -603,7 +605,7 @@ const TourSteps = {
             )
         },
         attachTo: '.perspectiveButton.syncViews',
-        attachWhere: 'below'
+        attachWhere: 'bottom'
     },
 	
  tool022: {
@@ -633,7 +635,7 @@ const TourSteps = {
             )
         },
         attachTo: '.perspectiveButton.syncViews',
-        attachWhere: 'below'
+        attachWhere: 'bottom'
     },
 	
 tool023: {
@@ -661,7 +663,7 @@ tool023: {
             )
         },
         attachTo: '.perspectiveButton.syncViews',
-        attachWhere: 'below'
+        attachWhere: 'bottom'
     }
 
     /*nav1: {

@@ -4,41 +4,10 @@ import ReactDOM from 'react-dom';
 import TourSteps from '../tour/tourSteps.js';
 import {eohub} from './../_modules/eo-hub';
 
+import Popper from 'popper.js';
+
 //Tours
-var Drop = require('tether-drop');
-
-//tour test
-/*let tour = new Shepherd.Tour({
-  defaults: {
-    classes: 'shepherd-theme-arrows'
-  }
-});
- 
-tour.addStep('example', {
-  title: 'Example Shepherd',
-  text: 'Creating a Shepherd is easy too! Just create ...',
-  attachTo: '.introduction'
-});
-tour.addStep('example2', {
-  title: 'hello 2',
-  text: 'hallo schritt',
-  attachTo: '.editionList'
-});
-
-tour.start();*/
-
-
-/*const Tour = ({ tour }) => {
-    if (tour === '') {
-        return null;
-    }
-  
-    return (
-        <div className="tourBackground">
-            <h1>{tour}</h1>
-        </div>
-    );
-};*/
+//var Drop = require('tether-drop');
 
 let TourException = (count) => {
     console.log('emitting a tour exception with count ' + count)
@@ -111,7 +80,19 @@ class Tour extends React.Component {
         /*console.log('[DEBUG] rendering ' + tourClass);*/
         
         return (
-            <div className="tourBackground"></div>
+            <div className="tourBackground">
+                <div id="tourPopper" className="popper">
+                    <div className="closeTourButton" onClick={e => {
+                        //e.preventDefault();
+                        document.querySelector('#tourPopper').remove();
+                        this.props.closeTour();
+                    }}>
+                        <i className="fa fa-times" aria-hidden="true"></i>
+                    </div>
+                    <div className='popper__arrow'></div>
+                    <div className="tourContent">TourContent</div>
+                </div>
+            </div>
         )
     }
     
@@ -140,7 +121,7 @@ class Tour extends React.Component {
                     
                 } catch(err) {
                     /*if(err.type !== 'TourException') {
-                        throw err;
+                  mam      throw err;
                     }*/
                     
                     iteration++;                    
@@ -195,7 +176,13 @@ class Tour extends React.Component {
         let nextStep;
         let tourEnd = false;
         let allowedSelectors = [];
-            
+        
+        //always allow to switch language
+        tourObj.allowedTargets.push({selector:'.languageSwitch'});
+        
+        //always allow to close tour
+        tourObj.allowedTargets.push({selector:'.closeTourButton'});
+        
         for(let i=0;i<tourObj.allowedTargets.length;i++) {
             let elem = event.target.closest(tourObj.allowedTargets[i].selector);
             if(elem !== null) {
@@ -219,7 +206,7 @@ class Tour extends React.Component {
             event.preventDefault();
             console.log(' stopped event on')
             console.log(event.target);
-        } else */if(event.type === 'click' || event.type === 'change') {
+        } else*/ if(event.type === 'click' || event.type === 'change') {
             //only resolve event when it's a click
             
             console.log('--------passing event of type ' + event.type + ' on to step ' + nextStep)
@@ -281,6 +268,7 @@ class Tour extends React.Component {
     renderTour(delayCount = 0) {
         
         console.log('\n-------renderTour---------')
+        
         let stepId = this.props.tour;
         let tourObj = TourSteps[stepId];
         
@@ -308,80 +296,40 @@ class Tour extends React.Component {
             //throw new TourException(delayCount);
         }
         
-        let div = document.createElement('div');
-        ReactDOM.render(tourObj.content[this.props.language],div);
+        //let reference = document.querySelector('.editionPreview');
+        let popper = document.querySelector('#tourPopper');
+        let popperContent = popper.querySelector('.tourContent');
+        //render content into popper
+        ReactDOM.render(tourObj.content[this.props.language],popperContent);
         
-        //define attachment based on values in tourObj
-        let attachment;
-        let targetAttachment;
-        let offset;
-        
-        
-        if(tourObj.attachWhere === 'top') {
-            attachment = 'bottom center';
-            targetAttachment = 'top center';
-            offset = '10px 0';
-        } else if(tourObj.attachWhere === 'top right') {
-            attachment = 'bottom left';
-            targetAttachment = 'top right';
-            offset = '10px 10px';
-        } else if(tourObj.attachWhere === 'right') {
-            attachment = 'middle left';
-            targetAttachment = 'middle right';
-            offset = '0 10px';
-        } else if(tourObj.attachWhere === 'bottom right') {
-            attachment = 'top left';
-            targetAttachment = 'bottom right';
-            offset = '10px 10px';
-        } else if(tourObj.attachWhere === 'bottom') {
-            attachment = 'top center';
-            targetAttachment = 'bottom center';
-            offset = '10px 0';
-        } else if(tourObj.attachWhere === 'bottom left') {
-            attachment = 'top right';
-            targetAttachment = 'bottom left';
-            offset = '10px 10px';
-        } else if(tourObj.attachWhere === 'left') {
-            attachment = 'middle right';
-            targetAttachment = 'middle left';
-            offset = '0 10px';
-        } else if(tourObj.attachWhere === 'top left') {
-            attachment = 'bottom right';
-            targetAttachment = 'top left';
-            offset = '10px 10px';
-        } else {
-            attachment = 'bottom center';
-            targetAttachment = 'top center';
-            offset = '10px 0';
-        }  
-        
-        let oldDrop = this.Drop;
-        if(typeof oldDrop !== 'undefined' && oldDrop !== null) {
-            
-            try {
-                let elems = document.querySelectorAll('.tourDrop.drop.drop-element'); 
-                for(let i=0;i<elems.length;i++) {
-                    elems[i].remove();  
-                }
-                oldDrop.destroy();
-            } catch(err) {
-                console.log('[ERROR] Unable to delete drop')
+        let container = document.querySelector('.views');
+        let anotherPopper = new Popper(
+            targetElem,
+            popper,
+            {
+                // popper options here
+                placement: tourObj.attachWhere,
+                flip: {
+                    behavior: ['left','right','bottom','top']
+                }/*,
+                preventOverflow: {
+                    boundariesElement: container,
+                }*/
             }
-            
-        }
+        );
         
-        let drop = new Drop({
+        /*let drop = new Drop({
             target: targetElem,
             //classes: 'tourDrop',
             //classPrefix: 'tourDrop', //todo: fix classes!!!
             content: div,
-            /*position: 'bottom left',*/
+            /\*position: 'bottom left',*\/
             openOn: 'always',
             constrainToWindow: true,
             classes: 'drop-theme-arrows tourDrop',
             beforeClose: () => {
-                /*console.log('the drop is supposed to close now… (but I try to prevent that)');
-                return false;*/
+                /\*console.log('the drop is supposed to close now… (but I try to prevent that)');
+                return false;*\/
             },
             tetherOptions: {
                 attachment: attachment,
@@ -400,7 +348,7 @@ class Tour extends React.Component {
         //window.drop = drop;
         drop.on('close',(e) => {
             this.Drop = null;
-        })
+        })*/
         
         return true;
     }
