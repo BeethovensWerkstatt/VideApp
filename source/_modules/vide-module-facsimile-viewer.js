@@ -287,6 +287,8 @@ const VideFacsimileViewer = class VideFacsimileViewer extends EoNavModule {
     _closeSingleScar(containerID) {
         super._closeSingleScar(containerID);
         
+        this._removeSvgHighlights(containerID);
+        
         if(this._feature) {
            document.getElementById(containerID + '_visSlider').value = 0;
            document.getElementById(containerID + '_visSlider').dispatchEvent(new Event('change'));
@@ -1120,20 +1122,12 @@ const VideFacsimileViewer = class VideFacsimileViewer extends EoNavModule {
             .then(
                 (json) => {
                     
-                    console.log('--------------776')
-                    console.log(json)
-                    console.log('')
-                    
                     let elem = json[0];
                     
                     let requests = [];
                     let filteredRequests = supportedRequests.filter((request) => {
                         return (request.object === elem.type && request.perspective !== this._supportedPerspective);
                     }); 
-                    
-                    console.log('---------------777 filtered requests:')
-                    console.log(filteredRequests)
-                    
                     
                     filteredRequests.forEach((request, j) => {
                         let req = Object.assign({}, request);
