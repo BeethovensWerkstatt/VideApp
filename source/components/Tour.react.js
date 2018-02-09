@@ -160,7 +160,7 @@ class Tour extends React.Component {
     
     handleTourEvent(event) {
         
-        console.log('\n \n handleTourEvent ' + event.type + ' \n ' + this.props.tour + '\n \n')
+        console.log('\n \n handleTourEvent ' + event.type + ' ' + this.props.tour + '')
         console.log(event)
         console.log('\n ')
         
@@ -199,17 +199,19 @@ class Tour extends React.Component {
             }
         }
             
-        console.log(' Values are isOk:' + isOk + ' | nextStep:' + nextStep + ' | stepId: ' + currentStepId);
-            
+        console.log(' Values are isOk:' + isOk + ' | nextStep:' + nextStep + ' | stepId: ' + currentStepId + ' | ' + allowedSelectors.length + ' allowedSelectors');
+        console.log(allowedSelectors)
+        
+        
         /*if(tourObj.restrictsAction && !isOk) {
             event.stopPropagation();
             event.preventDefault();
-            console.log(' stopped event on')
+            console.log(' matching case 1')
             console.log(event.target);
         } else*/ if(event.type === 'click' || event.type === 'change') {
             //only resolve event when it's a click
             
-            console.log('--------passing event of type ' + event.type + ' on to step ' + nextStep)
+            console.log(' matching case 2')
             
             //kill the existing Drop
             //drop.destroy();
@@ -217,18 +219,21 @@ class Tour extends React.Component {
             
             
             if(tourEnd) {
+                console.log(' matching case 2.1')
                 this.props.closeTour();
             } else if(typeof nextStep !== 'undefined') {
-                console.log('-----------On my way to ' + nextStep)
+                console.log(' matching case 2.2 (loading ' + nextStep + ')')
                 this.props.loadTourStep(nextStep);
             } else {
-                console.log('just passing on')
+                console.log('matching case 2.3 (just passing on)')
                 console.log(event)
                 /*this.props.closeTour();*/
             }
             
             //Special Treatment for Select Boxes
-            if(event.type === 'click' && allowedSelectors[0].hasOwnProperty('selectBox')) {
+            if(allowedSelectors.length > 0 && event.type === 'click' && allowedSelectors[0].hasOwnProperty('selectBox')) {
+                
+                console.log(' matching case 2 – select box handling')
                 
                 document.VideApp = {};
                 document.VideApp.openTour = (value) => {
@@ -242,6 +247,8 @@ class Tour extends React.Component {
                             target = allowedValue.state;
                         }
                     }
+                    
+                    console.log(' TOUR: resolving function to load tour')
                     
                     if(typeof target !== 'undefined') {
                         this.props.loadTourStep(target);
@@ -259,6 +266,7 @@ class Tour extends React.Component {
         } else {
             //other event types aren't resolved
             //console.log('passing event on without further action')
+            console.log(' matching case 3 (passing event of type ' + event.type + ' on)')
         }
         
         

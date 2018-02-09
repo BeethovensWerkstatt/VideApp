@@ -54,6 +54,9 @@ const ContextMenu = ({ items, visible, closeContextMenu, submitRequest, x, y }) 
             //only the first response will be used
             let res = json[0];
             
+            console.log('\n resolving context menu item:')
+            console.log(res)
+            
             try {
                 document.getElementById(key + '_bravura').innerHTML = res.bravura;
                 document.getElementById(key + '_desc').innerHTML = res.desc;
@@ -105,6 +108,9 @@ const ContextMenu = ({ items, visible, closeContextMenu, submitRequest, x, y }) 
         socket.emit('requestData', req);
         items.reverse();
         
+        //filter out duplicate requests for transcription view
+        items = filterDuplicateRequests(items);
+        
         return (
         
             <div className="contextMenuBack" onClick={e => {
@@ -147,6 +153,21 @@ const ContextMenu = ({ items, visible, closeContextMenu, submitRequest, x, y }) 
     return null;
 };
 
+let filterDuplicateRequests = (items) => {
+    
+    items = items.filter((item, index, self) =>
+        index === self.findIndex((i) => (
+            i.target === item.target && 
+            i.req.id === item.req.id &&
+            i.req.object === item.req.object &&
+            i.req.perspective === item.req.perspective &&
+            i.req.operation === item.req.operation &&
+            i.req.contexts.length === item.req.contexts.length
+        ))
+    )
+    
+    return items;
+};
 
 ContextMenu.propTypes = {
     items: PropTypes.array.isRequired,

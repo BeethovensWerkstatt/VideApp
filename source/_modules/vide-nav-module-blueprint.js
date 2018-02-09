@@ -493,8 +493,10 @@ const EoNavModule = class EoNavModule extends EoModule {
                                 //e.stopPropagation();
                             })
                         } else {
-                            console.log('[ERROR] Unable to render the following scar:')
+                            console.log('[ERROR] Unable to render the following scar which is supposed to start at ' + scar.firstMeasure + ':')
                             console.log(scar)
+                            console.log(measureJson.measures)
+                            console.log('')
                         }
                         
                     }

@@ -15,6 +15,7 @@ const VideTranscriptionViewer = class VideTranscriptionViewer extends EoNavModul
         this._supportedRequests.push({object: VIDE_PROTOCOL.OBJECT.STATE, contexts:[VIDE_PROTOCOL.CONTEXT.STATE], perspective: this._supportedPerspective, operation: VIDE_PROTOCOL.OPERATION.VIEW});
         //highlights a note (or similar) within a state
         this._supportedRequests.push({object: VIDE_PROTOCOL.OBJECT.NOTATION, contexts:[VIDE_PROTOCOL.CONTEXT.STATE], perspective: this._supportedPerspective, operation: VIDE_PROTOCOL.OPERATION.VIEW});
+        this._supportedRequests.push({object: VIDE_PROTOCOL.OBJECT.NOTATION, contexts:[], perspective: this._supportedPerspective, operation: VIDE_PROTOCOL.OPERATION.VIEW});
         this._supportedRequests.push({object: VIDE_PROTOCOL.OBJECT.LYRICS, contexts:[VIDE_PROTOCOL.CONTEXT.STATE], perspective: this._supportedPerspective, operation: VIDE_PROTOCOL.OPERATION.VIEW});
         this._supportedRequests.push({object: VIDE_PROTOCOL.OBJECT.DIR, contexts:[VIDE_PROTOCOL.CONTEXT.STATE], perspective: this._supportedPerspective, operation: VIDE_PROTOCOL.OPERATION.VIEW});
         
@@ -464,16 +465,32 @@ const VideTranscriptionViewer = class VideTranscriptionViewer extends EoNavModul
                     //rectangle used as background for textual scars
                     //attention: positioning is broken 
                     
+                    /*if(scar.id === 'newb2a2d9d8-4226-4d2f-b2e0-edfe27cd1bf2') {
+                        console.log('\n\ngetting here')
+                        console.log(scar)
+                    }*/
+                    
+                    
                     window.setTimeout(() => {
                         let scarRect = this._createRect(viewer,containerID, scar.affectedNotes);
                         
-                        if(typeof scarRect === 'undefined') {
+                        /*if(scar.id === 'newb2a2d9d8-4226-4d2f-b2e0-edfe27cd1bf2') {
+                            console.log('\nscarRect')
+                            console.log(scarRect)
+                        }*/
+                        if(typeof scarRect === 'undefined' || scarRect === false) {
                             //console.log('--------------66 lacking scarRect for ' + scar.label)
                             
                             let baseDimensions = this._baseDimensions.get(this._eohub.getEdition());
                             
                             let attachmentMeasureRect = document.querySelector('#' + containerID + ' svg #' +scar.firstMeasure).getBoundingClientRect();
-                
+                            
+                            if(scar.id === 'newb2a2d9d8-4226-4d2f-b2e0-edfe27cd1bf2') {
+                                console.log('\nBaseDimensions | first measure element | its bounding box')
+                                console.log(baseDimensions)
+                                console.log(document.querySelector('#' + containerID + ' svg #' +scar.firstMeasure))
+                                console.log(attachmentMeasureRect)
+                            }
                             let ul = viewer.viewport.windowToViewportCoordinates(new OpenSeadragon.Point(attachmentMeasureRect.left, attachmentMeasureRect.top));
                             let lr = viewer.viewport.windowToViewportCoordinates(new OpenSeadragon.Point(attachmentMeasureRect.right, attachmentMeasureRect.bottom));
                             
@@ -483,7 +500,10 @@ const VideTranscriptionViewer = class VideTranscriptionViewer extends EoNavModul
                             scarRect = new OpenSeadragon.Rect(ul.x - dist, ul.y, dist * 2, height);
                                     
                         }
-                        
+                        /*if(scar.id === 'newb2a2d9d8-4226-4d2f-b2e0-edfe27cd1bf2') {
+                            console.log('\n final scarRect:')
+                            console.log(scarRect)
+                        }*/
                         let elem = document.createElement('div');
                         elem.className = 'scarHighlight';
                         elem.id = containerID + '_' + scar.id;
@@ -1046,7 +1066,7 @@ const VideTranscriptionViewer = class VideTranscriptionViewer extends EoNavModul
         console.log('')*/
     
         try {
-            let viewBoxHeight = parseInt(renderedSvg.querySelector('svg#definition-scale').getAttribute('viewBox').split(' ')[3],10)
+            let viewBoxHeight = parseInt(renderedSvg.querySelector('svg.definition-scale').getAttribute('viewBox').split(' ')[3],10)
             let firstStaffLineYPos = parseInt(renderedSvg.querySelector('g.measure g.staff path:first-of-type').getAttribute('d').split(' ')[1],10)
             let lastStaffLineYPos = parseInt(renderedSvg.querySelector('g.measure g.staff path:last-of-type').getAttribute('d').split(' ')[1],10)
             
@@ -1067,7 +1087,9 @@ const VideTranscriptionViewer = class VideTranscriptionViewer extends EoNavModul
                 height: height
             }
         } catch(err) {
-            //console.log('[ERROR] Unable to determine dimensions of rendered SVG: ' + err)
+            console.log('')
+            console.log('[ERROR] Unable to determine dimensions of rendered SVG: ' + err)
+            console.log(renderedSvg)
             return {
                 relation: -1
             }

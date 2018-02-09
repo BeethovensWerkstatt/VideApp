@@ -1,6 +1,7 @@
 import 'babel-polyfill';
 import { connect } from 'react-redux';
 import fetch from 'isomorphic-fetch';
+import verovio from 'verovio-dev';
 
 //imported in HTML -> globally available
 /*import io from 'socket.io';*/
@@ -34,13 +35,13 @@ const EoHub = class EoHub {
         this.cache = new Map();
         
         this._vrvToolkit = new verovio.toolkit();
-        this._vrvToolkit.setOptions(JSON.stringify({
+        this._vrvToolkit.setOptions({
                         inputFormat: 'mei',
                         border: 0,
                         scale: 35,           //scale is in percent (1 - 100)
                         ignoreLayout: 0,
                         noLayout: 1          //results in a continuous system without page breaks
-                    }));
+                    });
         
         console.log('EoHub initialized');
     }
