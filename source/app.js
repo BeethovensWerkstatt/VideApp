@@ -15,7 +15,7 @@ import { Provider } from 'react-redux';
 import VideAppState from './redux/reducers.redux';
 
 //React: The action to start loading data into the app
-import { fetchEditions } from './redux/actions.redux';
+import { fetchEditions, switchLanguage } from './redux/actions.redux';
 
 //load core components
 import {eohub} from './_modules/eo-hub';
@@ -67,7 +67,11 @@ store.dispatch(changeViewsRatio(75));*/
 ReactDOM.render(<Provider store={store}><Application/></Provider>, document.getElementById('react-container'));
 
 //start loading data into the app
-store.dispatch(fetchEditions()).then(() =>
-  console.log(store.getState())
-);
+store.dispatch(fetchEditions()).then(() => {
+  console.log(store.getState());
+  //decide if app should be started in german
+  if(navigator.language.startsWith('de')) {
+    store.dispatch(switchLanguage('de'));    
+  }  
+});
 
