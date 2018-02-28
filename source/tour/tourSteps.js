@@ -51,7 +51,7 @@ const TourSteps = {
             )
         },
         attachTo: '.editionPreview[data-editionid="Codierung_WoO32"]',
-        attachWhere: 'top'
+        attachWhere: 'left'
     },
     
     tool003: {
@@ -428,7 +428,7 @@ const TourSteps = {
             )
         },
         attachTo: '.editionPreview[data-editionid="Codierung_op.75.2"]',
-        attachWhere: 'top-start'
+        attachWhere: 'left'
     },
     
     tool016: {
