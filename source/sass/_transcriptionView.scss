@@ -209,5 +209,10 @@
             stroke: #000000;
         }
     }
+    
+    svg defs symbol path {
+        fill: inherit;
+        stroke: inherit;
+    }
 }
 

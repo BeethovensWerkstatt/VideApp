@@ -192,6 +192,18 @@ const VideFacsimileViewer = class VideFacsimileViewer extends EoNavModule {
     }
     
     /** 
+     * This function loads a JSON object with info about the annotations available in this edition
+     * @param {string} editionID is the edition for which annotations are loaded
+     * returns {Object} a Promise with the json object containing info about annotations
+     */
+    _getAnnotationsOnPage(editionID, pageID) {
+        let req = {id:pageID, edition:editionID,type:'getAnnotationsOnPage'};
+        return this.requestData(req,true).then((annotationsJson) => {
+            return Promise.resolve(annotationsJson);
+        })
+    }
+    
+    /** 
      * This function builds the required HTML, with no data being involved
      * @param {string} containerID denotes the HTML element in which everything will be placed.
      */
@@ -815,6 +827,7 @@ const VideFacsimileViewer = class VideFacsimileViewer extends EoNavModule {
                 this._confirmView(containerID,this._getModuleState(containerID));
                 
                 this._adjustMeasureNumberDisplay(containerID,viewer);
+                
             });
             
             //do internal setup after images are loaded
@@ -826,6 +839,7 @@ const VideFacsimileViewer = class VideFacsimileViewer extends EoNavModule {
                     let source = pageJson.sources[i];
                     for(let j=0; j<source.pages.length; j++) {
                         let page = source.pages[j];
+                        
                         
                         let tiledImage = this._tiledImages.get(page.facsRef + '/info.json');
                         let bounds = tiledImage.getBounds();
@@ -940,6 +954,37 @@ const VideFacsimileViewer = class VideFacsimileViewer extends EoNavModule {
                         }
                         
                         this._loadMeasureLabels(page,bounds,viewer,containerID);
+                        
+                        this._getAnnotationsOnPage(this._eohub.getEdition(),page.id).then((annotations) => {
+                            
+                            //console.log(annotations);
+                            for(let i=0; i<annotations.length; i++) {
+                                let annotation = annotations[i];
+                                let rect = this._getShapesRect(containerID, viewer, annotation.facs);
+                                
+                                let elem = document.createElement('div');
+                                elem.className = 'annotBox';
+                                
+                                
+                                let annotIcon = document.createElement('div');
+                                annotIcon.className = 'annot';
+                                annotIcon.setAttribute('annotation-id',annotation.id);
+                                annotIcon.setAttribute('title','This is annotation ' + annotation.id);
+                                
+                                elem.appendChild(annotIcon);
+                                
+                                viewer.addOverlay({
+                                    element: elem,
+                                    location: rect,
+                                    placement: 'CENTER'
+                                });
+                                
+                                console.log('\nAnnotation ' + annotation.id)
+                                console.log(rect)
+                                
+                            }
+                            
+                        })
                         
                     }
                 }
@@ -1254,14 +1299,16 @@ const VideFacsimileViewer = class VideFacsimileViewer extends EoNavModule {
             return false;
         }
         
-        let baseRect = this._getShapeRect(containerID, viewer, document.querySelector('#' + containerID + ' #' + shapesArray[0]));
+        let rect = this._getShapesRect(containerID, viewer, shapesArray);
+        
+        //let baseRect = this._getShapeRect(containerID, viewer, document.querySelector('#' + containerID + ' #' + shapesArray[0]));
         
         for(let i=0; i<shapesArray.length; i++) {
             let shape = document.querySelector('#' + containerID + ' #' + shapesArray[i]);
             try {
                 shape.classList.add('current');
-                let rect = this._getShapeRect(containerID, viewer, shape);
-                baseRect = baseRect.union(rect);  
+                //let rect = this._getShapeRect(containerID, viewer, shape);
+                //baseRect = baseRect.union(rect);  
             } catch(error) {
                 console.log('[ERROR] invalid shape ' + shapesArray[i] + ': ' + error);
             } 
@@ -1279,9 +1326,34 @@ const VideFacsimileViewer = class VideFacsimileViewer extends EoNavModule {
             }
         },10000);
         
-        viewer.viewport.fitBoundsWithConstraints(baseRect);
+        viewer.viewport.fitBoundsWithConstraints(rect);
     }
     
+    //gets a rect around multiple shapes
+    _getShapesRect(containerID, viewer, shapesArray) {
+        if(shapesArray.length === 0) {
+            console.log('[WARNING] no shapes provided that could be focussed on')
+        }
+        
+        let baseRect = this._getShapeRect(containerID, viewer, document.querySelector('#' + containerID + ' #' + shapesArray[0]));
+        
+        if(shapesArray.length > 1) {
+            for(let i=1; i<shapesArray.length; i++) {
+                let shape = document.querySelector('#' + containerID + ' #' + shapesArray[i]);
+                try {
+                    let rect = this._getShapeRect(containerID, viewer, shape);
+                    baseRect = baseRect.union(rect);  
+                } catch(error) {
+                    console.log('[ERROR] invalid shape ' + shapesArray[i] + ': ' + error);
+                } 
+            }
+        }
+        
+        return baseRect;
+        
+    }
+    
+    //gets the rect of a single shape
     _getShapeRect(containerID, viewer, input) {
         //decide if I have an ID or the element itself already
         
