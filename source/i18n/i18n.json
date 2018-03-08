@@ -236,7 +236,7 @@
         "en":"retrieving genetic states"
     },
     "loadData_getState" : {
-        "de":"lade Textzustand",
+        "de":"lade Daten",
         "en":"retrieving genetic state"
     },
     "loadData_getScarCategories" : {
@@ -276,8 +276,8 @@
         "en":"retrieving XML"
     },
     "loadData_getFinalState" : {
-        "de":"lade endgültigen Werktext",
-        "en":"retrieving final text"
+        "de":"lade Transkription",
+        "en":"retrieving transcription"
     },
     "loadData_getIntroText" : {
         "de":"lade Einführungstext",

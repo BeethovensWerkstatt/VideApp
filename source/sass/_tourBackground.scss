@@ -47,6 +47,74 @@ $popper-border: #8bd8ec;
                 line-height: 1.1rem;
                 font-weight: 300;
             }
+            
+            b {
+                font-weight: 500;
+            }
+            
+            a, a:visited, a:hover {
+            
+                text-decoration: none;
+                color: inherit;
+                font-weight: 500;
+            
+                &:before {
+                    font-size: 70%;
+                    content: '\f08e';
+                    font-family: 'FontAwesome';
+                    padding: 0 3px 0 0;
+                    font-weight: 100;
+                }
+            }
+            
+            h2 {
+                font-size: 1em;
+            }
+            
+            dl dt {
+                display: block;
+                float: left;
+                clear: both;
+                width: 20px;
+                background-color: #666666;
+                border-radius: 4px;
+                margin: 0 10px 5px;
+                
+                img {
+                    margin: 2px 0 0 2px;
+                }
+                
+                .deletionSample {
+                    display: block;
+                    width: 12px;
+                    height: 12px;
+                    border: .5px solid #ffffff;
+                    margin: 4px;
+                    position: relative;
+                    border-radius: 2px;
+                    background-color: #bbbbbb;
+                    
+                    &:after {
+                        content: '/';
+                        color: #777777;
+                        font-size: 18px;
+                        position: absolute;
+                        top: -4px;
+                        left: 4px;
+                    }
+                }
+            }
+            
+            dl dd {
+                display: block;
+                margin: 0 0 5px 30px;
+                font-weight: 300;
+            }
+            
+            .fa.tourIcon {
+                font-size: 80%;
+            }
+
         }
         
         .closeTourButton {
@@ -153,3 +221,5 @@ $popper-border: #8bd8ec;
     border-radius: 3px;
     cursor: pointer;
 }
+
+

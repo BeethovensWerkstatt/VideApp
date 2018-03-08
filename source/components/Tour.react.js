@@ -54,6 +54,7 @@ class Tour extends React.Component {
     componentWillReceiveProps(nextProps) {
         //console.log('Tour.componentWillReceiveProps');
         if(this.props.tour === '' && nextProps.tour !== '') {
+            this.forceUpdate();
             this.initializeTour(nextProps.tour);
         }
         
@@ -64,6 +65,15 @@ class Tour extends React.Component {
             console.log(' forced update ')
             console.log('  ')*/
         }
+        
+        if(typeof this.props.tour === 'string' && this.props.tour !== '' && typeof nextProps.tour === 'string' && nextProps.tour === '') {
+            try {
+                document.querySelector('#tourPopper').remove();
+            } catch(err) {
+                console.log('[ERROR] Unable to find #tourPopper: ' + err)
+            }
+        }
+         
     }
     
     render() {
@@ -113,7 +123,7 @@ class Tour extends React.Component {
                     if(iteration === 0) {
                         this.renderTour(iteration);
                     } else {
-                        console.log('[DEBUG] Trying to render tour for ' + (iteration + 1) + ' times now.')
+                        /*console.log('[DEBUG] Trying to render tour for ' + (iteration + 1) + ' times now.')*/
                         window.setTimeout(func,iteration * 100);    
                     }
                     
@@ -143,7 +153,7 @@ class Tour extends React.Component {
     }
     
     initializeTour(firstStep) {
-        console.log('\n \n \n INITIALIZING EVERYTHING \n \n \n \n')
+        /*console.log('\n \n \n INITIALIZING EVERYTHING \n \n \n \n')*/
         
         let handler = (event) => {
             this.handleTourEvent(event)
@@ -260,10 +270,14 @@ class Tour extends React.Component {
                     /*console.log(' TOUR: resolving function to load tour')*/
                     
                     if(typeof target !== 'undefined') {
+                        /*console.log('DING DONG')*/
                         this.props.loadTourStep(target);
                         return true;
                     } else {
-                        return false;
+                        /*console.log('DONG DONG')*/
+                        this.props.loadTourStep(currentStepId);
+                        return true;
+                        //return false;
                     }
                     
                 }

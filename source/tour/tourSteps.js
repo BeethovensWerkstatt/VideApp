@@ -11,8 +11,8 @@ const TourSteps = {
         content: {
             de: (
                 <div>
-                    <h1>Willkommen in der VideApp</h1>
-                    <p>Diese Tour wird Sie mit der Bedienung der VideApp vertraut machen. Um zu beginnen, klicken Sie bitte auf WoO 32 in der unten stehenden Liste.</p>
+                    <h1>Willkommen in der <i>VideApp</i></h1>
+                    <p>Mit Hilfe dieser Tour sollen Sie schrittweise mit der Anwendung vertraut gemacht werden. Starten Sie, indem Sie das Beispiel zum Duett WoO 32 per Mausklick anwählen.</p>
                 </div>
             ),
             en: (
@@ -38,8 +38,8 @@ const TourSteps = {
             de: (
                 <div>
                     <h1>Vorschau der Fallstudie</h1>
-                    <p>Sie sehen nun eine kurze Beschreibung dessen, was die Fallstudie zu WoO 32 auszeichnet. Um sie zu öffnen, klicken Sie bitte entweder
-                        erneut auf den Faksimile-Ausschnitt, oder auf die Schaltfläche "Öffne Edition" rechts unten.</p>
+                    <p>Sie sehen nun eine kurze Beschreibung der Fallstudie. Um dieses Beispiel in der <i>VideApp</i> zu öffnen, klicken Sie 
+                        bitte entweder erneut auf die Faksimile-Vorschau oder auf "Öffne Edition" rechts unten.</p>
                 </div>
             ),
             en: (
@@ -72,9 +72,10 @@ const TourSteps = {
             de: (
                 <div>
                     <h1>Einführung</h1>
-                    <p>Die Einführungs-Ansicht besteht aus einem Text, der Informationen zum Werk und zur Quelle gibt, 
-                    außerdem die Variantenstelle, den zugrundeliegenden Schreibprozess und das kompositorische Problem detailliert erläutert. 
-                    Entsprechende Stellen sind verlinkt. Wechseln Sie nun in dem Drop-Down-Menü die "Faksimileansicht" aus.</p>
+                    <p>Der Einstieg in jedes Beispiel geschieht über einen Einführungstext, in dem Informationen zu Werk, Quelle, Variantenstelle(n), zugrunde liegenden
+                    Schreibprozessen und zum kompositorischen Problem gegeben werden. Verlinkungen helfen, einzelne Stellen in Faksimile, 
+                    Transkription und XML-Codierung aufzurufen. Diese verschiedenen Ansichten sind neben der Einführung jederzeit auch über das <b>Ansichtsmenü</b> am 
+                    oberen linken Bildrand zu erreichen. Wählen Sie jetzt in diesem Menü "Faksimile" aus.</p>
                 </div>
             ),
             en: (
@@ -93,14 +94,17 @@ const TourSteps = {
         allowedTargets: [
             {selector:'header.appHeader',state: 'tool004'},
             {selector:'.facsNav.navigator',state: 'tool004'},
-            {selector:'.facsNavMenu .menuRow',state:'tool005'}
+            {selector:'.facsNavMenu .menuRow'},
+            {selector:'.facsNavMenu #view1_zoomHome.menuButton', state: 'tool006'}
         ],
         content: {
             de: (
                 <div>
                     <h1>Faksimile-Ansicht</h1>
-                    <p>Die Fallstudie öffnet sich in der Faksimile-Ansicht. In der Navigationsbox haben Sie die Möglichkeit die Taktzahlen auszublenden.
-                    Bitte blenden Sie die Taktzahlen aus um fortzufahren.</p>
+                    <p>Die Faksimile-Ansicht ermöglicht, sich mit dem Manuskript vertraut zu machen. Dabei kann man das Faksimile mit Hilfe der <b>Dokumentnavigation</b> oben rechts beliebig
+                     vergrößern und verkleinern, drehen und verschieben. Das rote Kästchen in der Miniatur-Anzeige der Partitur verdeutlicht den gerade gewählten Bildausschnitt. 
+                     Außerdem können Sie die Taktzählung ein- und ausblenden. Erproben Sie diese Funktionen und wählen Sie
+                    die Vollansicht (<i className="fa fa-arrows-alt tourIcon"></i>), um mit der Tour fortzufahren.</p>
                 </div>
             ),
             en: (
@@ -115,7 +119,7 @@ const TourSteps = {
     },
     
     
-    tool005: {
+    /*tool005: {
         restrictsAction: true,
         allowedTargets: [
             {selector:'.openseadragon-container',state:'tool005'},
@@ -138,9 +142,9 @@ const TourSteps = {
         },
         attachTo: '.facsNavMenu',
         attachWhere: 'left'
-    },
+    },*/
     
-    tool006: {
+    /*tool006: {
         restrictsAction: true,
         allowedTargets: [
             {selector:'.openseadragon-container'},
@@ -167,6 +171,35 @@ const TourSteps = {
         },
         attachTo: '.facsNavMenu',
         attachWhere: 'left'
+    },*/
+    
+    tool006: {
+        restrictsAction: true,
+        allowedTargets: [
+            {selector:'.openseadragon-container'},
+            {selector:'.facsNav.navigator'},
+	        {selector:'.facsNavMenu'},
+	        {selector:'.navOverlay .measuresBox',state:'tool007'}
+        ],
+        content: {
+            de: (
+                <div>
+                    <h1>Textgenetische Navigation</h1>
+                    <p>Um die rekonstruierten Schreibprozesse nachzuvollziehen, bietet die <b>textgenetische Navigation</b> eine schematisch vereinfachte
+                    Partituransicht. Wenn Sie den Mauszeiger darüber bewegen, werden am Satzanfang die jeweiligen Stimmen und oben die entsprechende Taktzahl eingeblendet.
+                    Klicken Sie auf eine dieser Taktzahlen, um die entsprechende Stelle im Faksimile anzuzeigen.
+                    </p>
+                </div>
+            ),
+            en: (
+                <div>
+                    <h1>Overview of musical text</h1>
+                    <p>Here you can view the musical text... Next Step: Click on any text scar.</p>
+                </div>
+            )
+        },
+        attachTo: '.navOverlay.overview',
+        attachWhere: 'top'
     },
     
     tool007: {
@@ -176,17 +209,16 @@ const TourSteps = {
             {selector:'.facsNav.navigator'},
 	        {selector:'.facsNavMenu'},
 	        {selector:'.navOverlay.overview'},
-            {selector:'.navOverlay .stateNavigation .scarBox .scar',state:'tool008'}
+            {selector:'.navOverlay .stateNavigation .scarBox .scar'},
+            {selector:'.navOverlay .scarLabel .detailsLink',state:'tool009'}
         ],
         content: {
             de: (
                 <div>
-                    <h1>Werkübersicht</h1>
-                    <p>Diese Navigationsbox zeigt eine Übersicht der vorkommenden Textnarben innerhalb der Fallstudie an. 
-                    Alle im Werk vorhandenen Textnarben sind mit einem roten Kästchen versehen.
-                    Die Taktzahlen sind über der Box in grau hinterlegt. Wird mit der Maus über die Navigationsbox gefahren, 
-                    erscheinen die genauen Taktzahlen, die durch einen Klick ausgewählt werden können. 
-                    Nächster Schritt: Wählen Sie eine der Textnarben aus.</p>
+                    <h1>Textgenetische Navigation</h1>
+                    <p>Die roten Bereiche der <b>textgenetischen Navigation</b> markieren <b><a href="http://beethovens-werkstatt.de/glossary/Textnarbe" target="_blank">Textnarben</a></b>.
+                     Klicken Sie nun auf eine beliebige Textnarbe. Sie sehen nun, wieviele Schreibschichten diese enthält. Um die Rekonstruktion der Schreibprozesse anzuschauen, klicken Sie
+                     auf "<b>Detailansicht</b> öffnen".</p>
                 </div>
             ),
             en: (
@@ -201,7 +233,7 @@ const TourSteps = {
     },
     
 	
-	tool008: {
+	/*tool008: {
         restrictsAction: true,
         allowedTargets: [
         {selector:'.openseadragon-container'},
@@ -230,7 +262,7 @@ const TourSteps = {
         },
         attachTo: '.navOverlay.overview',
         attachWhere: 'top'
-    },
+    },*/
 
 
     tool009: {
@@ -240,6 +272,8 @@ const TourSteps = {
         {selector:'.facsNav.navigator'},
 	    {selector:'.facsNavMenu'},
 	    {selector:'.scarFrame.animated'},
+	    {selector:'.navOverlay .nextScarBtn'},
+	    {selector:'.navOverlay .prevScarBtn'},
 	    {selector:'.navOverlay .stateNavigation .statesBox .timelineBox',state:'tool009'},
         {selector:'.navOverlay.scarOpen .closeScarBtn',state:'tool010'}
         ],
@@ -247,10 +281,11 @@ const TourSteps = {
             de: (
                 <div>
                     <h1>Detailansicht</h1>
-                    <p>Die horizontale Anordnung innerhalb der Box spiegelt den chronologischen Verlauf der Entwicklung der Textnarbe wider. 
-		    Durch das Anwählen der einzelnen Kästchen können Sie nun durch die einzelnen Schichten des Schreibprozesses 
-		    navigieren, die aktuell ausgewählte Schicht wird durch einen roten Punkt markiert. Nachdem Sie die diese Funktion getestet haben, schließen 
-		    Sie die Detailansicht über das "X" rechts oben.</p>
+                    <p>
+                    Jedem Buchstaben ist eine <a href="http://beethovens-werkstatt.de/glossary/Schreibschicht" target="_blank">Schreibschicht</a> zugeordnet, die innerhalb
+                    des Manuskripts rot hervorgehoben wird. Wählt man den nächsten Buchstaben aus, wird die neue Schreibschicht im Manuskript rot, die vorherigen Schichten in einem dunkleren 
+                    Farbton angezeigt. Sie können sich beliebig durch die Textnarben bewegen, indem Sie auf die beiden Pfeile <i className="fa fa-chevron-left tourIcon"></i> <i className="fa fa-chevron-right tourIcon"></i> klicken.
+                    Nachdem Sie diese Funktion getestet haben, schließen Sie die Detailansicht (<i className="fa fa-close tourIcon"></i>).</p>
                 </div>
             ),
             en: (
@@ -277,8 +312,9 @@ const TourSteps = {
         content: {
             de: (
                 <div>
-                    <h1>Informationsbox</h1>
-                    <p>Als nächstes klicken Sie bitte eine beliebige Note an um zu der Informationsbox zu gelangen.</p>
+                    <h1>Infobox</h1>
+                    <p>In der <i>VideApp</i> ist jedes Zeichen des Manuskripts erfasst. Per Mausklick sind so zugehörige Informationen abrufbar. Klicken Sie auf eine beliebige Note,
+                    um die Infobox zu öffnen.</p>
                 </div>
             ),
             en: (
@@ -299,15 +335,24 @@ const TourSteps = {
             {selector:'.openseadragon-container'},
             {selector:'.facsNav.navigator'},
            	{selector:'.facsNavMenu'},
+           	{selector:'div.contextMenu .sliderFrame button.slick-next'},
+           	{selector:'div.contextMenu .sliderFrame button.slick-prev'},
+           	{selector:'div.contextMenu .sliderFrame .slick-dots button'},
            	{selector:'div.contextMenu .sliderFrame .contextSliderItem .sliderItemLabel',state:'tool012'}
         ],
         content: {
             de: (
                 <div>
-                    <h1>Informationsbox</h1>
-                    <p>Diese Box enthält eine Beschreibung des angewählten Zeichens, die Transkriptionsansicht sowie die entsprechende Auszeichnung in MEI. 
-                    Aus dieser Infobox heraus kann in eine andere Ansicht gewechselt werden, indem Sie auf "Transkription anzeigen" oder " XML anzeigen" klicken.
-                    Bitte öffnen Sie im nächsten Schritt die Transkriptionsansicht.</p>
+                    <h1>Infobox</h1>
+                    <p>
+                        Im unteren Bereich der Infobox finden Sie Informationen zum gewählten Zeichen sowie ggf. Hinweise auf eine unklare Lesart oder Herausgeberzusätze. 
+                    </p>
+                    <p>
+                        Im oberen Bereich erhalten Sie (wo möglich) eine Vorschau in den jeweils anderen Ansichten, hier Transkription und XML, zwischen denen
+                        Sie mit den Schaltflächen <i className="fa fa-chevron-left tourIcon"></i> <i className="fa fa-chevron-right tourIcon"></i> wechseln können.   
+                        Sie können direkt aus der Infobox in die anderen Ansichten an die entsprechende Stelle springen, indem Sie dem Link unterhalb der Vorschau folgen. 
+                        Klicken Sie auf "Transkription anzeigen".
+                    </p>
                 </div>
             ),
             en: (
@@ -328,15 +373,22 @@ const TourSteps = {
             {selector:'.facsNav.navigator'},
            	{selector:'.facsNavMenu'},
            	{selector:'.scarFrame.animated'},
-           	{selector:'.view.VideTranscriptionViewer .transcriptionNavMenu #view1_zoomHome.menuButton',state:'tool013'}
+           	/*{selector:'.view.VideTranscriptionViewer .transcriptionNavMenu #view1_zoomHome.menuButton',state:'tool013'}*/
+           	{selector:'.navOverlay .scarLabel .detailsLink',state:'tool014'}
         ],
         content: {
             de: (
                 <div>
                     <h1>Transkription</h1>
-                    <p>Die Transkription-Ansicht enthält den transkribierten Notentext der einzelnen Schichten, gerendert mit Verovio. Die Textnarben sind durch die roten
-                    Kästchen markiert. Die Navigationsbox ist also dieselbe wie in der Faksimile-Ansicht. Sie haben auch die Möglichkeit, sich das gesamte Stück anzusehen. 
-		    Klicken sie hierfür auf das "Maximieren" Symbol.</p>
+                    <p>
+                        Diese Ansicht enhält eine <a href="http://beethovens-werkstatt.de/glossary/cleartext-2" target="_blank">Cleartext-Transkription</a> des
+                        Notentextes in seinem letztgültigen Zustand. Die rot dargestellten Bereiche sind von Variantenbildung betroffen. Wird dabei nur der Beginn eines
+                        Taktes markiert, ohne auch einzelne Noten farblich hervorzuheben, so handelt es sich um getilgte Stellen, die im endgültigen Notentext nicht 
+                        mehr vorhanden sind, vgl. etwa Takte 66 und 105. 
+                    </p>
+                    <p>
+                        Das <b>textgenetische Menü</b> funktioniert wie in der Faksimile-Ansicht. Um die Rekonstruktion der Variantenabfolge zu betrachten, öffnen Sie die Detailansicht einer Textnarbe.
+                    </p>
                 </div>
             ),
             en: (
@@ -350,7 +402,7 @@ const TourSteps = {
         attachWhere: 'bottom-end'
     },
 
- tool013: {
+ /*tool013: {
         restrictsAction: true,
         allowedTargets: [
         {selector:'.openseadragon-container'},
@@ -363,7 +415,7 @@ const TourSteps = {
             de: (
                 <div>
                     <h1>Transkription</h1>
-                    <p>Um eine weitere Besonderheit der Transkriptionsansicht anzusehen, öffnen Sie erneut die "Detailansicht".</p>
+                    <p></p>
                 </div>
             ),
             en: (
@@ -375,7 +427,7 @@ const TourSteps = {
         },
         attachTo: '.navOverlay.overview',
         attachWhere: 'top'
-    },
+    },*/
 
 
 
@@ -392,9 +444,13 @@ const TourSteps = {
         content: {
             de: (
                 <div>
-                    <h1>Varianten-Detailansicht</h1>
-                    <p>Wenn Sie in der Transkriptionsansicht die jeweilige Schreibschichten anwählen, erscheinen diese hier über dem Notentext. 
-                    Anhand des Beispiels "Op. 75,2" soll im Folgenden noch auf weitere Funktionen hingewiesen werden. Wechseln Sie hierfür auf die Startseite mit Hilfe des "VideApp-Symbols" oben links.</p>
+                    <h1>Varianten-Abfolge</h1>
+                    <p>
+                        Wenn Sie den Buchstaben einer Variante anwählen, wird diese an der entsprechenden Stelle über dem letztgültigen Werktext eingeblendet. Die Noten, die im Lauf 
+                        der Variantenbildung unverändert bleiben, werden in dieser Darstellung in grau angezeigt, während die aktuelle Variante schwarz dargestellt wird. Wenn Sie
+                        einige Varianten ausprobiert haben, klicken Sie auf das <i>VideApp</i>-Logo links oben, um zur Startseite zurückzukehren und anhand eines weiteren Beispiels andere 
+                        Funktionen kennenzulernen.
+                    </p>
                 </div>
             ),
             en: (
@@ -417,7 +473,7 @@ const TourSteps = {
             de: (
                 <div>
                     <h1>VideApp</h1>
-                    <p>Um fortzufahren, klicken Sie bitte auf Op. 75,2 in der unten stehenden Liste.</p>
+                    <p>Um fortzufahren, öffnen Sie das Beispiel Op. 75,2.</p>
                 </div>
             ),
             en: (
@@ -440,9 +496,8 @@ const TourSteps = {
         content: {
             de: (
                 <div>
-                    <h1>Vorschau der Fallstudie</h1>
-                    <p>Sie sehen nun eine kurze Beschreibung dessen, was die Fallstudie zu Op. 75,2 auszeichnet. Um sie zu öffnen, klicken Sie bitte entweder
-                        erneut auf den Faksimile-Ausschnitt, oder auf die Schaltfläche "Öffne Edition" rechts unten.</p>
+                    <h1>VideApp</h1>
+                    <p>Um fortzufahren, öffnen Sie das Beispiel Op. 75,2.</p>
                 </div>
             ),
             en: (
@@ -453,8 +508,8 @@ const TourSteps = {
                 </div>
             )
         },
-        attachTo: '.introduction > div',
-        attachWhere: 'bottom'
+        attachTo: '.editionPreview[data-editionid="Codierung_op.75.2"]',
+        attachWhere: 'left'
     },
     
  tool017: {
@@ -462,7 +517,12 @@ const TourSteps = {
         allowedTargets: [
             {selector:'.openseadragon-container',state: 'tool017'},
             {selector:'.facsNav.navigator',state: 'tool017'},//here
-            {selector:'div.views .menu a.select-target.select-theme-chosen',
+            /*{selector:'div.views .menu a.select-target.select-theme-chosen',
+                selectBox:{
+                    allowedValues: [{value:'VideFacsimileViewer',state:'tool018'}]
+                }
+            },
+            */{selector:'div.views .menu a.select-target.select-theme-chosen, .select-theme-chosen',
                 selectBox:{
                     allowedValues: [{value:'VideFacsimileViewer',state:'tool018'}]
                 }
@@ -474,7 +534,7 @@ const TourSteps = {
             de: (
                 <div>
                     <h1>Einführung</h1>
-                    <p>Wechseln Sie bitte in die Faksimile-Ansicht über das Drop-Down-Menü.</p>
+                    <p>Wechseln Sie über das Ansichtsmenü in die Faksimile-Ansicht.</p>
                 </div>
             ),
             en: (
@@ -501,8 +561,9 @@ const TourSteps = {
         content: {
             de: (
                 <div>
-                    <h1>Detailansicht</h1>
-                    <p>Wählen Sie nun die unten gezeigte Textnarbe aus und öffnen Sie die "Detailansicht" um sich die Übersicht zu den einzelnen Textschichten innerhalb dieser Textnarbe anzeigen zu lassen.</p>
+                    <h1>Textgenetisches Menü</h1>
+                    <p>Im textgenetischen Menü sehen Sie eine Übersicht über die hier betrachteten Takte. In diesem Fall wurde nur eine Textnarbe untersucht. Um den Schreibprozess nachzuvollziehen, 
+                    klicken Sie auf "Detailansicht öffnen".</p>
                 </div>
             ),
             en: (
@@ -531,10 +592,25 @@ const TourSteps = {
             de: (
                 <div>
                     <h1>Detailansicht</h1>
-                    <p>Die horizontale Anordnung innerhalb der Box spiegelt den chronologischen Verlauf des Prozesses wider, 
-		    die vertikale Anordnung verdeutlicht das "Nicht-Bestimmen-Können" einer zeitlichen Reihenfolge der Schichten. 
-		    Durch das Anwählen der einzelnen Kästchen können Sie nun durch die einzelnen Schichten des Schreibprozesses 
-		    navigieren, die durchgestrichene Kästchen deuten eine Streichung an. Zum Fortfahren wählen Sie bitte den Schritt "j" in dem Verlauf aus.</p>
+                    <p>
+                        Sie befinden sich nun in der Faksimile-Ansicht, in der die einzelnen Schreibschichten im Manuskript rot markiert sind. Im textgenetischen Menü können
+                        Sie die einzelnen Schreibschichten auswählen, die mit Buchstaben bezeichnet sind. Die horizontale Anordnung spiegelt den chronologischen Verlauf wider. Unklare
+                        chronologische Verhältnisse von Schreibschichten werden durch vertikale Anordnung angezeigt. 
+                    </p>
+                    <h2>Legende</h2>
+                    <dl>
+                        <dt><img src="./resources/pix/timeline_singleVariant.png"/></dt>
+                        <dd><a href="http://beethovens-werkstatt.de/glossary/mikrochonologie" target="_blank">mikrochronologisch</a> bestimmbarer, d.h. relativer Zeitpunkt</dd>
+                        <dt><img src="./resources/pix/timeline_multipleVariants.png"/></dt>
+                        <dd>Zeitspanne mit unklarer Reihenfolge der enthaltenen Schreibschichten</dd>
+                        <dt><span className="deletionSample"> </span></dt>
+                        <dd>Streichung</dd>
+                        <dt><img src="./resources/pix/timeline_deletion.png"/></dt>
+                        <dd>frühestmöglicher Zeitpunkt von Streichungen</dd>
+                    </dl>
+                    <p>
+                        Zum Fortfahren wählen Sie Schreibschicht "j" aus.
+                    </p>
                 </div>
             ),
             en: (
@@ -562,10 +638,13 @@ const TourSteps = {
             de: (
                 <div>
                     <h1>Schieberegler</h1>
-                    <p>Mit Hilfe des Schieberegles kann zwischen der Faksimile- und der Rekonstruktionsanschicht gewechselt werden. 
-                    Klicken Sie auf nun auf die Balken in der Kopfzeile oben rechts, 
-		    um eine Parallelansicht nebeneinander oder übereinander zu legen. 
-		    Tun Sie dies, um fortzufahren.</p>
+                    <p>
+                        Mit dem Schieberegler kann zwischen <b>Schreibschichtenrekonstruktion</b> und Faksimile stufenlos überblendet werden. 
+                    </p>
+                    <p>
+                        Wechseln Sie nun in eine parallelisierte Ansicht, indem Sie auf <i className="fa fa-pause fa-rotate-90 tourIcon"></i> oder <i className="fa fa-pause tourIcon"></i> in 
+                        der <b>Kopfzeile</b> rechts oben klicken. 
+                    </p>
                 </div>
             ),
             en: (
@@ -582,19 +661,20 @@ const TourSteps = {
  tool021: {
         restrictsAction: true,
         allowedTargets: [
-        {selector:'.openseadragon-container'},
-        {selector:'.facsNav.navigator'},
-	{selector:'.facsNavMenu'},
-	{selector: '.scarFrame.animated'},
-	{selector:'.perspectiveButton.syncViews',state:'tool022'}
+            {selector:'.openseadragon-container'},
+            {selector:'.facsNav.navigator'},
+           	{selector:'.facsNavMenu'},
+           	{selector: '.scarFrame.animated'},
+           	{selector:'.perspectiveButton.syncViews',state:'tool022'}
         ],
         content: {
             de: (
                 <div>
                     <h1>Parallelansicht</h1>
-                    <p>Es erscheint ein zusätzliches Symbol, welches die Möglichkeit zur Synchronisation der Ansichten 
-		    anbietet sodass mit der Navigation in einer Ansicht, die andere automatisch mitläuft. 
-		    Nächster Schritt "Synchronisieren".</p>
+                    <p>
+                        Nun sind zwei Ansichten geöffnet, die Sie über die Ansichtsmenü nach Ihren Wünschen einrichten können. Kombinieren Sie hier Faksimile und Transkription. 
+                        In der <b>Kopfzeile</b> können Sie diese Ansichten synchronisieren. Aktivieren Sie dazu das Symbol <i className="fa fa-unlink tourIcon"></i>.   
+                    </p>
                 </div>
             ),
             en: (
@@ -611,20 +691,29 @@ const TourSteps = {
  tool022: {
         restrictsAction: true,
         allowedTargets: [
-        {selector:'.openseadragon-container'},
-        {selector:'.facsNav.navigator'},
-	{selector:'.facsNavMenu'},
-	{selector: '.scarFrame.animated'},
-	{selector: 'div.views .view.VideTextViewer .menu .select-target.select-theme-chosen .select-option'},
-	{selector:'.fa-square-o:before',state:'tool023'}
+            {selector:'div.views .menu a.select-target.select-theme-chosen, .select-theme-chosen',
+                selectBox:{
+                    allowedValues: [{value:'VideFacsimileViewer',state: 'tool022'},{value:'VideTranscriptionViewer',state: 'tool022'}]
+                }
+            },
+/*            {selector:'.openseadragon-container'},*/
+            {selector:'.facsNav.navigator'},
+           	{selector:'.facsNavMenu'},
+           	{selector: '.scarFrame.animated'},
+           	{selector:'.navOverlay .stateNavigation .statesBox .timelineBox'},
+           	{selector:'.fa-square-o',state:'tool023'}
         ],
         content: {
             de: (
                 <div>
-                    <h1>Parallelansicht</h1>
-                    <p>Nun sind beide Ansichten synchronisiert. Wenn Sie nun eine bestimmte Textnarbe in einem Beispiel auswählen, wird in der anderen Ansicht der selbe Bereich angezeigt. 
-                    Sie können in jedem Fenster beliebig zwischen den verschiedenen Anischten (Faksimile/Transkription/XML) umschalten. In der Trankriptionsansicht haben Sie bei diesem Beispiel 
-                    die Möglichkeit, sich die Invarianzeinfärbung anzeigen zu lassen. Wechseln Sie hierzu in einem Fenster in die Trankriptions-Ansicht und wählen Sie dort die "Invarianzeinfärbung" aus.</p>
+                    <h1>Synchronisierte Ansicht</h1>
+                    <p>
+                        Jetzt sind Faksimile und Transkription synchronisiert. Wenn Sie einen Buchstaben im <b>textgenetischen Menü</b> auswählen, wird in der jeweils anderen Ansicht der
+                        korrespondierende Abschnitt angezeigt. 
+                    </p>
+                    <p>
+                        Aktivieren Sie nun in der Transkriptionsansicht die Invarianzeinfärbung. Diese steht gegenwärtig nur in Op. 75,2 zur Verfügung.  
+                    </p>
                 </div>
             ),
             en: (
@@ -646,14 +735,20 @@ tool023: {
 	{selector:'.facsNavMenu'},
 	{selector: '.scarFrame.animated'},
 	{selector: 'div.views .view.VideTextViewer .menu .select-target.select-theme-chosen .select-option'},
-	{selector:'header.appHeader .videAppLogo'}
+	{selector:'header.appHeader .videAppLogo', tourEnd: true}
         ],
         content: {
             de: (
                 <div>
-                    <p>Sie haben die Tour erfolgreich abgeschlossen. Wir hoffen, dass Ihnen der Umgang unserer Fallstudien mit der VideApp nun vertrauter 
-		    geworden sind. Mit einem Klick auf das VideApp-Logo gelangen Sie zurück zum Hauptmenü 
-		    und können die verfügbaren Fallstudien öffnen.</p>
+                    <h1>Invarianz</h1>
+                    <p>
+                        Durch die Invarianzeinfärbung wird sichtbar, welche Teile des Notentextes bei der Variantenbildung unverändert bleiben. Die Farbe der jeweiligen Variante
+                        wird in den Auswahlkästchen angezeigt. Invariante Texteelemente sind in der Farbe der Variante markiert, in der sie zuerst aufgetreten sind. 
+                    </p>
+                    <p>
+                        Wir hoffen, dass Ihnen der Umgang mit der <i>VideApp</i> vertraut geworden ist. Bei Rückfragen melden Sie 
+                        sich bitte per <a href="mailto:info@beethovens-werkstatt.de">E-Mail</a>. Um die Tour abzuschließen, klicken Sie nun auf das <i>VideApp</i>-Logo oben links. 
+                    </p>
                 </div>
             ),
             en: (
@@ -665,6 +760,16 @@ tool023: {
         attachTo: '.perspectiveButton.syncViews',
         attachWhere: 'bottom'
     }
+    
+    
+    /* 
+     * Drop-Down -> Ansichtsmenü -> done
+     * Dokumentnavigation
+     * Textgenetische Navigation
+     * Detailansicht bleibt
+     * Kopfzeile bleibt
+     * Infobox bleibt
+     */
 
     /*nav1: {
         restrictsAction: true,
