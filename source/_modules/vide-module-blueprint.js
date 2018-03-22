@@ -198,6 +198,17 @@ const EoModule = class EoModule {
      * @param {string} containerID ID of the whole view
      */
     _setupViewSelect(parentID, containerID) {
+        
+        //this could serve as a starting point for a label of the view menu
+        
+        /*let viewMenuLabel = document.createElement('span');
+        let viewMenuLabelText = this._eohub.getI18nString('viewMenu_label');
+        viewMenuLabel.setAttribute('data-i18n-text','viewMenu_label');
+        viewMenuLabel.innerHTML = viewMenuLabelText;
+        
+        document.getElementById(parentID).appendChild(viewMenuLabel);
+        */
+        
         let sel = document.createElement('select');
         sel.classList.add('viewSelect');
         
@@ -234,6 +245,8 @@ const EoModule = class EoModule {
                 
                 let tourAllowsNextStep = document.VideApp.openTour(e.value);
                 if(tourAllowsNextStep) {
+                    
+                    console.log('\n\nTHIS IS THE PLACE WHERE I SHOULD BE ABLE TO CHANGE THINGS ACCORDING TO ' + e.value)
                     this._eohub.changeView(containerID,e.value);
                 } else {
                     //the target isn't allowed by the tour

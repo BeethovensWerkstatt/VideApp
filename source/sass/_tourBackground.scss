@@ -21,8 +21,8 @@ $popper-border: #8bd8ec;
     
     #tourPopper {
         width: 400px;
-        height: 150px;
-        max-height: 150px;
+        height: 180px;
+        max-height: 180px;
         background-color: lighten($popper-border,20%);
         border-radius: 5px;
         border: 5px solid $popper-border;
@@ -33,7 +33,7 @@ $popper-border: #8bd8ec;
         
         .tourContent {
             
-            height: 150px;
+            height: 180px;
             overflow: scroll;
         
             h1 {
@@ -113,6 +113,17 @@ $popper-border: #8bd8ec;
             
             .fa.tourIcon {
                 font-size: 80%;
+            }
+            
+            #closeThisTour {
+                display: block;
+                width: 150px;
+                margin: 30px auto 0;
+                border: .5px solid #666666;
+                background-color: rgba(0,0,0,.3);
+                border-radius: 3px;
+                text-align: center;
+                padding: 10px;
             }
 
         }

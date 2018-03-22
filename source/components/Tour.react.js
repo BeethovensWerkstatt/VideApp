@@ -193,6 +193,9 @@ class Tour extends React.Component {
         //always allow to close tour
         tourObj.allowedTargets.push({selector:'.closeTourButton'});
         
+        //always allow to open links contained in the tour itself
+        tourObj.allowedTargets.push({selector:'.tourContent a'});
+        
         for(let i=0;i<tourObj.allowedTargets.length;i++) {
             let elem = event.target.closest(tourObj.allowedTargets[i].selector);
             if(elem !== null) {
@@ -213,7 +216,41 @@ class Tour extends React.Component {
         console.log(allowedSelectors)*/
         
         
-        if(tourObj.restrictsAction && !isOk) {
+        /* 
+         * this is a fix for the view menu, which doesn't change values without this fix
+         */
+        let changeIsOk = false;
+        if(event.type === 'change') {
+            /*console.log('\n CHANGE EVENT:')
+            console.log(event)
+            console.log(isOk)
+            console.log('\ngoing out\n\n')*/
+            
+            let selectIsAllowed = (allowedSelectors.length > 0) ? allowedSelectors[0].hasOwnProperty('selectBox') : false;
+            let targetIsSelect = event.target.classList.contains('viewSelect');
+            let selectionIsAllowed = false;
+             
+            if(allowedSelectors.length > 0 && allowedSelectors[0].hasOwnProperty('selectBox')) {
+                for(let n=0; n<allowedSelectors[0].selectBox.allowedValues.length;n++) {
+                    let allowedValue = allowedSelectors[0].selectBox.allowedValues[n];
+                    
+                    if(event.value === allowedValue.value) {
+                        selectionIsAllowed = true;
+                    }
+                }
+            }
+            //console.log('\n\nVALUES: selectIsAllowed: ' + selectIsAllowed + ', targetIsSelect: ' + targetIsSelect + ', selectionIsAllowed: ' + selectionIsAllowed);
+            
+            if(selectIsAllowed && targetIsSelect && selectionIsAllowed) {
+                //console.log('\n\nWILL ALLOW CHANGE')    
+                changeIsOk = true;    
+            }
+        }
+        /* 
+         * /fix end
+         */
+        
+        if(tourObj.restrictsAction && !isOk && changeIsOk) {
             event.stopPropagation();
             event.preventDefault();
             /*console.log(' matching case 1')

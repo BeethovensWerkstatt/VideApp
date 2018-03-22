@@ -955,7 +955,8 @@ const VideFacsimileViewer = class VideFacsimileViewer extends EoNavModule {
                         
                         this._loadMeasureLabels(page,bounds,viewer,containerID);
                         
-                        this._getAnnotationsOnPage(this._eohub.getEdition(),page.id).then((annotations) => {
+                        //INFO: annotations will be implemented at a later stage
+                        /*this._getAnnotationsOnPage(this._eohub.getEdition(),page.id).then((annotations) => {
                             
                             //console.log(annotations);
                             for(let i=0; i<annotations.length; i++) {
@@ -984,7 +985,7 @@ const VideFacsimileViewer = class VideFacsimileViewer extends EoNavModule {
                                 
                             }
                             
-                        })
+                        })*/
                         
                     }
                 }

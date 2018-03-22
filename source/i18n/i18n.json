@@ -64,36 +64,36 @@
         "en":"last modified"
     },
     "VideXmlViewer":{
-        "de":"XML",
-        "en":"XML"
+        "de":"XML-Ansicht",
+        "en":"XML View"
     },
     "VideFacsimileViewer":{
-        "de":"Faksimile",
-        "en":"Facsimile"
+        "de":"Quellen-Ansicht",
+        "en":"Source View"
     },
     "VidePageOverlayViewer":{
         "de":"Überlagerung",
         "en":"Overlay"
     },
     "VideTranscriptionViewer":{
-        "de":"Transkription",
-        "en":"Transcription"
+        "de":"Transkriptions-Ansicht",
+        "en":"Transcription View"
     },
     "VideTextViewer":{
-        "de":"Einführung",
-        "en":"Introduction"
+        "de":"Kommentar-Ansicht",
+        "en":"Commentary View"
     },
     "contextMenu_showIn_VIDE_PROTOCOL_PERSPECTIVE_FACSIMILE":{
-        "de":"Im Faksimile anzeigen",
-        "en":"Show Facsimile"
+        "de":"Quellen-Ansicht öffnen",
+        "en":"Open Source View"
     },
     "contextMenu_showIn_VIDE_PROTOCOL_PERSPECTIVE_XML":{
-        "de":"XML anzeigen",
-        "en":"Show XML"
+        "de":"XML-Ansicht öffnen",
+        "en":"Open XML View"
     },
     "contextMenu_showIn_VIDE_PROTOCOL_PERSPECTIVE_TRANSCRIPTION":{
-        "de":"Transkription anzeigen",
-        "en":"Show Transcription"
+        "de":"Transkriptions-Ansicht öffnen",
+        "en":"Open Transcription View"
     },
     "contextMenu_showIn_VIDE_PROTOCOL_PERSPECTIVE_INVARIANCE":{
         "de":"In Invarianz-Darstellung anzeigen",
@@ -330,5 +330,9 @@
     "supplied" : {
         "de":"Herausgeberzusatz",
         "en":"Supplied by Editor"
+    },
+    "viewMenu_label" : {
+        "de":"Ansicht",
+        "en":"View"
     }
 }

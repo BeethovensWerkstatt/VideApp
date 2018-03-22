@@ -10,6 +10,8 @@ div.contextMenuBack {
     
     z-index: 100;
     
+    /*pointer-events: none;*/
+    
     div.contextMenu {
         position: absolute;
         width: 450px;
