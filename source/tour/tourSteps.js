@@ -309,8 +309,7 @@ const TourSteps = {
                         <i className="fa fa-chevron-left tourIcon"></i> <i className="fa fa-chevron-right tourIcon"></i>.   
                         By following the link below the preview, you can open the corresponding area in one of the other views.
                     </p> 
-                    <p>→ Click on "Open Transcription View".</p> 
-                    // Hier genau die Formulierung angeben, die in der Infobox im Englischen steht!
+                    <p>→ Click on "Open Transcription View".</p>
                 </div>
             )
         },
