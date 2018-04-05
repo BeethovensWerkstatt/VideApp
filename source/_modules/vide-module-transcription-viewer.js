@@ -730,10 +730,7 @@ const VideTranscriptionViewer = class VideTranscriptionViewer extends EoNavModul
                             this._openSingleScar(containerID,scar.id,request.id,activeStates);
                             //state needs to be rendered only if there is more than one scar
                             
-                            console.log('-----55')
-                            
                             if(stateJson.length > 1) {
-                                console.log(' ---------------55+1')
                                 this._renderState(containerID,scar,viewer,request.id,activeStates);
                             }
                         } catch(err) {
@@ -825,12 +822,29 @@ const VideTranscriptionViewer = class VideTranscriptionViewer extends EoNavModul
                 }
                 
                 let baseDimensions = this._baseDimensions.get(editionID);
-                                                    
+                  
                 let attachmentMeasureRect = document.querySelector('#' + containerID + ' svg #' +scar.firstMeasure).getBoundingClientRect();
                 let ul = viewer.viewport.windowToViewportCoordinates(new OpenSeadragon.Point(attachmentMeasureRect.left, attachmentMeasureRect.top));
                 let lr = viewer.viewport.windowToViewportCoordinates(new OpenSeadragon.Point(attachmentMeasureRect.right, attachmentMeasureRect.bottom));
                 
                 let dist = allBounds.height / (baseDimensions.viewBoxHeight / baseDimensions.staffHeight);
+                
+                
+                //test for offsetting states by meterSig
+                
+                /*console.log('------------\n-----55-----\n------------')*/
+                
+                let meterSigX = stateSvg.querySelector('g.measure g.staff g.meterSig use').getAttribute('x');
+                let allWidth = parseInt(stateSvg.querySelector('svg.definition-scale').getAttribute('viewBox').split(' ')[2],10)
+                
+                let offsetRatio = meterSigX / allWidth;
+                
+                /*console.log('')
+                
+                console.log(ul.x + ' ---- ' + meterSigX + ' ---- ' + allWidth + ' ---- ' + offsetRatio) 
+                
+                console.log('------------\n-----55-----\n------------')*/
+                //test end 
                 
                 let ulx = ul.x;
                 let uly = allBounds.y - (2 * dist);
@@ -861,7 +875,7 @@ const VideTranscriptionViewer = class VideTranscriptionViewer extends EoNavModul
                     let rectWidth = allBounds.width * thisWidthFactor;
                     let rectHeight = rectWidth / dimensions.width * dimensions.height;
                     
-                    let rectBounds = new OpenSeadragon.Rect(ulx, uly - rectHeight, rectWidth, rectHeight);
+                    let rectBounds = new OpenSeadragon.Rect(ulx - rectWidth * offsetRatio, uly - rectHeight, rectWidth, rectHeight);
                                         
                     //place Verovio
                     viewer.addOverlay({
