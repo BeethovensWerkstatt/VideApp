@@ -12,14 +12,19 @@ const TourSteps = {
             de: (
                 <div>
                     <h1>Willkommen in der <i>VideApp</i></h1>
-                    <p>Mit Hilfe dieser Tour sollen Sie schrittweise mit der Anwendung vertraut gemacht werden.</p>
+                    <p>Mit Hilfe dieser Tour werden Sie schrittweise mit der <i>VideApp</i> vertraut gemacht. Eine Unterbrechung 
+                    der Tour oder das Zurückgehen zu einem vorherigen Schritt ist derzeit nicht möglich. Daher bitten wir Sie,
+                    den vorgeschlagenen Anweisungen zu folgen, um einen Überblick über die einzelnen Funktionen der <i>VideApp</i>
+                    zu erhalten.</p>
                     <p>→ Starten Sie, indem Sie das Beispiel zum Duett WoO 32 per Mausklick anwählen.</p>
                 </div>
             ),
             en: (
                 <div>
                     <h1>Welcome to the <i>VideApp</i></h1>
-                    <p>This tour will introduce you with the functionality of the <i>VideApp</i>.</p>
+                    <p>This tour will introduce you with the functionality of the <i>VideApp</i>. Currently it is neither possible to
+                    interrupt the tour nor to go back to a previous step. Therefore we ask you to follow the instructions in order to 
+                    get an overview of the functionality of the <i>VideApp</i>.</p>
                     <p>→ To get started, please click on WoO 32 in the list below.</p>
                 </div>
             )
