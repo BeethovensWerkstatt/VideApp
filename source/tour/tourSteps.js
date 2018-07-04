@@ -111,7 +111,7 @@ const TourSteps = {
             de: (
                 <div>
                     <h1>Quellen-Ansicht</h1>
-                    <p>Die Quellen-Ansicht ermöglicht, sich mit dem Manuskript vertraut zu machen. Dabei kann man die Quelle mit Hilfe der Quellen-Navigation oben rechts beliebig
+                    <p>Die Quellen-Ansicht ermöglicht es, sich mit dem Manuskript vertraut zu machen. Dabei kann man die Quelle mit Hilfe der Quellen-Navigation oben rechts beliebig
                      vergrößern und verkleinern, drehen und verschieben. Das rote Kästchen in der Miniatur-Anzeige der Partitur verdeutlicht den gerade gewählten Bildausschnitt. 
                      Außerdem können Sie die Taktzählung ein- und ausblenden.</p>
                      <p>→ Erproben Sie diese Funktionen und wählen Sie
@@ -336,7 +336,7 @@ const TourSteps = {
                 <div>
                     <h1>Transkription</h1>
                     <p>
-                        Diese Ansicht enhält eine <b><a href="http://beethovens-werkstatt.de/glossary/cleartext-2" target="_blank">Cleartext-Transkription</a></b> des
+                        Diese Ansicht enthält eine <b><a href="http://beethovens-werkstatt.de/glossary/cleartext-2" target="_blank">Cleartext-Transkription</a></b> des
                         Notentextes in seinem letztgültigen Zustand. Für die rot dargestellten Bereiche lassen sich mehrere <b><a href="http://beethovens-werkstatt.de/glossary/textzustand" target="_blank">Textzustände</a></b> (etwa im Zuge von Variantenbildung) nachweisen. Wird dabei nur der Beginn eines
                         Taktes markiert, ohne auch einzelne Noten farblich hervorzuheben, so handelt es sich um getilgte Stellen, die im endgültigen Notentext nicht 
                         mehr vorhanden sind, vgl. etwa Takte 66 und 105. 
