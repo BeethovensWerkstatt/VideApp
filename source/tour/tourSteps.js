@@ -188,7 +188,7 @@ const TourSteps = {
                 <div>
                     <h1>Textgenetische Navigation</h1>
                     <p>Die roten Bereiche in der textgenetischen Navigation markieren <b><a href="http://beethovens-werkstatt.de/glossary/Textnarbe" target="_blank">Textnarben</a></b>.
-                     Klicken Sie auf eine beliebige Textnarbe. Unterhalb der schematischen Darstellung wird nun angezeigt, wieviele Schreibschichten diese enthält.</p>
+                     Klicken Sie auf eine beliebige Textnarbe. Unterhalb der schematischen Darstellung wird nun angezeigt, wie viele Schreibschichten diese enthält.</p>
                      <p>→ Um zur Rekonstruktion der Schreibprozesse zu gelangen, klicken Sie
                      auf "Detailansicht öffnen".</p>
                 </div>
@@ -756,9 +756,9 @@ tool023: {
                 <div>
                     <h1>Invariance</h1>
                     <p>
-                        The <b><a href="http://beethovens-werkstatt.de/glossary/invarianz" target="_blank">Invariance</a></b>coloring shows which parts of the musical 
+                        The <b><a href="http://beethovens-werkstatt.de/glossary/invarianz" target="_blank">Invariance</a></b> coloring shows which parts of the musical 
                         text remain unchanged when variants are created. The respective color is displayed in the selection boxes. Invariant text elements are marked 
-                        in the color of the text state in which they first appeared. 
+                        in the color of the textual state in which they first appeared. 
                     </p>
                     <p>
                         → To complete the tour, click on the <i>VideApp</i>-Logo at the top left. 
@@ -780,8 +780,8 @@ tool023: {
                 <div>
                     <h1>Ende der Tour</h1>
                     <p>
-                        Wir hoffen, dass Ihnen der Umgang mit der <i>VideApp</i> vertraut geworden ist. Bei Rückfragen melden Sie 
-                        sich bitte per <a href="mailto:info@beethovens-werkstatt.de">E-Mail</a>. 
+                        Wir hoffen, dass Ihnen der Umgang mit der <i>VideApp</i> vertraut geworden ist. Bei Rückfragen wenden Sie 
+                        sich gerne per <a href="mailto:info@beethovens-werkstatt.de">E-Mail</a> an uns. Sie können die Tour erneut starten, wenn Sie die Anwendung neu laden.
                     </p>
                     <div id="closeThisTour">Tour schließen</div>
                 </div>
@@ -790,7 +790,7 @@ tool023: {
                 <div>
                     <p>
                         We hope that you are now familiar with the <i>VideApp</i>. If you have any questions, please contact us 
-                        by <a href="mailto:info@beethovens-werkstatt.de">e-Mail</a>. 
+                        by <a href="mailto:info@beethovens-werkstatt.de">e-Mail</a>. To start this tour again reload the website.
                     </p>
                     <div id="closeThisTour">Close Tour</div>
                 </div>
