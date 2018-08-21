@@ -1,0 +1,43 @@
+{
+  "name": "videapp_server",
+  "version": "1.0.0",
+  "description": "This is the server setup of the VideApp. You don't need to 'npm install' this folder by hand.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/BeethovensWerkstatt/VideApp.git"
+  },
+  "author": "Johannes Kepper",
+  "contributors": [
+    {
+      "name": "Johannes Kepper",
+      "email": "kepper@edirom.de"
+    }
+  ],
+  "keywords": [
+    "edirom",
+    "mei",
+    "beethoven"
+  ],
+  "license": "AGPL-3.0",
+  "bugs": {
+    "url": "https://github.com/BeethovensWerkstatt/VideApp/issues"
+  },
+  "homepage": "https://github.com/BeethovensWerkstatt/VideApp#readme",
+  "dependencies": {
+    "body-parser": "^1.18.2",
+    "connect-ensure-login": "^0.1.1",
+    "cookie-parser": "^1.4.3",
+    "express": "^4.16.2",
+    "express-session": "^1.15.6",
+    "http": "0.0.0",
+    "isomorphic-fetch": "^2.2.1",
+    "passport": "^0.4.0",
+    "passport-local": "^1.0.0",
+    "rethinkdb": "^2.3.3",
+    "socket.io": "^2.0.4"
+  }
+}

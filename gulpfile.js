@@ -54,17 +54,22 @@ gulp.task('lint', function() {
         .pipe(gulp.dest('./build/'));
 });*/
 
+//remove package.json later on, or is that necessary for node_modules???
 gulp.task('installServerDependencies', function() {
-    return gulp.src(['./server_setup/package.json'])
-        .pipe(gulp.dest('./server/'))
+    return gulp.src(['./source_server/package.json'])
+        .pipe(gulp.dest('./build/'))
         .pipe(install());
 });
 
 gulp.task('installServerConfig', function() {
-    return gulp.src(['./server_setup/**','!serverConfig.json.sample'])
-        .pipe(gulp.dest('./server/'))
+    return gulp.src(['./source_server/**','!source_server/serverConfig.json.sample','!source_server/package.json'])
+        .pipe(gulp.dest('./build/'))
         .pipe(install());
 });
+
+gulp.task('buildServer',['installServerDependencies','installServerConfig'], function() {
+    return true;
+})
 
 gulp.task('socketClient', function() {
     return gulp.src('./node_modules/socket.io-client/dist/socket.io.min.js')

@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8"/>
+        <meta http-equiv="x-ua-compatible" content="ie=edge,chrome=1"/>
+        <title>Beethovens Werkstatt: VideApp Backend</title>
+        <!-- todo: replace with integrated version -->
+        <link rel="stylesheet" type="text/css" href="resources/css/spectre.min.css">
+        <link rel="stylesheet" type="text/css" href="resources/css/spectre-exp.min.css">
+        <link rel="stylesheet" type="text/css" href="resources/css/spectre-icons.min.css">
+        <link rel="stylesheet" type="text/css" href="resources/css/backend.css">
+        
+    </head>
+    <body>
+        <header class="navbar">
+            <section class="navbar-section">
+                <a href="http://beethovens-werkstatt.de" class="navbar-brand mr-2">Beethovens Werkstatt</a>
+                <a href="http://nagano.upb.de:29999" class="btn btn-link">VideApp</a>
+            </section>
+            <section class="navbar-section">
+                <a href="https://github.com/BeethovensWerkstatt" class="btn btn-link">GitHub</a>
+            </section>
+        </header>
+        <div class="container">
+            <div class="columns">
+                <div class="column col-4"></div>
+                <div class="column col-4 col-sm-12">
+                    <div class="empty">
+                        <div class="empty-icon">
+                            <i class="icon icon-3x icon-people"></i>
+                        </div>
+                        <p class="empty-title h5">You need to log in</p>
+                        <p class="empty-subtitle">The backend is only accessible to known users.</p>
+                        <form class="form-horizontal" action="/login" method="post">
+                            <div class="form-group">
+                                <div class="col-3">
+                                    <label class="form-label" for="inputUser">Name</label>
+                                </div>
+                                <div class="col-9">
+                                    <input class="form-input" type="text" id="inputUser" name="username" placeholder="Login">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <!--<div class="col-3">
+                                    <label class="form-label" for="inputUser">Name</label>
+                                </div>
+                                <div class="col-9">
+                                    <input class="form-input" type="text" id="inputUser" placeholder="Login">
+                                </div>-->
+                                <div class="col-3">
+                                    <label class="form-label" for="inputPass">Password</label>
+                                </div>
+                                <div class="col-9">
+                                    <input class="form-input" type="password" id="inputPass" name="password" placeholder="Password">
+                                </div>
+                            </div>
+                            <input class="btn btn-primary input-group-btn float-right" type="submit" value="Login"/>
+                        </form>
+                    </div>
+                </div>
+                <div class="column col-4"></div>
+            </div>
+        </div>
+    </body>
+</html>

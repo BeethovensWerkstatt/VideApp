@@ -26,27 +26,72 @@ div.introduction {
         max-width: 1200px;
     }
     
-    p {
-        margin: 10px auto;
-        padding: 0 40px;
-        max-width: 1200px;
-        /*font-weight: 300;*/
-        color: #666666;
-        font-size: 1.1em;
-        line-height: 1.4em;
-    }
-    
     .sample {
         font-weight: 100;
     }
     
-    a {
-        text-decoration: none;
-        color: #000000;
-        
-        &:hover {
-            color: #c93b22;
-        }
+}
+
+p {
+    margin: 10px auto;
+    padding: 0 40px;
+    max-width: 1200px;
+    /*font-weight: 300;*/
+    color: #666666;
+    font-size: 1.1em;
+    line-height: 1.4em;
+}
+
+.workIntroduction p {
+    margin: 0 30px 10px 0 !important;
+}
+
+a, span.internalLink {
+    text-decoration: none;
+    color: #000000;
+    font-weight: 500;
+    cursor: pointer;
+    
+    &:hover {
+        color: #c93b22;
+    }
+}
+
+table {
+    margin: 2em 40px 3em;
+    padding: 0 40px;
+    max-width: 1200px;
+    font-size: 1em;
+    line-height: 1.4em;
+    font-weight: 300;
+    
+    border-collapse: collapse;
+    border: none;
+    
+    tr {
+        padding: 2px 2px 1em;
     }
     
+    th {
+        font-weight: 500;
+        text-align: left;
+        padding: .2em .5em .2em .5em;
+        border-bottom: .5px solid #666666;
+        background-color: #e5e5e5;
+    }
+    
+    td {
+        vertical-align: top;
+        text-align: left;
+        padding: .5em;
+        border-left: .5px solid #666666;
+    }
+    
+    tr:nth-child(2n + 1) td {
+        background-color: #f5f5f5;
+    }
+    
+    td:first-child {
+        border-left: none;
+    }
 }

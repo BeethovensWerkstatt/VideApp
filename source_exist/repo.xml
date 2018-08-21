@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<meta xmlns="http://exist-db.org/xquery/repo">
+    <description>exist-module</description>
+    <author>Johannes Kepper</author>
+    <website/>
+    <status>beta</status>
+    <license>GNU-LGPL</license>
+    <copyright>true</copyright>
+    <type>application</type>
+    <target>exist-module</target>
+    <prepare>pre-install.xql</prepare>
+    <finish/>
+</meta>

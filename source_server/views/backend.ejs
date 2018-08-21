@@ -1,0 +1,199 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8"/>
+        <meta http-equiv="x-ua-compatible" content="ie=edge,chrome=1"/>
+        <title>Beethovens Werkstatt: VideApp Backend</title>
+        <!-- todo: replace with integrated version -->
+        <link rel="stylesheet" type="text/css" href="resources/css/spectre.min.css">
+        <link rel="stylesheet" type="text/css" href="resources/css/spectre-exp.min.css">
+        <link rel="stylesheet" type="text/css" href="resources/css/spectre-icons.min.css">
+        <link rel="stylesheet" type="text/css" href="resources/css/backend.css">
+        
+    </head>
+    <body>
+        <header class="navbar">
+            <section class="navbar-section">
+                <a href="http://beethovens-werkstatt.de" class="navbar-brand mr-2">Beethovens Werkstatt</a>
+                <a href="http://nagano.upb.de:29999" class="btn btn-link">VideApp</a>
+            </section>
+            <section class="navbar-section">
+                <p><%= user.displayName %></p>
+                <!--<a href="https://github.com/BeethovensWerkstatt" class="btn btn-link">GitHub</a>-->
+            </section>
+        </header>
+        <div class="container">
+            <div class="columns">
+                <div class="column col-2"></div>
+                <div class="column col-9 col-sm-12">
+                    <!--<form class="form-horizontal" action="/emptyCache" method="post">
+                        <input class="btn btn-primary input-group-btn float-right" type="submit" value="Empty Cache"/>
+                    </form>-->
+                    <div class="float-right">
+                        <div class="form-group">
+                            <label class="form-switch">
+                                <input id="unlocker" type="checkbox">
+                                    <i class="form-icon"></i> Unlock
+                            </label>
+                        </div>
+                        <button id="refreshAllBtn" class="btn btn-sm disabled">Refresh All</button>
+                    </div>
+                    <h1>Cache</h1>
+                    <table class="table table-striped table-hover" id="cacheList">
+                        <thead>
+                            <tr>
+                                <th>query</th>
+                                <th>duration</th>
+                                <th>format</th>
+                                <th>date</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <% cache.forEach(function(item) { %>
+                                <tr data-id="<%= item.id%>" data-uri="<%= item.uri%>">
+                                    
+                                    <%
+                                        var dur = Math.round(item.dur / 10) / 100 + 's';
+                                        var dateRaw = new Date(item.date);
+                                        var when = dateRaw.toISOString().substr(0,19);
+                                    %>
+                                    
+                                    <td class="uri"><%= item.uri %></td>
+                                    <td class="dur"><%= dur %></td>
+                                    <td class="format"><%= item.format %></td>
+                                    <td class="when"><%= when %></td>
+                                    <td class="control">
+                                        <div class="btn-group">
+                                            <button class="btn btn-action btn-sm cacheBtn disabled" title="Refresh Cache" data-uri="<%= item.id%>"><i class="icon icon-refresh"></i></button>
+                                            <button class="btn btn-action btn-sm downloadCacheBtn" title="Download from Cache" data-uri="<%= item.id%>"><i class="icon icon-download"></i></button>
+                                            <a class="btn btn-action btn-sm downloadBtn" title="Download from Database (may be slow)" href="<%= item.id%>" target="_blank"><i class="icon icon-forward"></i></a>
+                                        </div>
+                                    </td>
+    
+                                </tr>
+                            <% }); %>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="column col-1"></div>
+            </div>
+        </div><!-- <div class="loading"></div> -->
+        <script type="text/javascript">
+            var unlocker = document.getElementById('unlocker');
+            var refreshAllButton = document.getElementById('refreshAllBtn');
+            var cacheButtons = document.querySelectorAll('.cacheBtn');
+            var downloadCacheBtn = document.querySelectorAll('.downloadCacheBtn');
+            
+            unlocker.addEventListener('change',function(e) {
+                for(var i=0;i<cacheButtons.length;i++) {
+                    cacheButtons[i].classList.toggle('disabled');
+                }
+                refreshAllButton.classList.toggle('disabled');
+            });
+            
+            var refreshUri = function(id) {
+                
+                console.log('\nrefreshUri(' + id + ')')
+            
+                var row = document.querySelector('#cacheList tr[data-id="' + id + '"]');
+                if(row.classList.contains('refreshing')) {
+                    return false;
+                };
+                
+                var uri = row.getAttribute('data-uri');
+                
+                row.classList.add('refreshing');
+                row.querySelector('.dur').innerHTML = '<div class="loading"></div>';
+                row.querySelector('.when').innerHTML = '';
+                row.querySelector('.control .cacheBtn').setAttribute('disabled','disabled');
+                
+                var uriParam = encodeURIComponent(uri);
+                var formatParam = 'json';
+                
+                var fetchParameters = { 
+                    method: "GET",
+                    headers: {
+                      "Content-Type": "application/json"
+                    },
+                    credentials: "same-origin"
+                };
+                
+                fetch('/refreshCache?uri=' + uriParam + '&format=' + formatParam, fetchParameters)
+                .then(function(response) {
+                    return response.json();
+                })
+                .then(function(data) {
+                    
+                    var row = document.querySelector('#cacheList tr[data-id="' + data.id + '"]');
+                    
+                    var dateRaw = new Date(data.date);
+                    var when = dateRaw.toISOString().substr(0,19);
+                    
+                    row.querySelector('.dur').innerHTML = Math.round(data.dur / 10) / 100 + 's';
+                    row.querySelector('.when').innerHTML = when;
+                    row.querySelector('.control .cacheBtn').removeAttribute('disabled');
+                    row.classList.remove('refreshing');
+                    
+                });
+            };
+            
+            var downloadFromCache = function(uri) {
+                
+                var uriParam = encodeURIComponent(uri);
+                var fetchParameters = { 
+                    method: "GET",
+                    headers: {
+                      "Content-Type": "application/json"
+                    },
+                    credentials: "same-origin"
+                };
+                
+                window.open(
+                    '/downloadFromCache?uri=' + uriParam,
+                    uri,
+                    "resizable,scrollbars,status"
+                );
+                
+                /*fetch('/downloadFromCache?uri=' + uriParam, fetchParameters)
+                .then(function(response) {
+                    return response.json();
+                })
+                .then(function(data) {
+                    console.log('received data')
+                    console.log(data);
+                    
+                });*/
+            };
+            
+            for(var i=0;i<cacheButtons.length;i++) {
+                cacheButtons[i].addEventListener('click',function(e) {
+                    var uri = e.target.getAttribute('data-uri');
+                    refreshUri(uri);
+                });
+            }
+            
+            for(var i=0;i<downloadCacheBtn.length;i++) {
+                downloadCacheBtn[i].addEventListener('click',function(e) {
+                    var uri = e.target.getAttribute('data-uri');
+                    downloadFromCache(uri);
+                });
+            }
+            
+            refreshAllButton.addEventListener('click',function(e) {
+                
+                var uris = [
+                    <% cache.forEach(function(item,i) { %>
+                        <% if (i>0) { %>,<% } %>"<%= item.id %>"                        
+                    <% }); %>
+                ];
+                
+                for(var i=0;i<uris.length;i++) {
+                    refreshUri(uris[i]);
+                }
+                
+            });
+            
+        </script>
+    </body>
+</html>

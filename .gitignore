@@ -2,3 +2,5 @@ node_modules/
 build/
 releases/
 serverConfig.json
+.DS_Store
+/source_server/serverConfig.json

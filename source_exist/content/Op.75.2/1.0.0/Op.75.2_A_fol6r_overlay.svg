@@ -1,0 +1,1687 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="7847px" height="5920px" version="1.1" overflow="visible" id="Op.75.2_A_fol6r_verovioOverlay">
+    <desc>Engraved by Verovio 0.9.14-dev-d5d46fd-dirty</desc>
+    <defs>
+        <symbol id="E881" viewBox="0 0 1000 1000" overflow="inherit">
+            <path transform="scale(1,-1)" d="M207 311l-85 -275c-4 -6 7 -11 13 -13l18 -2h11l-6 -21h-158l6 21h15c7 0 14 2 21 5c9 1 16 8 20 20l55 176l-71 -56l-10 10l109 135h62z"/>
+        </symbol>
+        <symbol id="E883" viewBox="0 0 1000 1000" overflow="inherit">
+            <path transform="scale(1,-1)" d="M161 326c52 0 94 -17 94 -68c0 -50 -40 -76 -82 -94c26 -21 39 -42 39 -64c0 -52 -56 -100 -118 -100h-12c-40 0 -82 23 -82 56c0 30 12 49 37 49c17 0 31 -16 34 -31c0 -5 -4 -12 -11 -21c-7 -5 -13 -10 -13 -21l11 -9l17 -4c21 0 40 12 56 37c13 21 19 45 19 70 c-9 30 -28 35 -66 35l6 23c34 0 60 4 77 13c20 11 30 35 30 70c0 28 -12 38 -39 40l-20 -3c-8 -3 -12 -9 -12 -16c2 -7 4 -11 5 -14l4 -11l3 -10l-3 -12c-5 -6 -11 -11 -20 -13c-18 -4 -36 10 -36 27c0 39 43 71 82 71z"/>
+        </symbol>
+        <symbol id="E880" viewBox="0 0 1000 1000" overflow="inherit">
+            <path transform="scale(1,-1)" d="M166 326c47 0 77 -43 77 -90c0 -112 -68 -236 -164 -236c-50 0 -79 43 -79 93c0 52 14 102 43 149c28 46 61 84 123 84zM191 268c0 21 -10 34 -25 39c-33 0 -61 -36 -85 -107c-19 -57 -29 -104 -29 -143l2 -14c3 -5 3 -8 7 -12c5 -7 11 -12 20 -12c30 0 62 34 82 107 l21 78c5 21 7 43 7 64z"/>
+        </symbol>
+        <symbol id="E0A4" viewBox="0 0 1000 1000" overflow="inherit">
+            <path transform="scale(1,-1)" d="M0 -39c0 68 73 172 200 172c66 0 114 -37 114 -95c0 -84 -106 -171 -218 -171c-64 0 -96 30 -96 94z"/>
+        </symbol>
+        <symbol id="E241" viewBox="0 0 1000 1000" overflow="inherit">
+            <path transform="scale(1,-1)" d="M179 646c15 -29 28.5449 -55.0752 46 -102c18.3213 -49.2549 30 -108.298 30 -138c0 -105 -80 -173 -168 -200c-18 -5 -47 -9 -87 -16v-190h22c8 0 33 61 71 95c4 3 -2 -3 61 56c62 58 122 137 122 241c0 37.5244 -12.6807 106.071 -35 163 c-19.9111 50.7861 -43 99 -66 132c-6 5 -10 7 -13 7s-5 -2 -5 -5l4 -10c1.17285 -2.93066 13.7646 -24.8115 18 -33z"/>
+        </symbol>
+        <symbol id="E4E5" viewBox="0 0 1000 1000" overflow="inherit">
+            <path transform="scale(1,-1)" d="M107 292c-13 24 -30 49 -52 71c-1 1 0 2 0 3l-2 2c3 3 4 4 6 4c12 0 26 -7 40 -20s44 -40 89 -81c26 -24 28 -29 46 -47c4 -4 8 -9 10 -14c6 -8 8 -16 8 -27c0 -19 -12 -40 -36 -61c-28 -23 -49 -38 -61 -73c-4 -11 -7 -27 -10 -50c13 -43 34 -83 59 -121 c31 -47 59 -79 101 -129c-8 0 -26 7 -54 20l-62 29l-21 6l-23 1c-25 0 -45 -10 -60 -30l-4 -14l-1 -12c0 -33 20 -56 39 -78c8 -9 17 -18 26 -26c17 -15 27 -24 28 -30l-3 -3c-11 5 -19 10 -25 15c-9 3 -37 21 -45 26c-24 14 -45 32 -63 51c-19 21 -37 44 -37 71 c0 63 27 95 80 95c41 0 86 -18 136 -52c-19 26 -37 48 -55 66c-23 23 -48 44 -73 65c-28 23 -47 40 -58 53s-17 26 -18 39c75 64 113 125 113 183c0 27 -7 48 -18 68z"/>
+        </symbol>
+        <symbol id="E4E6" viewBox="0 0 1000 1000" overflow="inherit">
+            <path transform="scale(1,-1)" d="M0 123c7 34 33 56 69 60c29 -3 43 -9 53 -29c4 -8 7 -15 10 -22c0 -21 -1 -25 -11 -35c-5 -8 -18 -14 -40 -20l12 -3l15 -1c44 0 97 26 122 56c10 11 18 26 24 42c7 1 15 2 22 3l-140 -424h-36l111 330c-10 -6 -27 -12 -53 -16l-52 -8h-10l-20 1c-1 0 -8 3 -21 6 c-37 9 -55 28 -55 60z"/>
+        </symbol>
+        <symbol id="E520" viewBox="0 0 1000 1000" overflow="inherit">
+            <path transform="scale(1,-1)" d="M23 124h-23c22 42.667 42.667 76.333 62 101s44.667 37.333 76 38c6 0 12 -4.333 18 -13c6.667 -6.667 10 -15.667 10 -27l24 14l25 13c12 4.667 24.333 7 37 7c24 0 43.333 -9.333 58 -28s22.333 -44.333 23 -77c0 -14 -1 -26.667 -3 -38s-5.333 -21 -10 -29 s-11 -17 -19 -27c-14 -18 -29.667 -32 -47 -42c-17.333 -10 -35.333 -15 -54 -15c-8.667 0 -19.667 3.33301 -33 10c-5.333 3.333 -10.333 6.667 -15 10s-9 8 -13 14l-56 -158l-3 -4c2.667 -6.667 6.667 -10.333 12 -11h32v-29h-173v29h21c4 0 8.667 1.667 14 5 c4 4 7 8.667 9 14l119 331v6l-3 10l-6 3c-8.667 0 -17 -4 -25 -12s-15.667 -18.333 -23 -31l-11 -17l-10 -20zM197 201c-12 -20.667 -21.667 -44.667 -29 -72c-6.667 -30 -10 -50.667 -10 -62c0 -24 7.333 -36 22 -36c12.667 0 23 2.333 31 7s15 11.333 21 20 c10 16.667 15.333 26 16 28c4.667 11.333 8 26 10 44s3.333 31 4 39c0 7.333 -0.667 13.333 -2 18s-3.333 9.334 -6 14c-5.333 9.333 -14.667 14 -28 14c-14 0 -23.667 -4.667 -29 -14z"/>
+        </symbol>
+        <symbol id="E884" viewBox="0 0 1000 1000" overflow="inherit">
+            <path transform="scale(1,-1)" d="M259 110l-6 -21h-59l-16 -52c-3 -6 0 -11 9 -14l34 -2l-6 -21h-155l6 21l18 1l15 4c9 3 16 11 20 23l13 40h-132l5 21c12 10 26 22 39 39l33 43c13 18 27 41 40 68l21 51h97l-36 -49c-13 -16 -33 -34 -49 -49c-36 -35 -76 -67 -115 -100l108 -3l20 72l80 77h5l-44 -149 h55z"/>
+        </symbol>
+    </defs>
+    <style type="text/css">g.page-margin{font-family:Times;} g.tempo{font-weight:bold;} g.dir, g.dynam {font-style:italic;}</style>
+    <svg id="definition-scale" viewBox="0 0 31390 23680">
+        <g class="page-margin" transform="translate(-400, 0) rotate(-1)">
+            <g class="system" id="system-0000000661646167">
+                <path d="M15 2700 L15 6430" stroke="#000000" stroke-width="30"/>
+                <text x="-330" y="5385" text-anchor="end" font-size="0px">
+                    <tspan font-size="405px" class="text">Pianoforte</tspan>
+                </text>
+                <path d="M-15,6410 C-375,5870 75,5475 -195,5295 C140,5475 -310,5870 -15,6410" stroke="#000000" stroke-linecap="round" stroke-linejoin="round" stroke-width="20"/>
+                <path d="M-15,4180 C-310,4720 140,5115 -195,5295 C75,5115 -375,4720 -15,4180" stroke="#000000" stroke-linecap="round" stroke-linejoin="round" stroke-width="20"/>
+                <text x="-270" y="3150" text-anchor="end" font-size="0px">
+                    <tspan font-size="405px" class="text">Singstimme</tspan>
+                </text>
+                <use xlink:href="#E881" x="0" y="2160" height="720px" width="720px"/>
+                <use xlink:href="#E883" x="149" y="2160" height="720px" width="720px"/>
+                <use xlink:href="#E880" x="332" y="2160" height="720px" width="720px"/>
+                <g class="measure" id="a357f5fe9-63d9-4b9c-ab54-6788fff64165">
+                    <g class="staff" id="a85b035e3-7b08-4922-840a-611cb7f00434">
+                        <path d="M2550 2700 L6890 2700" stroke="#000000" stroke-width="20"/>
+                        <path d="M2550 2880 L6890 2880" stroke="#000000" stroke-width="20"/>
+                        <path d="M2550 3060 L6890 3060" stroke="#000000" stroke-width="20"/>
+                        <path d="M2550 3240 L6890 3240" stroke="#000000" stroke-width="20"/>
+                        <path d="M2550 3420 L6890 3420" stroke="#000000" stroke-width="20"/>
+                        <g class="layer" id="ae0116bb2-7062-4935-9bdd-8bd8bae5174e">
+                            <g class="note" id="new63f22093-6307-4ab6-ac0a-ed4067f71a0b">
+                                <use xlink:href="#E0A4" x="3887" y="2610" height="720px" width="720px"/>
+                                <g class="stem" id="stem-0000000679756919">
+                                    <path d="M3897 2632 L3897 3240" stroke="#000000" stroke-width="20"/>
+                                </g>
+                                <g class="verse" id="a3c0ae900-a348-4416-8817-b9f4a59491b3">
+                                    <g class="syl" id="newa2d1141c-2a68-4311-984d-8874cb255f8c">
+                                        <text x="3820" y="3332" font-size="0px">
+                                            <tspan font-size="405px" class="text">laß</tspan>
+                                        </text>
+                                    </g>
+                                </g>
+                            </g>
+                            <g class="note" id="a9cd38751-a7ff-4ace-95b2-cbc65529c48c">
+                                <use xlink:href="#E0A4" x="5127" y="3060" height="720px" width="720px"/>
+                                <g class="stem" id="stem-0000000061535593">
+                                    <path d="M5137 3082 L5137 3690" stroke="#000000" stroke-width="20"/>
+                                    <g class="flag" id="flag-0000001289077344">
+                                        <use xlink:href="#E241" x="5127" y="3690" height="720px" width="720px"/>
+                                    </g>
+                                </g>
+                                <g class="verse" id="aaf171eb9-2e54-4633-8701-b591a688d1c3">
+                                    <g class="syl" id="a380f7b5a-a474-41fc-8e09-bdeca62990a4">
+                                        <text x="5060" y="3332" font-size="0px">
+                                            <tspan font-size="405px" class="text">mich</tspan>
+                                        </text>
+                                    </g>
+                                </g>
+                            </g>
+                        </g>
+                    </g>
+                    <g class="staff" id="a288bd56c-10d9-43a6-a186-6b7c3313a22f">
+                        <path d="M2550 4160 L6890 4160" stroke="#000000" stroke-width="20"/>
+                        <path d="M2550 4340 L6890 4340" stroke="#000000" stroke-width="20"/>
+                        <path d="M2550 4520 L6890 4520" stroke="#000000" stroke-width="20"/>
+                        <path d="M2550 4700 L6890 4700" stroke="#000000" stroke-width="20"/>
+                        <path d="M2550 4880 L6890 4880" stroke="#000000" stroke-width="20"/>
+                        <g class="layer" id="ab17d9534-775d-442e-bbe2-49221b778960">
+                            <g class="space" id="a6ff2e649-09d2-4af7-86f7-cdf9f97e9dfd"/>
+                        </g>
+                    </g>
+                    <g class="staff" id="ab23e211f-51b9-4e14-9acb-adb4cbe97440">
+                        <path d="M2550 5710 L6890 5710" stroke="#000000" stroke-width="20"/>
+                        <path d="M2550 5890 L6890 5890" stroke="#000000" stroke-width="20"/>
+                        <path d="M2550 6070 L6890 6070" stroke="#000000" stroke-width="20"/>
+                        <path d="M2550 6250 L6890 6250" stroke="#000000" stroke-width="20"/>
+                        <path d="M2550 6430 L6890 6430" stroke="#000000" stroke-width="20"/>
+                        <g class="layer" id="ac1190829-7dcf-490c-8eb4-c5c0cab05057">
+                            <g class="space" id="a2ee01fac-072c-4872-9eb0-897dcb4016e9"/>
+                        </g>
+                    </g>
+                    <g class="barLineAttr" id="bline-0000002005008248">
+                        <path d="M2550 2700 L2550 3420" stroke="#000000" stroke-width="30"/>
+                        <path d="M2550 4160 L2550 6430" stroke="#000000" stroke-width="30"/>
+                    </g>
+                </g>
+                <g class="measure" id="aa75996ea-3af4-44fd-a841-fc532a0da894">
+                    <g class="staff" id="ac7eb446b-3047-4f95-9da6-83b0582d82a0">
+                        <path d="M6890 2700 L12390 2700" stroke="#000000" stroke-width="20"/>
+                        <path d="M6890 2880 L12390 2880" stroke="#000000" stroke-width="20"/>
+                        <path d="M6890 3060 L12390 3060" stroke="#000000" stroke-width="20"/>
+                        <path d="M6890 3240 L12390 3240" stroke="#000000" stroke-width="20"/>
+                        <path d="M6890 3420 L12390 3420" stroke="#000000" stroke-width="20"/>
+                        <g class="layer" id="a396af1be-453e-4bb5-af10-3635eb55fad7">
+                            <g class="note" id="a88204a6e-0b36-4e8c-8792-1e14c0831ad2">
+                                <use xlink:href="#E0A4" x="8687" y="2970" height="720px" width="720px"/>
+                                <g class="stem" id="stem-0000001707889672">
+                                    <path d="M8697 2992 L8697 3600" stroke="#000000" stroke-width="20"/>
+                                </g>
+                                <g class="supplied" id="add7adc7f-d046-49cf-994f-063349d29b1e">
+                                    <g class="verse" id="a3bbd9f7a-10d2-4507-9f91-5e70302d32ab">
+                                        <g class="syl" id="a389e6ee0-8302-4cc3-9940-8851477d5148">
+                                            <text x="8620" y="3332" font-size="0px">
+                                                <tspan font-size="405px" class="text">loß</tspan>
+                                            </text>
+                                        </g>
+                                    </g>
+                                </g>
+                            </g>
+                            <g class="rest" id="new6129d3a4-ade0-4295-b0af-6c34ab7a481b">
+                                <use xlink:href="#E4E5" x="9387" y="3060" height="720px" width="720px"/>
+                            </g>
+                        </g>
+                    </g>
+                    <g class="staff" id="af3f652d8-0f6a-4a1b-9367-0d7123657626">
+                        <path d="M6890 4160 L12390 4160" stroke="#000000" stroke-width="20"/>
+                        <path d="M6890 4340 L12390 4340" stroke="#000000" stroke-width="20"/>
+                        <path d="M6890 4520 L12390 4520" stroke="#000000" stroke-width="20"/>
+                        <path d="M6890 4700 L12390 4700" stroke="#000000" stroke-width="20"/>
+                        <path d="M6890 4880 L12390 4880" stroke="#000000" stroke-width="20"/>
+                        <g class="layer" id="af5af1599-a14a-4cf8-93e8-866be89e724d">
+                            <g class="space" id="abc7b4b1b-c1b9-4272-9055-a027423ba17c"/>
+                            <g class="note" id="ae6a4f6dc-67aa-4a52-8723-f506223fb8c8">
+                                <use xlink:href="#E0A4" x="10627" y="4070" height="720px" width="720px"/>
+                                <g class="stem" id="stem-0000001235291502">
+                                    <path d="M10637 4092 L10637 4700" stroke="#000000" stroke-width="20"/>
+                                </g>
+                            </g>
+                            <g class="note" id="a0de15c76-451a-48f4-a6ca-f8886de79ef4">
+                                <use xlink:href="#E0A4" x="11237" y="4520" height="720px" width="720px"/>
+                                <g class="stem" id="stem-0000001819858565">
+                                    <path d="M11247 4542 L11247 5150" stroke="#000000" stroke-width="20"/>
+                                    <g class="flag" id="flag-0000001900801381">
+                                        <use xlink:href="#E241" x="11237" y="5150" height="720px" width="720px"/>
+                                    </g>
+                                </g>
+                            </g>
+                        </g>
+                    </g>
+                    <g class="staff" id="a8b2376e2-b115-4051-aa1a-e5783a2610de">
+                        <path d="M6890 5710 L12390 5710" stroke="#000000" stroke-width="20"/>
+                        <path d="M6890 5890 L12390 5890" stroke="#000000" stroke-width="20"/>
+                        <path d="M6890 6070 L12390 6070" stroke="#000000" stroke-width="20"/>
+                        <path d="M6890 6250 L12390 6250" stroke="#000000" stroke-width="20"/>
+                        <path d="M6890 6430 L12390 6430" stroke="#000000" stroke-width="20"/>
+                        <g class="layer" id="ae1b755f1-a4e4-4ade-8d95-e39cb5eae369"/>
+                    </g>
+                    <g class="barLineAttr" id="bline-0000001404887562">
+                        <path d="M6890 2700 L6890 3420" stroke="#000000" stroke-width="30"/>
+                        <path d="M6890 4160 L6890 6430" stroke="#000000" stroke-width="30"/>
+                    </g>
+                </g>
+                <g class="measure" id="a2160e33a-d0d3-4b69-93bb-132060e61bee">
+                    <g class="staff" id="a7c52e7ff-4d2d-4de6-96c3-4cdd054c2531">
+                        <path d="M12390 2700 L16620 2700" stroke="#000000" stroke-width="20"/>
+                        <path d="M12390 2880 L16620 2880" stroke="#000000" stroke-width="20"/>
+                        <path d="M12390 3060 L16620 3060" stroke="#000000" stroke-width="20"/>
+                        <path d="M12390 3240 L16620 3240" stroke="#000000" stroke-width="20"/>
+                        <path d="M12390 3420 L16620 3420" stroke="#000000" stroke-width="20"/>
+                        <g class="layer" id="a3bd80bb5-a4da-4a28-9500-2f9d005aff5b">
+                            <g class="del" id="a02c83d09-ae0d-4637-ac4e-f242b150c666">
+                                <g class="space" id="aa0875a6e-6e76-4391-bf55-5bd561a73013"/>
+                                <g class="space" id="abbb8a373-71cf-4715-ad8e-93bb2bc5b50f"/>
+                            </g>
+                            <g class="add" id="a0c9b9abc-1793-4c78-8035-77bb837162f0">
+                                <g class="note" id="new9dbe58b5-2bff-4f82-8089-4aec693e3c38">
+                                    <use xlink:href="#E0A4" x="15577" y="2610" height="720px" width="720px"/>
+                                    <g class="stem" id="stem-0000000802077695">
+                                        <path d="M15587 2632 L15587 3240" stroke="#000000" stroke-width="20"/>
+                                    </g>
+                                    <g class="verse" id="af94e7380-0729-4013-89c4-69ee337584a7">
+                                        <g class="syl" id="a514eddec-fd08-4f07-9428-b9c4076de460">
+                                            <text x="15510" y="3332" font-size="0px">
+                                                <tspan font-size="405px" class="text">la</tspan>
+                                            </text>
+                                            <rect x="16766" y="3242" height="30" width="120"/>
+                                            <rect x="17966" y="3242" height="30" width="120"/>
+                                        </g>
+                                    </g>
+                                </g>
+                            </g>
+                        </g>
+                    </g>
+                    <g class="staff" id="a9cb019d4-d6dd-4ade-bcb1-7a84e87304fe">
+                        <path d="M12390 4160 L16620 4160" stroke="#000000" stroke-width="20"/>
+                        <path d="M12390 4340 L16620 4340" stroke="#000000" stroke-width="20"/>
+                        <path d="M12390 4520 L16620 4520" stroke="#000000" stroke-width="20"/>
+                        <path d="M12390 4700 L16620 4700" stroke="#000000" stroke-width="20"/>
+                        <path d="M12390 4880 L16620 4880" stroke="#000000" stroke-width="20"/>
+                        <g class="layer" id="a4be48578-c04e-40fa-9686-7606e1c2a337">
+                            <g class="del" id="afbe3365d-1900-4ee1-8b64-c352501054ca">
+                                <g class="note" id="a74eb9992-acb3-4578-bf6d-f24b048082d6">
+                                    <use xlink:href="#E0A4" x="14157" y="4430" height="720px" width="720px"/>
+                                    <g class="stem" id="stem-0000000764967646">
+                                        <path d="M14167 4452 L14167 5060" stroke="#000000" stroke-width="20"/>
+                                    </g>
+                                    <g class="supplied" id="a8cd6c407-3798-4411-9f53-51386687678d"/>
+                                </g>
+                            </g>
+                            <g class="beam" id="acf09f72a-7fbd-44aa-8109-59fbb3d68ac3">
+                                <polygon points="15007,5104 15937,5195 15937,5105 15007,5014 "/>
+                                <polygon points="15007,4969 15937,5060 15937,4970 15007,4879 "/>
+                                <g class="note" id="a28ea30ef-877d-4c7e-bc45-c83d3834ea87">
+                                    <use xlink:href="#E0A4" x="15007" y="4070" height="720px" width="720px"/>
+                                    <g class="stem" id="stem-0000001974115380">
+                                        <path d="M15017 4092 L15017 5084" stroke="#000000" stroke-width="20"/>
+                                    </g>
+                                </g>
+                                <g class="note" id="ab7653de4-b9a1-42b4-be02-e07c7c7d4a4e">
+                                    <use xlink:href="#E0A4" x="15187" y="4160" height="720px" width="720px"/>
+                                    <g class="stem" id="stem-0000000334845510">
+                                        <path d="M15197 4182 L15197 5102" stroke="#000000" stroke-width="20"/>
+                                    </g>
+                                </g>
+                                <g class="note" id="a90d6486c-b40a-40f6-b218-4ab4b02c9806">
+                                    <use xlink:href="#E0A4" x="15397" y="4250" height="720px" width="720px"/>
+                                    <g class="stem" id="stem-0000001341331430">
+                                        <path d="M15407 4272 L15407 5123" stroke="#000000" stroke-width="20"/>
+                                    </g>
+                                </g>
+                                <g class="note" id="a13981045-773a-4ed3-8a02-5715e3f5c317">
+                                    <use xlink:href="#E0A4" x="15547" y="4340" height="720px" width="720px"/>
+                                    <g class="stem" id="stem-0000001621501451">
+                                        <path d="M15557 4362 L15557 5138" stroke="#000000" stroke-width="20"/>
+                                    </g>
+                                </g>
+                                <g class="note" id="ac1b987ef-a7e6-4492-a335-eedd6c007616">
+                                    <use xlink:href="#E0A4" x="15707" y="4430" height="720px" width="720px"/>
+                                    <g class="stem" id="stem-0000001007406527">
+                                        <path d="M15717 4452 L15717 5154" stroke="#000000" stroke-width="20"/>
+                                    </g>
+                                </g>
+                                <g class="note" id="a306d390a-5a57-4197-9842-6a652d25b347">
+                                    <use xlink:href="#E0A4" x="15917" y="4520" height="720px" width="720px"/>
+                                    <g class="stem" id="stem-0000000720426341">
+                                        <path d="M15927 4542 L15927 5175" stroke="#000000" stroke-width="20"/>
+                                    </g>
+                                </g>
+                            </g>
+                        </g>
+                    </g>
+                    <g class="staff" id="a5f586e0b-be7f-4926-8682-3405ad175f65">
+                        <path d="M12390 5710 L16620 5710" stroke="#000000" stroke-width="20"/>
+                        <path d="M12390 5890 L16620 5890" stroke="#000000" stroke-width="20"/>
+                        <path d="M12390 6070 L16620 6070" stroke="#000000" stroke-width="20"/>
+                        <path d="M12390 6250 L16620 6250" stroke="#000000" stroke-width="20"/>
+                        <path d="M12390 6430 L16620 6430" stroke="#000000" stroke-width="20"/>
+                        <g class="layer" id="a78833203-2673-48db-b367-9db364384fcb">
+                            <g class="del" id="a6c56f09b-8be2-4dcc-a14a-71275bafd1f3">
+                                <g class="space" id="ae91e8ada-ff32-4969-9589-6e9352b449c1"/>
+                            </g>
+                            <g class="space" id="a693c394a-e2ac-477a-bb9c-33357cefad99"/>
+                        </g>
+                    </g>
+                    <g class="add" id="acd36abda-d82b-47cf-9d14-abbc160f2f80">
+                        <g class="tie" id="new19470df5-047a-4a57-8be0-f61d4e5b3f60"/>
+                    </g>
+                    <g class="supplied" id="a704ec27e-1948-44e0-a680-917d1977d764">
+                        <g class="del" id="afade0db9-df44-4e7f-a6b3-126f9453b3cc">
+                            <g class="add" id="a90d4e70e-8edc-4eff-b3f3-3cb2e7ff7057"/>
+                        </g>
+                    </g>
+                    <g class="del" id="a9a1c307b-0151-4b9b-b5a3-a876581aecc1">
+                        <g class="add" id="ac5f7bc9e-739f-4128-95ef-a02b28428f64"/>
+                    </g>
+                    <g class="barLineAttr" id="bline-0000001447395508">
+                        <path d="M12390 2700 L12390 3420" stroke="#000000" stroke-width="30"/>
+                        <path d="M12390 4160 L12390 6430" stroke="#000000" stroke-width="30"/>
+                    </g>
+                </g>
+                <g class="measure" id="a028b58e9-4142-4d76-8c11-47976cf7ae26">
+                    <g class="staff" id="a1bbe6e67-cadf-4817-b223-f0ae4e23153c">
+                        <path d="M16620 2700 L20650 2700" stroke="#000000" stroke-width="20"/>
+                        <path d="M16620 2880 L20650 2880" stroke="#000000" stroke-width="20"/>
+                        <path d="M16620 3060 L20650 3060" stroke="#000000" stroke-width="20"/>
+                        <path d="M16620 3240 L20650 3240" stroke="#000000" stroke-width="20"/>
+                        <path d="M16620 3420 L20650 3420" stroke="#000000" stroke-width="20"/>
+                        <g class="layer" id="ab128aa03-ceb0-48a8-bbb5-3658b512c884">
+                            <g class="del" id="ab48e35a1-0f99-4776-8052-826de388fcbd"/>
+                            <g class="add" id="a98a27bbe-81e6-482d-883f-66c8e395e18e">
+                                <g class="note" id="newadb8a6ee-7e81-4c72-8e4d-f0d6aa19b6b3">
+                                    <use xlink:href="#E0A4" x="17517" y="2610" height="720px" width="720px"/>
+                                    <g class="stem" id="stem-0000000692711401">
+                                        <path d="M17527 2632 L17527 3240" stroke="#000000" stroke-width="20"/>
+                                    </g>
+                                </g>
+                                <g class="note" id="new2fe228b9-bfa8-435b-a2c9-f7616f549afa">
+                                    <use xlink:href="#E0A4" x="19117" y="2610" height="720px" width="720px"/>
+                                    <g class="stem" id="stem-0000000891666220">
+                                        <path d="M19127 2632 L19127 3240" stroke="#000000" stroke-width="20"/>
+                                    </g>
+                                    <g class="verse" id="a0a05a4c8-8006-4f86-a97d-b29f9dfdad3d">
+                                        <g class="syl" id="new8ae5f0db-a8eb-439a-911d-3ebe5c698853">
+                                            <text x="19050" y="3332" font-size="0px">
+                                                <tspan font-size="405px" class="text">ß</tspan>
+                                            </text>
+                                        </g>
+                                    </g>
+                                </g>
+                                <g class="note" id="a0730c5ce-4acd-4f9b-8d66-7c68d3ce5936">
+                                    <use xlink:href="#E0A4" x="19967" y="3060" height="720px" width="720px"/>
+                                    <g class="stem" id="stem-0000001093270774">
+                                        <path d="M19977 3082 L19977 3690" stroke="#000000" stroke-width="20"/>
+                                        <g class="flag" id="flag-0000000731814886">
+                                            <use xlink:href="#E241" x="19967" y="3690" height="720px" width="720px"/>
+                                        </g>
+                                    </g>
+                                    <g class="verse" id="aa4536beb-87cc-45c9-8d3d-179696790429">
+                                        <g class="syl" id="a8061eeba-9ba1-45d7-b418-2f7f1b7aed7e">
+                                            <text x="19900" y="3332" font-size="0px">
+                                                <tspan font-size="405px" class="text">mich</tspan>
+                                            </text>
+                                        </g>
+                                    </g>
+                                </g>
+                            </g>
+                        </g>
+                    </g>
+                    <g class="staff" id="a9e75688a-d715-424c-92a4-78833f3f1a20">
+                        <path d="M16620 4160 L20650 4160" stroke="#000000" stroke-width="20"/>
+                        <path d="M16620 4340 L20650 4340" stroke="#000000" stroke-width="20"/>
+                        <path d="M16620 4520 L20650 4520" stroke="#000000" stroke-width="20"/>
+                        <path d="M16620 4700 L20650 4700" stroke="#000000" stroke-width="20"/>
+                        <path d="M16620 4880 L20650 4880" stroke="#000000" stroke-width="20"/>
+                        <g class="layer" id="ad9d272df-19cc-47e1-9e9a-e7dd41caed99">
+                            <g class="note" id="a79eada69-2198-49b9-b85d-a20a19cf3547">
+                                <use xlink:href="#E0A4" x="17387" y="4430" height="720px" width="720px"/>
+                                <g class="stem" id="stem-0000000973942633">
+                                    <path d="M17397 4452 L17397 5060" stroke="#000000" stroke-width="20"/>
+                                </g>
+                            </g>
+                            <g class="rest" id="ab463a485-2e9b-4db7-bd1e-065f792fcf65">
+                                <use xlink:href="#E4E6" x="17827" y="4520" height="720px" width="720px"/>
+                            </g>
+                            <g class="space" id="a90505cb4-794a-4d09-a572-ad21a15fa59c"/>
+                        </g>
+                    </g>
+                    <g class="staff" id="af436234b-9f2d-4ac1-932c-90e91813b08c">
+                        <path d="M16620 5710 L20650 5710" stroke="#000000" stroke-width="20"/>
+                        <path d="M16620 5890 L20650 5890" stroke="#000000" stroke-width="20"/>
+                        <path d="M16620 6070 L20650 6070" stroke="#000000" stroke-width="20"/>
+                        <path d="M16620 6250 L20650 6250" stroke="#000000" stroke-width="20"/>
+                        <path d="M16620 6430 L20650 6430" stroke="#000000" stroke-width="20"/>
+                        <g class="ledgerLines above">
+                            <path d="M19427 5530 L19753 5530" stroke="#000000" stroke-width="35"/>
+                        </g>
+                        <g class="layer" id="add655390-900c-4a91-8d91-c1be9904561f">
+                            <g class="space" id="adf1ef35d-ef8e-479a-bdb7-eb6aa83f1c03"/>
+                            <g class="chord" id="aa27828ee-1209-4dd1-8796-2223fe90bf56">
+                                <g class="stem" id="stem-0000000933475397">
+                                    <path d="M19693 5958 L19693 4900" stroke="#000000" stroke-width="20"/>
+                                </g>
+                                <g class="note" id="afc7e6d5e-157c-4de3-9896-7993e2e0d7c6">
+                                    <use xlink:href="#E0A4" x="19477" y="5530" height="720px" width="720px"/>
+                                </g>
+                                <g class="note" id="ad21f079e-a2b4-4e37-b00d-75856f9538d6">
+                                    <use xlink:href="#E0A4" x="19477" y="5800" height="720px" width="720px"/>
+                                </g>
+                                <g class="note" id="a6038ff28-a574-450e-81dc-6e287ee18905">
+                                    <use xlink:href="#E0A4" x="19477" y="5980" height="720px" width="720px"/>
+                                </g>
+                            </g>
+                            <g class="rest" id="af38ba82e-1d63-489d-a124-9c93b8ee1570">
+                                <use xlink:href="#E4E6" x="20017" y="6070" height="720px" width="720px"/>
+                            </g>
+                        </g>
+                    </g>
+                    <g class="dynam" id="a1a60b58e-b29f-4936-8ebb-3b0eeb80c6ce">
+                        <use xlink:href="#E520" x="16500" y="5710" height="720px" width="720px"/>
+                    </g>
+                    <g class="add" id="ae552db9b-3b4f-4a56-a66d-f2da70ea0716">
+                        <g class="tie" id="newf9498109-d9fe-461e-a429-6fb8cfe0e5e9"/>
+                    </g>
+                    <g class="barLineAttr" id="bline-0000001915636845">
+                        <path d="M16620 2700 L16620 3420" stroke="#000000" stroke-width="30"/>
+                        <path d="M16620 4160 L16620 6430" stroke="#000000" stroke-width="30"/>
+                    </g>
+                </g>
+                <g class="measure" id="a7b077e3e-c0e3-4af1-8e90-822557dd3e54">
+                    <g class="staff" id="a14d2ac7a-3b49-444b-a55a-43d1249f75ab">
+                        <path d="M20650 2700 L24860 2700" stroke="#000000" stroke-width="20"/>
+                        <path d="M20650 2880 L24860 2880" stroke="#000000" stroke-width="20"/>
+                        <path d="M20650 3060 L24860 3060" stroke="#000000" stroke-width="20"/>
+                        <path d="M20650 3240 L24860 3240" stroke="#000000" stroke-width="20"/>
+                        <path d="M20650 3420 L24860 3420" stroke="#000000" stroke-width="20"/>
+                        <g class="layer" id="a7833a03f-467e-463d-a242-e44d9b8c0437">
+                            <g class="del" id="a63c8594e-2d9a-48d1-ba3c-4a7b727e6628">
+                                <g class="space" id="a7521dff6-9e7a-4538-8c55-45bad7661ad5"/>
+                            </g>
+                            <g class="add" id="a481ff596-23df-40c1-8c23-9bf8b6fb11bf">
+                                <g class="note" id="accd40fe5-520e-4381-9ac0-51a28f7db693">
+                                    <use xlink:href="#E0A4" x="21727" y="2970" height="720px" width="720px"/>
+                                    <g class="stem" id="stem-0000001552956044">
+                                        <path d="M21737 2992 L21737 3600" stroke="#000000" stroke-width="20"/>
+                                    </g>
+                                    <g class="verse" id="ad93d791e-5ba5-4be0-aeb2-4f75b17513c3">
+                                        <g class="syl" id="a0f094a9b-ac87-490d-bb1f-9b733088dd42">
+                                            <text x="21660" y="3332" font-size="0px">
+                                                <tspan font-size="405px" class="text">loß</tspan>
+                                            </text>
+                                        </g>
+                                    </g>
+                                </g>
+                            </g>
+                            <g class="space" id="a0f902974-48f6-445d-a7a3-857abe9ddbf1"/>
+                        </g>
+                    </g>
+                    <g class="staff" id="ad4160421-07db-4e8c-bf5c-5dd97ef013ac">
+                        <path d="M20650 4160 L24860 4160" stroke="#000000" stroke-width="20"/>
+                        <path d="M20650 4340 L24860 4340" stroke="#000000" stroke-width="20"/>
+                        <path d="M20650 4520 L24860 4520" stroke="#000000" stroke-width="20"/>
+                        <path d="M20650 4700 L24860 4700" stroke="#000000" stroke-width="20"/>
+                        <path d="M20650 4880 L24860 4880" stroke="#000000" stroke-width="20"/>
+                        <g class="layer" id="a9e5f69b3-4257-4cc9-b095-b3c55d0f13e8">
+                            <g class="space" id="a7eae9c03-90ba-4068-9533-1de7330dcdf5"/>
+                            <g class="del" id="a2c58dbab-e64a-4803-838f-c70ff9bec84e">
+                                <g class="space" id="ab9ceee3f-fd20-4d1f-ad4b-0177aeb8683b"/>
+                            </g>
+                            <g class="del" id="ad3b26e4c-1e6f-4a73-9cc7-26d624b90906">
+                                <g class="add" id="a7ed833a0-1e92-4150-8665-25eb7af40fdc">
+                                    <g class="beam" id="a7a2fcb0f-225c-470d-bcb4-e309fcb0a22c">
+                                        <polygon points="22677,5105 24297,5256 24297,5166 22677,5015 "/>
+                                        <polygon points="23207,5019 23537,5050 23537,4960 23207,4929 "/>
+                                        <polygon points="23537,5050 23957,5090 23957,5000 23537,4960 "/>
+                                        <polygon points="23957,5090 24297,5121 24297,5031 23957,5000 "/>
+                                        <g class="note" id="ad7cdcffe-bdf2-4e0d-a175-c6d04e841cec">
+                                            <use xlink:href="#E0A4" x="22677" y="4430" height="720px" width="720px"/>
+                                            <g class="stem" id="stem-0000000015985870">
+                                                <path d="M22687 4452 L22687 5085" stroke="#000000" stroke-width="20"/>
+                                            </g>
+                                        </g>
+                                        <g class="note" id="ab3843292-0a1a-45ae-8578-90693ecfff59">
+                                            <use xlink:href="#E0A4" x="23197" y="4070" height="720px" width="720px"/>
+                                            <g class="stem" id="stem-0000000239061215">
+                                                <path d="M23207 4092 L23207 5134" stroke="#000000" stroke-width="20"/>
+                                            </g>
+                                        </g>
+                                        <g class="note" id="aa97b6ff3-e103-42cc-9310-eb2cb8646ad9">
+                                            <use xlink:href="#E0A4" x="23527" y="4160" height="720px" width="720px"/>
+                                            <g class="stem" id="stem-0000002107420615">
+                                                <path d="M23537 4182 L23537 5165" stroke="#000000" stroke-width="20"/>
+                                            </g>
+                                        </g>
+                                        <g class="note" id="a67011c9d-87aa-4364-ba9e-556d1c7ec761">
+                                            <use xlink:href="#E0A4" x="23947" y="4340" height="720px" width="720px"/>
+                                            <g class="stem" id="stem-0000000970486334">
+                                                <path d="M23957 4362 L23957 5205" stroke="#000000" stroke-width="20"/>
+                                            </g>
+                                        </g>
+                                        <g class="note" id="a52a4859b-9a03-4cf4-95df-82ee86c3569a">
+                                            <use xlink:href="#E0A4" x="24277" y="4520" height="720px" width="720px"/>
+                                            <g class="stem" id="stem-0000000825516573">
+                                                <path d="M24287 4542 L24287 5236" stroke="#000000" stroke-width="20"/>
+                                            </g>
+                                        </g>
+                                    </g>
+                                </g>
+                            </g>
+                            <g class="add" id="ac9ecbe5e-96f9-4a50-bb0d-b4ba541c347d">
+                                <g class="note" id="a528dd127-04d0-4282-830a-18bc0fae4d3c">
+                                    <use xlink:href="#E0A4" x="22267" y="4070" height="720px" width="720px"/>
+                                    <g class="stem" id="stem-0000001712682791">
+                                        <path d="M22277 4092 L22277 4700" stroke="#000000" stroke-width="20"/>
+                                    </g>
+                                </g>
+                                <g class="note" id="a99772897-f539-45c0-97f1-b1bde64db643">
+                                    <use xlink:href="#E0A4" x="22367" y="4520" height="720px" width="720px"/>
+                                    <g class="stem" id="stem-0000000188863949">
+                                        <path d="M22377 4542 L22377 5150" stroke="#000000" stroke-width="20"/>
+                                        <g class="flag" id="flag-0000000255560577">
+                                            <use xlink:href="#E241" x="22367" y="5150" height="720px" width="720px"/>
+                                        </g>
+                                    </g>
+                                </g>
+                            </g>
+                        </g>
+                    </g>
+                    <g class="staff" id="acf5e0b2b-0ac4-474e-8ba6-83d12410d123">
+                        <path d="M20650 5710 L24860 5710" stroke="#000000" stroke-width="20"/>
+                        <path d="M20650 5890 L24860 5890" stroke="#000000" stroke-width="20"/>
+                        <path d="M20650 6070 L24860 6070" stroke="#000000" stroke-width="20"/>
+                        <path d="M20650 6250 L24860 6250" stroke="#000000" stroke-width="20"/>
+                        <path d="M20650 6430 L24860 6430" stroke="#000000" stroke-width="20"/>
+                        <g class="ledgerLines above">
+                            <path d="M21127 5530 L21453 5530" stroke="#000000" stroke-width="35"/>
+                        </g>
+                        <g class="layer" id="a9677829a-fa56-4441-86bb-3e1766fafc0b">
+                            <g class="chord" id="ad6c71ea3-8739-4c8e-aaf4-c8966d15761f">
+                                <g class="stem" id="stem-0000000239323639">
+                                    <path d="M21393 5958 L21393 4900" stroke="#000000" stroke-width="20"/>
+                                </g>
+                                <g class="note" id="new99f7b310-c9fb-4bef-a732-17be925e9d87">
+                                    <use xlink:href="#E0A4" x="21177" y="5530" height="720px" width="720px"/>
+                                </g>
+                                <g class="note" id="abeed8e60-168c-4f71-bab5-c2c7a01378da">
+                                    <use xlink:href="#E0A4" x="21177" y="5800" height="720px" width="720px"/>
+                                </g>
+                                <g class="note" id="ad41174b7-eca0-4fa4-bcae-b017dced66e1">
+                                    <use xlink:href="#E0A4" x="21177" y="5980" height="720px" width="720px"/>
+                                </g>
+                            </g>
+                            <g class="space" id="a61cd9519-a905-45da-aefd-0edcbfbce85d"/>
+                        </g>
+                    </g>
+                    <g class="barLineAttr" id="bline-0000001076941945">
+                        <path d="M20650 2700 L20650 3420" stroke="#000000" stroke-width="30"/>
+                        <path d="M20650 4160 L20650 6430" stroke="#000000" stroke-width="30"/>
+                    </g>
+                </g>
+                <g class="measure" id="a8e6c729f-e4f8-4be7-b859-48facfb96653">
+                    <g class="staff" id="a44b17775-201e-4018-a66c-a10a30d1406a">
+                        <path d="M24860 2700 L26640 2700" stroke="#000000" stroke-width="20"/>
+                        <path d="M24860 2880 L26640 2880" stroke="#000000" stroke-width="20"/>
+                        <path d="M24860 3060 L26640 3060" stroke="#000000" stroke-width="20"/>
+                        <path d="M24860 3240 L26640 3240" stroke="#000000" stroke-width="20"/>
+                        <path d="M24860 3420 L26640 3420" stroke="#000000" stroke-width="20"/>
+                        <g class="layer" id="a4ecf68a1-54c4-4819-a703-ea8677193bb2"/>
+                    </g>
+                    <g class="staff" id="a0fbf2429-5685-4398-818f-2bb5a5ea53a7">
+                        <path d="M24860 4160 L26640 4160" stroke="#000000" stroke-width="20"/>
+                        <path d="M24860 4340 L26640 4340" stroke="#000000" stroke-width="20"/>
+                        <path d="M24860 4520 L26640 4520" stroke="#000000" stroke-width="20"/>
+                        <path d="M24860 4700 L26640 4700" stroke="#000000" stroke-width="20"/>
+                        <path d="M24860 4880 L26640 4880" stroke="#000000" stroke-width="20"/>
+                        <g class="layer" id="a3bd64857-1820-4196-ac9c-4fa9e1da3e36">
+                            <g class="del" id="a42a8f5ce-24fc-4f6b-9371-42638f386433">
+                                <g class="choice" id="a501239a8-f631-4d7e-8391-ba8b17c63979">
+                                    <g class="orig" id="new82aefeb1-451f-430a-b00b-8034f936d3c2">
+                                        <g class="space" id="aff71961d-9cd9-4340-b1e1-0a6f3b73a481"/>
+                                    </g>
+                                    <g class="orig" id="new796d97b3-862b-43aa-81af-a80328333465"/>
+                                </g>
+                            </g>
+                            <g class="add" id="a73082b30-bda3-4396-ad48-13a7c3e26108">
+                                <g class="note" id="ab6192e95-4313-4568-9e0b-bbb11bcc68ff">
+                                    <use xlink:href="#E0A4" x="25247" y="4430" height="720px" width="720px"/>
+                                    <g class="stem" id="stem-0000000075529842">
+                                        <path d="M25257 4452 L25257 5060" stroke="#000000" stroke-width="20"/>
+                                    </g>
+                                </g>
+                            </g>
+                            <g class="beam" id="a7d36a300-6831-46dd-8803-385429552a8b">
+                                <polygon points="25087,5105 26367,5232 26367,5142 25087,5015 "/>
+                                <polygon points="25427,5004 25687,5030 25687,4940 25427,4914 "/>
+                                <polygon points="25687,5030 25817,5043 25817,4953 25687,4940 "/>
+                                <polygon points="25817,5043 25987,5060 25987,4970 25817,4953 "/>
+                                <polygon points="25987,5060 26217,5083 26217,4993 25987,4970 "/>
+                                <polygon points="26217,5083 26367,5097 26367,5007 26217,4993 "/>
+                                <g class="del" id="aa769186c-9e8e-43ba-8898-0c36d43c1e5c">
+                                    <g class="note" id="a97a0f352-2fe5-4f07-a72e-2339b07c8b9d">
+                                        <use xlink:href="#E0A4" x="25087" y="4430" height="720px" width="720px"/>
+                                        <g class="stem" id="stem-0000000267219117">
+                                            <path d="M25097 4452 L25097 5085" stroke="#000000" stroke-width="20"/>
+                                        </g>
+                                    </g>
+                                </g>
+                                <g class="note" id="ad1c2fc41-d38a-49ef-9e46-f2ecf035365c">
+                                    <use xlink:href="#E0A4" x="25417" y="4070" height="720px" width="720px"/>
+                                    <g class="stem" id="stem-0000000763393542">
+                                        <path d="M25427 4092 L25427 5119" stroke="#000000" stroke-width="20"/>
+                                    </g>
+                                </g>
+                                <g class="note" id="aaac0057b-e3a7-43a0-87cb-75dee0f05bfb">
+                                    <use xlink:href="#E0A4" x="25677" y="4160" height="720px" width="720px"/>
+                                    <g class="stem" id="stem-0000001287953216">
+                                        <path d="M25687 4182 L25687 5145" stroke="#000000" stroke-width="20"/>
+                                    </g>
+                                </g>
+                                <g class="add" id="a9444c201-a5ab-4887-a066-465f5e05f468">
+                                    <g class="note" id="a26dba274-2c8a-49a1-9991-31abc52db4b7">
+                                        <use xlink:href="#E0A4" x="25807" y="4250" height="720px" width="720px"/>
+                                        <g class="stem" id="stem-0000002142023199">
+                                            <path d="M25817 4272 L25817 5158" stroke="#000000" stroke-width="20"/>
+                                        </g>
+                                    </g>
+                                </g>
+                                <g class="note" id="ad3224a61-ca70-4815-a0c5-a1cde7c0ca67">
+                                    <use xlink:href="#E0A4" x="25977" y="4340" height="720px" width="720px"/>
+                                    <g class="stem" id="stem-0000000568047285">
+                                        <path d="M25987 4362 L25987 5175" stroke="#000000" stroke-width="20"/>
+                                    </g>
+                                </g>
+                                <g class="add" id="a1ed914dc-b5b9-432c-8d5e-e97ea62367f2">
+                                    <g class="note" id="acdd63878-b891-4fe3-acae-c8c21ab2f9ce">
+                                        <use xlink:href="#E0A4" x="26207" y="4430" height="720px" width="720px"/>
+                                        <g class="stem" id="stem-0000001605908080">
+                                            <path d="M26217 4452 L26217 5198" stroke="#000000" stroke-width="20"/>
+                                        </g>
+                                    </g>
+                                </g>
+                                <g class="note" id="ac99e1c31-2f43-4b14-8a34-a8d8aa936e0e">
+                                    <use xlink:href="#E0A4" x="26347" y="4520" height="720px" width="720px"/>
+                                    <g class="stem" id="stem-0000000922625064">
+                                        <path d="M26357 4542 L26357 5212" stroke="#000000" stroke-width="20"/>
+                                    </g>
+                                </g>
+                            </g>
+                            <g class="del" id="a6da60f9a-7d2a-484a-bd9f-8a27ec8b64a6">
+                                <g class="choice" id="aef9290b0-65eb-4330-b3b7-4c8d51d8317a">
+                                    <g class="orig" id="newb0525033-7c7d-404d-924d-a90ec13e937e">
+                                        <g class="space" id="afe920727-2ca3-406f-9cb5-6f8307da89fd"/>
+                                    </g>
+                                    <g class="orig" id="newdebe8dab-e1b7-461d-a756-38f341dbada9"/>
+                                </g>
+                            </g>
+                        </g>
+                    </g>
+                    <g class="staff" id="a99837f1f-65aa-4c00-9a0c-ef0850f88d2e">
+                        <path d="M24860 5710 L26640 5710" stroke="#000000" stroke-width="20"/>
+                        <path d="M24860 5890 L26640 5890" stroke="#000000" stroke-width="20"/>
+                        <path d="M24860 6070 L26640 6070" stroke="#000000" stroke-width="20"/>
+                        <path d="M24860 6250 L26640 6250" stroke="#000000" stroke-width="20"/>
+                        <path d="M24860 6430 L26640 6430" stroke="#000000" stroke-width="20"/>
+                        <g class="layer" id="a045b6c49-b7e5-4050-9a83-d4fd2e963ea1"/>
+                    </g>
+                    <g class="barLineAttr" id="bline-0000000635107488">
+                        <path d="M24860 2700 L24860 3420" stroke="#000000" stroke-width="30"/>
+                        <path d="M24860 4160 L24860 6430" stroke="#000000" stroke-width="30"/>
+                    </g>
+                </g>
+            </g>
+            <g class="system" id="system-0000000100803621">
+                <path d="M15 8790 L15 12580" stroke="#000000" stroke-width="30"/>
+                <path d="M-15,12560 C-375,12020 75,11625 -195,11445 C140,11625 -310,12020 -15,12560" stroke="#000000" stroke-linecap="round" stroke-linejoin="round" stroke-width="20"/>
+                <path d="M-15,10330 C-310,10870 140,11265 -195,11445 C75,11265 -375,10870 -15,10330" stroke="#000000" stroke-linecap="round" stroke-linejoin="round" stroke-width="20"/>
+                <use xlink:href="#E881" x="0" y="8250" height="720px" width="720px"/>
+                <use xlink:href="#E883" x="149" y="8250" height="720px" width="720px"/>
+                <use xlink:href="#E884" x="332" y="8250" height="720px" width="720px"/>
+                <g class="measure" id="a5f871648-91b8-4b6d-b4fd-2bce80c86d3b">
+                    <g class="staff" id="a2cd6ce41-1d00-45b8-9284-d29e970349db">
+                        <path d="M2900 8790 L7610 8790" stroke="#000000" stroke-width="20"/>
+                        <path d="M2900 8970 L7610 8970" stroke="#000000" stroke-width="20"/>
+                        <path d="M2900 9150 L7610 9150" stroke="#000000" stroke-width="20"/>
+                        <path d="M2900 9330 L7610 9330" stroke="#000000" stroke-width="20"/>
+                        <path d="M2900 9510 L7610 9510" stroke="#000000" stroke-width="20"/>
+                        <g class="layer" id="aee5b22bc-947a-41c9-800c-4e14e2a2c3a5"/>
+                    </g>
+                    <g class="staff" id="a3759c3ad-ac92-4495-95ce-e51068afb21b">
+                        <path d="M2900 10310 L7610 10310" stroke="#000000" stroke-width="20"/>
+                        <path d="M2900 10490 L7610 10490" stroke="#000000" stroke-width="20"/>
+                        <path d="M2900 10670 L7610 10670" stroke="#000000" stroke-width="20"/>
+                        <path d="M2900 10850 L7610 10850" stroke="#000000" stroke-width="20"/>
+                        <path d="M2900 11030 L7610 11030" stroke="#000000" stroke-width="20"/>
+                        <g class="ledgerLines below">
+                            <path d="M5827 11210 L6153 11210" stroke="#000000" stroke-width="35"/>
+                        </g>
+                        <g class="layer" id="a091f2008-2534-40e6-beb0-fce15bbc0d8a">
+                            <g class="note" id="a278120e0-e321-44cd-bf22-575651a4efef">
+                                <use xlink:href="#E0A4" x="4027" y="10580" height="720px" width="720px"/>
+                                <g class="stem" id="stem-0000001727519308">
+                                    <path d="M4037 10602 L4037 11210" stroke="#000000" stroke-width="20"/>
+                                </g>
+                            </g>
+                            <g class="rest" id="ac0a78468-e686-4671-9387-18207fb0890e">
+                                <use xlink:href="#E4E6" x="4807" y="10670" height="720px" width="720px"/>
+                            </g>
+                            <g class="chord" id="a109814fb-c8d6-4592-a97a-b04ccca850db">
+                                <g class="stem" id="stem-0000000438102116">
+                                    <path d="M6093 11188 L6093 10400" stroke="#000000" stroke-width="20"/>
+                                </g>
+                                <g class="note" id="a30676908-e4c7-4c69-b890-be6d155b2847">
+                                    <use xlink:href="#E0A4" x="5877" y="11210" height="720px" width="720px"/>
+                                </g>
+                                <g class="add" id="acb018275-25d4-419d-8c55-ae96102c225f">
+                                    <g class="note" id="new633f6aec-c0e4-41ef-a171-833393a8e49d">
+                                        <use xlink:href="#E0A4" x="5877" y="11030" height="720px" width="720px"/>
+                                    </g>
+                                </g>
+                            </g>
+                            <g class="rest" id="a5847b5b5-7fa8-4a96-b77a-b9684ac56e84">
+                                <use xlink:href="#E4E6" x="6467" y="10670" height="720px" width="720px"/>
+                            </g>
+                        </g>
+                    </g>
+                    <g class="staff" id="a0bdbba3d-68e6-4d5c-8e6e-39d2726f65eb">
+                        <path d="M2900 11860 L7610 11860" stroke="#000000" stroke-width="20"/>
+                        <path d="M2900 12040 L7610 12040" stroke="#000000" stroke-width="20"/>
+                        <path d="M2900 12220 L7610 12220" stroke="#000000" stroke-width="20"/>
+                        <path d="M2900 12400 L7610 12400" stroke="#000000" stroke-width="20"/>
+                        <path d="M2900 12580 L7610 12580" stroke="#000000" stroke-width="20"/>
+                        <g class="layer" id="a02323f05-e85d-4053-8f47-0c4ff520e661"/>
+                    </g>
+                    <g class="barLineAttr" id="bline-0000000154619734">
+                        <path d="M2900 8790 L2900 9510" stroke="#000000" stroke-width="30"/>
+                        <path d="M2900 10310 L2900 12580" stroke="#000000" stroke-width="30"/>
+                    </g>
+                </g>
+                <g class="measure" id="a697b2de9-3c09-400b-92a1-c88b5a2d1ce3">
+                    <g class="staff" id="a99a7b283-a741-4e5c-928d-e40237f875af">
+                        <path d="M7610 8790 L12630 8790" stroke="#000000" stroke-width="20"/>
+                        <path d="M7610 8970 L12630 8970" stroke="#000000" stroke-width="20"/>
+                        <path d="M7610 9150 L12630 9150" stroke="#000000" stroke-width="20"/>
+                        <path d="M7610 9330 L12630 9330" stroke="#000000" stroke-width="20"/>
+                        <path d="M7610 9510 L12630 9510" stroke="#000000" stroke-width="20"/>
+                        <g class="layer" id="a8da20f13-f3b0-414c-a830-625bf5e9489e">
+                            <g class="space" id="abde30513-d697-46ec-adb7-bbd0ff151d45"/>
+                            <g class="barLine" id="a90e6a559-7902-4578-8f85-f53fb4e910c0">
+                                <path d="M10760 8790 L10760 9510" stroke="#000000" stroke-width="30"/>
+                            </g>
+                        </g>
+                    </g>
+                    <g class="staff" id="a6f3bba7e-41ac-470d-bbf3-89afa85f0ae1">
+                        <path d="M7610 10310 L12630 10310" stroke="#000000" stroke-width="20"/>
+                        <path d="M7610 10490 L12630 10490" stroke="#000000" stroke-width="20"/>
+                        <path d="M7610 10670 L12630 10670" stroke="#000000" stroke-width="20"/>
+                        <path d="M7610 10850 L12630 10850" stroke="#000000" stroke-width="20"/>
+                        <path d="M7610 11030 L12630 11030" stroke="#000000" stroke-width="20"/>
+                        <g class="ledgerLines below">
+                            <path d="M8457 11210 L8783 11210" stroke="#000000" stroke-width="35"/>
+                        </g>
+                        <g class="layer" id="aa33f96d9-64e1-48ac-854f-3f948ad2c558">
+                            <g class="note" id="new66debd2b-86a0-402e-bf51-82226f9deff2">
+                                <use xlink:href="#E0A4" x="8507" y="11210" height="720px" width="720px"/>
+                                <g class="stem" id="stem-0000001608321696">
+                                    <path d="M8723 11188 L8723 10580" stroke="#000000" stroke-width="20"/>
+                                </g>
+                            </g>
+                            <g class="rest" id="new8c42d97d-3132-4c76-9229-e191b49c2dd5">
+                                <use xlink:href="#E4E6" x="9637" y="10670" height="720px" width="720px"/>
+                            </g>
+                            <g class="barLine" id="a96d843f4-7171-4bda-a9ee-34d3f62f578d">
+                                <path d="M10760 10310 L10760 11030" stroke="#000000" stroke-width="30"/>
+                            </g>
+                        </g>
+                    </g>
+                    <g class="staff" id="a21b024f5-29f4-4be6-a447-fd2986ae0bee">
+                        <path d="M7610 11860 L12630 11860" stroke="#000000" stroke-width="20"/>
+                        <path d="M7610 12040 L12630 12040" stroke="#000000" stroke-width="20"/>
+                        <path d="M7610 12220 L12630 12220" stroke="#000000" stroke-width="20"/>
+                        <path d="M7610 12400 L12630 12400" stroke="#000000" stroke-width="20"/>
+                        <path d="M7610 12580 L12630 12580" stroke="#000000" stroke-width="20"/>
+                        <g class="layer" id="a4eb1b4a9-7d0c-4d02-9c12-0aaea9901cc6">
+                            <g class="space" id="a9e3cbf79-0e9d-42fe-9655-a460c9216f1b"/>
+                            <g class="barLine" id="ab120ca0f-2dff-4e23-84d2-0042ee0c2cac">
+                                <path d="M10760 11860 L10760 12580" stroke="#000000" stroke-width="30"/>
+                            </g>
+                        </g>
+                    </g>
+                    <g class="add" id="a8057fab0-6b1a-48e7-8c71-9eaf56fd3bfd"/>
+                    <g class="barLineAttr" id="bline-0000000222561788">
+                        <path d="M7610 8790 L7610 9510" stroke="#000000" stroke-width="30"/>
+                        <path d="M7610 10310 L7610 12580" stroke="#000000" stroke-width="30"/>
+                    </g>
+                </g>
+                <g class="measure" id="a1a434ab1-625f-477f-93d4-13c5f8e23b2d">
+                    <g class="staff" id="ad2683283-cd03-4ec7-8895-f8f31c7d9791">
+                        <path d="M12630 8790 L15720 8790" stroke="#000000" stroke-width="20"/>
+                        <path d="M12630 8970 L15720 8970" stroke="#000000" stroke-width="20"/>
+                        <path d="M12630 9150 L15720 9150" stroke="#000000" stroke-width="20"/>
+                        <path d="M12630 9330 L15720 9330" stroke="#000000" stroke-width="20"/>
+                        <path d="M12630 9510 L15720 9510" stroke="#000000" stroke-width="20"/>
+                        <g class="layer" id="ae54030fe-c4e2-40ca-bffc-415ef80a426e">
+                            <g class="note" id="af8cc910d-1326-4c8a-ae3c-40a45a74e4b7">
+                                <use xlink:href="#E0A4" x="14067" y="8700" height="720px" width="720px"/>
+                                <g class="stem" id="stem-0000000686079883">
+                                    <path d="M14077 8722 L14077 9330" stroke="#000000" stroke-width="20"/>
+                                </g>
+                                <g class="verse" id="a633c8ba2-bb8a-469d-a1aa-21c3091430f3">
+                                    <g class="syl" id="a2ebc7ffe-15d0-4b8d-a01e-9c75e594561e">
+                                        <text x="14000" y="9422" font-size="0px">
+                                            <tspan class="del" id="a74913424-05ad-47f8-888a-3d7f53e85db0">
+                                                <tspan class="unclear" id="a09b0b5bd-2636-4549-a79e-7c88fde9da39"/>
+                                            </tspan>
+                                        </text>
+                                    </g>
+                                </g>
+                            </g>
+                        </g>
+                    </g>
+                    <g class="staff" id="a8fcbef3c-14f1-4966-a216-f9b9fbe62993">
+                        <path d="M12630 10310 L15720 10310" stroke="#000000" stroke-width="20"/>
+                        <path d="M12630 10490 L15720 10490" stroke="#000000" stroke-width="20"/>
+                        <path d="M12630 10670 L15720 10670" stroke="#000000" stroke-width="20"/>
+                        <path d="M12630 10850 L15720 10850" stroke="#000000" stroke-width="20"/>
+                        <path d="M12630 11030 L15720 11030" stroke="#000000" stroke-width="20"/>
+                        <g class="layer" id="a9c1e2ffe-7ba6-4410-b88c-db4c0192e66e">
+                            <g class="chord" id="a9f4bca17-0045-4372-bc70-36d7357382c2">
+                                <g class="stem" id="stem-0000001104892838">
+                                    <path d="M14267 10242 L14267 11480" stroke="#000000" stroke-width="20"/>
+                                </g>
+                                <g class="note" id="a3e334e28-9d88-44e5-8ecd-e46cebb3c46e">
+                                    <use xlink:href="#E0A4" x="14257" y="10850" height="720px" width="720px"/>
+                                </g>
+                                <g class="note" id="ade1bf51a-2e7c-4909-aee8-bbecd6753a4e">
+                                    <use xlink:href="#E0A4" x="14257" y="10670" height="720px" width="720px"/>
+                                </g>
+                                <g class="note" id="ac933f6f7-2219-4e30-80f1-6482993c0f81">
+                                    <use xlink:href="#E0A4" x="14257" y="10220" height="720px" width="720px"/>
+                                </g>
+                            </g>
+                            <g class="del" id="a4439dc5e-8fd6-4d9d-b243-53e35da1ed1b">
+                                <g class="unclear" id="a1fb2cc2f-4842-4f21-8283-e4e49ceca652"/>
+                            </g>
+                            <g class="rest" id="adf92ecbb-fd74-46d0-82e5-abe7537ffd1e">
+                                <use xlink:href="#E4E6" x="14997" y="10670" height="720px" width="720px"/>
+                            </g>
+                        </g>
+                    </g>
+                    <g class="staff" id="aade8a724-c090-430b-96bc-abc9b8194d9a">
+                        <path d="M12630 11860 L15720 11860" stroke="#000000" stroke-width="20"/>
+                        <path d="M12630 12040 L15720 12040" stroke="#000000" stroke-width="20"/>
+                        <path d="M12630 12220 L15720 12220" stroke="#000000" stroke-width="20"/>
+                        <path d="M12630 12400 L15720 12400" stroke="#000000" stroke-width="20"/>
+                        <path d="M12630 12580 L15720 12580" stroke="#000000" stroke-width="20"/>
+                        <g class="layer" id="ab6acf3f4-8a2e-4d3a-b7c0-d113cc5ea208">
+                            <g class="chord" id="afcda0a2f-e84b-4d0e-981a-5bbb8754e64a">
+                                <g class="stem" id="stem-0000000642832657">
+                                    <path d="M14307 12062 L14307 13210" stroke="#000000" stroke-width="20"/>
+                                </g>
+                                <g class="note" id="a951f42c3-e9da-4c4b-af16-42ab5642c118">
+                                    <use xlink:href="#E0A4" x="14297" y="12580" height="720px" width="720px"/>
+                                </g>
+                                <g class="note" id="aaccfc6b3-ce8e-454c-a5fe-39d1eb254498">
+                                    <use xlink:href="#E0A4" x="14297" y="12220" height="720px" width="720px"/>
+                                </g>
+                                <g class="note" id="a852a949a-9c44-4b70-a8fd-a0aec9717671">
+                                    <use xlink:href="#E0A4" x="14297" y="12040" height="720px" width="720px"/>
+                                </g>
+                            </g>
+                            <g class="del" id="adadbbf61-5fbb-46e5-a0ba-aae991627877">
+                                <g class="unclear" id="aed702713-77c0-4144-898e-90c8a2005562"/>
+                            </g>
+                            <g class="rest" id="abca48f70-9a11-48f4-b859-0286b6da862d">
+                                <use xlink:href="#E4E6" x="15147" y="12220" height="720px" width="720px"/>
+                            </g>
+                        </g>
+                    </g>
+                    <g class="dynam" id="a59370c9e-f3c3-4c58-b1df-4bd412d79c7f">
+                        <text x="12630" y="10310" font-size="0px">
+                            <tspan font-size="405px" class="text">f:</tspan>
+                        </text>
+                    </g>
+                    <g class="tie" id="a7c9431e4-f910-4edf-acaf-a03d8dc53f28"/>
+                    <g class="barLineAttr" id="bline-0000001744962958"/>
+                    <g class="barLineAttr" id="bline-0000001555751674">
+                        <path d="M12630 8790 L12630 9510" stroke="#000000" stroke-width="30"/>
+                        <path d="M12630 10310 L12630 12580" stroke="#000000" stroke-width="30"/>
+                    </g>
+                </g>
+                <g class="measure" id="a9633427b-4247-4fb3-b802-6d0caf891f90">
+                    <g class="staff" id="a18dbcc0a-f705-4423-aa3d-939dc76f69c4">
+                        <path d="M15720 8790 L20840 8790" stroke="#000000" stroke-width="20"/>
+                        <path d="M15720 8970 L20840 8970" stroke="#000000" stroke-width="20"/>
+                        <path d="M15720 9150 L20840 9150" stroke="#000000" stroke-width="20"/>
+                        <path d="M15720 9330 L20840 9330" stroke="#000000" stroke-width="20"/>
+                        <path d="M15720 9510 L20840 9510" stroke="#000000" stroke-width="20"/>
+                        <g class="layer" id="acf051223-f33b-43c0-a91c-9fb47a13c2f4">
+                            <g class="note" id="ae4e2aa7f-2148-4a58-bce0-17ddd74d834e">
+                                <use xlink:href="#E0A4" x="16527" y="8700" height="720px" width="720px"/>
+                                <g class="stem" id="stem-0000000098238142">
+                                    <path d="M16537 8722 L16537 9330" stroke="#000000" stroke-width="20"/>
+                                </g>
+                            </g>
+                            <g class="note" id="ad2c7ada8-bfbe-4e93-9315-295d04f6f06f">
+                                <use xlink:href="#E0A4" x="18707" y="8700" height="720px" width="720px"/>
+                                <g class="stem" id="stem-0000001821011698">
+                                    <path d="M18717 8722 L18717 9330" stroke="#000000" stroke-width="20"/>
+                                </g>
+                                <g class="verse" id="a9beecb5c-486b-4e8d-837f-2029be96de9e">
+                                    <g class="syl" id="a3c889efb-4a91-493b-815b-bc4479d4d374">
+                                        <text x="18640" y="9422" font-size="0px">
+                                            <tspan font-size="405px" class="text">ß</tspan>
+                                        </text>
+                                    </g>
+                                </g>
+                            </g>
+                            <g class="note" id="afb9b516c-2c9e-4c69-b218-5611fc7d2044">
+                                <use xlink:href="#E0A4" x="19617" y="9150" height="720px" width="720px"/>
+                                <g class="stem" id="stem-0000001954154889">
+                                    <path d="M19627 9172 L19627 9780" stroke="#000000" stroke-width="20"/>
+                                    <g class="flag" id="flag-0000002013805852">
+                                        <use xlink:href="#E241" x="19617" y="9780" height="720px" width="720px"/>
+                                    </g>
+                                </g>
+                                <g class="verse" id="a75a136f0-f6ce-41d8-9ccf-eae958c46ffd">
+                                    <g class="syl" id="aa9ecdb97-9778-41ed-871a-cc7a560ff297">
+                                        <text x="19550" y="9422" font-size="0px">
+                                            <tspan font-size="405px" class="text">mich</tspan>
+                                        </text>
+                                    </g>
+                                </g>
+                            </g>
+                        </g>
+                    </g>
+                    <g class="staff" id="a5c92cb32-33b4-4f3b-8bae-86210f294005">
+                        <path d="M15720 10310 L20840 10310" stroke="#000000" stroke-width="20"/>
+                        <path d="M15720 10490 L20840 10490" stroke="#000000" stroke-width="20"/>
+                        <path d="M15720 10670 L20840 10670" stroke="#000000" stroke-width="20"/>
+                        <path d="M15720 10850 L20840 10850" stroke="#000000" stroke-width="20"/>
+                        <path d="M15720 11030 L20840 11030" stroke="#000000" stroke-width="20"/>
+                        <g class="layer" id="ad9537eaa-b36a-40f2-aefc-688b2233ebb6">
+                            <g class="mRest" id="a22a26e12-9caa-419a-990d-bb162498a0e6">
+                                <rect x="15612" y="10490" height="90" width="216"/>
+                            </g>
+                        </g>
+                    </g>
+                    <g class="staff" id="aedc45cc2-159a-4bc1-b859-ad9cb8127bbe">
+                        <path d="M15720 11860 L20840 11860" stroke="#000000" stroke-width="20"/>
+                        <path d="M15720 12040 L20840 12040" stroke="#000000" stroke-width="20"/>
+                        <path d="M15720 12220 L20840 12220" stroke="#000000" stroke-width="20"/>
+                        <path d="M15720 12400 L20840 12400" stroke="#000000" stroke-width="20"/>
+                        <path d="M15720 12580 L20840 12580" stroke="#000000" stroke-width="20"/>
+                        <g class="layer" id="af703f089-0eea-4b22-b1aa-6b2cc2c9123c">
+                            <g class="mRest" id="af16cc10e-d3e5-4120-ba1f-d82943dca9fe">
+                                <rect x="15612" y="12040" height="90" width="216"/>
+                            </g>
+                        </g>
+                    </g>
+                    <g class="tie" id="a05ef2f18-f36a-491d-8357-6c4724956e67"/>
+                    <g class="barLineAttr" id="bline-0000000060149229">
+                        <path d="M15720 8790 L15720 9510" stroke="#000000" stroke-width="30"/>
+                        <path d="M15720 10310 L15720 12580" stroke="#000000" stroke-width="30"/>
+                    </g>
+                </g>
+                <g class="measure" id="adc19f619-c6ad-477f-9a1d-0babbc9a43f2">
+                    <g class="staff" id="a630c9b59-4be6-4cf7-a409-f2787687338c">
+                        <path d="M20840 8790 L24140 8790" stroke="#000000" stroke-width="20"/>
+                        <path d="M20840 8970 L24140 8970" stroke="#000000" stroke-width="20"/>
+                        <path d="M20840 9150 L24140 9150" stroke="#000000" stroke-width="20"/>
+                        <path d="M20840 9330 L24140 9330" stroke="#000000" stroke-width="20"/>
+                        <path d="M20840 9510 L24140 9510" stroke="#000000" stroke-width="20"/>
+                        <g class="layer" id="a7dddb6a3-7b8c-4b6c-99e2-88952c705356">
+                            <g class="note" id="a16e3f31e-8073-4385-876a-8dcba29c94b5">
+                                <use xlink:href="#E0A4" x="22097" y="9060" height="720px" width="720px"/>
+                                <g class="stem" id="stem-0000001692677844">
+                                    <path d="M22107 9082 L22107 9690" stroke="#000000" stroke-width="20"/>
+                                </g>
+                                <g class="verse" id="a4101c385-6ef7-490c-83ee-14c112353371">
+                                    <g class="syl" id="ab42f2f1a-77b2-43f1-8869-82b851afae4c">
+                                        <text x="22030" y="9422" font-size="0px">
+                                            <tspan font-size="405px" class="text">loß!</tspan>
+                                        </text>
+                                    </g>
+                                </g>
+                            </g>
+                            <g class="rest" id="aec199b7a-0f60-473d-92cf-9ed486338e1f">
+                                <use xlink:href="#E4E6" x="22937" y="9150" height="720px" width="720px"/>
+                            </g>
+                            <g class="rest" id="a6072f7a7-9fe8-48b0-a331-dca67c4688a3">
+                                <use xlink:href="#E4E5" x="23517" y="9150" height="720px" width="720px"/>
+                            </g>
+                        </g>
+                    </g>
+                    <g class="staff" id="a8442b7e4-c923-4d0e-ad1e-43b02748a7df">
+                        <path d="M20840 10310 L24140 10310" stroke="#000000" stroke-width="20"/>
+                        <path d="M20840 10490 L24140 10490" stroke="#000000" stroke-width="20"/>
+                        <path d="M20840 10670 L24140 10670" stroke="#000000" stroke-width="20"/>
+                        <path d="M20840 10850 L24140 10850" stroke="#000000" stroke-width="20"/>
+                        <path d="M20840 11030 L24140 11030" stroke="#000000" stroke-width="20"/>
+                        <g class="layer" id="add9cedb4-7e20-44a0-8f8f-f14d1bf952a6">
+                            <g class="chord" id="a7f501370-79b9-4f89-b453-651793af4d79">
+                                <g class="stem" id="stem-0000001120652299">
+                                    <path d="M22077 10602 L22077 11660" stroke="#000000" stroke-width="20"/>
+                                </g>
+                                <g class="note" id="ac1b8d132-fe6f-4a72-9e67-eeec554a897d">
+                                    <use xlink:href="#E0A4" x="22067" y="11030" height="720px" width="720px"/>
+                                </g>
+                                <g class="note" id="a38b51378-185b-412f-9fff-821533c8054e">
+                                    <use xlink:href="#E0A4" x="22067" y="10850" height="720px" width="720px"/>
+                                </g>
+                                <g class="note" id="a8cc26531-1682-44ff-8e77-08a1eeb54aed">
+                                    <use xlink:href="#E0A4" x="22067" y="10580" height="720px" width="720px"/>
+                                </g>
+                            </g>
+                            <g class="rest" id="a23730e77-d602-4035-b6bf-e63373467ee5">
+                                <use xlink:href="#E4E6" x="22597" y="10670" height="720px" width="720px"/>
+                            </g>
+                            <g class="note" id="aa297e69c-0de5-4f28-8780-50f9da4c206e">
+                                <use xlink:href="#E0A4" x="23397" y="10220" height="720px" width="720px"/>
+                                <g class="stem" id="stem-0000001371605103">
+                                    <path d="M23407 10242 L23407 10850" stroke="#000000" stroke-width="20"/>
+                                </g>
+                            </g>
+                            <g class="note" id="a846023c0-54df-45b0-8aaa-9944bfdd6868">
+                                <use xlink:href="#E0A4" x="23707" y="10670" height="720px" width="720px"/>
+                                <g class="stem" id="stem-0000001477499223">
+                                    <path d="M23717 10692 L23717 11300" stroke="#000000" stroke-width="20"/>
+                                    <g class="flag" id="flag-0000000976030700">
+                                        <use xlink:href="#E241" x="23707" y="11300" height="720px" width="720px"/>
+                                    </g>
+                                </g>
+                            </g>
+                        </g>
+                    </g>
+                    <g class="staff" id="a4ecad7ff-b7ec-4d89-bad2-ed2b50197163">
+                        <path d="M20840 11860 L24140 11860" stroke="#000000" stroke-width="20"/>
+                        <path d="M20840 12040 L24140 12040" stroke="#000000" stroke-width="20"/>
+                        <path d="M20840 12220 L24140 12220" stroke="#000000" stroke-width="20"/>
+                        <path d="M20840 12400 L24140 12400" stroke="#000000" stroke-width="20"/>
+                        <path d="M20840 12580 L24140 12580" stroke="#000000" stroke-width="20"/>
+                        <g class="ledgerLines above">
+                            <path d="M22147 11680 L22473 11680" stroke="#000000" stroke-width="35"/>
+                        </g>
+                        <g class="layer" id="a8a450ca8-f5d1-4ebe-a1e6-e7db5b2bbd5b">
+                            <g class="bTrem" id="ac7a3cfd3-2ab9-4043-adcb-ec08d40a97ed">
+                                <polygon points="22114,12877 22340,12814 22340,12751 22114,12814 "/>
+                                <g class="chord" id="aed15d772-aee5-4f99-a3db-ff76ca74c72d">
+                                    <g class="dots" id="dots-0000000940224707">
+                                        <ellipse cx="22513" cy="11590" rx="36" ry="36"/>
+                                        <ellipse cx="22513" cy="11950" rx="36" ry="36"/>
+                                        <ellipse cx="22513" cy="12130" rx="36" ry="36"/>
+                                        <ellipse cx="22513" cy="12310" rx="36" ry="36"/>
+                                    </g>
+                                    <g class="stem" id="stem-0000001667879114">
+                                        <path d="M22207 11702 L22207 12940" stroke="#000000" stroke-width="20"/>
+                                    </g>
+                                    <g class="note" id="acabcab14-60f8-4b59-969f-08a725a6c661">
+                                        <use xlink:href="#E0A4" x="22197" y="12310" height="720px" width="720px"/>
+                                    </g>
+                                    <g class="note" id="a5328d9b9-71cb-41b1-854e-a5966277b1a8">
+                                        <use xlink:href="#E0A4" x="22197" y="12130" height="720px" width="720px"/>
+                                    </g>
+                                    <g class="note" id="ad1ea9ffa-0c19-40d2-aada-f8246ef7847d">
+                                        <use xlink:href="#E0A4" x="22197" y="11950" height="720px" width="720px"/>
+                                    </g>
+                                    <g class="note" id="a1e882272-69af-4d74-be09-e68fde919f72">
+                                        <use xlink:href="#E0A4" x="22197" y="11680" height="720px" width="720px"/>
+                                    </g>
+                                </g>
+                            </g>
+                            <g class="bTrem" id="a932046da-8d6d-4637-b1b4-e3b24af83566">
+                                <polygon points="23264,12877 23490,12814 23490,12751 23264,12814 "/>
+                                <g class="chord" id="a809bb29e-d198-4b1b-a6de-f90b5f902ea3">
+                                    <g class="dots" id="dots-0000000679327577">
+                                        <ellipse cx="23663" cy="11770" rx="36" ry="36"/>
+                                        <ellipse cx="23663" cy="11950" rx="36" ry="36"/>
+                                        <ellipse cx="23663" cy="12130" rx="36" ry="36"/>
+                                        <ellipse cx="23663" cy="12310" rx="36" ry="36"/>
+                                    </g>
+                                    <g class="stem" id="stem-0000001171975923">
+                                        <path d="M23357 11792 L23357 12940" stroke="#000000" stroke-width="20"/>
+                                    </g>
+                                    <g class="note" id="a251f681c-8618-4624-ae50-bd07550271a7">
+                                        <use xlink:href="#E0A4" x="23141" y="12310" height="720px" width="720px"/>
+                                    </g>
+                                    <g class="note" id="ae397ce6e-b6fa-42b1-8b70-6753c7b82d79">
+                                        <use xlink:href="#E0A4" x="23347" y="12220" height="720px" width="720px"/>
+                                    </g>
+                                    <g class="note" id="a5aa2def7-3145-43e3-8dc5-d617536ea79b">
+                                        <use xlink:href="#E0A4" x="23141" y="12040" height="720px" width="720px"/>
+                                    </g>
+                                    <g class="note" id="af0675a93-b988-4ff8-8dde-76dc76642cab">
+                                        <use xlink:href="#E0A4" x="23347" y="11950" height="720px" width="720px"/>
+                                    </g>
+                                    <g class="note" id="ae3c4f6ad-8ff9-4053-847c-715eb2b9c1c8">
+                                        <use xlink:href="#E0A4" x="23347" y="11770" height="720px" width="720px"/>
+                                    </g>
+                                </g>
+                            </g>
+                        </g>
+                    </g>
+                    <g class="slur" id="a30d9506a-7dbd-4448-b9fe-bb2940364b14">
+                        <path d="M20840,8710 C20840,8539 20840,8539 20840,8710 C20840,8593 20840,8593 20840,8710" stroke="#000000" stroke-linecap="round" stroke-linejoin="round" stroke-width="10"/>
+                    </g>
+                    <g class="dynam" id="aa3e5947c-b85a-4386-8011-43ed5ac2b21b">
+                        <text x="20840" y="10310" font-size="0px">
+                            <tspan font-size="405px" class="text">forte</tspan>
+                        </text>
+                    </g>
+                    <g class="del" id="a929f4a3f-b784-497a-9cd2-0ca424611513">
+                        <g class="unclear" id="aa29d5894-522d-4a89-b6f7-91b33eb1d259"/>
+                    </g>
+                    <g class="dynam" id="ac74bb444-f25c-4db0-aac0-5b1bb0fe53e8">
+                        <text x="20840" y="10310" font-size="0px">
+                            <tspan font-size="405px" class="text">sf:</tspan>
+                        </text>
+                    </g>
+                    <g class="barLineAttr" id="bline-0000000588703472">
+                        <path d="M20840 8790 L20840 9510" stroke="#000000" stroke-width="30"/>
+                        <path d="M20840 10310 L20840 12580" stroke="#000000" stroke-width="30"/>
+                    </g>
+                </g>
+                <g class="measure" id="abc405bc8-0d44-4e68-a186-5a56fb2b30d4">
+                    <g class="staff" id="a4eec68c3-1b83-42eb-bdca-ae3ceaca1b80">
+                        <path d="M24140 8790 L27080 8790" stroke="#000000" stroke-width="20"/>
+                        <path d="M24140 8970 L27080 8970" stroke="#000000" stroke-width="20"/>
+                        <path d="M24140 9150 L27080 9150" stroke="#000000" stroke-width="20"/>
+                        <path d="M24140 9330 L27080 9330" stroke="#000000" stroke-width="20"/>
+                        <path d="M24140 9510 L27080 9510" stroke="#000000" stroke-width="20"/>
+                        <g class="layer" id="afc4a91f1-b603-47bb-aace-9d1410111d94"/>
+                    </g>
+                    <g class="staff" id="a6a23fefc-687c-48e6-b8db-f6ab1151d951">
+                        <path d="M24140 10310 L27080 10310" stroke="#000000" stroke-width="20"/>
+                        <path d="M24140 10490 L27080 10490" stroke="#000000" stroke-width="20"/>
+                        <path d="M24140 10670 L27080 10670" stroke="#000000" stroke-width="20"/>
+                        <path d="M24140 10850 L27080 10850" stroke="#000000" stroke-width="20"/>
+                        <path d="M24140 11030 L27080 11030" stroke="#000000" stroke-width="20"/>
+                        <g class="layer" id="a9c755583-9510-4e7b-9275-cc1314cafd0b">
+                            <g class="note" id="ac3b2b76a-c3a4-4fc3-b0dd-179fb165a20a">
+                                <use xlink:href="#E0A4" x="24697" y="10580" height="720px" width="720px"/>
+                                <g class="stem" id="stem-0000001435519187">
+                                    <path d="M24707 10602 L24707 11210" stroke="#000000" stroke-width="20"/>
+                                </g>
+                            </g>
+                            <g class="rest" id="a1963c040-67c9-4c53-86a8-3b48feca87bc">
+                                <use xlink:href="#E4E6" x="25007" y="10670" height="720px" width="720px"/>
+                            </g>
+                            <g class="beam" id="a3ae06e45-1605-41b5-bad2-ca1eb70a3f21">
+                                <polygon points="25577,11227 26777,11345 26777,11255 25577,11137 "/>
+                                <polygon points="25577,11092 26777,11210 26777,11120 25577,11002 "/>
+                                <g class="note" id="ae6e959f3-c165-4237-8952-345f7be1d708">
+                                    <use xlink:href="#E0A4" x="25577" y="10220" height="720px" width="720px"/>
+                                    <g class="stem" id="stem-0000001939685511">
+                                        <path d="M25587 10242 L25587 11207" stroke="#000000" stroke-width="20"/>
+                                    </g>
+                                </g>
+                                <g class="note" id="a07c79ed5-2dcf-443e-9bb1-d83cd1ca3028">
+                                    <use xlink:href="#E0A4" x="25827" y="10310" height="720px" width="720px"/>
+                                    <g class="stem" id="stem-0000001492621917">
+                                        <path d="M25837 10332 L25837 11232" stroke="#000000" stroke-width="20"/>
+                                    </g>
+                                </g>
+                                <g class="note" id="a5687ed84-8eb1-440b-b7b3-432a191cdea5">
+                                    <use xlink:href="#E0A4" x="26047" y="10400" height="720px" width="720px"/>
+                                    <g class="stem" id="stem-0000001740078412">
+                                        <path d="M26057 10422 L26057 11254" stroke="#000000" stroke-width="20"/>
+                                    </g>
+                                </g>
+                                <g class="note" id="ae9187738-3d96-4b36-8a85-de5c45177bf4">
+                                    <use xlink:href="#E0A4" x="26297" y="10490" height="720px" width="720px"/>
+                                    <g class="stem" id="stem-0000001065565638">
+                                        <path d="M26307 10512 L26307 11279" stroke="#000000" stroke-width="20"/>
+                                    </g>
+                                </g>
+                                <g class="note" id="ae9280a0e-2291-4726-b21e-7e49ebcd2b38">
+                                    <use xlink:href="#E0A4" x="26527" y="10580" height="720px" width="720px"/>
+                                    <g class="stem" id="stem-0000001095545533">
+                                        <path d="M26537 10602 L26537 11302" stroke="#000000" stroke-width="20"/>
+                                    </g>
+                                </g>
+                                <g class="note" id="ac032e3b5-707b-40f9-9e07-825b00bff205">
+                                    <use xlink:href="#E0A4" x="26757" y="10670" height="720px" width="720px"/>
+                                    <g class="stem" id="stem-0000000308983753">
+                                        <path d="M26767 10692 L26767 11325" stroke="#000000" stroke-width="20"/>
+                                    </g>
+                                </g>
+                            </g>
+                        </g>
+                    </g>
+                    <g class="staff" id="a192d013c-e7b0-40b8-beb1-7449be6bb813">
+                        <path d="M24140 11860 L27080 11860" stroke="#000000" stroke-width="20"/>
+                        <path d="M24140 12040 L27080 12040" stroke="#000000" stroke-width="20"/>
+                        <path d="M24140 12220 L27080 12220" stroke="#000000" stroke-width="20"/>
+                        <path d="M24140 12400 L27080 12400" stroke="#000000" stroke-width="20"/>
+                        <path d="M24140 12580 L27080 12580" stroke="#000000" stroke-width="20"/>
+                        <g class="ledgerLines above">
+                            <path d="M24647 11680 L24973 11680" stroke="#000000" stroke-width="35"/>
+                        </g>
+                        <g class="layer" id="a640bc7c0-beb4-4623-8880-4f6ce15c79bf">
+                            <g class="bTrem" id="a948a7004-e26a-4d2b-8edf-22fb22dae720">
+                                <polygon points="24614,12877 24840,12814 24840,12751 24614,12814 "/>
+                                <g class="chord" id="a823c024e-d20d-44ec-bad8-9c9d28bd62b2">
+                                    <g class="dots" id="dots-0000000948746264">
+                                        <ellipse cx="25013" cy="11590" rx="36" ry="36"/>
+                                        <ellipse cx="25013" cy="11950" rx="36" ry="36"/>
+                                        <ellipse cx="25013" cy="12130" rx="36" ry="36"/>
+                                        <ellipse cx="25013" cy="12310" rx="36" ry="36"/>
+                                    </g>
+                                    <g class="stem" id="stem-0000000474478225">
+                                        <path d="M24707 11702 L24707 12940" stroke="#000000" stroke-width="20"/>
+                                    </g>
+                                    <g class="note" id="a7382fa5b-0490-473f-993c-85a591c6a5b6">
+                                        <use xlink:href="#E0A4" x="24697" y="12310" height="720px" width="720px"/>
+                                    </g>
+                                    <g class="note" id="a6a126539-1abd-43ae-9144-3648af639584">
+                                        <use xlink:href="#E0A4" x="24697" y="12130" height="720px" width="720px"/>
+                                    </g>
+                                    <g class="note" id="a3e33f767-1252-49f2-8633-d706e0b54cdc">
+                                        <use xlink:href="#E0A4" x="24697" y="11950" height="720px" width="720px"/>
+                                    </g>
+                                    <g class="note" id="afc80b7cf-d980-40f9-a091-f6be6697d99c">
+                                        <use xlink:href="#E0A4" x="24697" y="11680" height="720px" width="720px"/>
+                                    </g>
+                                </g>
+                            </g>
+                            <g class="bTrem" id="a37cf41b5-9d8a-4934-b9e8-4f8aebb86de7">
+                                <polygon points="25914,12877 26140,12814 26140,12751 25914,12814 "/>
+                                <g class="chord" id="a59ccc072-6da1-483f-82d2-2c679607950c">
+                                    <g class="dots" id="dots-0000000162462441">
+                                        <ellipse cx="26313" cy="11770" rx="36" ry="36"/>
+                                        <ellipse cx="26313" cy="11950" rx="36" ry="36"/>
+                                        <ellipse cx="26313" cy="12130" rx="36" ry="36"/>
+                                        <ellipse cx="26313" cy="12310" rx="36" ry="36"/>
+                                    </g>
+                                    <g class="stem" id="stem-0000000512380073">
+                                        <path d="M26007 11792 L26007 12940" stroke="#000000" stroke-width="20"/>
+                                    </g>
+                                    <g class="note" id="a72f40428-5d49-4c97-808f-e4ab1a3fccaf">
+                                        <use xlink:href="#E0A4" x="25791" y="12310" height="720px" width="720px"/>
+                                    </g>
+                                    <g class="note" id="ab1206a1e-4dd2-44fd-88cd-1665011e265d">
+                                        <use xlink:href="#E0A4" x="25997" y="12220" height="720px" width="720px"/>
+                                    </g>
+                                    <g class="note" id="a3be6804c-2012-4f32-9927-9f2a0b60de11">
+                                        <use xlink:href="#E0A4" x="25791" y="12040" height="720px" width="720px"/>
+                                    </g>
+                                    <g class="note" id="af4989066-3e5a-415d-adcd-2bab0dd1626d">
+                                        <use xlink:href="#E0A4" x="25997" y="11950" height="720px" width="720px"/>
+                                    </g>
+                                    <g class="note" id="ae46e9ed2-fb97-4bb3-8f91-190d6007d2f7">
+                                        <use xlink:href="#E0A4" x="25997" y="11770" height="720px" width="720px"/>
+                                    </g>
+                                </g>
+                            </g>
+                        </g>
+                    </g>
+                    <g class="dynam" id="aeee646f2-360d-477c-abe8-45e51fcd2d58">
+                        <text x="24140" y="10310" font-size="0px">
+                            <tspan font-size="405px" class="text">sf:</tspan>
+                        </text>
+                    </g>
+                    <g class="barLineAttr" id="bline-0000000634557726">
+                        <path d="M24140 8790 L24140 9510" stroke="#000000" stroke-width="30"/>
+                        <path d="M24140 10310 L24140 12580" stroke="#000000" stroke-width="30"/>
+                    </g>
+                </g>
+                <g class="measure" id="a0951b490-3b13-4033-b29a-5e244665bc5b">
+                    <g class="staff" id="a49050ca0-1b6e-4319-bf4b-c87d00b6c220">
+                        <path d="M27080 8790 L28880 8790" stroke="#000000" stroke-width="20"/>
+                        <path d="M27080 8970 L28880 8970" stroke="#000000" stroke-width="20"/>
+                        <path d="M27080 9150 L28880 9150" stroke="#000000" stroke-width="20"/>
+                        <path d="M27080 9330 L28880 9330" stroke="#000000" stroke-width="20"/>
+                        <path d="M27080 9510 L28880 9510" stroke="#000000" stroke-width="20"/>
+                        <g class="layer" id="a25fae58a-4cde-4393-bc3e-ab3af323f026"/>
+                    </g>
+                    <g class="staff" id="ae457ed81-6ccf-47fe-b8e2-3f523408b73d">
+                        <path d="M27080 10310 L28880 10310" stroke="#000000" stroke-width="20"/>
+                        <path d="M27080 10490 L28880 10490" stroke="#000000" stroke-width="20"/>
+                        <path d="M27080 10670 L28880 10670" stroke="#000000" stroke-width="20"/>
+                        <path d="M27080 10850 L28880 10850" stroke="#000000" stroke-width="20"/>
+                        <path d="M27080 11030 L28880 11030" stroke="#000000" stroke-width="20"/>
+                        <g class="ledgerLines below">
+                            <path d="M28217 11210 L28543 11210" stroke="#000000" stroke-width="35"/>
+                        </g>
+                        <g class="layer" id="a5c5382f1-73c8-4db8-bb5e-7f107ec46590">
+                            <g class="note" id="ac666ee51-333b-482d-89cb-31a914baa3ba">
+                                <use xlink:href="#E0A4" x="27387" y="10580" height="720px" width="720px"/>
+                                <g class="stem" id="stem-0000001054530550">
+                                    <path d="M27397 10602 L27397 11210" stroke="#000000" stroke-width="20"/>
+                                </g>
+                            </g>
+                            <g class="rest" id="ac786173a-d6b5-4d78-ae7b-e05cadf2b9c1">
+                                <use xlink:href="#E4E6" x="27747" y="10670" height="720px" width="720px"/>
+                            </g>
+                            <g class="chord" id="aa67b88ad-c6f6-44fa-9602-12cb65dd847a">
+                                <g class="stem" id="stem-0000000312415159">
+                                    <path d="M28483 11928 L28483 10400" stroke="#000000" stroke-width="20"/>
+                                </g>
+                                <g class="note" id="a60f94684-5261-48da-b900-9ae08f94a0b6">
+                                    <use xlink:href="#E0A4" x="28267" y="11950" height="720px" width="720px"/>
+                                </g>
+                                <g class="note" id="a314b1879-4964-405a-8659-7d4637a8a43a">
+                                    <use xlink:href="#E0A4" x="28267" y="11210" height="720px" width="720px"/>
+                                </g>
+                                <g class="note" id="afae0e0a4-962d-425b-95a0-6bc3c3b746d3">
+                                    <use xlink:href="#E0A4" x="28267" y="11030" height="720px" width="720px"/>
+                                </g>
+                            </g>
+                            <g class="rest" id="a8b332d11-1881-4a6c-a9c2-a4fd81b64416">
+                                <use xlink:href="#E4E6" x="28607" y="10670" height="720px" width="720px"/>
+                            </g>
+                        </g>
+                    </g>
+                    <g class="staff" id="aa8497025-71d2-4cfc-ae23-19858c30ee94">
+                        <path d="M27080 11860 L28880 11860" stroke="#000000" stroke-width="20"/>
+                        <path d="M27080 12040 L28880 12040" stroke="#000000" stroke-width="20"/>
+                        <path d="M27080 12220 L28880 12220" stroke="#000000" stroke-width="20"/>
+                        <path d="M27080 12400 L28880 12400" stroke="#000000" stroke-width="20"/>
+                        <path d="M27080 12580 L28880 12580" stroke="#000000" stroke-width="20"/>
+                        <g class="ledgerLines above">
+                            <path d="M27187 11680 L27513 11680" stroke="#000000" stroke-width="35"/>
+                        </g>
+                        <g class="ledgerLines below">
+                            <path d="M28027 12760 L28353 12760" stroke="#000000" stroke-width="35"/>
+                            <path d="M28027 12940 L28353 12940" stroke="#000000" stroke-width="35"/>
+                        </g>
+                        <g class="layer" id="a1685258d-df94-4a85-84e9-d9324f2cdc3b">
+                            <g class="chord" id="a26f1a739-5810-44f5-b9c3-8d26b2142906">
+                                <g class="stem" id="stem-0000000164060398">
+                                    <path d="M27247 11702 L27247 12940" stroke="#000000" stroke-width="20"/>
+                                </g>
+                                <g class="note" id="acf006476-1f88-44d9-8880-faaaf574a6a0">
+                                    <use xlink:href="#E0A4" x="27237" y="12310" height="720px" width="720px"/>
+                                </g>
+                                <g class="note" id="a42ed174c-bc6c-46b8-b325-f4ae86a9519a">
+                                    <use xlink:href="#E0A4" x="27237" y="12130" height="720px" width="720px"/>
+                                </g>
+                                <g class="note" id="ae168c77d-8e07-4a28-9f71-9e6faa35c4fd">
+                                    <use xlink:href="#E0A4" x="27237" y="11950" height="720px" width="720px"/>
+                                </g>
+                                <g class="note" id="a2b393704-7eba-420f-a5b2-ed413932eb3c">
+                                    <use xlink:href="#E0A4" x="27237" y="11680" height="720px" width="720px"/>
+                                </g>
+                            </g>
+                            <g class="rest" id="a5aa62573-f107-4af4-8e40-9a192329588d">
+                                <use xlink:href="#E4E6" x="27557" y="12220" height="720px" width="720px"/>
+                            </g>
+                            <g class="chord" id="acaad8b92-c980-450c-9627-ce8f29ff5803">
+                                <g class="stem" id="stem-0000002141590085">
+                                    <path d="M28087 12332 L28087 13570" stroke="#000000" stroke-width="20"/>
+                                </g>
+                                <g class="note" id="a2cdb2c7e-8d01-471a-8bd7-2a0aee57bf4e">
+                                    <use xlink:href="#E0A4" x="28077" y="12940" height="720px" width="720px"/>
+                                </g>
+                                <g class="note" id="a44aaed97-aabb-42a4-b804-4aa83c5aaf7e">
+                                    <use xlink:href="#E0A4" x="28077" y="12310" height="720px" width="720px"/>
+                                </g>
+                            </g>
+                            <g class="rest" id="acc4a2db9-345f-4f62-8061-3d11d80878c7">
+                                <use xlink:href="#E4E6" x="28347" y="12220" height="720px" width="720px"/>
+                            </g>
+                        </g>
+                    </g>
+                    <g class="dynam" id="ad3dad0f1-6800-4270-b709-f68210a2e1e0">
+                        <text x="27080" y="10310" font-size="0px">
+                            <tspan font-size="405px" class="text">p:</tspan>
+                        </text>
+                    </g>
+                    <g class="del" id="a015b9bb4-c637-4bda-818b-caae65306207">
+                        <g class="unclear" id="abcebdbd8-07e8-4b24-b893-ac74808164b4"/>
+                    </g>
+                    <g class="barLineAttr" id="bline-0000001600884791">
+                        <path d="M27080 8790 L27080 9510" stroke="#000000" stroke-width="30"/>
+                        <path d="M27080 10310 L27080 12580" stroke="#000000" stroke-width="30"/>
+                    </g>
+                </g>
+                <g class="measure" id="ad969cd13-af49-42e3-9457-fc50347dbc85">
+                    <g class="staff" id="ab0bdac37-f7af-490f-aa0b-7329d07f3d8f">
+                        <path d="M28880 8790 L30130 8790" stroke="#000000" stroke-width="20"/>
+                        <path d="M28880 8970 L30130 8970" stroke="#000000" stroke-width="20"/>
+                        <path d="M28880 9150 L30130 9150" stroke="#000000" stroke-width="20"/>
+                        <path d="M28880 9330 L30130 9330" stroke="#000000" stroke-width="20"/>
+                        <path d="M28880 9510 L30130 9510" stroke="#000000" stroke-width="20"/>
+                        <g class="layer" id="ac92c6104-bf8f-4403-93cd-93138294fb2d">
+                            <g class="space" id="ad1873a2a-9184-40dc-9e60-f4d6f22cf942"/>
+                            <g class="barLine" id="a760c4295-7bbd-451d-acd1-ab6fadc1717c">
+                                <path d="M29750 8790 L29750 9510" stroke="#000000" stroke-width="30"/>
+                            </g>
+                        </g>
+                    </g>
+                    <g class="staff" id="ae8645096-c18d-4c92-9bc2-fc98d650be30">
+                        <path d="M28880 10310 L30130 10310" stroke="#000000" stroke-width="20"/>
+                        <path d="M28880 10490 L30130 10490" stroke="#000000" stroke-width="20"/>
+                        <path d="M28880 10670 L30130 10670" stroke="#000000" stroke-width="20"/>
+                        <path d="M28880 10850 L30130 10850" stroke="#000000" stroke-width="20"/>
+                        <path d="M28880 11030 L30130 11030" stroke="#000000" stroke-width="20"/>
+                        <g class="ledgerLines below">
+                            <path d="M28997 11210 L29323 11210" stroke="#000000" stroke-width="35"/>
+                        </g>
+                        <g class="layer" id="a6dbe72dd-3550-4c3d-96a8-715ecdd863ba">
+                            <g class="chord" id="a38cb76fd-03f4-44af-b8ea-dd431e2905e2">
+                                <g class="stem" id="stem-0000001878634875">
+                                    <path d="M29263 12108 L29263 10580" stroke="#000000" stroke-width="20"/>
+                                </g>
+                                <g class="note" id="abe932872-2d82-421e-9a6d-c16fd1f344f5">
+                                    <use xlink:href="#E0A4" x="29047" y="12130" height="720px" width="720px"/>
+                                </g>
+                                <g class="note" id="ab17e8097-c847-4c50-acda-cd2a3736305c">
+                                    <use xlink:href="#E0A4" x="29047" y="11950" height="720px" width="720px"/>
+                                </g>
+                                <g class="note" id="abd25349c-df9d-48f4-82f8-dd04c224000d">
+                                    <use xlink:href="#E0A4" x="29047" y="11210" height="720px" width="720px"/>
+                                </g>
+                            </g>
+                            <g class="rest" id="a4914053e-cb6b-41c7-9dda-6b0653c80ac5">
+                                <use xlink:href="#E4E6" x="29427" y="10670" height="720px" width="720px"/>
+                            </g>
+                            <g class="barLine" id="a4d21bfac-f200-405b-b3b7-65cdd9eef2a4">
+                                <path d="M29790 10310 L29790 11030" stroke="#000000" stroke-width="30"/>
+                            </g>
+                        </g>
+                    </g>
+                    <g class="staff" id="a1de14de5-9c97-4155-8454-ac94f8a77074">
+                        <path d="M28880 11860 L30130 11860" stroke="#000000" stroke-width="20"/>
+                        <path d="M28880 12040 L30130 12040" stroke="#000000" stroke-width="20"/>
+                        <path d="M28880 12220 L30130 12220" stroke="#000000" stroke-width="20"/>
+                        <path d="M28880 12400 L30130 12400" stroke="#000000" stroke-width="20"/>
+                        <path d="M28880 12580 L30130 12580" stroke="#000000" stroke-width="20"/>
+                        <g class="ledgerLines below">
+                            <path d="M28907 12760 L29233 12760" stroke="#000000" stroke-width="35"/>
+                            <path d="M28907 12940 L29233 12940" stroke="#000000" stroke-width="35"/>
+                        </g>
+                        <g class="layer" id="af9354b1e-5278-40ce-b438-0df9fc1f9138">
+                            <g class="chord" id="ab7f184b6-0e9c-4360-aa1f-a18602597e5e">
+                                <g class="stem" id="stem-0000001911765931">
+                                    <path d="M28967 12332 L28967 13570" stroke="#000000" stroke-width="20"/>
+                                </g>
+                                <g class="note" id="a085be2de-a7ab-4b63-9b25-d24dc1d754f2">
+                                    <use xlink:href="#E0A4" x="28957" y="12940" height="720px" width="720px"/>
+                                </g>
+                                <g class="note" id="a5e56d94a-cac0-462a-b1b8-e421db1621a8">
+                                    <use xlink:href="#E0A4" x="28957" y="12310" height="720px" width="720px"/>
+                                </g>
+                            </g>
+                            <g class="rest" id="a650efd9e-0743-430e-9eee-2f84035beb67">
+                                <use xlink:href="#E4E6" x="29337" y="12220" height="720px" width="720px"/>
+                            </g>
+                            <g class="barLine" id="af5e69744-d284-4771-987f-49a5b19ebcc6">
+                                <path d="M29740 11860 L29740 12580" stroke="#000000" stroke-width="30"/>
+                            </g>
+                        </g>
+                    </g>
+                    <g class="barLineAttr" id="bline-0000001067868243">
+                        <path d="M28880 8790 L28880 9510" stroke="#000000" stroke-width="30"/>
+                        <path d="M28880 10310 L28880 12580" stroke="#000000" stroke-width="30"/>
+                    </g>
+                </g>
+            </g>
+            <g class="system" id="system-0000001582984522">
+                <path d="M15 14920 L15 18700" stroke="#000000" stroke-width="30"/>
+                <path d="M-15,18680 C-375,18140 75,17735 -195,17555 C140,17735 -310,18140 -15,18680" stroke="#000000" stroke-linecap="round" stroke-linejoin="round" stroke-width="20"/>
+                <path d="M-15,16430 C-310,16970 140,17375 -195,17555 C75,17375 -375,16970 -15,16430" stroke="#000000" stroke-linecap="round" stroke-linejoin="round" stroke-width="20"/>
+                <use xlink:href="#E881" x="0" y="14380" height="720px" width="720px"/>
+                <use xlink:href="#E883" x="149" y="14380" height="720px" width="720px"/>
+                <use xlink:href="#E880" x="332" y="14380" height="720px" width="720px"/>
+                <g class="measure" id="a534ff9ef-005c-4e34-b6bf-d122b2fe1584">
+                    <g class="staff" id="ad8bd5a51-c159-4f6f-ae6c-464d698fdf25">
+                        <path d="M2950 14920 L9820 14920" stroke="#000000" stroke-width="20"/>
+                        <path d="M2950 15100 L9820 15100" stroke="#000000" stroke-width="20"/>
+                        <path d="M2950 15280 L9820 15280" stroke="#000000" stroke-width="20"/>
+                        <path d="M2950 15460 L9820 15460" stroke="#000000" stroke-width="20"/>
+                        <path d="M2950 15640 L9820 15640" stroke="#000000" stroke-width="20"/>
+                        <g class="layer" id="a45a640fd-f9a8-4b24-b367-ed29e2f2222e">
+                            <g class="note" id="aed3245b1-e8c6-40e5-9e88-1c3903ee64fa">
+                                <use xlink:href="#E0A4" x="4497" y="15010" height="720px" width="720px"/>
+                                <g class="stem" id="stem-0000000399675903">
+                                    <path d="M4507 15032 L4507 15640" stroke="#000000" stroke-width="20"/>
+                                </g>
+                                <g class="supplied" id="af8aadebe-55f0-4688-9bf0-6275de625606">
+                                    <g class="verse" id="a142769df-3fc6-4307-beee-eec7c2ede52d">
+                                        <g class="syl" id="afa92b9eb-58a6-48ff-b4ba-43128a4aeafe">
+                                            <text x="4430" y="15552" font-size="0px">
+                                                <tspan font-size="405px" class="text">laß</tspan>
+                                            </text>
+                                        </g>
+                                    </g>
+                                </g>
+                            </g>
+                            <g class="note" id="a2ce234c1-c032-4634-85b8-c38146937ce9">
+                                <use xlink:href="#E0A4" x="5647" y="15190" height="720px" width="720px"/>
+                                <g class="stem" id="stem-0000000024053905">
+                                    <path d="M5657 15212 L5657 15820" stroke="#000000" stroke-width="20"/>
+                                    <g class="flag" id="flag-0000000547055699">
+                                        <use xlink:href="#E241" x="5647" y="15820" height="720px" width="720px"/>
+                                    </g>
+                                </g>
+                            </g>
+                            <g class="note" id="abe67c535-6dae-4bfe-a49d-9cc2f93c3ba8">
+                                <use xlink:href="#E0A4" x="7557" y="14830" height="720px" width="720px"/>
+                                <g class="stem" id="stem-0000000987640286">
+                                    <path d="M7567 14852 L7567 15460" stroke="#000000" stroke-width="20"/>
+                                </g>
+                                <g class="supplied" id="a0e422aaa-1d85-4b89-a1d4-e42c7273489f">
+                                    <g class="verse" id="a988f8909-30b2-4e31-8e9f-a943c8a513e8">
+                                        <g class="syl" id="a5bec278e-bce6-4bb3-b6bc-7cdea0c72620">
+                                            <text x="7490" y="15552" font-size="0px">
+                                                <tspan font-size="405px" class="text">laß</tspan>
+                                            </text>
+                                        </g>
+                                    </g>
+                                </g>
+                            </g>
+                            <g class="note" id="a949c83df-ad2a-46c0-a1da-fafe3995279c">
+                                <use xlink:href="#E0A4" x="8927" y="15280" height="720px" width="720px"/>
+                                <g class="stem" id="stem-0000001369179139">
+                                    <path d="M8937 15302 L8937 15910" stroke="#000000" stroke-width="20"/>
+                                    <g class="flag" id="flag-0000001506511568">
+                                        <use xlink:href="#E241" x="8927" y="15910" height="720px" width="720px"/>
+                                    </g>
+                                </g>
+                                <g class="supplied" id="abfba67e1-aae7-4aab-8913-b376af21d231">
+                                    <g class="verse" id="a28d53947-d19f-480e-b685-703778b7d3c4">
+                                        <g class="syl" id="a87cb1ef5-2a51-4a35-8c62-4067145a4fc5">
+                                            <text x="8860" y="15552" font-size="0px">
+                                                <tspan font-size="405px" class="text">mich</tspan>
+                                            </text>
+                                        </g>
+                                    </g>
+                                </g>
+                            </g>
+                        </g>
+                    </g>
+                    <g class="staff" id="ac7e07430-1063-4684-8427-f5b9e893ad2f">
+                        <path d="M2950 16410 L9820 16410" stroke="#000000" stroke-width="20"/>
+                        <path d="M2950 16590 L9820 16590" stroke="#000000" stroke-width="20"/>
+                        <path d="M2950 16770 L9820 16770" stroke="#000000" stroke-width="20"/>
+                        <path d="M2950 16950 L9820 16950" stroke="#000000" stroke-width="20"/>
+                        <path d="M2950 17130 L9820 17130" stroke="#000000" stroke-width="20"/>
+                        <g class="layer" id="a7a23ec9f-fed8-4852-946f-839c50679bc0"/>
+                    </g>
+                    <g class="staff" id="a6f54fa76-605b-4097-9b09-39c9cd660dbe">
+                        <path d="M2950 17980 L9820 17980" stroke="#000000" stroke-width="20"/>
+                        <path d="M2950 18160 L9820 18160" stroke="#000000" stroke-width="20"/>
+                        <path d="M2950 18340 L9820 18340" stroke="#000000" stroke-width="20"/>
+                        <path d="M2950 18520 L9820 18520" stroke="#000000" stroke-width="20"/>
+                        <path d="M2950 18700 L9820 18700" stroke="#000000" stroke-width="20"/>
+                        <g class="layer" id="a6e394ee0-93a5-4c6c-96f6-54b571583808"/>
+                    </g>
+                    <g class="barLineAttr" id="bline-0000001763711436">
+                        <path d="M2950 14920 L2950 15640" stroke="#000000" stroke-width="30"/>
+                        <path d="M2950 16410 L2950 18700" stroke="#000000" stroke-width="30"/>
+                    </g>
+                </g>
+                <g class="measure" id="a884e30d9-e0ac-47ad-9756-114fad0794bf">
+                    <g class="staff" id="a5a1c7db7-093f-464a-98d3-0eeb0bd3bf49">
+                        <path d="M9820 14920 L14220 14920" stroke="#000000" stroke-width="20"/>
+                        <path d="M9820 15100 L14220 15100" stroke="#000000" stroke-width="20"/>
+                        <path d="M9820 15280 L14220 15280" stroke="#000000" stroke-width="20"/>
+                        <path d="M9820 15460 L14220 15460" stroke="#000000" stroke-width="20"/>
+                        <path d="M9820 15640 L14220 15640" stroke="#000000" stroke-width="20"/>
+                        <g class="layer" id="a1666d09d-ad99-4b15-a308-b110c433b2b7">
+                            <g class="note" id="a8a1b79c2-5327-40b5-8792-4324e7f56b89">
+                                <use xlink:href="#E0A4" x="11007" y="15190" height="720px" width="720px"/>
+                                <g class="stem" id="stem-0000001107725246">
+                                    <path d="M11017 15212 L11017 15820" stroke="#000000" stroke-width="20"/>
+                                </g>
+                                <g class="supplied" id="a04002686-fc5e-4d64-a939-756569566a45">
+                                    <g class="verse" id="a4131e186-efed-40ec-a8f1-5adc6528a1d0">
+                                        <g class="syl" id="a3b8919d9-cff1-449c-8053-cb262d9bcb41">
+                                            <text x="10940" y="15552" font-size="0px">
+                                                <tspan font-size="405px" class="text">loß</tspan>
+                                            </text>
+                                        </g>
+                                    </g>
+                                </g>
+                            </g>
+                            <g class="rest" id="abbf66d20-278c-4b26-b7ef-3cb714347383">
+                                <use xlink:href="#E4E5" x="12767" y="15280" height="720px" width="720px"/>
+                            </g>
+                        </g>
+                    </g>
+                    <g class="staff" id="ad58d4c81-c569-4b2d-b060-b175e5e45e82">
+                        <path d="M9820 16410 L14220 16410" stroke="#000000" stroke-width="20"/>
+                        <path d="M9820 16590 L14220 16590" stroke="#000000" stroke-width="20"/>
+                        <path d="M9820 16770 L14220 16770" stroke="#000000" stroke-width="20"/>
+                        <path d="M9820 16950 L14220 16950" stroke="#000000" stroke-width="20"/>
+                        <path d="M9820 17130 L14220 17130" stroke="#000000" stroke-width="20"/>
+                        <g class="layer" id="abf67ad30-75cc-4ddb-adc7-72180eac9d67"/>
+                    </g>
+                    <g class="staff" id="a13a8ac63-033b-4506-88f6-9002e0801a58">
+                        <path d="M9820 17980 L14220 17980" stroke="#000000" stroke-width="20"/>
+                        <path d="M9820 18160 L14220 18160" stroke="#000000" stroke-width="20"/>
+                        <path d="M9820 18340 L14220 18340" stroke="#000000" stroke-width="20"/>
+                        <path d="M9820 18520 L14220 18520" stroke="#000000" stroke-width="20"/>
+                        <path d="M9820 18700 L14220 18700" stroke="#000000" stroke-width="20"/>
+                        <g class="layer" id="a08b95428-bef4-4848-b9ce-ec09b3825a1a"/>
+                    </g>
+                    <g class="barLineAttr" id="bline-0000000351387719">
+                        <path d="M9820 14920 L9820 15640" stroke="#000000" stroke-width="30"/>
+                        <path d="M9820 16410 L9820 18700" stroke="#000000" stroke-width="30"/>
+                    </g>
+                </g>
+                <g class="measure" id="a432c99ce-de57-41ea-a794-e0ffe0eb15c9">
+                    <g class="staff" id="a35c09269-ac1e-41a6-b7ed-f4e754417ba1">
+                        <path d="M14220 14920 L17420 14920" stroke="#000000" stroke-width="20"/>
+                        <path d="M14220 15100 L17420 15100" stroke="#000000" stroke-width="20"/>
+                        <path d="M14220 15280 L17420 15280" stroke="#000000" stroke-width="20"/>
+                        <path d="M14220 15460 L17420 15460" stroke="#000000" stroke-width="20"/>
+                        <path d="M14220 15640 L17420 15640" stroke="#000000" stroke-width="20"/>
+                        <g class="layer" id="a18d75f3f-bc35-46ad-b850-c641400f9f37"/>
+                    </g>
+                    <g class="staff" id="a4cb4708a-e5d7-49a1-8f9c-8c0f4cdbfb6d">
+                        <path d="M14220 16410 L17420 16410" stroke="#000000" stroke-width="20"/>
+                        <path d="M14220 16590 L17420 16590" stroke="#000000" stroke-width="20"/>
+                        <path d="M14220 16770 L17420 16770" stroke="#000000" stroke-width="20"/>
+                        <path d="M14220 16950 L17420 16950" stroke="#000000" stroke-width="20"/>
+                        <path d="M14220 17130 L17420 17130" stroke="#000000" stroke-width="20"/>
+                        <g class="layer" id="a03db47fd-5650-485c-858d-8a1b9d70868f"/>
+                    </g>
+                    <g class="staff" id="a993c6575-a783-45a7-a67a-8839ea1f0432">
+                        <path d="M14220 17980 L17420 17980" stroke="#000000" stroke-width="20"/>
+                        <path d="M14220 18160 L17420 18160" stroke="#000000" stroke-width="20"/>
+                        <path d="M14220 18340 L17420 18340" stroke="#000000" stroke-width="20"/>
+                        <path d="M14220 18520 L17420 18520" stroke="#000000" stroke-width="20"/>
+                        <path d="M14220 18700 L17420 18700" stroke="#000000" stroke-width="20"/>
+                        <g class="layer" id="abc696695-714d-4382-9840-987465a21a39"/>
+                    </g>
+                    <g class="barLineAttr" id="bline-0000000599622589">
+                        <path d="M14220 14920 L14220 15640" stroke="#000000" stroke-width="30"/>
+                        <path d="M14220 16410 L14220 18700" stroke="#000000" stroke-width="30"/>
+                    </g>
+                </g>
+                <g class="measure" id="a43d5761e-05cb-4073-b646-e84006647cf4">
+                    <g class="staff" id="a63df49e2-01ed-4052-b283-3f2b9182974c">
+                        <path d="M17420 14920 L19810 14920" stroke="#000000" stroke-width="20"/>
+                        <path d="M17420 15100 L19810 15100" stroke="#000000" stroke-width="20"/>
+                        <path d="M17420 15280 L19810 15280" stroke="#000000" stroke-width="20"/>
+                        <path d="M17420 15460 L19810 15460" stroke="#000000" stroke-width="20"/>
+                        <path d="M17420 15640 L19810 15640" stroke="#000000" stroke-width="20"/>
+                        <g class="layer" id="a8cea613e-a317-40fc-b6b4-78b119cfda63"/>
+                    </g>
+                    <g class="staff" id="a1895a299-c451-4e77-9208-04c66636b5c0">
+                        <path d="M17420 16410 L19810 16410" stroke="#000000" stroke-width="20"/>
+                        <path d="M17420 16590 L19810 16590" stroke="#000000" stroke-width="20"/>
+                        <path d="M17420 16770 L19810 16770" stroke="#000000" stroke-width="20"/>
+                        <path d="M17420 16950 L19810 16950" stroke="#000000" stroke-width="20"/>
+                        <path d="M17420 17130 L19810 17130" stroke="#000000" stroke-width="20"/>
+                        <g class="layer" id="a1d38659b-aabd-41fe-91f7-4983374db20e"/>
+                    </g>
+                    <g class="staff" id="a69467005-bafb-44a2-962d-f985f75c8b7e">
+                        <path d="M17420 17980 L19810 17980" stroke="#000000" stroke-width="20"/>
+                        <path d="M17420 18160 L19810 18160" stroke="#000000" stroke-width="20"/>
+                        <path d="M17420 18340 L19810 18340" stroke="#000000" stroke-width="20"/>
+                        <path d="M17420 18520 L19810 18520" stroke="#000000" stroke-width="20"/>
+                        <path d="M17420 18700 L19810 18700" stroke="#000000" stroke-width="20"/>
+                        <g class="layer" id="a1bd335ba-39f6-4884-aaba-4c3df982d3bd"/>
+                    </g>
+                    <g class="barLineAttr" id="bline-0000000037734155">
+                        <path d="M17420 14920 L17420 15640" stroke="#000000" stroke-width="30"/>
+                        <path d="M17420 16410 L17420 18700" stroke="#000000" stroke-width="30"/>
+                    </g>
+                </g>
+                <g class="measure" id="afddc2e82-20f2-4805-ae86-081cb59ef4d0">
+                    <g class="staff" id="a4b2d7257-72ae-4a04-b76b-889e850174d4">
+                        <path d="M19810 14920 L22420 14920" stroke="#000000" stroke-width="20"/>
+                        <path d="M19810 15100 L22420 15100" stroke="#000000" stroke-width="20"/>
+                        <path d="M19810 15280 L22420 15280" stroke="#000000" stroke-width="20"/>
+                        <path d="M19810 15460 L22420 15460" stroke="#000000" stroke-width="20"/>
+                        <path d="M19810 15640 L22420 15640" stroke="#000000" stroke-width="20"/>
+                        <g class="layer" id="a323c13b2-b184-42fc-a65b-eebba7ef6500">
+                            <g class="space" id="ada80f42c-b570-4a92-b8b7-66d03e9cc9a5"/>
+                            <g class="barLine" id="a3b25c188-84b0-4c97-98be-d41f0bbf41cd">
+                                <path d="M21360 14920 L21360 15640" stroke="#000000" stroke-width="30"/>
+                            </g>
+                        </g>
+                    </g>
+                    <g class="staff" id="a19e085e9-0fbc-493b-9222-47131b3eeeef">
+                        <path d="M19810 16410 L22420 16410" stroke="#000000" stroke-width="20"/>
+                        <path d="M19810 16590 L22420 16590" stroke="#000000" stroke-width="20"/>
+                        <path d="M19810 16770 L22420 16770" stroke="#000000" stroke-width="20"/>
+                        <path d="M19810 16950 L22420 16950" stroke="#000000" stroke-width="20"/>
+                        <path d="M19810 17130 L22420 17130" stroke="#000000" stroke-width="20"/>
+                        <g class="layer" id="aeb71dc9b-2751-47d6-a9a5-f4d9aad9c3f1">
+                            <g class="space" id="a0e305712-93e1-4ab7-8f3c-4c2a106518d2"/>
+                            <g class="barLine" id="ae60f625e-808b-4e68-8ef7-edec6b04be9b">
+                                <path d="M21410 16410 L21410 17130" stroke="#000000" stroke-width="30"/>
+                            </g>
+                        </g>
+                    </g>
+                    <g class="staff" id="a5eeae1e8-5783-46df-ade4-7aeda8a4eeaf">
+                        <path d="M19810 17980 L22420 17980" stroke="#000000" stroke-width="20"/>
+                        <path d="M19810 18160 L22420 18160" stroke="#000000" stroke-width="20"/>
+                        <path d="M19810 18340 L22420 18340" stroke="#000000" stroke-width="20"/>
+                        <path d="M19810 18520 L22420 18520" stroke="#000000" stroke-width="20"/>
+                        <path d="M19810 18700 L22420 18700" stroke="#000000" stroke-width="20"/>
+                        <g class="layer" id="affd02328-5d0d-406b-8f78-087632f6fffa">
+                            <g class="space" id="ab5ceb28d-6ffe-401f-ad3e-cd2dd245251d"/>
+                            <g class="barLine" id="ac3533ef1-7639-44b6-971d-9064ac3ee22f">
+                                <path d="M21490 17980 L21490 18700" stroke="#000000" stroke-width="30"/>
+                            </g>
+                        </g>
+                    </g>
+                    <g class="barLineAttr" id="bline-0000001338577122">
+                        <path d="M19810 14920 L19810 15640" stroke="#000000" stroke-width="30"/>
+                        <path d="M19810 16410 L19810 18700" stroke="#000000" stroke-width="30"/>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </svg>
+</svg>

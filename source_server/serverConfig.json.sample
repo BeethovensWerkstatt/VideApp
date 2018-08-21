@@ -1,0 +1,36 @@
+{
+  "dev":{
+      "eXist":{
+          "url":"http://localhost:8080/exist/apps/exist-module/",
+          "login":"",
+          "pass":""
+      },
+      "rethink":{
+          "host":"localhost",
+          "port":28015,
+          "login":"",
+          "pass":""
+      },
+      "app":{
+          "host":"http://localhost",
+          "port":2999
+      }
+  },
+  "live":{
+      "eXist":{
+          "url":"http://example.com:8088/exist/apps/exist-module/",
+          "login":"",
+          "pass":""
+      },
+      "rethink":{
+          "host":"example.com",
+          "port":8089,
+          "login":"admin",
+          "pass":"secretPassword"
+      },
+      "app":{
+          "host":"http://example.com",
+          "port":29999
+      }
+  }
+}
