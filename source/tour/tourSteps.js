@@ -12,14 +12,19 @@ const TourSteps = {
             de: (
                 <div>
                     <h1>Willkommen in der <i>VideApp</i></h1>
-                    <p>Mit Hilfe dieser Tour sollen Sie schrittweise mit der Anwendung vertraut gemacht werden.</p>
+                    <p>Mit Hilfe dieser Tour werden Sie schrittweise mit der <i>VideApp</i> vertraut gemacht. Eine Unterbrechung 
+                    der Tour oder das Zurückgehen zu einem vorherigen Schritt ist derzeit nicht möglich. Daher bitten wir Sie,
+                    den vorgeschlagenen Anweisungen zu folgen, um einen Überblick über die einzelnen Funktionen der <i>VideApp</i>
+                    zu erhalten.</p>
                     <p>→ Starten Sie, indem Sie das Beispiel zum Duett WoO 32 per Mausklick anwählen.</p>
                 </div>
             ),
             en: (
                 <div>
                     <h1>Welcome to the <i>VideApp</i></h1>
-                    <p>This tour will introduce you with the functionality of the <i>VideApp</i>.</p>
+                    <p>This tour will introduce you with the functionality of the <i>VideApp</i>. Currently it is neither possible to
+                    interrupt the tour nor to go back to a previous step. Therefore we ask you to follow the instructions in order to 
+                    get an overview of the functionality of the <i>VideApp</i>.</p>
                     <p>→ To get started, please click on WoO 32 in the list below.</p>
                 </div>
             )
@@ -76,7 +81,7 @@ const TourSteps = {
                     <h1>Kommentar-Ansicht</h1>
                     <p>Der Einstieg in jedes Beispiel geschieht über einen Einführungstext, in dem Informationen zu Werk, Quelle, Variantenstelle(n), zugrunde liegenden
                     Schreibprozessen und zum kompositorischen Problem gegeben werden. Verlinkungen helfen, einzelne Stellen in der Quellen-Ansicht, 
-                    Transkription und XML-Codierung aufzurufen. Diese verschiedenen Ansichten sind neben der Kommentar-Ansicht jederzeit auch über das Ansichtsmenü am 
+                    Transkription und XML-Codierung aufzurufen. Diese Ansichten sind neben der Kommentar-Ansicht jederzeit auch über das Ansichtsmenü am 
                     oberen linken Bildrand zu erreichen.</p>
                     <p>→ Wählen Sie jetzt in diesem Menü "Quellen-Ansicht" aus.</p>
                 </div>
@@ -146,8 +151,10 @@ const TourSteps = {
                 <div>
                     <h1>Textgenetische Navigation</h1>
                     <p>Um die rekonstruierten Schreibprozesse nachzuvollziehen, bietet die textgenetische Navigation eine schematisch vereinfachte
-                    Partituransicht. Wenn Sie den Mauszeiger darüber bewegen, werden am Satzanfang die jeweiligen Stimmen und oben die entsprechende Taktzahl eingeblendet.</p>
-                    <p>→ Klicken Sie auf eine dieser Taktzahlen, um die entsprechende Stelle in der Quelle anzuzeigen.
+                    Partituransicht. Wenn Sie den Mauszeiger darüber bewegen, werden am Satzanfang die jeweiligen Stimmen und oben die entsprechende Taktzahl eingeblendet. 
+                    Unterhalb des Cursors erscheint innerhalb der Partitur eine Markierungslinie.</p>
+                    <p>→ Um einen beliebigen Takt in der Quelle anzuzeigen, bewegen Sie nun den Mauszeiger über die vereinfachte Partitur 
+                    und klicken Sie dann oberhalb der Partitur auf die gewünschte Stelle. Rechts von der Markierungslinie erscheint die entsprechende Taktzahl.
                     </p>
                 </div>
             ),
@@ -155,8 +162,9 @@ const TourSteps = {
                 <div>
                     <h1>Genetic Navigation</h1>
                     <p>Here you see a schematically simplified view of the score. If you move across it with the cursor the respective instrumental parts are shown on the left side 
-                    and the appropriate measure numbers appear above the score.</p>
-                    <p>→ Click on one of these measure numbers to view the corresponding measure in the source.
+                    and the appropriate measure numbers appear above the score. A marking line appears below the cursor.</p>
+                    <p>→ Now move the cursor across the simplified view of the score and then click on one of the measure numbers above the score
+                    to view the corresponding measure in the source.
                     </p>
                 </div>
             )
@@ -179,9 +187,9 @@ const TourSteps = {
             de: (
                 <div>
                     <h1>Textgenetische Navigation</h1>
-                    <p>Die roten Bereiche der textgenetischen Navigation markieren <b><a href="http://beethovens-werkstatt.de/glossary/Textnarbe" target="_blank">Textnarben</a></b>.
-                     Klicken Sie auf eine beliebige Textnarbe. Sie sehen nun, wieviele Schreibschichten diese enthält.</p>
-                     <p>→ Um die Rekonstruktion der Schreibprozesse anzuschauen, klicken Sie
+                    <p>Die roten Bereiche in der textgenetischen Navigation markieren <b><a href="http://beethovens-werkstatt.de/glossary/Textnarbe" target="_blank">Textnarben</a></b>.
+                     Klicken Sie auf eine beliebige Textnarbe. Unterhalb der schematischen Darstellung wird nun angezeigt, wie viele Schreibschichten diese enthält.</p>
+                     <p>→ Um zur Rekonstruktion der Schreibprozesse zu gelangen, klicken Sie
                      auf "Detailansicht öffnen".</p>
                 </div>
             ),
@@ -217,7 +225,7 @@ const TourSteps = {
                     <h1>Detailansicht</h1>
                     <p>
                     Jedem Buchstaben ist eine <b><a href="http://beethovens-werkstatt.de/glossary/Schreibschicht" target="_blank">Schreibschicht</a></b> zugeordnet, die innerhalb
-                    des Manuskripts rot hervorgehoben wird. Wählt man den nächsten Buchstaben aus, wird die neue Schreibschicht im Manuskript rot, die vorherigen Schichten in einem dunkleren 
+                    des Manuskripts rot hervorgehoben wird. Wählt man den nächsten Buchstaben aus, werden die neue Schreibschicht im Manuskript rot und die vorherigen Schichten in einem dunkleren 
                     Farbton angezeigt. Sie können sich beliebig durch die Textnarben bewegen, indem Sie auf die beiden Pfeile <i className="fa fa-chevron-left tourIcon"></i> <i className="fa fa-chevron-right tourIcon"></i> klicken.
                     </p>
                     <p>→ Nachdem Sie diese Funktion getestet haben, schließen Sie die Detailansicht (<i className="fa fa-close tourIcon"></i>).</p>
@@ -254,7 +262,7 @@ const TourSteps = {
                 <div>
                     <h1>Infobox</h1>
                     <p>In der <i>VideApp</i> ist jedes Zeichen des Manuskripts erfasst. Per Mausklick sind so zugehörige Informationen abrufbar.</p>
-                    <p>→ Klicken Sie auf eine beliebige Note,
+                    <p>→ Klicken Sie auf eine beliebige Note innerhalb der Quelle,
                     um die Infobox zu öffnen.</p>
                 </div>
             ),
@@ -263,7 +271,7 @@ const TourSteps = {
                     <h1>Infobox</h1>
                     <p> Every shape of the manuscript is recorded in the <i>VideApp</i>. 
                     By clicking on them, information on these shapes can be called up.</p>
-                    <p>→ To open the Infobox, click on any of the notes.</p>
+                    <p>→ To open the Infobox, click on any of the notes within the source.</p>
                 </div>
             )
         },
@@ -295,7 +303,7 @@ const TourSteps = {
                         Sie mit den Schaltflächen <i className="fa fa-chevron-left tourIcon"></i> <i className="fa fa-chevron-right tourIcon"></i> wechseln können.   
                         Sie können direkt aus der Infobox in die anderen Ansichten an die entsprechende Stelle springen, indem Sie dem Link unterhalb der Vorschau folgen.
                     </p> 
-                    <p>→ Klicken Sie auf "Transkriptions-Ansicht öffnen".</p>
+                    <p>→ Klicken Sie nun im unteren Bereich der Infobox auf "Transkriptions-Ansicht öffnen".</p>
                 </div>
             ),
             en: (
@@ -309,7 +317,7 @@ const TourSteps = {
                         <i className="fa fa-chevron-left tourIcon"></i> <i className="fa fa-chevron-right tourIcon"></i>.   
                         By following the link below the preview, you can open the corresponding area in one of the other views.
                     </p> 
-                    <p>→ Click on "Open Transcription View".</p>
+                    <p>→ Click on "Open Transcription View" in the lower section of the Infobox.</p>
                 </div>
             )
         },
@@ -388,8 +396,8 @@ const TourSteps = {
                         der Variantenbildung unverändert bleiben, werden in dieser Darstellung in grau angezeigt, während der aktuelle Textzustand schwarz dargestellt wird.
                     </p>
                     <p>→ Wenn Sie
-                        einige Textzustände angezeigt haben, klicken Sie auf das <i>VideApp</i>-Logo links oben, um zur Startseite zurückzukehren und anhand eines anderen Beispiels weitere 
-                        Funktionen kennenzulernen.
+                        einige Textzustände angezeigt haben, klicken Sie auf das <i>VideApp</i>-Logo links oben, um zur Startseite zurückzukehren und anhand des Beispiels 
+                        zum Lied op. 75/2 weitere Funktionen kennenzulernen. Über das <i>VideApp</i>-Logo können Sie jederzeit zur Startseite zurückkehren.
                     </p>
                 </div>
             ),
@@ -397,11 +405,11 @@ const TourSteps = {
                 <div>
                     <h1>Sequence of Textual States</h1>
                     <p>
-                        If you select one of boxes, the corresponding textual state is shown above the transcription of the final text. 
+                        If you select one of the boxes, the corresponding textual state is shown above the transcription of the final text. 
                         Notes which do not change in the different variants are marked in grey in this representation, whereas the current variant is black.
                     </p>
                     <p>→ After having tested some of the textual states, click on the <i>VideApp</i> sign in the upper left to return to the start screen and learn more
-                        functions using another case study.
+                        functions using the case study about the Lied op. 75/2. You can return to the start screen at any time by clicking on the <i>VideApp</i> sign.
                     </p>
                 </div>
             )
@@ -419,13 +427,13 @@ const TourSteps = {
             de: (
                 <div>
                     <h1>VideApp</h1>
-                    <p>→ Um fortzufahren, öffnen Sie das Beispiel Op. 75,2.</p>
+                    <p>→ Um fortzufahren, öffnen Sie das Beispiel Op. 75/2.</p>
                 </div>
             ),
             en: (
                 <div>
                     <h1>VideApp</h1>
-                    <p>→ Open the case study of op. 75,2 to continue the tour.</p>
+                    <p>→ Open the case study of op. 75/2 to continue the tour.</p>
                 </div>
             )
         },
@@ -443,13 +451,13 @@ const TourSteps = {
             de: (
                 <div>
                     <h1>VideApp</h1>
-                    <p>→ Um fortzufahren, öffnen Sie das Beispiel Op. 75,2.</p>
+                    <p>→ Um fortzufahren, öffnen Sie das Beispiel Op. 75/2.</p>
                 </div>
             ),
             en: (
                 <div>
                     <h1>VideApp</h1>
-                    <p>→ Open the case study of op. 75,2 to continue the tour.</p>
+                    <p>→ Open the case study of op. 75/2 to continue the tour.</p>
                 </div>
             )
         },
@@ -478,13 +486,13 @@ const TourSteps = {
         content: {
             de: (
                 <div>
-                    <h1>Einführung</h1>
+                    <h1>Kommentar-Ansicht</h1>
                     <p>→ Wechseln Sie über das Ansichtsmenü in die Quellen-Ansicht.</p>
                 </div>
             ),
             en: (
                 <div>
-                    <h1>Introduction</h1>
+                    <h1>Commentary View</h1>
                     <p>→ Go to the Source View by using the View Menu.</p>
                 </div>
             )
@@ -604,7 +612,8 @@ const TourSteps = {
                 <div>
                     <h1>Schieberegler</h1>
                     <p>
-                        Mit dem Schieberegler kann zwischen Quelle und Schreibschichtenrekonstruktion stufenlos überblendet werden. 
+                        Im Fallbeispiel zum Lied und in dem zur Symphonie op. 93 wurde die Abfolge der Schreibschichten rekonstruiert. Mit einem 
+                        Schieberegler kann die Schreibschichtenrekonstruktion in der Quelle stufenlos eingeblendet werden.
                     </p>
                     <p>
                         → Wechseln Sie nun die vertikale Parallel-Ansicht, indem Sie auf <i className="fa fa-pause fa-rotate-90 tourIcon"></i> in 
@@ -616,7 +625,8 @@ const TourSteps = {
                 <div>
                     <h1>Slider</h1>
                     <p>
-                        With the help of the slider you can crossfade continuously between the source and the Writing Layer Reconstruction. 
+                        In the case studies about the Lied and about the symphony op. 93 the sequence of writing layers has been reconstructed. 
+                        With the help of a slider you can crossfade continuously between the source and the Writing Layer Reconstruction. 
                     </p>
                     <p>
                         → Now change into the vertical Parallel View by cklicking on <i className="fa fa-pause fa-rotate-90 tourIcon"></i> in the Header in the upper right. 
@@ -647,10 +657,11 @@ const TourSteps = {
                 <div>
                     <h1>Parallel-Ansicht</h1>
                     <p>
-                        Nun sind zwei Ansichten geöffnet, die Sie in den jeweiligen Ansichtsmenüs umschalten können. Wählen Sie in einer Ansicht die Quellenansicht, in der anderen die Transkription aus. 
+                        Nun sind zwei Ansichten geöffnet, die Sie in den jeweiligen Ansichtsmenüs umschalten können. Im zweiten Fenster öffnet sich automatisch die XML-Ansicht. 
                     </p>
                     <p>
-                        → In der Kopfleiste können Sie diese Ansichten synchronisieren. Aktivieren Sie dazu das Symbol <i className="fa fa-unlink tourIcon"></i>.
+                        → Wählen Sie nun in einem Fenster die Quellen-Ansicht, im anderen die Transkription aus. In der Kopfleiste können Sie die beiden Ansichten synchronisieren. 
+                        → Aktivieren Sie dazu das Symbol <i className="fa fa-unlink tourIcon"></i>.
                     </p>
                 </div>
             ),
@@ -658,10 +669,11 @@ const TourSteps = {
                 <div>
                     <h1>Parallel View</h1>
                     <p>
-                        Now two views are open, which you can switch in their respective View Menus. Select the Source View in one view and Transcription View in the other.
+                        Now two views are open, which you can switch in their respective View Menus. The XML View opens automatically in the second window. 
                     </p>
                     <p>
-                        → You can synchronize these views in the header bar. To do this, activate the symbol <i className="fa fa-unlink tourIcon"></i>.
+                        → Now select the Source View in one view and Transcription View in the other. 
+                        You can synchronize these views in the Header. → To do this, activate the symbol <i className="fa fa-unlink tourIcon"></i>.
                     </p>
                 </div>
             )
@@ -690,22 +702,24 @@ const TourSteps = {
                 <div>
                     <h1>Synchronisierte Ansicht</h1>
                     <p>
-                        Jetzt sind Quellen-Ansicht und Transkription synchronisiert. Wenn Sie einen Buchstaben im textgenetischen Menü auswählen, werden beide Ansichten
+                        Jetzt sind Quellen-Ansicht und Transkription synchronisiert. Wenn Sie einen Buchstaben in der textgenetischen Navigation auswählen, werden beide Ansichten
                         synoptisch aufeinander bezogen.
                     </p>
                     <p>
-                        → Aktivieren Sie nun in der Transkriptions-Ansicht die Invarianzeinfärbung. Diese steht gegenwärtig nur in Op. 75,2 zur Verfügung.  
+                        → Aktivieren Sie nun in der Transkriptions-Ansicht die Invarianzeinfärbung, indem Sie oben rechts ein Häkchen vor "Invarianzeinfärbung" setzen. 
+                        Diese Option steht gegenwärtig nur in Op. 75/2 zur Verfügung.  
                     </p>
                 </div>
             ),
             en: (
                 <div>
-                    <h1>Synchronized Views</h1>
+                    <h1>Synchronized View</h1>
                     <p>
-                        Now Source View and Transcription View are synchronized. If you select a letter in the text genetic menu, both views are synoptically related.
+                        Now Source View and Transcription View are synchronized. If you select a letter in the Genetic Navigation, both views are synoptically related.
                     </p>
                     <p>
-                        → Activate the Invariance coloring in the Transcription View. This is currently only available in Op. 75,2.  
+                        → Now activate the Invariance coloring in the Transcription View by setting a checkmark in front of "Invariance" in the upper right. 
+                        This option is currently only available in op. 75/2.  
                     </p>
                 </div>
             )
@@ -742,9 +756,9 @@ tool023: {
                 <div>
                     <h1>Invariance</h1>
                     <p>
-                        The <b><a href="http://beethovens-werkstatt.de/glossary/invarianz" target="_blank">Invariance</a></b>coloring shows which parts of the musical 
+                        The <b><a href="http://beethovens-werkstatt.de/glossary/invarianz" target="_blank">Invariance</a></b> coloring shows which parts of the musical 
                         text remain unchanged when variants are created. The respective color is displayed in the selection boxes. Invariant text elements are marked 
-                        in the color of the text state in which they first appeared. 
+                        in the color of the textual state in which they first appeared. 
                     </p>
                     <p>
                         → To complete the tour, click on the <i>VideApp</i>-Logo at the top left. 
@@ -766,8 +780,8 @@ tool023: {
                 <div>
                     <h1>Ende der Tour</h1>
                     <p>
-                        Wir hoffen, dass Ihnen der Umgang mit der <i>VideApp</i> vertraut geworden ist. Bei Rückfragen melden Sie 
-                        sich bitte per <a href="mailto:info@beethovens-werkstatt.de">E-Mail</a>. 
+                        Wir hoffen, dass Ihnen der Umgang mit der <i>VideApp</i> vertraut geworden ist. Bei Rückfragen wenden Sie 
+                        sich gerne per <a href="mailto:info@beethovens-werkstatt.de">E-Mail</a> an uns. Sie können die Tour erneut starten, wenn Sie die Anwendung neu laden.
                     </p>
                     <div id="closeThisTour">Tour schließen</div>
                 </div>
@@ -776,7 +790,7 @@ tool023: {
                 <div>
                     <p>
                         We hope that you are now familiar with the <i>VideApp</i>. If you have any questions, please contact us 
-                        by <a href="mailto:info@beethovens-werkstatt.de">e-Mail</a>. 
+                        by <a href="mailto:info@beethovens-werkstatt.de">e-Mail</a>. To start this tour again reload the website.
                     </p>
                     <div id="closeThisTour">Close Tour</div>
                 </div>
