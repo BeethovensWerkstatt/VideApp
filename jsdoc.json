@@ -1,5 +1,8 @@
 {
   "plugins": [],
+  "source": {
+    "include": ["source"]
+  },
   "opts": {
     "destination": "./docs/",
     "recurse": true

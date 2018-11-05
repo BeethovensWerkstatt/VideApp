@@ -4,8 +4,9 @@ import LanguageSwitch from '../containers/LanguageSwitch.react';
 import HomeButtonController from '../containers/HomeButtonController.react';
 import PerspectivesBar from './PerspectivesBar.react';
 
+/** The REACT header component */
 class AppHeader extends React.Component {
-    
+
     render() {
         return (
             <header className='appHeader'>
@@ -19,7 +20,7 @@ class AppHeader extends React.Component {
                 </div>
             </header>
         );
-    } 
+    }
 };
 
 AppHeader.defaultProps = {

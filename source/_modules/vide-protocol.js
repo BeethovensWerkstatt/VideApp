@@ -1,9 +1,13 @@
+
+/**
+ * Protocol constants
+ */
 const VIDE_PROTOCOL = {
-    
+
     OBJECT: {
-        EDITION: 'VIDE_PROTOCOL_OBJECT_EDITION', // this is a frequent request for default / start views
+        EDITION: 'VIDE_PROTOCOL_OBJECT_EDITION', //this is a frequent request for default / start views
         PAGE: 'VIDE_PROTOCOL_OBJECT_PAGE',
-        NOTATION: 'VIDE_PROTOCOL_OBJECT_NOTATION', //this includes mei:note, mei:rest, mei:chord, mei:beam, mei:fTrem etc. 
+        NOTATION: 'VIDE_PROTOCOL_OBJECT_NOTATION', //this includes mei:note, mei:rest, mei:chord, mei:beam, mei:fTrem etc.
         LYRICS: 'VIDE_PROTOCOL_OBJECT_LYRICS',
         METAMARK: 'VIDE_PROTOCOL_OBJECT_METAMARK',
         DIR: 'VIDE_PROTOCOL_OBJECT_DIR',
@@ -15,7 +19,7 @@ const VIDE_PROTOCOL = {
         CHOICECHILD: 'VIDE_PROTOCOL_OBJECT_CHOICECHILD',
         ANNOTATION: 'VIDE_PROTOCOL_OBJECT_ANNOTATION'
     },
-    
+
     CONTEXT: {
         FILE: 'VIDE_PROTOCOL_CONTEXT_FILE',
         PAGE: 'VIDE_PROTOCOL_CONTEXT_PAGE',
@@ -25,7 +29,7 @@ const VIDE_PROTOCOL = {
         STATE: 'VIDE_PROTOCOL_CONTEXT_STATE',
         CHOICECHILD: 'VIDE_PROTOCOL_CONTEXT_CHOICECHILD'
     },
-    
+
     PERSPECTIVE: {
         FACSIMILE: 'VIDE_PROTOCOL_PERSPECTIVE_FACSIMILE',
         XML: 'VIDE_PROTOCOL_PERSPECTIVE_XML',
@@ -33,12 +37,12 @@ const VIDE_PROTOCOL = {
         RECONSTRUCTION: 'VIDE_PROTOCOL_PERSPECTIVE_RECONSTRUCTION',
         INVARIANCE: 'VIDE_PROTOCOL_PERSPECTIVE_INVARIANCE',
         TEXT: 'VIDE_PROTOCOL_PERSPECTIVE_TEXT'
-    }, 
-    
+    },
+
     OPERATION: {
         VIEW: 'VIDE_PROTOCOL_OPERATION_VIEW' //delete, update, change, modify, whatsoever… 
     }
-    
+
 };
 
 export default VIDE_PROTOCOL;

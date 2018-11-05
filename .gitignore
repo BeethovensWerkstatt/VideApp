@@ -1,9 +1,11 @@
-node_modules/
+**/node_modules/
 build/
 releases/
 
-serverConfig.json
-.DS_Store
+/serverConfig.json
 source_server/serverConfig.json
 
-docs/vide_app/
+docs/*
+!docs/README.md
+
+**/.DS_Store
