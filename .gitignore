@@ -1,6 +1,7 @@
 node_modules/
 build/
 releases/
+docs/
 serverConfig.json
 .DS_Store
 /source_server/serverConfig.json

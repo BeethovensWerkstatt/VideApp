@@ -1,0 +1,7 @@
+{
+  "plugins": [],
+  "opts": {
+    "destination": "./docs/",
+    "recurse": true
+  }
+}

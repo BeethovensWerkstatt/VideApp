@@ -5,6 +5,7 @@ const source = require('vinyl-source-stream'); //Use conventional text streams a
 const sass = require('gulp-sass');
 const eslint = require('gulp-eslint');
 const install = require("gulp-install");
+const jsdoc = require('gulp-jsdoc3');
 
 gulp.task('html', function() {
     return gulp.src('./source/index.html')
@@ -39,10 +40,10 @@ gulp.task('lint', function() {
         // To have the process exit with an error code (1) on
         // lint error, return the stream and pipe to failAfterError last.
         .pipe(gulp.dest('.'))
-        .pipe(eslint.failAfterError());  
-    /* 
+        .pipe(eslint.failAfterError());
+    /*
      * DOKU: bislang auf commandline: ./node_modules/.bin/eslint source --fix
-     * 
+     *
      */
 });
 
@@ -74,6 +75,12 @@ gulp.task('buildServer',['installServerDependencies','installServerConfig'], fun
 gulp.task('socketClient', function() {
     return gulp.src('./node_modules/socket.io-client/dist/socket.io.min.js')
         .pipe(gulp.dest('./build/resources/js/'));
+});
+
+gulp.task('doc', function(cb) {
+    var config = require('./jsdoc.json');
+    gulp.src(['./docs/README.md','./source/**/*.js','./package.json'],
+        {read: false}).pipe(jsdoc(config, cb));
 });
 
 gulp.task('default', ['html', 'css', 'fonts', 'socketClient'], function() {
