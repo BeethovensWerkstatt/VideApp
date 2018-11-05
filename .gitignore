@@ -1,7 +1,9 @@
 node_modules/
 build/
 releases/
-docs/
+
 serverConfig.json
 .DS_Store
-/source_server/serverConfig.json
+source_server/serverConfig.json
+
+docs/vide_app/
