@@ -16,11 +16,13 @@ Math.uuidCompact = function() {
     });
 };
 
+/**
+ * The EoHub class
+ */
 const EoHub = class EoHub {
 
     /**
      * @constructor
-     * Constructor of an EoHub instance
      * @param {Object} options provided for an EoHub instance
      */
     constructor(options = {database:
@@ -307,7 +309,7 @@ const EoHub = class EoHub {
 
     /**
      * This function sets up the connection to server
-     * TODO hardcoded URL
+     * @todo hardcoded URL
      */
     _setupSocket(socketID) {
         var socket = io('http://localhost:2999/' + socketID);
