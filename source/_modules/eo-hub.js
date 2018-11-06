@@ -8,6 +8,7 @@ import verovio from 'verovio-dev';
 
 let server = 'http://localhost:2999/';
 
+/** generate UUIDs - unique identifiers */
 Math.uuidCompact = function() {
     return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
         let r = Math.random()*16|0;
@@ -16,9 +17,7 @@ Math.uuidCompact = function() {
     });
 };
 
-/**
- * The EoHub class
- */
+/** The EoHub class */
 const EoHub = class EoHub {
 
     /**
@@ -309,7 +308,7 @@ const EoHub = class EoHub {
 
     /**
      * This function sets up the connection to server
-     * @todo hardcoded URL
+     * @todo fetch hardcoded URL from server config
      */
     _setupSocket(socketID) {
         var socket = io('http://localhost:2999/' + socketID);

@@ -79,8 +79,7 @@ gulp.task('socketClient', function() {
 
 gulp.task('doc', function(cb) {
     var config = require('./jsdoc.json');
-    gulp.src(['./docs/README.md','./source/**/*.js','./package.json'],
-        {read: false}).pipe(jsdoc(config, cb));
+    gulp.src([],{read: false}).pipe(jsdoc(config, cb));
 });
 
 gulp.task('default', ['html', 'css', 'fonts', 'socketClient'], function() {

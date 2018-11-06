@@ -1,7 +1,7 @@
 {
-  "plugins": [],
+  "plugins": ["plugins/markdown"],
   "source": {
-    "include": ["source"]
+    "include": ["./source_docs/README.md","./source/"]
   },
   "opts": {
     "destination": "./docs/",

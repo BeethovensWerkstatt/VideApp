@@ -6,6 +6,5 @@ releases/
 source_server/serverConfig.json
 
 docs/*
-!docs/README.md
 
 **/.DS_Store
