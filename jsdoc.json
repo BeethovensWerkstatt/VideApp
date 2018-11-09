@@ -1,7 +1,8 @@
 {
-  "plugins": ["plugins/markdown"],
+  "plugins": ["plugins/markdown","jsdoc/undocumented"],
   "source": {
-    "include": ["./source_docs/README.md","./source/"]
+    "include": ["./source_docs/README.md","./source/"],
+    "excludePattern": "(^|\\/|\\\\)__tests__"
   },
   "opts": {
     "destination": "./docs/",

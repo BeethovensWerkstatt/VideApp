@@ -6,6 +6,9 @@ import VideHistoryManager from './vide-history-manager';
 import {eohub} from './eo-hub';
 import * as langfile from '../i18n/i18n.json';
 
+/**
+ * The VideViewManager class 
+ */
 const VideViewManager = class VideViewManager {
 
     /**
@@ -203,7 +206,7 @@ const VideViewManager = class VideViewManager {
     /**
      * Returns all views supported by a specified edition
      * @param {string} id of the edition
-     * @returns {Object[]} the array of supported views 
+     * @returns {Object[]} the array of supported views
      */
     getSupportedViews(id) {
         //todo: include revision of the edition
