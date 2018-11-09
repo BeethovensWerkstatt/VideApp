@@ -48,6 +48,7 @@ const EoHub = class EoHub {
         console.log('EoHub initialized');
     }
 
+    /** @return the verovio toolkit */
     getVerovio() {
         return this._vrvToolkit;
     }
@@ -290,7 +291,7 @@ const EoHub = class EoHub {
         this._viewManager.notifyLoadingDataStop(key,success);
     }
 
-    /*
+    /**
      * this function is used when a module "speaks to itself"
      */
     sendSelfRequest(req, module,containerID) {

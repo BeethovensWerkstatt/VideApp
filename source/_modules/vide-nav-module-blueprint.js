@@ -3,6 +3,9 @@ import VIDE_PROTOCOL from './vide-protocol';
 import {EoModule} from './vide-module-blueprint';
 let Drop = require('tether-drop');
 
+/**
+ * 
+ */
 const EoNavModule = class EoNavModule extends EoModule {
 
     /** Constructor method */

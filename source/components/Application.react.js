@@ -1,5 +1,6 @@
 var React = require('react');
-var AppHeader = require('./AppHeader.react');
+// var AppHeader = require('./AppHeader.react');
+import AppHeader from './AppHeader.react';
 
 import ViewsController from '../containers/ViewsController.react';
 import ContextMenuController from '../containers/ContextMenuController.react';
@@ -18,8 +19,11 @@ import SupportedViewsListController from '../containers/SupportedViewsListContro
 import I18n from '../containers/I18n.react';
 */
 
+/**
+ * The global application component
+ */
 class Application extends React.Component {
-    
+
     render() {
         return (
             <div className='appContainer'>
@@ -29,18 +33,18 @@ class Application extends React.Component {
                 <LoadingIndicatorController/>
                 <TourController/>
             </div>
-            
+
         );
-    } 
+    }
 };
 
 module.exports = Application;
 
-/* 
- * 
-                
+/*
+ *
+
                 <ViewsController/>
-                
+
                 <AppFooter/>
-                
+
  */

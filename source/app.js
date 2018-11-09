@@ -4,7 +4,8 @@ require('./polyfills'); //is this really the correct way to load polyfills?
 //React
 var React = require('react');
 var ReactDOM = require('react-dom');
-var Application = require('./components/Application.react');
+// var Application = require('./components/Application.react');
+import Application from './components/Application.react';
 
 //Redux
 import thunkMiddleware from 'redux-thunk';
@@ -71,7 +72,6 @@ store.dispatch(fetchEditions()).then(() => {
   console.log(store.getState());
   //decide if app should be started in german
   if(navigator.language.startsWith('de')) {
-    store.dispatch(switchLanguage('de'));    
-  }  
+    store.dispatch(switchLanguage('de'));
+  }
 });
-
