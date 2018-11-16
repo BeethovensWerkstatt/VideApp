@@ -4,11 +4,12 @@ import {EoModule} from './vide-module-blueprint';
 let Drop = require('tether-drop');
 
 /**
+ * @classdesc
  * @extends EoModule
  */
 const EoNavModule = class EoNavModule extends EoModule {
 
-    /** Constructor method */
+    /** @constructs */
     constructor() {
         super();
 
@@ -1095,4 +1096,4 @@ const EoNavModule = class EoNavModule extends EoModule {
 
 };
 
-export default { EoNavModule };
+export { EoNavModule };

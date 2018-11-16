@@ -9,6 +9,8 @@ import Slider from 'react-slick';
 /**
  * @module components/ContextMenu
  */
+
+ /** */
 const ContextMenu = ({ items, visible, closeContextMenu, submitRequest, x, y }) => {
 
     if(visible) {

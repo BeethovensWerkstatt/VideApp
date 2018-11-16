@@ -2,8 +2,8 @@
 
 const logtypes = {
   "ExportDefaultDeclaration": true,
-  "ExportSpecifier": true,
-  "ExportNamedDeclaration": false,
+  "ExportSpecifier": false,
+  "ExportNamedDeclaration": true,
   "FunctionDeclaration": true,
   "FunctionExpression": true,
   "VariableDeclarator": true,

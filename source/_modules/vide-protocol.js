@@ -1,11 +1,18 @@
 
 /**
  * Protocol constants
- * @namespace _modules/vide-protocol
+ * @namespace
  */
 const VIDE_PROTOCOL = {
 
+    /**
+     * request object
+     * @namespace
+     */
     OBJECT: {
+        /**
+         * receive edition
+         */
         EDITION: 'VIDE_PROTOCOL_OBJECT_EDITION', //this is a frequent request for default / start views
         PAGE: 'VIDE_PROTOCOL_OBJECT_PAGE',
         NOTATION: 'VIDE_PROTOCOL_OBJECT_NOTATION', //this includes mei:note, mei:rest, mei:chord, mei:beam, mei:fTrem etc.
