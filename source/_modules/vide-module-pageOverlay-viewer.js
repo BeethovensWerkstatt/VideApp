@@ -3,7 +3,9 @@ import VIDE_PROTOCOL from './vide-protocol';
 import {EoNavModule} from './vide-nav-module-blueprint';
 
 
-
+/**
+ * @extends EoNavModule
+ */
 const VidePageOverlayViewer = class VidePageOverlayViewer extends EoNavModule {
 
     /** Constructor method */

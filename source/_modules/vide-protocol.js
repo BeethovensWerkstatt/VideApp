@@ -1,6 +1,7 @@
 
 /**
  * Protocol constants
+ * @namespace _modules/vide-protocol
  */
 const VIDE_PROTOCOL = {
 

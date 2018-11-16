@@ -1,15 +1,25 @@
 'use strict';
 
 const logtypes = {
-  "FunctionDeclaration": true,
-  "VariableDeclarator": true,
+  "ExportDefaultDeclaration": true,
+  "ExportSpecifier": true,
   "ExportNamedDeclaration": false,
-  "ClassExpression": true,
-  "MethodDefinition": true
+  "FunctionDeclaration": true,
+  "FunctionExpression": true,
+  "VariableDeclarator": true,
+  "ClassDeclaration": true,
+  "ClassExpression": false,
+  "MethodDefinition": true,
+  "AssignmentExpression": false,
+  "ArrowFunctionExpression": false,
+  "ObjectExpression": false,
+  "Property": false
 };
 
 exports.handlers = {
   symbolFound: function(e) {
+    if (typeof logtypes[e.astnode.type] === "undefined")
+      console.log(e.astnode.type);
     // if (e.astnode.id != null && e.astnode.id.name != null) console.log(e);
     if (logtypes[e.astnode.type] == true && (e.comment === "@undocumented")) {
       e.comment = '/** undocumented */';

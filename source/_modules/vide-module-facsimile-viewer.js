@@ -4,6 +4,9 @@ import {EoNavModule} from './vide-nav-module-blueprint';
 
 
 
+/**
+ * @extends {EoNavModule}
+ */
 const VideFacsimileViewer = class VideFacsimileViewer extends EoNavModule {
 
     /** Constructor method */

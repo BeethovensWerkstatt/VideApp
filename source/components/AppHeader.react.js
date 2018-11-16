@@ -4,7 +4,10 @@ import LanguageSwitch from '../containers/LanguageSwitch.react';
 import HomeButtonController from '../containers/HomeButtonController.react';
 import PerspectivesBar from './PerspectivesBar.react';
 
-/** The REACT header component */
+/**
+ * The REACT header component
+ * @extends React.component
+ */
 class AppHeader extends React.Component {
 
     render() {

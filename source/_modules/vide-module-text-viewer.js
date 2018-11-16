@@ -3,6 +3,9 @@ import VIDE_PROTOCOL from './vide-protocol';
 import {EoModule, Request} from './vide-module-blueprint';
 
 
+/**
+ * @extends EoModule
+ */
 const VideTextViewer = class VideTextViewer extends EoModule {
 
     /** Constructor method */

@@ -21,6 +21,7 @@ import I18n from '../containers/I18n.react';
 
 /**
  * The global application component
+ * @extends React.component
  */
 class Application extends React.Component {
 

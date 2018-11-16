@@ -4,6 +4,7 @@ import I18n from './../containers/I18n.react';
 
 /**
  * One edition
+ * @extends React.component
  */
 class EditionListEntry extends React.Component {
 

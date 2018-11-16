@@ -2,6 +2,9 @@ import 'babel-polyfill';
 import VIDE_PROTOCOL from './vide-protocol';
 import {EoModule, Request} from './vide-module-blueprint';
 
+/**
+ * @extends EoModule
+ */
 const VideXmlViewer = class VideXMLviewer extends EoModule {
 
     /** Constructor method */

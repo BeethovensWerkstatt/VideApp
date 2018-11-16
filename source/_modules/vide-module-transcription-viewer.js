@@ -3,6 +3,9 @@ import VIDE_PROTOCOL from './vide-protocol';
 import {EoNavModule} from './vide-nav-module-blueprint';
 
 
+/**
+ * @extends EoNavModule
+ */
 const VideTranscriptionViewer = class VideTranscriptionViewer extends EoNavModule {
 
     /** Constructor method */
