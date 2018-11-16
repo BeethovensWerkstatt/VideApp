@@ -3,6 +3,11 @@ import { ViewLayouts } from '../redux/layout.constants';
 import { setViewLayout, deActivateEdition } from '../redux/actions.redux';
 import PerspectiveButton from '../components/PerspectiveButton.react';
 
+/**
+ * @module containers/PerspectiveController
+ */
+
+/** */
 const mapStateToProps = (state, ownProps) => {
     return {
         active: ownProps.type === state.views.layout,

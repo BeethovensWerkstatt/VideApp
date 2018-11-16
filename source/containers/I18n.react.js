@@ -2,6 +2,11 @@ import { connect } from 'react-redux';
 import { switchLanguage } from '../redux/actions.redux';
 import I18nString from '../components/I18nString.react';
 
+/**
+ * @module containers/I18n
+ */
+
+/** */
 const mapStateToProps = (state, ownProps) => {
     return {
         lang : state.preferences.language,

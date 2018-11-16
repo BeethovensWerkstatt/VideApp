@@ -5,6 +5,11 @@ import SyncViewsController from '../containers/SyncViewsController.react';
 
 import {ViewLayouts} from '../redux/layout.constants';
 
+/**
+ * @module components/PerspectivesBar
+ */
+
+/** */
 const PerspectivesBar = ({ }) => {
     return (
     <div className="perspectivesBar">
@@ -13,13 +18,13 @@ const PerspectivesBar = ({ }) => {
         <PerspectiveController type={ViewLayouts.HORIZONTAL_SPLIT} noIntro={true}/>
         <SyncViewsController/>
     </div>
-    
+
     );
 };
 
 
 PerspectivesBar.propTypes = {
-  
+
 };
 
 export default PerspectivesBar;

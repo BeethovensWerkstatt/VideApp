@@ -1,11 +1,18 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
+/**
+ * @module components/Link
+ */
+
+/**
+ * @function
+ */
 const Link = ({ active, children, onClick }) => {
     if (active) {
         return <span><strong>{children}</strong></span>;
     }
-  
+
     return (
     <a href="#"
        onClick={e => {

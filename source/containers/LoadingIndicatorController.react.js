@@ -1,6 +1,11 @@
 import { connect } from 'react-redux';
 import LoadingIndicator from '../components/LoadingIndicator.react';
 
+/**
+ * @module containers/LoadingIndicator
+ */
+
+/** */
 const mapStateToProps = (state, ownProps) => {
     return {
         requests: state.network.activeRequests
@@ -9,7 +14,7 @@ const mapStateToProps = (state, ownProps) => {
 
 const mapDispatchToProps = (dispatch, ownProps) => {
     return {
-        
+
     };
 };
 

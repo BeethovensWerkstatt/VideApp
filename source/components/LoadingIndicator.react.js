@@ -2,24 +2,29 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import I18n from './../containers/I18n.react';
 
+/**
+ * @module components/LoadingIndicator
+ */
+
+/** */
 const LoadingIndicator = ({ requests }) => {
-    
+
     if(requests.length === 0) {
         return null;
     }
-    
-    return ( 
-        
+
+    return (
+
         <div id="loadingIndicator">
             <div className="loadingItem">
                 <i className="fa fa-spinner fa-pulse fa-fw"></i>
                 <I18n content={'loadData_' + requests[0].type}/>
             </div>;
         </div>
-        
-    )    
-                
-            
+
+    )
+
+
 };
 
 LoadingIndicator.propTypes = {

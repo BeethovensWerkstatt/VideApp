@@ -34,6 +34,9 @@ const mapDispatchToProps = (dispatch, ownProps) => {
     };
 };
 
+/**
+ *
+ */
 const ViewsController = connect(
   mapStateToProps,
   mapDispatchToProps

@@ -3,6 +3,11 @@ import { activateEdition, highlightEdition } from '../redux/actions.redux';
 import VIDE_PROTOCOL from '../_modules/vide-protocol';
 import EditionListEntry from '../components/EditionListEntry.react';
 
+/**
+ * @module containers/EditionListEntryController
+ */
+
+/** */
 const mapStateToProps = (state, ownProps) => {
     return {
         edition: ownProps.edition,
@@ -15,7 +20,7 @@ const mapDispatchToProps = (dispatch, ownProps) => {
     return {
         onSelect: () => {
             if(ownProps.highlighted) {
-                dispatch(activateEdition(ownProps.edition.id));      
+                dispatch(activateEdition(ownProps.edition.id));
             } else {
                 dispatch(highlightEdition(ownProps.edition.id));
             }

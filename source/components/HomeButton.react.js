@@ -1,8 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
+/**
+ * @module components/HomeButton
+ */
+
+/** */
 const HomeButton = ({ onClick }) => {
-    
+
     return (
     <img src='./resources/pix/videAppLogo.png' className='videAppLogo' alt='Home'
        onClick={e => {

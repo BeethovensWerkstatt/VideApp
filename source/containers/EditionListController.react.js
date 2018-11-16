@@ -2,10 +2,20 @@ import { connect } from 'react-redux';
 import { activateEdition } from '../redux/actions.redux';
 import EditionList from '../components/EditionList.react';
 
+/**
+ * @module containers/EditionListController
+ */
+
 //these must match the CSS classes
+/**
+ * @namespace
+ */
 const EditionListMode = {
+  /** */
     ROW: 'row',
+    /** */
     COLUMN: 'column',
+    /** */
     GRID: 'grid'
 };
 
@@ -21,8 +31,8 @@ const mapStateToProps = (state, ownProps) => {
 const mapDispatchToProps = (dispatch, ownProps) => {
     return {
         onSelect: (editionId) => {
-            dispatch(activateEdition(editionId));      
-        }   
+            dispatch(activateEdition(editionId));
+        }
     /*onShow: () => {
       dispatch(showSidebar())
     },

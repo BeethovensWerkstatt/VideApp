@@ -3,6 +3,11 @@ import { openContextMenu, closeContextMenu } from '../redux/actions.redux';
 import {eohub} from './../_modules/eo-hub';
 import ContextMenu from '../components/ContextMenu.react';
 
+/**
+ * @module containers/ContextMenuController
+ */
+
+/** */
 const mapStateToProps = (state, ownProps) => {
     return {
         items: state.contextMenu.items,
@@ -18,15 +23,15 @@ const mapDispatchToProps = (dispatch, ownProps) => {
             dispatch(closeContextMenu());
         },
         submitRequest: (item) => {
-            
+
             try {
-                eohub.broadcastRequest(item);    
+                eohub.broadcastRequest(item);
             } catch(err) {
                 console.log('[ERROR] Unable to submit request: ' + err);
             }
         //dispatch(closeContextMenu())
         }
-    
+
     /*onShow: () => {
       dispatch(showSidebar())
     },
