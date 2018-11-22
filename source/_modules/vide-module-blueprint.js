@@ -2,10 +2,6 @@ import VIDE_PROTOCOL from './vide-protocol';
 let Select = require('tether-select');
 
 /**
- * @file Definition of generic EoModule class
- */
-
-/**
  * create a unique identifier (UUID)
  */
 Math.uuidCompact = function() {

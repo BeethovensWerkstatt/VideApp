@@ -2,7 +2,6 @@ import 'babel-polyfill';
 import { connect } from 'react-redux';
 import fetch from 'isomorphic-fetch';
 import verovio from 'verovio-dev';
-
 //imported in HTML -> globally available
 /*import io from 'socket.io';*/
 
