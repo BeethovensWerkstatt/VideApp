@@ -118,7 +118,9 @@ const VideViewManager = class VideViewManager {
         } else {
             target = 'view1';
         }
-        
+        console.log('\n\n--------------------------XX')
+        console.log(items)
+        console.log('--------------------------XX\n\n')
         let requests = [];
         items.forEach((item, i) => {
             let containerID= target;// + '_' + item.perspective;
