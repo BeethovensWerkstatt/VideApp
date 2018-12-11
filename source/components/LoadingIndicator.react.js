@@ -6,7 +6,9 @@ import I18n from './../containers/I18n.react';
  * @module components/LoadingIndicator
  */
 
-/** */
+/**
+ * 
+ */
 const LoadingIndicator = ({ requests }) => {
 
     if(requests.length === 0) {

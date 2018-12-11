@@ -380,4 +380,8 @@ const EoHub = class EoHub {
 
 };
 
-export let eohub = new EoHub();
+/**
+ * global singleton instance of {@link EoHub}
+ */
+let eohub = new EoHub();
+export default eohub;

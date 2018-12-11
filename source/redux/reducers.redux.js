@@ -7,7 +7,9 @@ import { combineReducers } from 'redux';
 import { eohub } from '../_modules/eo-hub';
 
 var semver = require('semver');
-
+/**
+ * {@link VIDE_PROTOCOL.PERSPECTIVE}
+ */
 let Perspectives = VIDE_PROTOCOL.PERSPECTIVE;
 
 /**

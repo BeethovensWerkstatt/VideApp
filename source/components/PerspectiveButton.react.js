@@ -6,7 +6,12 @@ import { ViewLayouts } from '../redux/layout.constants';
  * @module components/PerspectiveButton
  */
 
-/** */
+/**
+ * @param active {bool} link to active view
+ * @param type
+ * @param hidden
+ * @param onClick
+ */
 const PerspectiveButton = ({ active, type, hidden, onClick }) => {
     const classString = 'perspectiveButton' + (active ? ' active ' : ' ') + type + (hidden ? ' hidden':'');
 

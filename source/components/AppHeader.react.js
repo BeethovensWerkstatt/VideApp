@@ -10,6 +10,9 @@ import PerspectivesBar from './PerspectivesBar.react';
  */
 class AppHeader extends React.Component {
 
+/**
+ * REACT render method returns the header block of the VideApp.
+ */
     render() {
         return (
             <header className='appHeader'>

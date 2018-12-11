@@ -9,16 +9,13 @@ import Popper from 'popper.js';
 //Tours
 //var Drop = require('tether-drop');
 
-/**
- * @module components/Tour
- */
-
 /** */
 let TourException = (count) => {
     console.log('emitting a tour exception with count ' + count)
 }
 
 /**
+ * The {@link Tour} class implements a React component that displays a link to start the tour
  * @extends React.Component
  */
 class Tour extends React.Component {

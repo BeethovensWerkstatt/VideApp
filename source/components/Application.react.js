@@ -21,6 +21,11 @@ import I18n from '../containers/I18n.react';
 
 /**
  * The global application component
+ *
+ * combines {@link ViewsController}, {@link AppHeader}, 
+ * {@link ContextMenuController}, {@link LoadingIndicatorController} and
+ * {@link TourController}.
+ *
  * @extends React.component
  */
 class Application extends React.Component {

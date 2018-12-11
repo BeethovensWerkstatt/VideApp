@@ -8,6 +8,7 @@ import TourStartButtonController from './../containers/TourStartButtonController
  */
 
 /**
+ * The Introduction React component contains the landing page text
  * @param {string} language - the selected language
  * @return introduction HTML
  */

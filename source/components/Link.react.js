@@ -6,7 +6,7 @@ import PropTypes from 'prop-types';
  */
 
 /**
- * @function
+ * This element defines a link.
  */
 const Link = ({ active, children, onClick }) => {
     if (active) {

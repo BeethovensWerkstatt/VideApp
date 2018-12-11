@@ -1,6 +1,12 @@
 import 'babel-polyfill';
 import VIDE_PROTOCOL from './vide-protocol';
 import {EoModule} from './vide-module-blueprint';
+/**
+ * Dropdown Menu support:
+ * <a href="https://www.npmjs.com/package/tether-drop">tether-drop</a>
+ *
+ * used in {@link EoNavModule}
+ */
 let Drop = require('tether-drop');
 
 /**
