@@ -216,6 +216,7 @@ const VideFacsimileViewer = class VideFacsimileViewer extends EoNavModule {
         let container = document.getElementById(containerID);
         
         container.innerHTML = '';
+        container.classList.add('focusFollowsStates');
         
         let facs = document.createElement('div');
         facs.id = containerID + '_facsimile';
@@ -239,7 +240,8 @@ const VideFacsimileViewer = class VideFacsimileViewer extends EoNavModule {
             '<div id="' + containerID + '_rotateLeft" class="menuButton"><i class="fa fa-rotate-left"></i></div>' + 
             '<div id="' + containerID + '_rotateRight" class="menuButton"><i class="fa fa-rotate-right"></i></div>' +
             '<input id="' + containerID + '_visSlider" class="visSlider" type="range" name="vis" min="0" max="1" step="0.1" value="' + this._overlayDefaultOpacity + '">' + 
-            '<div id="' + containerID + '_showMeasureNumbersBtn" class="menuRow"><i class="fa fa-fw fa-check-square-o" aria-hidden="true"></i> <span data-i18n-text="show_MeasureNumbers">' + this._eohub.getI18nString('show_MeasureNumbers') + '</span></div>';
+            '<div id="' + containerID + '_showMeasureNumbersBtn" class="menuRow"><i class="fa fa-fw fa-check-square-o" aria-hidden="true"></i> <span data-i18n-text="show_MeasureNumbers">' + this._eohub.getI18nString('show_MeasureNumbers') + '</span></div>' + 
+            '<div id="' + containerID + '_focusFollowsStatesBtn" class="menuRow"><i class="fa fa-fw fa-check-square-o" aria-hidden="true"></i> <span data-i18n-text="focusFollowsStates">' + this._eohub.getI18nString('focusFollowsStates') + '</span></div>';
         
         container.appendChild(facs);
         container.appendChild(facsNav);
@@ -253,6 +255,13 @@ const VideFacsimileViewer = class VideFacsimileViewer extends EoNavModule {
         
         showMeasureNumbersBtn.addEventListener('click',(e) => {
             this._toggleMeasureNumbers(containerID);
+        })
+        
+        //focus follows states btn
+        let focusFollowsStatesBtn = document.getElementById(containerID + '_focusFollowsStatesBtn');
+        
+        focusFollowsStatesBtn.addEventListener('click',(e) => {
+            this._toggleFocusSetting(containerID);
         })
         
         //listeners for background slider
@@ -283,6 +292,12 @@ const VideFacsimileViewer = class VideFacsimileViewer extends EoNavModule {
         document.getElementById(containerID).classList.toggle('hideMeasureNumbers');
         document.querySelector('#' + containerID + '_showMeasureNumbersBtn .fa').classList.toggle('fa-square-o');
         document.querySelector('#' + containerID + '_showMeasureNumbersBtn .fa').classList.toggle('fa-check-square-o');
+    }
+    
+    _toggleFocusSetting(containerID) {
+        document.getElementById(containerID).classList.toggle('focusFollowsStates');
+        document.querySelector('#' + containerID + '_focusFollowsStatesBtn .fa').classList.toggle('fa-square-o');
+        document.querySelector('#' + containerID + '_focusFollowsStatesBtn .fa').classList.toggle('fa-check-square-o');
     }
     
     _openSingleScar(containerID, scarId, currentState = '', activeStates = [],overlayOpacity = this._overlayDefaultOpacity) {
@@ -1295,7 +1310,11 @@ const VideFacsimileViewer = class VideFacsimileViewer extends EoNavModule {
             if(problems.length > 0) {
                 console.log('[ERROR] found ' + problems.length + ' problems when highlighting state ' + state.label);                
             }
-            viewer.viewport.fitBoundsWithConstraints(baseRect);
+            
+            if(document.getElementById(containerID).classList.contains('focusFollowsStates')) {
+                viewer.viewport.fitBoundsWithConstraints(baseRect);
+            }
+            
             
         } catch(err) {
             console.log('[ERROR] Unable to highlight state ' + state.id + ' in facsimile: ' + err);
