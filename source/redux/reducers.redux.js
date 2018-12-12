@@ -457,8 +457,8 @@ export function handleNetwork(state = {
  */
 export function handleTour(state = '', action) {
     
-    console.log('')
-    console.log('ACTION: ' + action.type)
+    /*console.log('')
+    console.log('ACTION: ' + action.type)*/
     
     switch (action.type) {
         
