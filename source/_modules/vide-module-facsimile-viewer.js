@@ -428,8 +428,6 @@ const VideFacsimileViewer = class VideFacsimileViewer extends EoNavModule {
                     placement: 'TOP'
                 });
                 
-                this._loadMeasureLabels(page,bounds,viewer,containerID);
-                
                 //if possible, load svg overlays for page background
                 if(page.pageRef !== '') {
                     let cacheKeyPage = JSON.stringify({id: page.pageRef,type:'getPageShapesSvg'});
@@ -497,12 +495,16 @@ const VideFacsimileViewer = class VideFacsimileViewer extends EoNavModule {
                     console.log('no shapes to retrieve for page ' + page.label);
                 }
                 
+                this._loadMeasureLabels(page,bounds,viewer,containerID);
                 
             }
         });
     }
     
     _removePage(containerID,tiledImage,uri) {
+    
+        console.log('removing page ' + uri)
+    
         try {
             //get required objects
             let viewer = this._cache.get(containerID + '_facsViewer'); 
@@ -1009,6 +1011,14 @@ const VideFacsimileViewer = class VideFacsimileViewer extends EoNavModule {
     //load measure overlays
     _loadMeasureLabels(page,bounds,viewer,containerID) {
         
+        //check if measureLabels are rendered already
+        let existingSummary = viewer.getOverlayById(containerID + '_measuresSummary_' + page.id)
+        if(existingSummary !== null) {
+            console.log('\nmeasures labels for page ' + page.id + ' available already')
+            return false;
+        }
+        
+        
         //decide what to render initially
         let keys = [...this._tiledImages.keys()];
         let image = this._tiledImages.get(keys[0]);
@@ -1108,6 +1118,13 @@ const VideFacsimileViewer = class VideFacsimileViewer extends EoNavModule {
     }
     
     _removeMeasureLabels(page,viewer,containerID) {
+        
+        //remove measureSummary
+        try {
+            viewer.removeOverlay(containerID + '_measuresSummary_' + page.id);
+        } catch(err) {
+            console.log('[ERROR] Unable to remove measure summary for ' + page.n)
+        }
         
         for(let i=0;i<page.measures.length;i++) {
             try {
