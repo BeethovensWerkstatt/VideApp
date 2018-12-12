@@ -74,12 +74,12 @@ const VideHistoryManager = class VideHistoryManager {
             this._storeState(state);
 
             //logs each change of the state into the console
-            console.log('[LOG] preserving state ' + this._getHash(state));
-            console.log(state);
+            /*console.log('[LOG] preserving state ' + this._getHash(state));
+            console.log(state);*/
         } else {
             //logs each change of the state into the console
-            console.log('[LOG] temporary state ' + this._getHash(state));
-            console.log(state);
+            /*console.log('[LOG] temporary state ' + this._getHash(state));
+            console.log(state);*/
         }
     }
 

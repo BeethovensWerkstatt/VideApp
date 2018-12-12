@@ -1,8 +1,8 @@
 @import 'mixins';
 @import 'variables';
 
-@import '../../node_modules/tether/src/css/helpers/tether';
-@import '../../node_modules/tether/src/css/helpers/tether-theme-arrows';
+@import '../../node_modules/tether-drop/node_modules/tether/src/css/helpers/tether';
+@import '../../node_modules/tether-drop/node_modules/tether/src/css/helpers/tether-theme-arrows';
 
 /*@import '../../node_modules/tether-drop/src/css/drop-theme-hubspot-popovers';*/
 $themePrefix: "drop";

@@ -829,6 +829,11 @@ const VideFacsimileViewer = class VideFacsimileViewer extends EoNavModule {
 
                 this._confirmView(containerID,this._getModuleState(containerID));
 
+            });
+
+            //decide if measure numbers should be rendered individually or in sum
+            viewer.addHandler('animation',(event) => {
+
                 this._adjustMeasureNumberDisplay(containerID,viewer);
 
             });
@@ -843,120 +848,124 @@ const VideFacsimileViewer = class VideFacsimileViewer extends EoNavModule {
                     for(let j=0; j<source.pages.length; j++) {
                         let page = source.pages[j];
 
+                        try {
+                            let tiledImage = this._tiledImages.get(page.facsRef + '/info.json');
+                            let bounds = tiledImage.getBounds();
 
-                        let tiledImage = this._tiledImages.get(page.facsRef + '/info.json');
-                        let bounds = tiledImage.getBounds();
+                            pageCount++;
 
-                        pageCount++;
+                            //set source label
 
-                        //set source label
+                            let rasterY = pageJson.maxDimensions.height + 50;
 
-                        let rasterY = pageJson.maxDimensions.height + 50;
+                            if(j===0) {
 
-                        if(j===0) {
+                                let sourceLabel = document.createElement('div');
+                                sourceLabel.id = containerID + '_pageLabel_' + source.id;
+                                sourceLabel.className = 'pageLabel';
+                                sourceLabel.innerHTML = source.label;
 
-                            let sourceLabel = document.createElement('div');
-                            sourceLabel.id = containerID + '_pageLabel_' + source.id;
-                            sourceLabel.className = 'pageLabel';
-                            sourceLabel.innerHTML = source.label;
-
-                            viewer.addOverlay({
-                                element: sourceLabel,
-                                y: i * rasterY + (rasterY / 2),
-                                x: -10,
-                                placement: 'RIGHT'
-                            });
-
-                        }
-
-                        //set page label
-                        let existingLabel = viewer.getOverlayById(containerID + '_pageLabel_' + page.id);
-                        //add label only once (in case of moving pages)
-                        if(existingLabel === null) {
-                            let pageLabel = document.createElement('div');
-                            pageLabel.id = containerID + '_pageLabel_' + page.id;
-                            pageLabel.className = 'pageLabel';
-                            pageLabel.innerHTML = page.label;
-
-                            viewer.addOverlay({
-                                element: pageLabel,
-                                y: bounds.y + bounds.height,
-                                x: bounds.x + (bounds.width / 2),
-                                placement: 'TOP'
-                            });
-                        }
-
-                        //if possible, load svg overlays for page backgrounds
-                        let existingPage = viewer.getOverlayById(containerID + '_' + page.id + '_pageBack');
-                        if(page.pageRef !== '' && existingPage === null) {
-                            let cacheKeyPage = JSON.stringify({id: page.pageRef,type:'getPageShapesSvg'});
-                            if(this._cache.has(cacheKeyPage)) {
-                                let svgBox = document.createElement('div');
-                                svgBox.className = 'pageBack';
-                                svgBox.id = containerID + '_' + page.id + '_pageBack';
-                                svgBox.innerHTML = this._cache.get(cacheKeyPage);
-                                if(!this._feature) {
-                                    svgBox.style.opacity = this._overlayDefaultOpacity;
-                                }
                                 viewer.addOverlay({
-                                    element: svgBox,
-                                    y: bounds.y,
-                                    x: bounds.x,
-                                    width: bounds.width,
-                                    height: bounds.height,
-                                    placement: 'TOP_LEFT'
+                                    element: sourceLabel,
+                                    y: i * rasterY + (rasterY / 2),
+                                    x: -10,
+                                    placement: 'RIGHT'
                                 });
 
-                            } else {
-                                console.log('[ERROR] failed to load things in correct order – svg page backgorund not available for ' + page.id + ' (yet)');
                             }
-                        } else {
-                            console.log('no page background to retrieve for page ' + page.label);
-                        }
 
-                        //if possible, load svg overlays
-                        let existingShapes = viewer.getOverlayById(containerID + '_' + page.id + '_shapes');
-                        if(page.shapesRef !== '' && existingShapes === null) {
-                            let cacheKey = JSON.stringify({id: page.shapesRef,type:'getPageShapesSvg'});
-                            if(this._cache.has(cacheKey)) {
+                            //set page label
+                            let existingLabel = viewer.getOverlayById(containerID + '_pageLabel_' + page.id);
+                            //add label only once (in case of moving pages)
+                            if(existingLabel === null) {
+                                let pageLabel = document.createElement('div');
+                                pageLabel.id = containerID + '_pageLabel_' + page.id;
+                                pageLabel.className = 'pageLabel';
+                                pageLabel.innerHTML = page.label;
 
-                                let svgBox = document.createElement('div');
-                                svgBox.className = 'svgBox';
-                                svgBox.id = containerID + '_' + page.id + '_shapes';
-                                svgBox.innerHTML = this._cache.get(cacheKey);
-                                if(!this._feature) {
-                                    svgBox.style.opacity = this._overlayDefaultOpacity;
-                                }
                                 viewer.addOverlay({
-                                    element: svgBox,
-                                    y: bounds.y,
-                                    x: bounds.x,
-                                    width: bounds.width,
-                                    height: bounds.height,
-                                    placement: 'TOP_LEFT'
+                                    element: pageLabel,
+                                    y: bounds.y + bounds.height,
+                                    x: bounds.x + (bounds.width / 2),
+                                    placement: 'TOP'
                                 });
+                            }
 
-                                //handler for svg shapes being clicked
-                                let onClick = (e) => {
-                                    let shape = e.currentTarget;
-                                    this._clickShape(containerID, viewer, shape, e);
-                                    e.preventDefault();
-                                };
-                                let paths = svgBox.querySelectorAll('path');
+                            //if possible, load svg overlays for page backgrounds
+                            let existingPage = viewer.getOverlayById(containerID + '_' + page.id + '_pageBack');
+                            if(page.pageRef !== '' && existingPage === null) {
+                                let cacheKeyPage = JSON.stringify({id: page.pageRef,type:'getPageShapesSvg'});
+                                if(this._cache.has(cacheKeyPage)) {
+                                    let svgBox = document.createElement('div');
+                                    svgBox.className = 'pageBack';
+                                    svgBox.id = containerID + '_' + page.id + '_pageBack';
+                                    svgBox.innerHTML = this._cache.get(cacheKeyPage);
+                                    if(!this._feature) {
+                                        svgBox.style.opacity = this._overlayDefaultOpacity;
+                                    }
+                                    viewer.addOverlay({
+                                        element: svgBox,
+                                        y: bounds.y,
+                                        x: bounds.x,
+                                        width: bounds.width,
+                                        height: bounds.height,
+                                        placement: 'TOP_LEFT'
+                                    });
 
-                                //adding the handler to each svg shape
-                                for(let x=0; x < paths.length; x++) {
-                                    let path = paths[x];
-                                    path.addEventListener('click', onClick, false);
+                                } else {
+                                    console.log('[ERROR] failed to load things in correct order – svg page backgorund not available for ' + page.id + ' (yet)');
                                 }
                             } else {
-                                console.log('[ERROR] failed to load things in correct order – svg shapes not available for ' + page.id + ' (yet)');
+                                console.log('no page background to retrieve for page ' + page.label);
                             }
-                        } else {
-                            console.log('no shapes to retrieve for page ' + page.label);
-                        }
 
-                        this._loadMeasureLabels(page,bounds,viewer,containerID);
+                            //if possible, load svg overlays
+                            let existingShapes = viewer.getOverlayById(containerID + '_' + page.id + '_shapes');
+                            if(page.shapesRef !== '' && existingShapes === null) {
+                                let cacheKey = JSON.stringify({id: page.shapesRef,type:'getPageShapesSvg'});
+                                if(this._cache.has(cacheKey)) {
+
+                                    let svgBox = document.createElement('div');
+                                    svgBox.className = 'svgBox';
+                                    svgBox.id = containerID + '_' + page.id + '_shapes';
+                                    svgBox.innerHTML = this._cache.get(cacheKey);
+                                    if(!this._feature) {
+                                        svgBox.style.opacity = this._overlayDefaultOpacity;
+                                    }
+                                    viewer.addOverlay({
+                                        element: svgBox,
+                                        y: bounds.y,
+                                        x: bounds.x,
+                                        width: bounds.width,
+                                        height: bounds.height,
+                                        placement: 'TOP_LEFT'
+                                    });
+
+                                    //handler for svg shapes being clicked
+                                    let onClick = (e) => {
+                                        let shape = e.currentTarget;
+                                        this._clickShape(containerID, viewer, shape, e);
+                                        e.preventDefault();
+                                    };
+                                    let paths = svgBox.querySelectorAll('path');
+
+                                    //adding the handler to each svg shape
+                                    for(let x=0; x < paths.length; x++) {
+                                        let path = paths[x];
+                                        path.addEventListener('click', onClick, false);
+                                    }
+                                } else {
+                                    console.log('[ERROR] failed to load things in correct order – svg shapes not available for ' + page.id + ' (yet)');
+                                }
+                            } else {
+                                console.log('no shapes to retrieve for page ' + page.label);
+                            }
+
+                            this._loadMeasureLabels(page,bounds,viewer,containerID);
+
+                        } catch(err) {
+                            console.warn('unable to load page ' + page.n + ': ' + err)
+                        }
 
                         //INFO: annotations will be implemented at a later stage
                         /*this._getAnnotationsOnPage(this._eohub.getEdition(),page.id).then((annotations) => {

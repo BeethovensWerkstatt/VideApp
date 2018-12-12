@@ -7,7 +7,7 @@ import {eohub} from './eo-hub';
 import * as langfile from '../i18n/i18n.json';
 
 /**
- * The VideViewManager class 
+ * The VideViewManager class
  */
 const VideViewManager = class VideViewManager {
 
@@ -121,7 +121,9 @@ const VideViewManager = class VideViewManager {
         } else {
             target = 'view1';
         }
-
+        console.log('\n\n--------------------------XX')
+        console.log(items)
+        console.log('--------------------------XX\n\n')
         let requests = [];
         items.forEach((item, i) => {
             let containerID= target;// + '_' + item.perspective;
