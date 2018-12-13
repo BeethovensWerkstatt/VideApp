@@ -219,6 +219,10 @@
         "de":"Taktzahlen einblenden",
         "en":"show measure numbers"
     },
+    "focusFollowsStates" : {
+        "de":"Textänderungen fokussieren",
+        "en":"Focus textual changes"
+    },
     "show_Invariance" : {
         "de":"Invarianzeinfärbung",
         "en":"Invariance"

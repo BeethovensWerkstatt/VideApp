@@ -219,6 +219,7 @@ const VideFacsimileViewer = class VideFacsimileViewer extends EoNavModule {
         let container = document.getElementById(containerID);
 
         container.innerHTML = '';
+        container.classList.add('focusFollowsStates');
 
         let facs = document.createElement('div');
         facs.id = containerID + '_facsimile';
@@ -242,7 +243,8 @@ const VideFacsimileViewer = class VideFacsimileViewer extends EoNavModule {
             '<div id="' + containerID + '_rotateLeft" class="menuButton"><i class="fa fa-rotate-left"></i></div>' +
             '<div id="' + containerID + '_rotateRight" class="menuButton"><i class="fa fa-rotate-right"></i></div>' +
             '<input id="' + containerID + '_visSlider" class="visSlider" type="range" name="vis" min="0" max="1" step="0.1" value="' + this._overlayDefaultOpacity + '">' +
-            '<div id="' + containerID + '_showMeasureNumbersBtn" class="menuRow"><i class="fa fa-fw fa-check-square-o" aria-hidden="true"></i> <span data-i18n-text="show_MeasureNumbers">' + this._eohub.getI18nString('show_MeasureNumbers') + '</span></div>';
+            '<div id="' + containerID + '_showMeasureNumbersBtn" class="menuRow"><i class="fa fa-fw fa-check-square-o" aria-hidden="true"></i> <span data-i18n-text="show_MeasureNumbers">' + this._eohub.getI18nString('show_MeasureNumbers') + '</span></div>' +
+            '<div id="' + containerID + '_focusFollowsStatesBtn" class="menuRow"><i class="fa fa-fw fa-check-square-o" aria-hidden="true"></i> <span data-i18n-text="focusFollowsStates">' + this._eohub.getI18nString('focusFollowsStates') + '</span></div>';
 
         container.appendChild(facs);
         container.appendChild(facsNav);
@@ -256,6 +258,13 @@ const VideFacsimileViewer = class VideFacsimileViewer extends EoNavModule {
 
         showMeasureNumbersBtn.addEventListener('click',(e) => {
             this._toggleMeasureNumbers(containerID);
+        })
+
+        //focus follows states btn
+        let focusFollowsStatesBtn = document.getElementById(containerID + '_focusFollowsStatesBtn');
+
+        focusFollowsStatesBtn.addEventListener('click',(e) => {
+            this._toggleFocusSetting(containerID);
         })
 
         //listeners for background slider
@@ -286,6 +295,12 @@ const VideFacsimileViewer = class VideFacsimileViewer extends EoNavModule {
         document.getElementById(containerID).classList.toggle('hideMeasureNumbers');
         document.querySelector('#' + containerID + '_showMeasureNumbersBtn .fa').classList.toggle('fa-square-o');
         document.querySelector('#' + containerID + '_showMeasureNumbersBtn .fa').classList.toggle('fa-check-square-o');
+    }
+
+    _toggleFocusSetting(containerID) {
+        document.getElementById(containerID).classList.toggle('focusFollowsStates');
+        document.querySelector('#' + containerID + '_focusFollowsStatesBtn .fa').classList.toggle('fa-square-o');
+        document.querySelector('#' + containerID + '_focusFollowsStatesBtn .fa').classList.toggle('fa-check-square-o');
     }
 
     _openSingleScar(containerID, scarId, currentState = '', activeStates = [],overlayOpacity = this._overlayDefaultOpacity) {
@@ -431,8 +446,6 @@ const VideFacsimileViewer = class VideFacsimileViewer extends EoNavModule {
                     placement: 'TOP'
                 });
 
-                this._loadMeasureLabels(page,bounds,viewer,containerID);
-
                 //if possible, load svg overlays for page background
                 if(page.pageRef !== '') {
                     let cacheKeyPage = JSON.stringify({id: page.pageRef,type:'getPageShapesSvg'});
@@ -500,12 +513,16 @@ const VideFacsimileViewer = class VideFacsimileViewer extends EoNavModule {
                     console.log('no shapes to retrieve for page ' + page.label);
                 }
 
+                this._loadMeasureLabels(page,bounds,viewer,containerID);
 
             }
         });
     }
 
     _removePage(containerID,tiledImage,uri) {
+
+        console.log('removing page ' + uri)
+
         try {
             //get required objects
             let viewer = this._cache.get(containerID + '_facsViewer');
@@ -1012,6 +1029,14 @@ const VideFacsimileViewer = class VideFacsimileViewer extends EoNavModule {
     //load measure overlays
     _loadMeasureLabels(page,bounds,viewer,containerID) {
 
+        //check if measureLabels are rendered already
+        let existingSummary = viewer.getOverlayById(containerID + '_measuresSummary_' + page.id)
+        if(existingSummary !== null) {
+            console.log('\nmeasures labels for page ' + page.id + ' available already')
+            return false;
+        }
+
+
         //decide what to render initially
         let keys = [...this._tiledImages.keys()];
         let image = this._tiledImages.get(keys[0]);
@@ -1111,6 +1136,13 @@ const VideFacsimileViewer = class VideFacsimileViewer extends EoNavModule {
     }
 
     _removeMeasureLabels(page,viewer,containerID) {
+
+        //remove measureSummary
+        try {
+            viewer.removeOverlay(containerID + '_measuresSummary_' + page.id);
+        } catch(err) {
+            console.log('[ERROR] Unable to remove measure summary for ' + page.n)
+        }
 
         for(let i=0;i<page.measures.length;i++) {
             try {
@@ -1281,7 +1313,11 @@ const VideFacsimileViewer = class VideFacsimileViewer extends EoNavModule {
             if(problems.length > 0) {
                 console.log('[ERROR] found ' + problems.length + ' problems when highlighting state ' + state.label);
             }
-            viewer.viewport.fitBoundsWithConstraints(baseRect);
+
+            if(document.getElementById(containerID).classList.contains('focusFollowsStates')) {
+                viewer.viewport.fitBoundsWithConstraints(baseRect);
+            }
+
 
         } catch(err) {
             console.log('[ERROR] Unable to highlight state ' + state.id + ' in facsimile: ' + err);
