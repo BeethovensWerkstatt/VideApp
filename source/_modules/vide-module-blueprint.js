@@ -1,5 +1,6 @@
 import VIDE_PROTOCOL from './vide-protocol';
-let Select = require('tether-select');
+// let Select = require('tether-select');
+import Select from 'tether-select';
 
 /**
  * create a unique identifier (UUID)

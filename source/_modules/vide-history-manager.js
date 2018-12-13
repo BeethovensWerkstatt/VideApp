@@ -1,4 +1,5 @@
 import 'babel-polyfill';
+/** random hash generator in {@link VideHistoryManager} (<i>$FILE</i>) */
 let shake128 = require('js-sha3').shake_128;
 import {version} from './../../package.json';
 import {restoreState, resetState, receiveEditions, activateEdition} from './../redux/actions.redux';
@@ -84,7 +85,7 @@ const VideHistoryManager = class VideHistoryManager {
     }
 
     /**
-     * This function creates a hasg for the current state and adds both the hash and the state to the browser history.
+     * This function creates a hash for the current state and adds both the hash and the state to the browser history.
      * Also logs the state on the server
      * @param {object} state reflects the current Redux state of the application
      */

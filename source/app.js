@@ -2,8 +2,10 @@ import 'babel-polyfill';
 require('./polyfills'); //is this really the correct way to load polyfills?
 
 //React
-var React = require('react');
-var ReactDOM = require('react-dom');
+// var React = require('react');
+import React from 'react';
+// var ReactDOM = require('react-dom');
+import ReactDOM from 'react-dom';
 // var Application = require('./components/Application.react');
 import Application from './components/Application.react';
 
@@ -28,29 +30,55 @@ import VideTranscriptionViewer from './_modules/vide-module-transcription-viewer
 import VideTextViewer from './_modules/vide-module-text-viewer';
 import VideFacsimileViewer from './_modules/vide-module-facsimile-viewer';
 
+/**
+ * This module defines the core react-redux application.
+ * It first renders the {@link Application} and then adds available editions
+ * to the application state with the {@link fetchEditions()} function.
+ * @module app
+ */
 
 /*import VidePageOverlayViewer from './_modules/vide-module-pageOverlay-viewer';*/
 
 //enhance react app to allow dispatching functions, not just plain states
+/**
+ * the redux store created from {@link VideAppState}
+ */
 let store = createStore(VideAppState, applyMiddleware(
         thunkMiddleware
     )
 );
 
+/**
+ * The VideApp {@link VideViewManager}
+ */
 let videViewManager = new VideViewManager(store);
 
+/**
+ * The {@link VideXmlViewer}
+ */
 let xmlViewer = new VideXmlViewer();
 eohub.registerModule(xmlViewer);
 
+/**
+ * The {@link VideFacsimileViewer}
+ */
 let videFacsimileViewer = new VideFacsimileViewer();
 eohub.registerModule(videFacsimileViewer);
 
-/*let videPageOverlayViewer = new VidePageOverlayViewer();
+/*
+let videPageOverlayViewer = new VidePageOverlayViewer();
 eohub.registerModule(videPageOverlayViewer);
 */
+
+/**
+ * The verovio based {@link VideTranscriptionViewer}
+ */
 let transcriptionViewer = new VideTranscriptionViewer();
 eohub.registerModule(transcriptionViewer);
 
+/**
+ * The {@link VideTextViewer}
+ */
 let videTextViewer = new VideTextViewer();
 eohub.registerModule(videTextViewer);
 

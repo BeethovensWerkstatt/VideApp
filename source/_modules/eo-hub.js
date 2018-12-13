@@ -5,6 +5,11 @@ import verovio from 'verovio-dev';
 //imported in HTML -> globally available
 /*import io from 'socket.io';*/
 
+/**
+ * local server address: <code>let server = 'http://localhost:2999/';</code>
+ * @todo fetch from config?
+ * <br>$FILE
+ */
 let server = 'http://localhost:2999/';
 
 /** generate UUIDs - unique identifiers */
@@ -383,5 +388,4 @@ const EoHub = class EoHub {
 /**
  * global singleton instance of {@link EoHub}
  */
-let eohub = new EoHub();
-export default eohub;
+export let eohub = new EoHub();

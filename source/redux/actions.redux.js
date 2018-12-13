@@ -3,6 +3,13 @@ import VIDE_PROTOCOL from '../_modules/vide-protocol';
 
 import {ViewLayouts} from './layout.constants';
 
+/**
+ * List of {@link VIDE_PROTOCOL.PERSPECTIVE}
+ *
+ * @todo do we need this? There is no reference in this file?
+ *
+ * <br /> $FILE
+ */
 let Perspective = VIDE_PROTOCOL.PERSPECTIVE;
 
 

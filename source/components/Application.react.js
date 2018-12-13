@@ -1,4 +1,5 @@
-var React = require('react');
+// var React = require('react');
+import React from 'react';
 // var AppHeader = require('./AppHeader.react');
 import AppHeader from './AppHeader.react';
 
@@ -22,7 +23,7 @@ import I18n from '../containers/I18n.react';
 /**
  * The global application component
  *
- * combines {@link ViewsController}, {@link AppHeader}, 
+ * combines {@link ViewsController}, {@link AppHeader},
  * {@link ContextMenuController}, {@link LoadingIndicatorController} and
  * {@link TourController}.
  *

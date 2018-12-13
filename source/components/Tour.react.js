@@ -9,7 +9,10 @@ import Popper from 'popper.js';
 //Tours
 //var Drop = require('tether-drop');
 
-/** */
+/**
+ * @todo this exception is actually not thrown anywhere?
+ * @class
+ */
 let TourException = (count) => {
     console.log('emitting a tour exception with count ' + count)
 }

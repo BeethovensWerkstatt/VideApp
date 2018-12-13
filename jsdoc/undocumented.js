@@ -2,9 +2,9 @@
 
 // what to document
 const logtypes = {
-  "ExportDefaultDeclaration": true,
+  "ExportDefaultDeclaration": false,
   "ExportSpecifier": false,
-  "ExportNamedDeclaration": true,
+  "ExportNamedDeclaration": false,
   "FunctionDeclaration": true,
   "FunctionExpression": true,
   "VariableDeclarator": true,
@@ -22,11 +22,13 @@ exports.handlers = {
   symbolFound: function(e) {
     if (typeof logtypes[e.astnode.type] === "undefined")
       console.log(e.astnode.type);
+    var i = e.filename.indexOf('VideApp/source') + 'VideApp/source'.length;
+    var filename = e.filename.substring(i);
     // if (e.astnode.id != null && e.astnode.id.name != null) console.log(e);
     if (logtypes[e.astnode.type] == true && (e.comment === "@undocumented")) {
-      var i = e.filename.indexOf('VideApp/source') + 'VideApp/source'.length;
-      e.comment = '/** undocumented <i>(' + e.filename.substring(i) + ':' + e.lineno +')</i> */';
+      e.comment = '/** undocumented <i>(' + filename + ':' + e.lineno + ')</i> */';
       // add to list
     }
+    e.comment = e.comment.replace("$FILE", "'" + filename + "' (" + e.lineno + ")");
   }
 };
