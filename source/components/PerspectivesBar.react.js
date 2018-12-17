@@ -6,10 +6,8 @@ import SyncViewsController from '../containers/SyncViewsController.react';
 import {ViewLayouts} from '../redux/layout.constants';
 
 /**
- * @module components/PerspectivesBar
+ * @class
  */
-
-/** */
 const PerspectivesBar = ({ }) => {
     return (
     <div className="perspectivesBar">

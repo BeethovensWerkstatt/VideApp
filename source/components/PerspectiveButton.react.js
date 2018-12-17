@@ -3,14 +3,11 @@ import PropTypes from 'prop-types';
 import { ViewLayouts } from '../redux/layout.constants';
 
 /**
- * @module components/PerspectiveButton
- */
-
-/**
  * @param active {bool} link to active view
  * @param type
  * @param hidden
  * @param onClick
+ * @class
  */
 const PerspectiveButton = ({ active, type, hidden, onClick }) => {
     const classString = 'perspectiveButton' + (active ? ' active ' : ' ') + type + (hidden ? ' hidden':'');

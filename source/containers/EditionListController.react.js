@@ -2,24 +2,19 @@ import { connect } from 'react-redux';
 import { activateEdition } from '../redux/actions.redux';
 import EditionList from '../components/EditionList.react';
 
-/**
- * @module containers/EditionListController
- */
-
 //these must match the CSS classes
 /**
  * @namespace
  */
 const EditionListMode = {
-  /** */
+    /** horizontal alignment */
     ROW: 'row',
-    /** */
+    /** vertical alignment */
     COLUMN: 'column',
-    /** */
+    /** responsive(?) alignment */
     GRID: 'grid'
 };
 
-/** */
 const mapStateToProps = (state, ownProps) => {
     return {
         editions: state.edition.editions,
@@ -29,7 +24,6 @@ const mapStateToProps = (state, ownProps) => {
     };
 };
 
-/** */
 const mapDispatchToProps = (dispatch, ownProps) => {
     return {
         onSelect: (editionId) => {
@@ -44,7 +38,13 @@ const mapDispatchToProps = (dispatch, ownProps) => {
     };
 };
 
-/** @class */
+/**
+ * @module
+ */
+
+/**
+ * @see {@link EditionListMode}
+ */
 const EditionListController = connect(
   mapStateToProps,
   mapDispatchToProps

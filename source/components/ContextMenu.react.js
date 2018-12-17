@@ -6,24 +6,22 @@ import {eohub} from './../_modules/eo-hub';
 import VIDE_PROTOCOL from './../_modules/vide-protocol';
 import Slider from 'react-slick';
 
-/**
- * @module components/ContextMenu
- */
-
  /**
+  * uses {@link components/ContextMenu#filterDuplicateRequests}
   * @param items {array}
   * @param visible {bool}
   * @param closeContextMenu {function}
   * @param submitRequest {function}
   * @param x {number}
   * @param y {number}
-  * @class
+  * @class ContextMenu
   */
 const ContextMenu = ({ items, visible, closeContextMenu, submitRequest, x, y }) => {
 
     if(visible) {
+        /** style and position of the context menu */
         let menuStyle = {top: (y + 10) + 'px', left: (x + 10) + 'px'};
-
+        /** */
         let sliderSettings;
 
         if(items.length > 1) {
@@ -51,7 +49,9 @@ const ContextMenu = ({ items, visible, closeContextMenu, submitRequest, x, y }) 
             };
         }
 
+        /** uuid of the request */
         let key = Math.uuidCompact()
+        /** the request */
         let req = {
             id: items[0].req.id,
             edition: eohub.getEdition(),
@@ -59,6 +59,7 @@ const ContextMenu = ({ items, visible, closeContextMenu, submitRequest, x, y }) 
             key: key
         }
 
+        /** the socket to the server */
         let socket = io(eohub._server + eohub._socketID);
 
         socket.once(key,(json) => {
@@ -165,7 +166,16 @@ const ContextMenu = ({ items, visible, closeContextMenu, submitRequest, x, y }) 
     return null;
 };
 
-/** */
+
+/**
+ * @module
+ */
+
+
+/**
+ * @param items {array}
+ * @return {array} filtered array without duplicate items items
+ */
 let filterDuplicateRequests = (items) => {
 
     items = items.filter((item, index, self) =>

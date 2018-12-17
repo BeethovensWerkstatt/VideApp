@@ -3,11 +3,8 @@ import PropTypes from 'prop-types';
 import I18n from './../containers/I18n.react';
 
 /**
- * @module components/LoadingIndicator
- */
-
-/**
- * 
+ * @param requests {array}
+ * @class
  */
 const LoadingIndicator = ({ requests }) => {
 

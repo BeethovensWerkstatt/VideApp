@@ -2,11 +2,6 @@ import { connect } from 'react-redux';
 import Tour from '../components/Tour.react';
 import { loadTourStep, closeTour } from '../redux/actions.redux';
 
-/**
- * @module containers/TourController
- */
-
-/** */
 const mapStateToProps = (state, ownProps) => {
     return {
         tour: state.tour,
@@ -16,7 +11,6 @@ const mapStateToProps = (state, ownProps) => {
     };
 };
 
-/** */
 const mapDispatchToProps = (dispatch, ownProps) => {
     return {
         loadTourStep: (stepId) => {
@@ -28,7 +22,11 @@ const mapDispatchToProps = (dispatch, ownProps) => {
     };
 };
 
-/** @class */
+/**
+ * @module
+ */
+
+/** */
 const TourController = connect(
   mapStateToProps,
   mapDispatchToProps

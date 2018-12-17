@@ -7,7 +7,7 @@ const logtypes = {
   "ExportNamedDeclaration": false,
   "FunctionDeclaration": true,
   "FunctionExpression": true,
-  "VariableDeclarator": true,
+  "VariableDeclarator": false,
   "ClassDeclaration": true,
   "ClassExpression": false,
   "MethodDefinition": true,
@@ -20,7 +20,11 @@ const logtypes = {
 const hideDefs = {
   "mapDispatchToProps": true,
   "mapStateToProps": true,
-  "render": true
+  "render": true,
+  "componentDidMount": true,
+  "componentDidUpdate": true,
+  "componentWillReceiveProps": true,
+  "shouldComponentUpdate": true
 }
 
 // add export handler (symbolFound) to mark undocumented symbols
@@ -34,11 +38,14 @@ exports.handlers = {
     if (logtypes[e.astnode.type] == true) {
       var codename = e.code.name;
       //console.log(e.astnode);
-      if (e.comment === "@undocumented" && !hideDefs[e.code.name]) {
+      if (typeof codename === "string") {
+        var h = codename.indexOf("#");
+        if (h > 0)
+          codename = codename.substring(h + 1);
+      }
+      if (e.comment === "@undocumented" && !hideDefs[codename]) {
         e.comment = '/** undocumented <i>(' + filename + ':' + e.lineno + ')</i> */';
-        if (typeof e.code.name === "string" && e.code.name.endsWith("render"))
-          console.log(e);
-      } else if (hideDefs[e.code.name]) {
+      } else if (hideDefs[codename]) {
         e.comment = "@undocumented";
       }
     }

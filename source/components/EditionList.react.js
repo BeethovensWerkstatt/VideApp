@@ -5,12 +5,17 @@ import { StatusCodes } from './../redux/actions.redux';
 import I18n from './../containers/I18n.react';
 
 /**
- * @module components/EditionList
+ * @param editions {object}
+ * @param revision {string}
+ * @param mode {string}
+ * @param highlighted {string}
+ * @param onSelect {function}
+ * @class
  */
-
-/** */
 const EditionList = ({ editions, revision, mode, highlighted, onSelect }) => {
+    /** class attributes for each edition */
     let classNames = 'editionList ' + mode;
+    /** */
     let noneHighlighted = highlighted === '';
 
     return (

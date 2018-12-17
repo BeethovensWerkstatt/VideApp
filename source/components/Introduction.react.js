@@ -4,13 +4,9 @@ import EditionListController, { EditionListMode } from './../containers/EditionL
 import TourStartButtonController from './../containers/TourStartButtonController.react';
 
 /**
- * @module components/Introduction
- */
-
-/**
  * The Introduction React component contains the landing page text
  * @param {string} language - the selected language
- * @return introduction HTML
+ * @class introduction HTML
  */
 const Introduction = ({language }) => {
     if(language === 'de') {

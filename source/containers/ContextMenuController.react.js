@@ -3,11 +3,7 @@ import { openContextMenu, closeContextMenu } from '../redux/actions.redux';
 import {eohub} from './../_modules/eo-hub';
 import ContextMenu from '../components/ContextMenu.react';
 
-/**
- * @module containers/ContextMenuController
- */
 
-/** */
 const mapStateToProps = (state, ownProps) => {
     return {
         items: state.contextMenu.items,
@@ -17,7 +13,6 @@ const mapStateToProps = (state, ownProps) => {
     };
 };
 
-/** */
 const mapDispatchToProps = (dispatch, ownProps) => {
     return {
         closeContextMenu: () => {
@@ -43,8 +38,10 @@ const mapDispatchToProps = (dispatch, ownProps) => {
 };
 
 /**
- * @class
+ * @module
  */
+
+/** */
 const ContextMenuController = connect(
   mapStateToProps,
   mapDispatchToProps

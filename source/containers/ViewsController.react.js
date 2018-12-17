@@ -2,11 +2,6 @@ import { connect } from 'react-redux';
 import { setViewRatio } from '../redux/actions.redux';
 import Views from '../components/Views.react';
 
-/**
- * @module containers/ViewsController
- */
-
-/** */
 const mapStateToProps = (state, ownProps) => {
     return {
         view1 : state.views.view1,
@@ -20,7 +15,6 @@ const mapStateToProps = (state, ownProps) => {
     };
 };
 
-/** */
 const mapDispatchToProps = (dispatch, ownProps) => {
     return {
         setRatio: (ratio) => {
@@ -36,8 +30,10 @@ const mapDispatchToProps = (dispatch, ownProps) => {
 };
 
 /**
- * @class
+ * @module
  */
+
+/** */
 const ViewsController = connect(
   mapStateToProps,
   mapDispatchToProps

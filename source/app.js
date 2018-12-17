@@ -34,7 +34,7 @@ import VideFacsimileViewer from './_modules/vide-module-facsimile-viewer';
  * This module defines the core react-redux application.
  * It first renders the {@link Application} and then adds available editions
  * to the application state with the {@link fetchEditions()} function.
- * @module app
+ * @module
  */
 
 /*import VidePageOverlayViewer from './_modules/vide-module-pageOverlay-viewer';*/

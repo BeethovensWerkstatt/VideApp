@@ -2,10 +2,9 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 /**
- * @module components/HomeButton
+ * @param onClick {function}
+ * @class
  */
-
-/** */
 const HomeButton = ({ onClick }) => {
 
     return (

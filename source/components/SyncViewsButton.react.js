@@ -3,10 +3,11 @@ import PropTypes from 'prop-types';
 import { ViewLayouts } from '../redux/layout.constants';
 
 /**
- * @module components/SyncViewsButton
+ * @param hidden {bool}
+ * @param synced {bool}
+ * @param onClick {function}
+ * @class
  */
-
-/** */
 const SyncViewsButton = ({ hidden, synced, onClick }) => {
     const classString = 'perspectiveButton syncViews' + (hidden ? ' hidden':'');
 

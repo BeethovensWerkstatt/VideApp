@@ -5,11 +5,6 @@ import VIDE_PROTOCOL from './../_modules/vide-protocol';
 import {eohub} from './../_modules/eo-hub';
 import {EoModule, DataRequest} from './../_modules/vide-module-blueprint';
 
-/**
- * @module components/PreviewItem
- */
-
-/** */
 Math.uuidCompact = function() {
     return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
       let r = Math.random()*16|0, v = c == 'x' ? r : (r&0x3|0x8);
@@ -17,6 +12,11 @@ Math.uuidCompact = function() {
     });
 };
 
+/**
+ * @param object {object}
+ * @param clickFunc {function}
+ * @class
+ */
 const PreviewItem = ({ object, clickFunc }) => {
 
     try {

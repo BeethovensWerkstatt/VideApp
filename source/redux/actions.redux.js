@@ -4,21 +4,6 @@ import VIDE_PROTOCOL from '../_modules/vide-protocol';
 import {ViewLayouts} from './layout.constants';
 
 /**
- * @module redux/actions
- */
-
-/**
- * List of {@link VIDE_PROTOCOL.PERSPECTIVE}
- *
- * @todo do we need this? There is no reference in this file?
- *
- * <br /> $FILE
- */
-let Perspective = VIDE_PROTOCOL.PERSPECTIVE;
-
-
-
-/**
  * Action types
  * @namespace
  */
@@ -89,44 +74,49 @@ const ActionTypes = {
 };
 export { ActionTypes };
 
-/**
- * @module redux/actions
- */
+ /**
+  * @module
+  */
 
-/**
+ /**
+  * List of {@link VIDE_PROTOCOL.PERSPECTIVE}
+  *
+  * @todo do we need this? There is no reference in this file?
+  *
+  * <br /> $FILE
+  */
+ let Perspective = VIDE_PROTOCOL.PERSPECTIVE;
+
+export /**
  * Function setFirstView specifies the view to be opened in view1
  * @param {string} perspective to be opened
  * @param {Object|null} viewState object when initializing the view
  * @returns {object} the information how view1.state needs to be modified
- */
-export function setFirstView(moduleKey = 'VideFacsimileViewer', request = null) {
+ */ function setFirstView(moduleKey = 'VideFacsimileViewer', request = null) {
     return { type: ActionTypes.SET_FIRST_VIEW, moduleKey, request };
 }
 
-/**
+export /**
  * Function setSecondView specifies the view to be opened in view2
  * @param {string} perspective to be opened
  * @param {Object|null} viewState object when initializing the view
  * @returns {object} the information how view2.state needs to be modified
- */
-export function setSecondView(moduleKey = 'VideTranscriptionViewer', request = null) {
+ */ function setSecondView(moduleKey = 'VideTranscriptionViewer', request = null) {
     return { type: ActionTypes.SET_SECOND_VIEW, moduleKey, request };
 }
 
-/**
+export /**
  * Function setSyncViews determines whether views should be synced or not
  * @param {boolean} sync if views shall be synced or not
  * @returns {object} the information needed for reducers
- */
-export function setSyncViews(synced = false) {
+ */ function setSyncViews(synced = false) {
     return { type: ActionTypes.SET_SYNC_VIEWS, synced };
 }
 
-/**
+export /**
  * Function confirmView confirms that a certain state has been reached by a view
  * @returns {object} the actionType that's required for Redux
- */
-export function confirmView(state = null,view = -1) {
+ */ function confirmView(state = null,view = -1) {
     return {type: ActionTypes.CONFIRM_VIEW, state, view};
 }
 
@@ -138,7 +128,7 @@ export function stopLoadingData(key,success) {
     return {type: ActionTypes.STOP_LOADING_DATA, key, success};
 }
 
-/**
+/* *
  * Function logViewState is (indirectly) called by individual modules to
  * indicate that a requested state has been achieved. Mostly used to identify
  * what should be kept in the application history and what shouldn't.
@@ -149,72 +139,64 @@ export function stopLoadingData(key,success) {
     return {type: ActionTypes.LOG_VIEW_STATE, view: view};
 }*/
 
-/**
+export /**
  * Function setViewLayout specifies the general layout of the app
  * @param {string} viewLayout to be used
  * @returns {object} the layout that shall be used
- */
-export function setViewLayout(viewLayout = ViewLayouts.INTRODUCTION) {
+ */ function setViewLayout(viewLayout = ViewLayouts.INTRODUCTION) {
     return { type: ActionTypes.SET_VIEW_LAYOUT, viewLayout };
 }
 
-/**
+export /**
  * Function setViewRation defines the part that view1 occupies
  * @param {number} viewRatio to be used
  * @returns {object} the information about the share that view1 gets
- */
-export function setViewRatio(viewRatio = .5) {
+ */ function setViewRatio(viewRatio = .5) {
     return { type: ActionTypes.SET_VIEW_RATIO, viewRatio };
 }
 
-/**
+export /**
  * Function switchLanguage sets the language of the app
  * @param {string} language code
  * @returns {object} the language that shall be used
- */
-export function switchLanguage(language = 'en') {
+ */ function switchLanguage(language = 'en') {
     return { type: ActionTypes.SWITCH_LANGUAGE, language };
 }
 
-/**
+export /**
  * Function showPreferences opens the preference window
  * @returns {object} the actionType that's required for Redux
- */
-export function showPreferences() {
+ */ function showPreferences() {
     return { type: ActionTypes.SHOW_PREFERENCES };
 }
 
-/**
+export /**
  * Function hidePreferences closes the preference window
  * @returns {object} the actionType that's required for Redux
- */
-export function hidePreferences() {
+ */ function hidePreferences() {
     return { type: ActionTypes.HIDE_PREFERENCES };
 }
 
-/**
+export /**
  * Function showAbout opens the about window
  * @returns {object} the actionType that's required for Redux
- */
-export function showAbout() {
+ */ function showAbout() {
     return { type: ActionTypes.SHOW_ABOUT };
 }
 
-/**
+export /**
  * Function hideAbout opens the about window
  * @returns {object} the actionType that's required for Redux
- */
-export function hideAbout() {
+ */ function hideAbout() {
     return { type: ActionTypes.HIDE_ABOUT };
 }
 
 //this is a think action creator; cf http://redux.js.org/docs/advanced/AsyncActions.html
 //usage: store.dispatch(fetchEditions())
-/**
+export /**
  * Function fetchEditions gets
  * @returns {function} a function that is used to fetch all editions
- */
-export function fetchEditions() {
+ */ function fetchEditions() {
     return function (dispatch) {
         dispatch(requestEditions());
 
@@ -228,83 +210,74 @@ export function fetchEditions() {
     };
 }
 
-/**
+export /**
  * Function requestEditions requests the editions available from the db
  * @returns {object} the actionType that's required for Redux
- */
-export function requestEditions() {
+ */ function requestEditions() {
     return { type: ActionTypes.REQUEST_EDITIONS };
 }
 
-/**
+export /**
  * Function receiveEditions gets editions from the database
  * @param {Object[]} editions array
  * @returns {object} the editions that need to be added to the state
- */
-export function receiveEditions(editions = []) {
+ */ function receiveEditions(editions = []) {
     return { type: ActionTypes.RECEIVE_EDITIONS, editions };
 }
 
-/**
+export /**
  * Function receiveEditionsFailed indicates that editions couldn't be loaded
  * @returns {object} the actionType that's required for Redux
- */
-export function receiveEditionsFailed() {
+ */ function receiveEditionsFailed() {
     return { type: ActionTypes.RECEIVE_EDITIONS_FAILED };
 }
 
 
-/**
+export /**
  * Function highlightEdition marks an edition and shows further details
  * @param {string} id of the edition to highlight
  * @returns {object} the actionType that's required for Redux
- */
-export function highlightEdition(id = '') {
+ */ function highlightEdition(id = '') {
     return { type: ActionTypes.HIGHLIGHT_EDITION, id };
 }
 
-/**
+export /**
  * Function activateEdition sets an edition as the active one
  * @param {string} id of the edition to activate
  * @returns {object} the actionType that's required for Redux
- */
-export function activateEdition(id = '', revision = '') {
+ */ function activateEdition(id = '', revision = '') {
     return { type: ActionTypes.ACTIVATE_EDITION, id, revision };
 }
 
-/**
+export /**
  * Function deActivateEdition closes the active edition and goes back to the start screen
  * @returns {object} the actionType that's required for Redux
- */
-export function deActivateEdition() {
+ */ function deActivateEdition() {
     return { type: ActionTypes.DEACTIVATE_EDITION };
 }
 
-/**
+export /**
  * Function openContextMenu opens the context menu with the specified items at the specified x / y position
  * @param {Object[]} items to be displayed in the context menu
  * @param {number} x position of the context menu
  * @param {number} y position of the context menu
  * @returns {object} the actionType that's required for Redux
- */
-export function openContextMenu(items = [], x = 0, y = 0) {
+ */ function openContextMenu(items = [], x = 0, y = 0) {
     return { type: ActionTypes.OPEN_CONTEXTMENU, items, x, y };
 }
 
-/**
+export /**
  * Function closeContextMenu closes the context menu
  * @returns {object} the actionType that's required for Redux
- */
-export function closeContextMenu() {
+ */ function closeContextMenu() {
     return { type: ActionTypes.CLOSE_CONTEXTMENU };
 }
 
-/**
+export /**
  * Function restoreState replaces the complete state object with a different state
  * @param {object} newState is the state that needs to be restored
  * @returns {object} the actionType that's required for Redux
- */
-export function restoreState(newState = {}) {
+ */ function restoreState(newState = {}) {
     //todo: move check if the state to be restored is valid over here
     //right now, it's checked by the reducers, but this means that
     //one reducer may decide that it's ok, while a second may reject
@@ -312,26 +285,23 @@ export function restoreState(newState = {}) {
     return { type: ActionTypes.RESTORE_STATE, newState: newState };
 }
 
-/**
+export /**
  * Function resetState brings the application back to the starting point
  * @returns {object} the actionType that's required for Redux
- */
-export function resetState() {
+ */ function resetState() {
     return {type: ActionTypes.RESET_STATE};
 }
 
-/**
+export /**
  * Function closeTour closes a currently rendered tour
  * @returns {object} the actionType that's required for Redux
- */
-export function closeTour() {
+ */ function closeTour() {
     return {type: ActionTypes.CLOSE_TOUR};
 }
 
-/**
+export /**
  * Function loadTourStep loads a step for a demo or explanatory tour
  * @returns {object} the actionType that's required for Redux
- */
-export function loadTourStep(stepId) {
+ */ function loadTourStep(stepId) {
     return {type: ActionTypes.LOAD_TOURSTEP,id:stepId};
 }

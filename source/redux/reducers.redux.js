@@ -7,9 +7,9 @@ import { combineReducers } from 'redux';
 import { eohub } from '../_modules/eo-hub';
 
 /**
- * @module redux/reducers
+ * @module
  */
- 
+
 /** {@link https://semver.org/|semantic versioning} used by {@link ActionTypes.ACTIVATE_EDITION} */
 var semver = require('semver');
 /**

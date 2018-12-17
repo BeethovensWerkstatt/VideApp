@@ -159,6 +159,9 @@ class Tour extends React.Component {
         }
     }
 
+    /**
+     * @param firstStep {string} the first step of the tour
+     */
     initializeTour(firstStep) {
         /*console.log('\n \n \n INITIALIZING EVERYTHING \n \n \n \n')*/
 
@@ -175,6 +178,9 @@ class Tour extends React.Component {
         this.tourHandlers.push(app.addEventListener('mousedown',handler,true));
     }
 
+    /**
+     * @param event {object}
+     */
     handleTourEvent(event) {
 
         /*console.log('\n \n handleTourEvent ' + event.type + ' ' + this.props.tour + '')
@@ -224,7 +230,7 @@ class Tour extends React.Component {
 
 
         /*
-         * this is a fix for the view menu, which doesn't change values without this fix
+         * this is a fix for the view menu, which doesnt change values without this fix
          */
         let changeIsOk = false;
         if(event.type === 'change') {
@@ -340,6 +346,9 @@ class Tour extends React.Component {
 
     }
 
+    /**
+     * @param delayCount {number}
+     */
     renderTour(delayCount = 0) {
 
         /*console.log('\n-------renderTour---------')*/

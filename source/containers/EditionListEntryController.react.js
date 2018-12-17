@@ -3,11 +3,6 @@ import { activateEdition, highlightEdition } from '../redux/actions.redux';
 import VIDE_PROTOCOL from '../_modules/vide-protocol';
 import EditionListEntry from '../components/EditionListEntry.react';
 
-/**
- * @module containers/EditionListEntryController
- */
-
-/** */
 const mapStateToProps = (state, ownProps) => {
     return {
         edition: ownProps.edition,
@@ -16,7 +11,6 @@ const mapStateToProps = (state, ownProps) => {
     };
 };
 
-/** */
 const mapDispatchToProps = (dispatch, ownProps) => {
     return {
         onSelect: () => {
@@ -29,7 +23,11 @@ const mapDispatchToProps = (dispatch, ownProps) => {
     };
 };
 
-/** @class */
+/**
+ * @module
+ */
+
+/** */
 const EditionListEntryController = connect(
   mapStateToProps,
   mapDispatchToProps

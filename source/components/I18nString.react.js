@@ -1,14 +1,15 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-/**
- * @module components/I18nString
- */
-
-/** */
+/** localization in (<i>$FILE</i>) */
 var langfile = require('../i18n/i18n.json');
 
-/** */
+/**
+ * @param lang {string}
+ * @param content {string}
+ * @param tooltip {string}
+ * @class
+ */
 const I18nString = ({ lang, content, tooltip }) => {
     if(typeof content !== 'undefined' && typeof tooltip !== 'undefined') {
         if(!langfile.hasOwnProperty(content)) {
