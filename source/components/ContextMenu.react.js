@@ -7,7 +7,7 @@ import VIDE_PROTOCOL from './../_modules/vide-protocol';
 import Slider from 'react-slick';
 
  /**
-  * uses {@link components/ContextMenu#filterDuplicateRequests}
+  * uses {@link module:components/ContextMenu}
   * @param items {array}
   * @param visible {bool}
   * @param closeContextMenu {function}
