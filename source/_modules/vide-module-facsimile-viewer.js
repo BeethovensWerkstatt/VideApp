@@ -5,6 +5,7 @@ import {EoNavModule} from './vide-nav-module-blueprint';
 
 
 /**
+ * Displays facsimiles of the current edition.
  * @extends {EoNavModule}
  */
 const VideFacsimileViewer = class VideFacsimileViewer extends EoNavModule {

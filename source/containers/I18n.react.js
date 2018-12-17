@@ -15,6 +15,7 @@ const mapStateToProps = (state, ownProps) => {
     };
 };
 
+/** */
 const mapDispatchToProps = (dispatch, ownProps) => {
     return {
     /*onShow: () => {
@@ -26,6 +27,7 @@ const mapDispatchToProps = (dispatch, ownProps) => {
     };
 };
 
+/** @class */
 const I18n = connect(
   mapStateToProps,
   mapDispatchToProps

@@ -44,6 +44,10 @@ const VideViewManager = class VideViewManager {
         }
     }
 
+    /**
+     * @param {string} key identifier for string
+     * @return {string} localized string for key
+     */
     getI18nString(key) {
         let object = this._langfile[key];
         if(typeof object !== 'undefined') {
@@ -52,6 +56,12 @@ const VideViewManager = class VideViewManager {
         return 'I18N ERROR: ' + key;
     }
 
+    /**
+     * display/refresh current view in container
+     * @param moduleKey
+     * @param containerID
+     * @param state
+     */
     confirmView(moduleKey, containerID, state) {
         if(containerID === 'view1') {
             this._store.dispatch(confirmView(state, 1));

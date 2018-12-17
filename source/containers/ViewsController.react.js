@@ -20,6 +20,7 @@ const mapStateToProps = (state, ownProps) => {
     };
 };
 
+/** */
 const mapDispatchToProps = (dispatch, ownProps) => {
     return {
         setRatio: (ratio) => {
@@ -35,7 +36,7 @@ const mapDispatchToProps = (dispatch, ownProps) => {
 };
 
 /**
- *
+ * @class
  */
 const ViewsController = connect(
   mapStateToProps,

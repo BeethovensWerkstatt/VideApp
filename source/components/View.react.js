@@ -11,6 +11,7 @@ import {eohub} from '../_modules/eo-hub';
  */
 class View extends React.Component {
 
+    /** */
     unmount() {
 
         let viewType = this.props.view.moduleKey;
@@ -27,6 +28,7 @@ class View extends React.Component {
         //console.log('INFO: componentWillMount');
     },*/
 
+    /** */
     componentDidMount() {
         //console.log('INFO: componentDidMount');
         this.sendRequest(this.props, this.state);
@@ -36,6 +38,7 @@ class View extends React.Component {
         //console.log('INFO: componentWillReceiveProps on ' + nextProps.pos);
     },*/
 
+    /** */
     shouldComponentUpdate(nextProps, nextState) {
         //console.log('INFO: shouldComponentUpdate');
         let needsUpdate = true;
@@ -81,6 +84,7 @@ class View extends React.Component {
         return needsUpdate;
     }
 
+    /** */
     componentWillUpdate(nextProps, nextState) {
         if(this.props.view.moduleKey !== nextProps.view.moduleKey) {
             //console.log('[DEBUG]: will call unmount()');
@@ -88,6 +92,7 @@ class View extends React.Component {
         }
     }
 
+    /** */
     componentDidUpdate(prevProps, prevState) {
         //console.log('[DEBUG] componentDidUpdate')
 
@@ -95,10 +100,12 @@ class View extends React.Component {
         this.sendRequest(this.props, this.state);
     }
 
+    /** */
     componentWillUnmount() {
         this.unmount();
     }
 
+    /** */
     render() {
         //console.log('[DEBUG] rendering view ' + this.props.view.perspective + ' at ' + this.props.pos)
         return (
@@ -108,6 +115,7 @@ class View extends React.Component {
         );
     }
 
+    /** */
     sendRequest(props, state) {
 
         let moduleKey = props.view.moduleKey;

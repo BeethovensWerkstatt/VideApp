@@ -16,6 +16,7 @@ const mapStateToProps = (state, ownProps) => {
     };
 };
 
+/** */
 const mapDispatchToProps = (dispatch, ownProps) => {
     return {
         onSelect: () => {
@@ -28,6 +29,7 @@ const mapDispatchToProps = (dispatch, ownProps) => {
     };
 };
 
+/** @class */
 const EditionListEntryController = connect(
   mapStateToProps,
   mapDispatchToProps

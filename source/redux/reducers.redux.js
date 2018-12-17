@@ -6,17 +6,17 @@ import { combineReducers } from 'redux';
 
 import { eohub } from '../_modules/eo-hub';
 
-/** <a href="https://semver.org/">semantic versioning</a> used by {@link ActionTypes.ACTIVATE_EDITION} */
+/**
+ * @module redux/reducers
+ */
+ 
+/** {@link https://semver.org/|semantic versioning} used by {@link ActionTypes.ACTIVATE_EDITION} */
 var semver = require('semver');
 /**
  * List of possible perspectives defined in
  * {@link VIDE_PROTOCOL.PERSPECTIVE}
  */
 let Perspectives = VIDE_PROTOCOL.PERSPECTIVE;
-
-/**
- * @module redux/reducers
- */
 
 /**
  * handlePreferences is a Redux reducer composition which deals with all

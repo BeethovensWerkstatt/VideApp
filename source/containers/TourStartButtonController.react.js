@@ -13,6 +13,7 @@ const mapStateToProps = (state, ownProps) => {
     };
 };
 
+/** */
 const mapDispatchToProps = (dispatch, ownProps) => {
     return {
         loadTourStep: (stepId) => {
@@ -21,6 +22,7 @@ const mapDispatchToProps = (dispatch, ownProps) => {
     };
 };
 
+/** @class */
 const TourStartButtonController = connect(
   mapStateToProps,
   mapDispatchToProps

@@ -2,10 +2,10 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 /**
- * @module components/TourStartButton
+ * @param loadTourStep {function}
+ * @param firstStep {string}
+ * @class
  */
-
-/** */
 const TourStartButton = ({ loadTourStep, firstStep }) => {
 
     return (

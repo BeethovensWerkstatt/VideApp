@@ -57,21 +57,36 @@ const EoHub = class EoHub {
         return this._vrvToolkit;
     }
 
+    /**
+     * set the GUI language
+     * @param {string} lang language key (en/de)
+     */
     setLanguage(lang) {
         this._viewManager.setLanguage(lang);
     }
 
+    /**
+     * get localized string for the current GUI setting
+     * @param {string} key id of localized string
+     */
     getI18nString(key) {
         return this._viewManager.getI18nString(key);
     }
 
+    /**
+     * delegate to {@link VideViewManager#confirmView}
+     * @param moduleKey
+     * @param containerID
+     * @param state
+     */
     confirmView(moduleKey, containerID, state) {
         this._viewManager.confirmView(moduleKey, containerID, state);
     }
 
     /**
-     * sets the ID of the current edition
-     * @param {string} id of the current edition (called by //todo, which coordinates with Redux)
+     * sets the ID of the current edition. Called by {@link redux/reducers~handleEdition} with action {@link ActionTypes.ACTIVATE_EDITION}
+     * @param {string} id of the current edition (called by {@link redux/reducers~handleEdition}, which coordinates with Redux)
+     * @param revision
      * @returns {Object} returns the EoHub instance
      *
      */
@@ -282,7 +297,11 @@ const EoHub = class EoHub {
         this._viewManager.prepareView(containerID, module.getKey(), req);
     }
 
-
+    /**
+     * delegate to {@link VideViewManager#prepareView}
+     * @param {string} containerID
+     * @param {string} targetView
+     */
     changeView(containerID,targetView) {
         this._viewManager.prepareView(containerID, targetView);
     }

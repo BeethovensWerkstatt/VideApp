@@ -19,6 +19,7 @@ const EditionListMode = {
     GRID: 'grid'
 };
 
+/** */
 const mapStateToProps = (state, ownProps) => {
     return {
         editions: state.edition.editions,
@@ -28,6 +29,7 @@ const mapStateToProps = (state, ownProps) => {
     };
 };
 
+/** */
 const mapDispatchToProps = (dispatch, ownProps) => {
     return {
         onSelect: (editionId) => {
@@ -42,6 +44,7 @@ const mapDispatchToProps = (dispatch, ownProps) => {
     };
 };
 
+/** @class */
 const EditionListController = connect(
   mapStateToProps,
   mapDispatchToProps

@@ -12,7 +12,17 @@ import SplitPane from 'react-split-pane';
  * @module components/Views
  */
 
-/** */
+/**
+* @param view1 {object} first view to display
+* @param view2 {object} optional second view to display in {@link ViewLayouts.HORIZONTAL_SPLIT|horizontal} and {@link ViewLayouts.VERTICAL_SPLIT|vertical} split view
+* @param layout {string} one of {@link ViewLayouts}
+* @param synced {bool} synchronize views
+* @param viewRatio {number}
+* @param edition {string}
+* @param revision {string}
+* @param language {string}
+* @param setRatio {function}
+*/
 const Views = ({ view1, view2, layout, synced, viewRatio, edition, revision, language, setRatio }) => {
     if(layout === ViewLayouts.SINGLE_VIEW) {
         return (

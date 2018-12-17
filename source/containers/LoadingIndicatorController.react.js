@@ -12,12 +12,14 @@ const mapStateToProps = (state, ownProps) => {
     };
 };
 
+/** */
 const mapDispatchToProps = (dispatch, ownProps) => {
     return {
 
     };
 };
 
+/** @class */
 const LoadingIndicatorController = connect(
   mapStateToProps,
   mapDispatchToProps

@@ -10,7 +10,15 @@ import Slider from 'react-slick';
  * @module components/ContextMenu
  */
 
- /** */
+ /**
+  * @param items {array}
+  * @param visible {bool}
+  * @param closeContextMenu {function}
+  * @param submitRequest {function}
+  * @param x {number}
+  * @param y {number}
+  * @class
+  */
 const ContextMenu = ({ items, visible, closeContextMenu, submitRequest, x, y }) => {
 
     if(visible) {
@@ -157,6 +165,7 @@ const ContextMenu = ({ items, visible, closeContextMenu, submitRequest, x, y }) 
     return null;
 };
 
+/** */
 let filterDuplicateRequests = (items) => {
 
     items = items.filter((item, index, self) =>

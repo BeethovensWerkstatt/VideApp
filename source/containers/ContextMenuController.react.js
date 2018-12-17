@@ -17,6 +17,7 @@ const mapStateToProps = (state, ownProps) => {
     };
 };
 
+/** */
 const mapDispatchToProps = (dispatch, ownProps) => {
     return {
         closeContextMenu: () => {
@@ -41,6 +42,9 @@ const mapDispatchToProps = (dispatch, ownProps) => {
     };
 };
 
+/**
+ * @class
+ */
 const ContextMenuController = connect(
   mapStateToProps,
   mapDispatchToProps

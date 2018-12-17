@@ -15,6 +15,7 @@ const mapStateToProps = (state, ownProps) => {
     };
 };
 
+/** */
 const mapDispatchToProps = (dispatch, ownProps) => {
     return {
         onClick: (type) => {
@@ -31,6 +32,7 @@ const mapDispatchToProps = (dispatch, ownProps) => {
     };
 };
 
+/** @class */
 const PerspectiveController = connect(
   mapStateToProps,
   mapDispatchToProps

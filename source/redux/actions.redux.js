@@ -4,6 +4,10 @@ import VIDE_PROTOCOL from '../_modules/vide-protocol';
 import {ViewLayouts} from './layout.constants';
 
 /**
+ * @module redux/actions
+ */
+
+/**
  * List of {@link VIDE_PROTOCOL.PERSPECTIVE}
  *
  * @todo do we need this? There is no reference in this file?

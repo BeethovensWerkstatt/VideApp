@@ -17,6 +17,7 @@ const mapStateToProps = (state, ownProps) => {
     };
 };
 
+/** */
 const mapDispatchToProps = (dispatch, ownProps) => {
     return {
         onClick: (bool) => {
@@ -25,6 +26,7 @@ const mapDispatchToProps = (dispatch, ownProps) => {
     };
 };
 
+/** @class */
 const SyncViewsController = connect(
   mapStateToProps,
   mapDispatchToProps

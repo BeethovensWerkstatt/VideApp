@@ -13,6 +13,7 @@ const mapStateToProps = (state, ownProps) => {
     };
 };
 
+/** */
 const mapDispatchToProps = (dispatch, ownProps) => {
     return {
         onClick: () => {
@@ -21,6 +22,7 @@ const mapDispatchToProps = (dispatch, ownProps) => {
     };
 };
 
+/** @class */
 const HomeButtonController = connect(
   mapStateToProps,
   mapDispatchToProps
