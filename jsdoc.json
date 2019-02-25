@@ -1,11 +1,15 @@
 {
-  "plugins": ["plugins/markdown","jsdoc/undocumented"],
+  "plugins": ["plugins/markdown", "jsdoc/undocumented", "jsdoc/staticFiles"],
   "source": {
-    "include": ["./source_docs/README.md","./source/"],
+    "include": ["./source_docs/README.md", "./source/"],
     "excludePattern": "(^|\\/|\\\\)__tests__"
   },
   "opts": {
     "destination": "./docs/",
-    "recurse": true
+    "recurse": true,
+    "tutorials": "./tutorials/"
+  },
+  "staticFiles": {
+    "include": ["img:tutorials/images","img:images"]
   }
 }
