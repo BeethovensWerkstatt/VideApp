@@ -1,0 +1,19 @@
+<html>
+  <head>
+    <title>Application</title>
+  </head>
+  <body>
+    <h1>Application</h1>
+    <div>
+      <p>The application is started from <code>app.js</code> and first initializes the main modules:</p>
+      <h2 id="the-redux-store">The redux-store</h2>
+      <p><img src="img/pic_VideAppState.svg" id="pic_VideAppState" style="width:40.0%" /></p>
+      <h2 id="the-view-modules">The view modules</h2>
+      <p><img src="img/pic_EoModule.svg" id="pic_EoModule" style="width:40.0%" /></p>
+      <h2 id="events">events</h2>
+      <p><img src="img/pic_FetchEditions.svg" id="pic_FetchEditions" style="width:40.0%" /></p>
+      <p>Then it requests the available editions with <code>dispatch(fetchEditions())</code>. That function creates an action event <code>REQUEST_EDITIONS</code>. That event is fetched by the <code>handleNetwork</code> reducer and initiates the request to get the available editions from the configured server. When the response is received from the server an event <code>RECEIVE_EDITIONS</code> is triggered which is catched by the <code>handleEdition</code> reducer and sets the edition list in the global state.</p>
+      <p>Now the state contains the current list of available editions.</p>
+    </div>
+  </body>
+</html>
