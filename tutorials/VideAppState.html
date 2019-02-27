@@ -1,69 +1,70 @@
 <html>
-  <head>
-    <title>VideAppState</title>
-  </head>
-  <body>
-    <h1>VideAppState</h1>
-    <div>
-      <h2 id="combined-reducers">combined reducers</h2>
-      <div style="float: right;" data-markdown="1">
-      <figure>
-      <img src="img/pic_VideAppState.svg" alt="VideAppState" id="pic_VideAppState" style="width:50.0%" /><figcaption>VideAppState</figcaption>
-      </figure>
-      </div>
-      <p>The VideAppState class is a combined reducer of six core reducers. The listen to the named events. All reducers listen to <code>RESTORE_STATE</code> when a state is to be restored and <code>RESET_STATE</code> when the application is to be resetted to the starting state.</p>
-      <ul>
-      <li><code>handleEdition</code><br />
-      This reducer handles edition events to select, change or activate an edition.
-      <ul>
-      <li><code>RECEIVE_EDITIONS</code> when the edition list is received from the server</li>
-      <li><code>HIGHLIGHT_EDITION</code> an edition is clicked</li>
-      <li><code>ACTIVATE_EDITION</code></li>
-      <li><code>DEACTIVATE_EDITION</code></li>
-      </ul></li>
-      <li><code>handleNetwork</code><br />
-      This reducer handles network operations, where the client asks the server for some data.
-      <ul>
-      <li><code>REQUEST_EDITIONS</code> request the edition list from the server</li>
-      <li><code>RECEIVE_EDITIONS</code> when the edition list is received from the server</li>
-      <li><code>RECEIVE_EDITIONS_FAILED</code> when the request failed</li>
-      <li><code>HIGHLIGHT_EDITION</code> an edition is clicked</li>
-      <li><code>START_LOADING_DATA</code> when a network operation is started<br />
-      </li>
-      <li><code>STOP_LOADING_DATA</code> when a network operation is finished</li>
-      </ul></li>
-      <li><code>handleViews</code><br />
-      This reducer handles views to change between facsimile-, transcription- and page overlay-view
-      <ul>
-      <li><code>SET_VIEW_RATIO</code></li>
-      <li><code>SET_VIEW_LAYOUT</code> one of <code>INTRODUCTION</code>, <code>SINGLE_VIEW</code>, <code>VERTICAL_SPLIT</code>, <code>HORIZONTAL_SPLIT</code>, <code>EDITION_SELECTION</code></li>
-      <li><code>SET_FIRST_VIEW</code> set module in first view</li>
-      <li><code>SET_SECOND_VIEW</code> set module in second view</li>
-      <li><code>SET_SYNC_VIEWS</code></li>
-      <li><code>CONFIRM_VIEW</code></li>
-      <li><code>ACTIVATE_EDITION</code></li>
-      <li><code>DEACTIVATE_EDITION</code></li>
-      </ul></li>
-      <li><code>handlePreferences</code><br />
-      This reducer handles preferences.
-      <ul>
-      <li><code>SHOW_PREFERENCES</code></li>
-      <li><code>HIDE_PREFERENCES</code></li>
-      <li><code>SHOW_ABOUT</code></li>
-      <li><code>HIDE_ABOUT</code></li>
-      <li><code>SWITCH_LANGUAGE</code></li>
-      </ul></li>
-      <li><code>handleTour</code><br />
-      This reducer manages a tour through the application.
-      <ul>
-      <li><code>CLOSE_TOUR</code></li>
-      <li><code>LOAD_TOURSTEP</code></li>
-      </ul></li>
-      <li><code>handleContextMenu</code> This reducer manages the contextMenu
-      <ul>
-      <li><code>OPEN_CONTEXTMENU</code></li>
-      </ul></li>
-      </ul>
+
+<head>
+  <title>VideAppState</title>
+</head>
+<body>
+  <div>
+    <h2 id="combined-reducers">combined reducers</h2>
+    <div style="float: right;" data-markdown="1">
+    <figure>
+    <img src="img/pic_VideAppState.svg" alt="VideAppState" id="pic_VideAppState" style="width:50.0%" /><figcaption>VideAppState</figcaption>
+    </figure>
     </div>
-  </body>
+    <p>The VideAppState class is a combined reducer of six core reducers. The listen to the named events. All reducers listen to <code>RESTORE_STATE</code> when a state is to be restored and <code>RESET_STATE</code> when the application is to be resetted to the starting state.</p>
+    <ul>
+    <li><code>handleEdition</code><br />
+    This reducer handles edition events to select, change or activate an edition.
+    <ul>
+    <li><code>RECEIVE_EDITIONS</code> when the edition list is received from the server</li>
+    <li><code>HIGHLIGHT_EDITION</code> an edition is clicked</li>
+    <li><code>ACTIVATE_EDITION</code></li>
+    <li><code>DEACTIVATE_EDITION</code></li>
+    </ul></li>
+    <li><code>handleNetwork</code><br />
+    This reducer handles network operations, where the client asks the server for some data.
+    <ul>
+    <li><code>REQUEST_EDITIONS</code> request the edition list from the server</li>
+    <li><code>RECEIVE_EDITIONS</code> when the edition list is received from the server</li>
+    <li><code>RECEIVE_EDITIONS_FAILED</code> when the request failed</li>
+    <li><code>HIGHLIGHT_EDITION</code> an edition is clicked</li>
+    <li><code>START_LOADING_DATA</code> when a network operation is started<br />
+    </li>
+    <li><code>STOP_LOADING_DATA</code> when a network operation is finished</li>
+    </ul></li>
+    <li><code>handleViews</code><br />
+    This reducer handles views to change between facsimile-, transcription- and page overlay-view
+    <ul>
+    <li><code>SET_VIEW_RATIO</code></li>
+    <li><code>SET_VIEW_LAYOUT</code> one of <code>INTRODUCTION</code>, <code>SINGLE_VIEW</code>, <code>VERTICAL_SPLIT</code>, <code>HORIZONTAL_SPLIT</code>, <code>EDITION_SELECTION</code></li>
+    <li><code>SET_FIRST_VIEW</code> set module in first view</li>
+    <li><code>SET_SECOND_VIEW</code> set module in second view</li>
+    <li><code>SET_SYNC_VIEWS</code></li>
+    <li><code>CONFIRM_VIEW</code></li>
+    <li><code>ACTIVATE_EDITION</code></li>
+    <li><code>DEACTIVATE_EDITION</code></li>
+    </ul></li>
+    <li><code>handlePreferences</code><br />
+    This reducer handles preferences.
+    <ul>
+    <li><code>SHOW_PREFERENCES</code></li>
+    <li><code>HIDE_PREFERENCES</code></li>
+    <li><code>SHOW_ABOUT</code></li>
+    <li><code>HIDE_ABOUT</code></li>
+    <li><code>SWITCH_LANGUAGE</code></li>
+    </ul></li>
+    <li><code>handleTour</code><br />
+    This reducer manages a tour through the application.
+    <ul>
+    <li><code>CLOSE_TOUR</code></li>
+    <li><code>LOAD_TOURSTEP</code></li>
+    </ul></li>
+    <li><code>handleContextMenu</code> This reducer manages the contextMenu
+    <ul>
+    <li><code>OPEN_CONTEXTMENU</code></li>
+    </ul></li>
+    </ul>
+  </div>
+</body>
+
 </html>

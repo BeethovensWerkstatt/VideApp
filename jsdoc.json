@@ -10,6 +10,6 @@
     "tutorials": "./tutorials/"
   },
   "staticFiles": {
-    "include": ["img:tutorials/images","img:images"]
+    "include": ["img:tutorials/img","img:img"]
   }
 }
