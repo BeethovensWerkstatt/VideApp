@@ -199,8 +199,8 @@ export /**
  */ function fetchEditions() {
     return function (dispatch) {
         dispatch(requestEditions());
-
-        return fetch('http://172.17.0.2:8080/exist/apps/exist-module/listall.json')
+        // 172.17.0.2
+        return fetch('http://existdb:8080/exist/apps/exist-module/listall.json')
             .then(response => response.json())
             .then(json =>
                 dispatch(receiveEditions(json))
