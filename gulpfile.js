@@ -4,7 +4,7 @@ const babelify = require('babelify'); //translates JSX to browser-compatible Jav
 const source = require('vinyl-source-stream'); //Use conventional text streams at the start of your gulp or vinyl pipelines
 const sass = require('gulp-sass');
 const eslint = require('gulp-eslint');
-const install = require("gulp-install");
+const install = require('gulp-install');
 const jsdoc = require('gulp-jsdoc3');
 
 gulp.task('html', function() {
