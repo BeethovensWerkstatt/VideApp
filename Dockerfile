@@ -1,5 +1,6 @@
 ###############################################
-FROM node:10 as builder
+FROM node:10
+# as builder
 LABEL maintainer="Jan-Peter Voigt"
 
 WORKDIR /usr/app
