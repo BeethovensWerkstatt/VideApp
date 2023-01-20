@@ -3,15 +3,15 @@ FROM node:10 as builder
 LABEL maintainer="Jan-Peter Voigt"
 
 WORKDIR /usr/app
-RUN npm i -g gulp
 
-COPY . /usr/app/
+COPY . .
 RUN npm i
-RUN gulp gulpfile.js ./gulpfile.js default
+# RUN ./node_modules/.bin/gulp
+# RUN ./node_modules/.bin/gulp buildServer
 
 ###############################################
 #FROM node:10
 #WORKDIR /usr/app
 #COPY --from=builder /usr/app/build/* .
 
-CMD [ "ls", "-lh" ]
+CMD [ "./node_modules/.bin/gulp", "--help" ]
