@@ -6,7 +6,7 @@
           "pass":""
       },
       "rethink":{
-          "host":"rethink",
+          "host":"rethinkdb",
           "port":28015,
           "login":"",
           "pass":""

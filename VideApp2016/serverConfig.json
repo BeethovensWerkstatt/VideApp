@@ -6,8 +6,8 @@
             "pass": ""
         },
         "rethink": {
-            "host": "rethink",
-            "port": 8080,
+            "host": "rethinkdb",
+            "port": 28015,
             "login": "",
             "pass": ""
         },

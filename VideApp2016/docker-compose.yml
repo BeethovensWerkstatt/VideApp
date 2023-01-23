@@ -1,12 +1,11 @@
-version: "3.3"
+version: "3.8"
 
 services:
-  rethink:
+  rethinkdb:
     image: rethinkdb:2.4
-
-  viedeapp:
+  videapp:
     build: .
     ports:
       - 2999:2999
     depends_on:
-      - rethink
+      - rethinkdb
