@@ -6,12 +6,13 @@ WORKDIR /usr/app
 
 COPY . .
 RUN npm i
-# RUN ./node_modules/.bin/gulp
-# RUN ./node_modules/.bin/gulp buildServer
+RUN ./node_modules/.bin/gulp
+RUN ./node_modules/.bin/gulp buildServer
+COPY ./source_server/serverConfig.json.docker build/serverConfig.json
 
 ###############################################
-#FROM node:10
-#WORKDIR /usr/app
-#COPY --from=builder /usr/app/build/* .
+FROM node:10.24.1
+WORKDIR /usr/app
+COPY --from=builder /usr/app/build/* .
 
-CMD [ "./node_modules/.bin/gulp", "--help" ]
+CMD [ "node", "videServer.js" ]

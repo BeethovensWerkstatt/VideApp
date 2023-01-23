@@ -1,0 +1,36 @@
+{
+  "dev":{
+      "eXist":{
+          "url":"https://api.beethovens-werkstatt.de/module1/",
+          "login":"",
+          "pass":""
+      },
+      "rethink":{
+          "host":"rethink",
+          "port":28015,
+          "login":"",
+          "pass":""
+      },
+      "app":{
+          "host":"http://localhost",
+          "port":2999
+      }
+  },
+  "live":{
+      "eXist":{
+          "url":"https://api.beethovens-werkstatt.de/module1/",
+          "login":"",
+          "pass":""
+      },
+      "rethink":{
+          "host":"example.com",
+          "port":8089,
+          "login":"admin",
+          "pass":"secretPassword"
+      },
+      "app":{
+          "host":"http://example.com",
+          "port":29999
+      }
+  }
+}

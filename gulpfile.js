@@ -64,7 +64,7 @@ gulp.task('installServerDependencies', function() {
 });
 
 gulp.task('installServerConfig', function() {
-    return gulp.src(['./source_server/**','!source_server/serverConfig.json.sample','!source_server/package.json'])
+    return gulp.src(['./source_server/**','!source_server/serverConfig.json.sample','!source_server/serverConfig.json.docker','!source_server/package.json'])
         .pipe(gulp.dest('./build/'))
         .pipe(install());
 });
@@ -85,7 +85,8 @@ gulp.task('doc', function(cb) {
 
 gulp.task('default', ['html', 'css', 'fonts', 'socketClient'], function() {
     return browserify('./source/app.js')
-        .transform(babelify, {presets: ['es2015', 'react'], plugins: ['transform-object-rest-spread']})
+        // .transform(babelify, {presets: ['es2015', 'react'], plugins: ['transform-object-rest-spread']})
+        .transform(babelify, {presets: ['@babel/preset-env', '@babel/preset-react'], plugins: ['transform-object-rest-spread']})
         .bundle()
         .pipe(source('resources/js/main.js'))
         .pipe(gulp.dest('./build/'));
