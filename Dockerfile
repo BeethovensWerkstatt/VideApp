@@ -1,5 +1,5 @@
 ###############################################
-FROM node:10.24.1 as builder
+FROM node:10 as builder
 LABEL maintainer="Jan-Peter Voigt"
 
 WORKDIR /usr/app
@@ -11,8 +11,9 @@ RUN ./node_modules/.bin/gulp buildServer
 COPY ./source_server/serverConfig.json.docker build/serverConfig.json
 
 ###############################################
-FROM node:10.24.1
+FROM node:10
 WORKDIR /usr/app
 COPY --from=builder /usr/app/build/* .
+COPY --from=builder /usr/app/build/node_modules .
 
 CMD [ "node", "videServer.js" ]

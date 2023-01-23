@@ -1,0 +1,19 @@
+{
+    "live": {
+        "eXist": {
+            "url": "https://api.beethovens-werkstatt.de/modul1",
+            "login": "",
+            "pass": ""
+        },
+        "rethink": {
+            "host": "rethink",
+            "port": 8080,
+            "login": "",
+            "pass": ""
+        },
+        "app": {
+            "host": "http://localhost",
+            "port": 2999
+        }
+    }
+}
