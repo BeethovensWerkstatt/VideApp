@@ -175,7 +175,7 @@ export function fetchEditions() {
     return function (dispatch) {
         dispatch(requestEditions());    
         
-        return fetch('http://localhost:8080/exist/apps/exist-module/listall.json')
+        return fetch('https://api.beethovens-werkstatt.de/module1/listall.json')
             .then(response => response.json())
             .then(json =>
                 dispatch(receiveEditions(json))
