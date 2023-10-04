@@ -4,7 +4,7 @@ import HomeButton from '../components/HomeButton.react';
 
 const mapStateToProps = (state, ownProps) => {
     return {
-        
+
     };
 };
 
@@ -16,6 +16,11 @@ const mapDispatchToProps = (dispatch, ownProps) => {
     };
 };
 
+/**
+ * @module
+ */
+
+/** */
 const HomeButtonController = connect(
   mapStateToProps,
   mapDispatchToProps

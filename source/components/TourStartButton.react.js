@@ -1,8 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
+/**
+ * @param loadTourStep {function}
+ * @param firstStep {string}
+ * @class
+ */
 const TourStartButton = ({ loadTourStep, firstStep }) => {
-    
+
     return (
         <span className='tourStartButton'
            onClick={e => {

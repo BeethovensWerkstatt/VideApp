@@ -2,9 +2,11 @@ const gulp = require('gulp');
 const browserify = require('browserify'); //allows packaging
 const babelify = require('babelify'); //translates JSX to browser-compatible Javascript
 const source = require('vinyl-source-stream'); //Use conventional text streams at the start of your gulp or vinyl pipelines
-const sass = require('gulp-sass');
+// const sass = require('gulp-sass');
+const sass = require('gulp-sass')(require('sass'));
 const eslint = require('gulp-eslint');
-const install = require("gulp-install");
+const install = require('gulp-install');
+const jsdoc = require('gulp-jsdoc3');
 
 gulp.task('html', function() {
     return gulp.src('./source/index.html')
@@ -39,10 +41,10 @@ gulp.task('lint', function() {
         // To have the process exit with an error code (1) on
         // lint error, return the stream and pipe to failAfterError last.
         .pipe(gulp.dest('.'))
-        .pipe(eslint.failAfterError());  
-    /* 
+        .pipe(eslint.failAfterError());
+    /*
      * DOKU: bislang auf commandline: ./node_modules/.bin/eslint source --fix
-     * 
+     *
      */
 });
 
@@ -62,7 +64,7 @@ gulp.task('installServerDependencies', function() {
 });
 
 gulp.task('installServerConfig', function() {
-    return gulp.src(['./source_server/**','!source_server/serverConfig.json.sample','!source_server/package.json'])
+    return gulp.src(['./source_server/**','!source_server/serverConfig.json.sample','!source_server/serverConfig.json.docker','!source_server/package.json'])
         .pipe(gulp.dest('./build/'))
         .pipe(install());
 });
@@ -76,9 +78,15 @@ gulp.task('socketClient', function() {
         .pipe(gulp.dest('./build/resources/js/'));
 });
 
+gulp.task('doc', function(cb) {
+    var config = require('./jsdoc.json');
+    gulp.src([],{read: false}).pipe(jsdoc(config, cb));
+});
+
 gulp.task('default', ['html', 'css', 'fonts', 'socketClient'], function() {
     return browserify('./source/app.js')
-        .transform(babelify, {presets: ['es2015', 'react'], plugins: ['transform-object-rest-spread']})
+        // .transform(babelify, {presets: ['es2015', 'react'], plugins: ['transform-object-rest-spread']})
+        .transform(babelify, {presets: ['@babel/preset-env', '@babel/preset-react'], plugins: ['transform-object-rest-spread']})
         .bundle()
         .pipe(source('resources/js/main.js'))
         .pipe(gulp.dest('./build/'));

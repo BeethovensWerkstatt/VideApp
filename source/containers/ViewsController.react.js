@@ -29,6 +29,11 @@ const mapDispatchToProps = (dispatch, ownProps) => {
     };
 };
 
+/**
+ * @module
+ */
+
+/** */
 const ViewsController = connect(
   mapStateToProps,
   mapDispatchToProps

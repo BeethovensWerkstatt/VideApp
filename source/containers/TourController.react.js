@@ -22,6 +22,11 @@ const mapDispatchToProps = (dispatch, ownProps) => {
     };
 };
 
+/**
+ * @module
+ */
+
+/** */
 const TourController = connect(
   mapStateToProps,
   mapDispatchToProps

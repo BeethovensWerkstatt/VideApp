@@ -1,0 +1,11 @@
+version: "3.8"
+
+services:
+  rethinkdb:
+    image: rethinkdb:2.4
+  videapp:
+    build: .
+    ports:
+      - 2999:2999
+    depends_on:
+      - rethinkdb

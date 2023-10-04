@@ -21,6 +21,11 @@ const mapDispatchToProps = (dispatch, ownProps) => {
     };
 };
 
+/**
+ * @module
+ */
+
+/** */
 const I18n = connect(
   mapStateToProps,
   mapDispatchToProps

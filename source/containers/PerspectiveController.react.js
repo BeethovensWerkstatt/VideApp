@@ -26,6 +26,11 @@ const mapDispatchToProps = (dispatch, ownProps) => {
     };
 };
 
+/**
+ * @module
+ */
+
+/** */
 const PerspectiveController = connect(
   mapStateToProps,
   mapDispatchToProps

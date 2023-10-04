@@ -4,10 +4,20 @@ import EditionListEntryController from './../containers/EditionListEntryControll
 import { StatusCodes } from './../redux/actions.redux';
 import I18n from './../containers/I18n.react';
 
+/**
+ * @param editions {object}
+ * @param revision {string}
+ * @param mode {string}
+ * @param highlighted {string}
+ * @param onSelect {function}
+ * @class
+ */
 const EditionList = ({ editions, revision, mode, highlighted, onSelect }) => {
+    /** class attributes for each edition */
     let classNames = 'editionList ' + mode;
+    /** */
     let noneHighlighted = highlighted === '';
-    
+
     return (
         <div>
             <h2><I18n content="availableEditions"/></h2>
@@ -21,7 +31,7 @@ const EditionList = ({ editions, revision, mode, highlighted, onSelect }) => {
                 </div>
             </div>
             {
-                (highlighted !== '') && 
+                (highlighted !== '') &&
                     <div className="editionDetails">
                         <h2>{editions[highlighted].fullTitle}</h2>
                         <p>{editions[highlighted].desc}</p>
@@ -32,10 +42,10 @@ const EditionList = ({ editions, revision, mode, highlighted, onSelect }) => {
                             <I18n content="open_edition"/>
                         </div>
                     </div>
-                
+
             }
-        </div>    
-    );    
+        </div>
+    );
 };
 
 EditionList.propTypes = {

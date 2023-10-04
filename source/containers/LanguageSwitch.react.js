@@ -16,6 +16,11 @@ const mapDispatchToProps = (dispatch, ownProps) => {
     };
 };
 
+/**
+ * @module
+ */
+
+/** */
 const LanguageSwitch = connect(
   mapStateToProps,
   mapDispatchToProps

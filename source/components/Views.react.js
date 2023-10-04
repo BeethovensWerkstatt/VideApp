@@ -5,12 +5,21 @@ import Introduction from './Introduction.react';
 import { ViewLayouts } from './../redux/layout.constants';
 import SplitPane from 'react-split-pane';
 
-/* 
+/**
  * INFO
- * 
+ *
  * cap of viewRatio to be .1 <= viewRatio <= .9 also enforced in reducers.redux.js
+ * @param view1 {object} first view to display
+ * @param view2 {object} optional second view to display in {@link ViewLayouts.HORIZONTAL_SPLIT|horizontal} and {@link ViewLayouts.VERTICAL_SPLIT|vertical} split view
+ * @param layout {string} one of {@link ViewLayouts}
+ * @param synced {bool} synchronize views
+ * @param viewRatio {number}
+ * @param edition {string}
+ * @param revision {string}
+ * @param language {string}
+ * @param setRatio {function}
+ * @class
  */
-
 const Views = ({ view1, view2, layout, synced, viewRatio, edition, revision, language, setRatio }) => {
     if(layout === ViewLayouts.SINGLE_VIEW) {
         return (
@@ -21,7 +30,7 @@ const Views = ({ view1, view2, layout, synced, viewRatio, edition, revision, lan
     } else if(layout === ViewLayouts.HORIZONTAL_SPLIT) {
         let size = Math.round(viewRatio * 100) + '%';
         let fullWidth = document.getElementsByClassName('views')[0].clientWidth;
-        
+
         return (
         <div className="views">
             <SplitPane size={size} minSize={fullWidth / 10} maxSize={fullWidth / -10} split="vertical" onDragFinished={ (newSize) => {
@@ -36,7 +45,7 @@ const Views = ({ view1, view2, layout, synced, viewRatio, edition, revision, lan
     } else if(layout === ViewLayouts.VERTICAL_SPLIT) {
         let size = Math.round(viewRatio * 100) + '%';
         let fullHeight = document.getElementsByClassName('views')[0].clientHeight;
-        
+
         return (
         <div className="views">
             <SplitPane size={size} minSize={fullHeight / 10} maxSize={fullHeight / -10} split="horizontal" onDragFinished={ (newSize) => {
@@ -45,7 +54,7 @@ const Views = ({ view1, view2, layout, synced, viewRatio, edition, revision, lan
             }}>
                 <View view={view1} otherView={view2} synced={synced} pos="view1" edition={edition} revision={revision} language={language} layout={layout}/>
                 <View view={view2} otherView={view2} synced={synced} pos="view2" edition={edition} revision={revision} language={language} layout={layout}/>
-            </SplitPane>  
+            </SplitPane>
         </div>
         );
     } else if(layout === ViewLayouts.INTRODUCTION) {
@@ -53,9 +62,9 @@ const Views = ({ view1, view2, layout, synced, viewRatio, edition, revision, lan
             <div className="views">
                 <Introduction language={language}/>
             </div>
-        );  
-    } 
-    
+        );
+    }
+
     console.log('[ERROR] Something is wrong with ' + layout + ' in Views.react.js');
 };
 

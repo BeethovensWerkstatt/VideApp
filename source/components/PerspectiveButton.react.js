@@ -2,9 +2,16 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { ViewLayouts } from '../redux/layout.constants';
 
+/**
+ * @param active {bool} link to active view
+ * @param type
+ * @param hidden
+ * @param onClick
+ * @class
+ */
 const PerspectiveButton = ({ active, type, hidden, onClick }) => {
     const classString = 'perspectiveButton' + (active ? ' active ' : ' ') + type + (hidden ? ' hidden':'');
-  
+
     var content;
     if(type === ViewLayouts.INTRODUCTION) {
         content = <i className="fa fa-home"></i>;
@@ -17,10 +24,10 @@ const PerspectiveButton = ({ active, type, hidden, onClick }) => {
     } else if(type === ViewLayouts.HORIZONTAL_SPLIT) {
         content = <i className="fa fa-pause"></i>;
     }
-  
-  
+
+
     return (
-    <div className={classString} 
+    <div className={classString}
         onClick={e => {
             e.preventDefault();
             onClick(type);
@@ -29,7 +36,7 @@ const PerspectiveButton = ({ active, type, hidden, onClick }) => {
             content
         }
     </div>
-    
+
     );
 };
 
@@ -39,7 +46,7 @@ PerspectiveButton.propTypes = {
     type: PropTypes.string.isRequired,
     hidden: PropTypes.bool.isRequired,
     onClick: PropTypes.func.isRequired
-  
+
 };
 
 export default PerspectiveButton;

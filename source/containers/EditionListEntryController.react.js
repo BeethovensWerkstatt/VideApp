@@ -15,7 +15,7 @@ const mapDispatchToProps = (dispatch, ownProps) => {
     return {
         onSelect: () => {
             if(ownProps.highlighted) {
-                dispatch(activateEdition(ownProps.edition.id));      
+                dispatch(activateEdition(ownProps.edition.id));
             } else {
                 dispatch(highlightEdition(ownProps.edition.id));
             }
@@ -23,6 +23,11 @@ const mapDispatchToProps = (dispatch, ownProps) => {
     };
 };
 
+/**
+ * @module
+ */
+
+/** */
 const EditionListEntryController = connect(
   mapStateToProps,
   mapDispatchToProps

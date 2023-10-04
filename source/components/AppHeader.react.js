@@ -4,8 +4,15 @@ import LanguageSwitch from '../containers/LanguageSwitch.react';
 import HomeButtonController from '../containers/HomeButtonController.react';
 import PerspectivesBar from './PerspectivesBar.react';
 
+/**
+ * The REACT header component
+ * @extends React.component
+ */
 class AppHeader extends React.Component {
-    
+
+/**
+ * REACT render method returns the header block of the VideApp.
+ */
     render() {
         return (
             <header className='appHeader'>
@@ -19,7 +26,7 @@ class AppHeader extends React.Component {
                 </div>
             </header>
         );
-    } 
+    }
 };
 
 AppHeader.defaultProps = {

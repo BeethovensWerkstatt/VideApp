@@ -8,7 +8,7 @@ const mapStateToProps = (state, ownProps) => {
         hidden: state.views.layout !== ViewLayouts.HORIZONTAL_SPLIT
             && state.views.layout !== ViewLayouts.VERTICAL_SPLIT,
         synced: state.views.synced
-            
+
     };
 };
 
@@ -20,6 +20,11 @@ const mapDispatchToProps = (dispatch, ownProps) => {
     };
 };
 
+/**
+ * @module
+ */
+
+/** */
 const SyncViewsController = connect(
   mapStateToProps,
   mapDispatchToProps

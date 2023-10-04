@@ -16,6 +16,11 @@ const mapDispatchToProps = (dispatch, ownProps) => {
     };
 };
 
+/**
+ * @module
+ */
+
+/** */
 const TourStartButtonController = connect(
   mapStateToProps,
   mapDispatchToProps

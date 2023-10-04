@@ -1,6 +1,10 @@
-node_modules/
+**/node_modules/
 build/
 releases/
-serverConfig.json
-.DS_Store
-/source_server/serverConfig.json
+
+/serverConfig.json
+source_server/serverConfig.json
+
+docs/*
+
+**/.DS_Store
