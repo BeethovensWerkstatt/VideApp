@@ -1,0 +1,20 @@
+#cacheList {
+    font-size: .6rem;
+    margin-top: 2rem;
+}
+
+#cacheList td {
+    padding: .3rem;
+}
+
+#cacheList td.dur {
+    text-align: center;
+}
+
+#cacheList tr.refreshing td.uri {
+    font-style: italic;
+}
+
+#cacheList td.control {
+    width: 100px;
+}

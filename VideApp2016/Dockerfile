@@ -1,7 +1,7 @@
 FROM node:10
 
-ADD "VideApp-beta28.tar.gz" /
-WORKDIR /VideApp-beta28
+COPY "VideApp-beta29" /VideApp-beta29
+WORKDIR /VideApp-beta29
 COPY serverConfig.json .
 
-CMD "node" "VideApp-beta28.js"
+CMD "node" "VideApp-beta29.js"

@@ -1,7 +1,7 @@
 {
     "live": {
         "eXist": {
-            "url": "https://api.beethovens-werkstatt.de/modul1",
+            "url": "https://dev-api.beethovens-werkstatt.de/module1/",
             "login": "",
             "pass": ""
         },
