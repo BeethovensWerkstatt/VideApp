@@ -69790,8 +69790,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 //imported in HTML -> globally available
 /*import io from 'socket.io';*/
 
-serverConfig = require('./serverConfig.json');
-var server = 'http://' + serverConfig.live.app.host + ':' + serverConfig.live.app.port + "/" // 'http://localhost:2999/';
+var server = window.location.protocol + '//' + window.location.hostname + ':' + window.location.port + '/';
 
 Math.uuidCompact = function () {
     return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
@@ -70188,7 +70187,7 @@ var EoHub = function () {
     }, {
         key: '_setupSocket',
         value: function _setupSocket(socketID) {
-            var socket = io(server + socketID);
+            var socket = io(this._server + socketID);
             /*socket.on('connect', function(){
                  //console.log('eohub is entering connection')
             });*/
@@ -70349,7 +70348,7 @@ var VideHistoryManager = function () {
             _this._checkState();
         });
 
-        this._logSocket = io(server + this._socketID);
+        this._logSocket = io(this._server + this._socketID);
         this._logSocket.on('connect', function () {
             _this._logSocket.emit('logSession', { id: _this._sessionID, user: _this._userID, userAgent: userAgent, lang: language, states: [] });
         });
